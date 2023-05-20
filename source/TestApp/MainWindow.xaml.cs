@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -118,7 +118,7 @@ namespace TestApp
 		}
 
 		#endregion
-
+		//LayoutAnchorablePane
 		private void OnLayoutRootPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			var activeContent = ((LayoutRoot)sender).ActiveContent;

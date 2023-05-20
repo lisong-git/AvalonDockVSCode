@@ -33,7 +33,7 @@ namespace AvalonDock.Layout
 
 		#region Events
 
-		/// <summary>Event is invoked when the visibility of this object has changed.</summary>
+		/// <summary>Event is invoked when the _contentVisibility of this object has changed.</summary>
 		public event EventHandler IsVisibleChanged;
 
 		#endregion Events

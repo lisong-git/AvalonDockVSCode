@@ -15,8 +15,8 @@
     xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TestApp"
-    xmlns:winformsIntegration="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
-    Title="MainWindow"
+    xmlns:winformsIntegration="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration" 
+	Title="MainWindow"
     Width="525"
     Height="350"
     UseLayoutRounding="True">
@@ -67,8 +67,8 @@
             IsVirtualizingAnchorable="True"
             IsVirtualizingDocument="True">
             <DockingManager.Theme>
-                <Vs2013LightTheme />
-            </DockingManager.Theme>
+				<VS2010Theme/>
+			</DockingManager.Theme>
             <DockingManager.DocumentHeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -117,7 +117,7 @@
                             </LayoutDocument>
                         </LayoutDocumentPane>
                     </LayoutDocumentPaneGroup>
-                    <LayoutAnchorablePaneGroup DockWidth="50">
+					<!--<LayoutAnchorablePaneGroup Orientation="Horizontal" DockWidth="200" >
                         <LayoutAnchorablePane>
                             <LayoutAnchorable
                                 Title="Tool Window 1"
@@ -132,27 +132,41 @@
                                 <TextBlock Text="{Binding FocusedElement}" />
                             </LayoutAnchorable>
                         </LayoutAnchorablePane>
-                    </LayoutAnchorablePaneGroup>
-                </LayoutPanel>
-
-                <LayoutRoot.LeftSide>
-                    <LayoutAnchorSide>
-                        <LayoutAnchorGroup>
-                            <LayoutAnchorable
+                    </LayoutAnchorablePaneGroup>-->
+					<LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="220">
+						<LayoutAnchorablePane>
+							<LayoutAnchorable
+                                Title="Tool Window 1"
+                                ContentId="toolWindow1"
+                                Hiding="OnToolWindow1Hiding">
+								<StackPanel MinHeight="450">
+									<local:TestUserControl />
+									<TextBox Text="{Binding TestTimer, Mode=OneWay, StringFormat='Tool Window 1 Attached to Timer ->\{0\}'}" />
+								</StackPanel>
+							</LayoutAnchorable>
+							<LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
+								<TextBlock Text="{Binding FocusedElement}" />
+							</LayoutAnchorable>
+						</LayoutAnchorablePane>
+						<LayoutAnchorablePane>
+							<LayoutAnchorable
                                 Title="AutoHide1 Content"
                                 ContentId="AutoHide1Content"
                                 IconSource="/TestApp;component/Images/address-book--pencil.png">
-                                <TextBox Text="{Binding TestTimer, Mode=OneWay, StringFormat='AutoHide Attached to Timer ->\{0\}'}" />
-                            </LayoutAnchorable>
-                            <LayoutAnchorable Title="AutoHide2 Content" ContentId="AutoHide2Content">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBox />
-                                    <TextBox />
-                                </StackPanel>
-                            </LayoutAnchorable>
-                        </LayoutAnchorGroup>
-                    </LayoutAnchorSide>
-                </LayoutRoot.LeftSide>
+								<TextBox Text="{Binding TestTimer, Mode=OneWay, StringFormat='AutoHide Attached to Timer ->\{0\}'}" />
+							</LayoutAnchorable>
+						</LayoutAnchorablePane>
+						<LayoutAnchorablePane>
+							<LayoutAnchorable Title="AutoHide2 Content" ContentId="AutoHide2Content">
+								<StackPanel Orientation="Vertical">
+									<TextBox />
+									<TextBox />
+								</StackPanel>
+							</LayoutAnchorable>
+						</LayoutAnchorablePane>
+					</LayoutAnchorablePaneGroup>
+                </LayoutPanel>
+                
             </LayoutRoot>
         </DockingManager>
     </Grid>

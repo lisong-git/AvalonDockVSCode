@@ -256,7 +256,7 @@
 						</LayoutAnchorablePaneGroup>
 					</LayoutPanel>
 
-					<LayoutAnchorablePaneGroup DockWidth="256" Orientation="Vertical">
+					<LayoutAnchorablePaneGroup DockWidth="256" Orientation="Horizontal">
 						<LayoutAnchorablePane Name="ExplorerPane" DockHeight="2*"/>
 						<LayoutAnchorablePane Name="PropertiesPane"/>
 					</LayoutAnchorablePaneGroup>

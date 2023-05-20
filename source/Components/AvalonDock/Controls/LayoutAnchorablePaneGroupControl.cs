@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -10,6 +10,7 @@
 using AvalonDock.Layout;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace AvalonDock.Controls
 {
@@ -37,6 +38,8 @@ namespace AvalonDock.Controls
 			: base(model, model.Orientation)
 		{
 			_model = model;
+			//Background = new SolidColorBrush(Colors.Green);
+			//Margin = new Thickness(0, 50, 0, 0);
 		}
 
 		#endregion Constructors

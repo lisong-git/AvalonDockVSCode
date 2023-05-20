@@ -92,12 +92,12 @@
 						KeyboardNavigation.TabNavigation="Local"
 						SnapsToDevicePixels="true">
 						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
 							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
 						</Grid.RowDefinitions>
 						<!--  Following border is required to catch mouse events  -->
 						<Border Grid.RowSpan="2" Background="Transparent" />
-						<Grid Panel.ZIndex="1" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type avalonDockControls:LayoutDocumentPaneControl}}, Path=Model.ShowHeader, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
+						<Grid Grid.Row="1" Panel.ZIndex="1" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type avalonDockControls:LayoutDocumentPaneControl}}, Path=Model.ShowHeader, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition />
 								<ColumnDefinition Width="Auto" />
@@ -133,7 +133,7 @@
 						</Grid>
 						<Border
 							x:Name="ContentPanel"
-							Grid.Row="1"
+							Grid.Row="0"
 							Grid.Column="0"
 							Padding="0,1,0,2"
 							HorizontalAlignment="Stretch"
@@ -285,7 +285,8 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-
+	
+	
 	<!--  AnchorablePaneControlStyle  -->
 	<Style x:Key="AvalonDock_ThemeVS2010_AnchorablePaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorablePaneControl}">
 		<Setter Property="TabStripPlacement" Value="Bottom" />
@@ -301,14 +302,14 @@
 						KeyboardNavigation.TabNavigation="Local"
 						SnapsToDevicePixels="true">
 						<Grid.RowDefinitions>
-							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
 						</Grid.RowDefinitions>
 						<!--  Following border is required to catch mouse events  -->
 						<Border Grid.RowSpan="2" Background="Transparent" />
 						<Border
 							x:Name="ContentPanel"
-							Grid.Row="0"
+							Grid.Row="1"
 							Grid.Column="0"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}"
@@ -324,7 +325,7 @@
 						</Border>
 						<avalonDockControls:AnchorablePaneTabPanel
 							x:Name="HeaderPanel"
-							Grid.Row="1"
+							Grid.Row="0"
 							Margin="0,0,2,2"
 							Panel.ZIndex="1"
 							IsItemsHost="true"
@@ -423,6 +424,15 @@
 		</Setter>
 	</Style>
 
+	<!--<Style TargetType="{x:Type avalonDockControls:LayoutAnchorablePaneGroupControl}">
+		<Setter Property="Margin" Value="20"></Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				
+			</Setter.Value>
+		</Setter>
+	</Style>-->
+	
 	<Style TargetType="avalonDockControls:AnchorablePaneTitle">
 		<Setter Property="Template">
 			<Setter.Value>
@@ -436,6 +446,7 @@
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="Auto" />
@@ -487,7 +498,18 @@
 								Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
 								<Image x:Name="PART_ImgHidePin" Source="Images/PinClose.png" />
 							</Button>
-
+							<Button
+								x:Name="PART_Collapse"
+								Grid.Column="4"
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center"
+								Command="{Binding Path=LayoutItem.CollapseCommand, RelativeSource={RelativeSource TemplatedParent}}"
+								Focusable="False"
+								Style="{StaticResource AvalonDock_ThemeVS2010_ButtonStyle}"
+								ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnClose_Hint}"
+								Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
+								<Image Source="Images/PinClose.png" />
+							</Button>
 						</Grid>
 					</Border>
 					<ControlTemplate.Triggers>
@@ -530,24 +552,27 @@
 		</Setter>
 	</Style>
 
+	<!--侧停靠栏整体-->
 	<ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorSideTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorSideControl}">
-		<ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children}">
+		<ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children}" Background="BlanchedAlmond">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
 					<StackPanel
 						MinWidth="4"
 						MinHeight="4"
+						Background="BlueViolet"
 						Orientation="{Binding Path=Model.Side, RelativeSource={RelativeSource AncestorType={x:Type avalonDockControls:LayoutAnchorSideControl}, Mode=FindAncestor}, Converter={avalonDockConverters:AnchorSideToOrientationConverter}}" />
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</ItemsControl>
 	</ControlTemplate>
 
+	<!--侧停靠栏内Button组-->
 	<ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorGroupTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorGroupControl}">
-		<ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children}">
+		<ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children}" Background="Black">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" />
+					<StackPanel Orientation="Vertical" Background="Yellow"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 			<ItemsControl.Style>
@@ -567,6 +592,7 @@
 			</ItemsControl.Style>
 		</ItemsControl>
 	</ControlTemplate>
+	<!--Background="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}"-->
 
 	<ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorControl}">
 		<Border
@@ -585,15 +611,15 @@
 		<ControlTemplate.Triggers>
 			<Trigger Property="Side" Value="Right">
 				<Setter TargetName="Bd" Property="CornerRadius" Value="0,0,3,3" />
-				<Setter TargetName="Bd" Property="Margin" Value="0,0,0,4" />
+				<Setter TargetName="Bd" Property="Margin" Value="0,0,0,2" />
 			</Trigger>
 			<Trigger Property="Side" Value="Bottom">
 				<Setter TargetName="Bd" Property="CornerRadius" Value="3,3,0,0" />
-				<Setter TargetName="Bd" Property="Margin" Value="0,4,0,0" />
+				<Setter TargetName="Bd" Property="Margin" Value="0,2,0,0" />
 			</Trigger>
 			<Trigger Property="Side" Value="Top">
 				<Setter TargetName="Bd" Property="CornerRadius" Value="0,0,3,3" />
-				<Setter TargetName="Bd" Property="Margin" Value="0,0,0,4" />
+				<Setter TargetName="Bd" Property="Margin" Value="0,0,0,2" />
 			</Trigger>
 			<MultiTrigger>
 				<MultiTrigger.Conditions>
@@ -607,7 +633,7 @@
 	</ControlTemplate>
 
 	<Style x:Key="{x:Type avalonDockControls:OverlayWindow}" TargetType="{x:Type avalonDockControls:OverlayWindow}">
-		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Background" Value="GreenYellow" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:OverlayWindow}">
@@ -885,6 +911,7 @@
 		<TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
 	</DataTemplate>
 
+	<!--Anchorable Tab 内的标题样式-->
 	<DataTemplate x:Key="AvalonDock_ThemeVS2010_AnchorableHeaderTemplate">
 		<Grid>
 			<Grid.ColumnDefinitions>
@@ -913,14 +940,16 @@
 		<TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
 	</DataTemplate>
 
+	<!--Anchorable 顶部的标题样式-->
 	<DataTemplate x:Key="AvalonDock_ThemeVS2010_AnchorableTitleTemplate">
-		<TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+		<TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" Background="Transparent"/>
 	</DataTemplate>
 
 	<DataTemplate x:Key="AvalonDock_ThemeVS2010_IconContentTemplate">
 		<Image Source="{Binding IconSource, Converter={avalonDockConverters:NullToDoNothingConverter}}" Stretch="Uniform" />
 	</DataTemplate>
 
+	<!--下拉菜单-->
 	<ContextMenu x:Key="AvalonDock_ThemeVS2010_AnchorableContextMenu">
 		<MenuItem Command="{Binding Path=FloatCommand}" Header="{x:Static avalonDockProperties:Resources.Anchorable_Float}" />
 		<MenuItem Command="{Binding Path=DockCommand}" Header="{x:Static avalonDockProperties:Resources.Anchorable_Dock}" />
@@ -1062,6 +1091,7 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+					<!--<Border Background="{TemplateBinding Background}" />-->
 					<Border Background="{TemplateBinding Background}" />
 				</ControlTemplate>
 			</Setter.Value>
@@ -1072,6 +1102,8 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentControl}">
+					<!--Background="{TemplateBinding Background}"-->
+
 					<Border
 						Background="{TemplateBinding Background}"
 						BorderBrush="{TemplateBinding BorderBrush}"
@@ -1203,15 +1235,16 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableControl}">
+						<!--Background="{TemplateBinding Background}"-->
 					<Border
 						x:Name="Bd"
-						Background="{TemplateBinding Background}"
+						Background="Green"
 						BorderBrush="{TemplateBinding BorderBrush}"
 						BorderThickness="{TemplateBinding BorderThickness}">
-						<Grid>
+						<Grid Background="Yellow">
 							<Grid.RowDefinitions>
 								<RowDefinition Height="Auto" />
-								<RowDefinition Height="*" />
+								<RowDefinition Height="Auto" />
 							</Grid.RowDefinitions>
 							<Border
 								x:Name="Header"
@@ -1228,7 +1261,9 @@
 								Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
 								ContentTemplate="{Binding LayoutItem.View.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
 								ContentTemplateSelector="{Binding LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
-								FlowDirection="{TemplateBinding FlowDirection}" />
+								FlowDirection="{TemplateBinding FlowDirection}" 
+								Visibility="{Binding ContentVisibility}"								
+								/>
 
 							<!--<ContentPresenter
                                 Content="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"
@@ -1660,7 +1695,7 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 		<Setter Property="SizeToContent" Value="WidthAndHeight" />
 		<Setter Property="ResizeMode" Value="NoResize" />
-		<!--<Setter Property="shell:WindowChrome.WindowChrome">
+		<Setter Property="shell:WindowChrome.WindowChrome">
             <Setter.Value>
                 <shell:WindowChrome
                     ResizeBorderThickness="10"
@@ -1668,7 +1703,7 @@
                     CornerRadius="3,3,3,3"
                     GlassFrameThickness="4"/>
             </Setter.Value>
-        </Setter>-->
+        </Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:NavigatorWindow}">
@@ -1801,7 +1836,7 @@
 												</ListBox.ItemTemplate>
 												<ListBox.ItemsPanel>
 													<ItemsPanelTemplate>
-														<WrapPanel Orientation="Vertical" />
+														<WrapPanel Orientation="Horizontal" />
 													</ItemsPanelTemplate>
 												</ListBox.ItemsPanel>
 											</ListBox>

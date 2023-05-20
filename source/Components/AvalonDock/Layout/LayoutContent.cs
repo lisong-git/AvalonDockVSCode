@@ -47,7 +47,7 @@ namespace AvalonDock.Layout
 		/// Event fired when the content is about to be closed (i.e. removed definitely from the layout)
 		/// </summary>
 		/// <remarks>Please note that <see cref="LayoutAnchorable"/> also can be hidden. Usually user hide anchorables when click the 'X' button. To completely close
-		/// an anchorable the user should click the 'Close' menu item from the context menu. When an <see cref="LayoutAnchorable"/> is hidden its visibility changes to false and
+		/// an anchorable the user should click the 'Close' menu item from the context menu. When an <see cref="LayoutAnchorable"/> is hidden its _contentVisibility changes to false and
 		/// <see cref="LayoutAnchorable.IsHidden"/> property is set to true.
 		/// Handle the Hiding event for the <see cref="LayoutAnchorable"/> to cancel the hide operation.</remarks>
 		public event EventHandler<CancelEventArgs> Closing;

@@ -9,7 +9,7 @@
 
 namespace AvalonDock.Layout
 {
-	/// <summary>Interface definition for a <see cref="ILayoutElement"/> that supports a visibility property.</summary>
+	/// <summary>Interface definition for a <see cref="ILayoutElement"/> that supports a _contentVisibility property.</summary>
 	public interface ILayoutPanelElement : ILayoutElement
 	{
 		/// <summary>Gets whether the <see cref="ILayoutElement"/> is currently visible or not.</summary>
