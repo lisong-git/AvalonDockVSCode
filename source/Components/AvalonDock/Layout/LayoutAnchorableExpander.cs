@@ -8,7 +8,9 @@
  ************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
@@ -19,7 +21,7 @@ namespace AvalonDock.Layout
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorablePane : LayoutPositionableGroup<LayoutAnchorable>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutContentSelector, ILayoutPaneSerializable
+	public class LayoutAnchorableExpander : LayoutPositionableGroup<LayoutAnchorable>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutContentSelector, ILayoutPaneSerializable
 	{
 		#region fields
 
@@ -30,20 +32,23 @@ namespace AvalonDock.Layout
 
 		private string _name = null;
 		private string _id;
+		private bool _isExpanded;
 
 		#endregion fields
 
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorablePane()
+		public LayoutAnchorableExpander()
 		{
-		}
+			UpdateHeight();
+		} 
 
 		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
-		public LayoutAnchorablePane(LayoutAnchorable anchorable)
+		public LayoutAnchorableExpander(LayoutAnchorable anchorable):this()
 		{
 			Children.Add(anchorable);
+			//_isExpanded = anchorable.IsExpanded;
 		}
 
 		#endregion Constructors
@@ -56,8 +61,47 @@ namespace AvalonDock.Layout
 		/// <summary>Gets whether the pane can be closed.</summary>
 		public bool CanClose => Children.All(a => a.CanClose);
 
+		private LayoutAnchorable LayoutAnchorable => Children.FirstOrDefault();
+
+		public bool IsExpanded {
+			get => _isExpanded; 
+			set {
+				if(_isExpanded == value)
+					return;
+
+				_isExpanded = value;
+				Debug.WriteLine($"==========================================", "LayoutAnchorableExpanderPane IsExpanded");
+				Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 1");
+				UpdateHeight();
+				Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 2");
+
+				RaisePropertyChanged(nameof(IsExpanded));
+			}
+		}
+
+		private void UpdateHeight() {
+			//Debug.WriteLine($"{LayoutAnchorable?.Title}", "LayoutAnchorableExpanderPane UpdateHeight 0");
+			Debug.WriteLine($"{DockHeight}, {LayoutAnchorable?.Title}", "LayoutAnchorableExpanderPane UpdateHeight 1");
+
+			if(IsExpanded) {
+				var t = new GridLength(1.0, GridUnitType.Star);
+				if(DockHeight == t) {
+					DockHeight = new GridLength(1.0, GridUnitType.Pixel);
+				}
+				Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 2");
+				DockHeight = t;
+				// DockMinHeight = double.MaxValue;
+			} else {
+				var  t = new GridLength(25, GridUnitType.Pixel);
+				Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 3");
+				DockHeight = t;
+
+				// Dock
+			}
+		}
+
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
-		public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
+		//public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		public string Name

@@ -10,6 +10,7 @@
 using AvalonDock.Layout;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
@@ -95,7 +96,7 @@ namespace AvalonDock.Controls
 			}
 
 			var newHost = _overlayWindowHosts.FirstOrDefault(oh => oh.HitTestScreen(dragPosition));
-
+			Debug.WriteLine($"{newHost}", "UpdateMouseLocation");
 			if (_currentHost != null || _currentHost != newHost)
 			{
 				//is mouse still inside current overlay window host?
@@ -177,26 +178,32 @@ namespace AvalonDock.Controls
 				_currentWindowAreas.Remove(a));
 
 			var areasToAdd =
-				_currentHost.GetDropAreas(_floatingWindow).Where(cw => !_currentWindowAreas.Contains(cw) && cw.DetectionRect.Contains(cw.TransformToDeviceDPI(dragPosition))).ToList();
-
+				_currentHost.GetDropAreas(_floatingWindow)
+				//.Where(o=> o.)
+								.Where(cw => !_currentWindowAreas.Contains(cw) && cw.DetectionRect.Contains(cw.TransformToDeviceDPI(dragPosition)))
+								.ToList();
+			Debug.WriteLine($"=================================================================================");
 			_currentWindowAreas.AddRange(areasToAdd);
 
+			Debug.WriteLineIf(areasToAdd.Any(),$"{string.Join(",", areasToAdd.Select(o=> o.Type))}", "UpdateMouseLocation 1");
+			//显示可插入区域小图预览
 			areasToAdd.ForEach(a =>
 				_currentWindow.DragEnter(a));
+			Debug.WriteLine($"{_currentDropTarget?.Type}, {_currentWindow.GetType().Name}", "UpdateMouseLocation 2");
 
-			if (_currentDropTarget == null)
-			{
-				_currentWindowAreas.ForEach(wa =>
-				{
-					if (_currentDropTarget != null)
+			if(_currentDropTarget == null) {
+				_currentWindowAreas.ForEach(wa => {
+					if(_currentDropTarget != null)
 						return;
 
-					_currentDropTarget = _currentWindow.GetTargets().FirstOrDefault(dt => dt.HitTestScreen(dragPosition));
+					Debug.WriteLine($"{string.Join($";", _currentWindow.GetTargets().Select(o => o.GetType().Name))}", "UpdateMouseLocation 3");
 
-					if (_currentDropTarget != null)
-					{
+					_currentDropTarget = _currentWindow.GetTargets().FirstOrDefault(dt => dt.HitTestScreen(dragPosition));
+					if(_currentDropTarget != null) {
+						Debug.WriteLine($"{_currentDropTarget.GetType().Name}", "UpdateMouseLocation 4");
+						// 显示可插入区域大图预览
 						_currentWindow.DragEnter(_currentDropTarget);
-						BringWindowToTop2((Window)_currentWindow);
+						BringWindowToTop2((Window) _currentWindow);
 						return;
 					}
 				});

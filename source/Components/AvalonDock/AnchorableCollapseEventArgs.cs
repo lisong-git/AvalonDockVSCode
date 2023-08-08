@@ -16,13 +16,13 @@ namespace AvalonDock
 	/// Implements an event that can be raised to inform the client application about an
 	/// anchorable that been closed and removed its content (viewmodel) from the docking framework.
 	/// </summary>
-	public class AnchorableCollapseEventArgs : EventArgs
+	public class AnchorableExpandEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Class constructor from the anchorables layout model.
 		/// </summary>
 		/// <param name="document"></param>
-		public AnchorableCollapseEventArgs(LayoutAnchorable anchorable)
+		public AnchorableExpandEventArgs(LayoutAnchorable anchorable)
 		{
 			Anchorable = anchorable;
 		}

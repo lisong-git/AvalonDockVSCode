@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -8,6 +8,7 @@
  ************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -112,10 +113,13 @@ namespace AvalonDock.Layout
 						new GridLength(_resizableAbsoluteDockHeight.Value) : _dockHeight;
 			set
 			{
-				if (_dockHeight == value || !(value.Value > 0)) return;
+				Debug.WriteLine($"{_dockHeight}", "LayoutPositionableGroup DockHeight 1");
+
+				if(_dockHeight == value || !(value.Value > 0)) return;
 				if (value.IsAbsolute) _resizableAbsoluteDockHeight = value.Value;
 				RaisePropertyChanging(nameof(DockHeight));
 				_dockHeight = value;
+				Debug.WriteLine($"{_dockHeight}", "LayoutPositionableGroup DockHeight 2");
 				RaisePropertyChanged(nameof(DockHeight));
 				OnDockHeightChanged();
 			}

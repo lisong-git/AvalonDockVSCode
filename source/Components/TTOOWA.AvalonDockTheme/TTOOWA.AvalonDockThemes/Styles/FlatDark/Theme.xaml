@@ -1074,7 +1074,6 @@
 		<Setter Property="IconContentTemplate" Value="{StaticResource AvalonDock_IconContentTemplate}" />
 		<Setter Property="GridSplitterWidth" Value="6" />
 		<Setter Property="GridSplitterHeight" Value="6" />
-		<Setter Property="AnchorGroupTemplate" Value=""
 	</Style>
 
 			<!--<Style x:Key="{x:Type avalonDockControls:AvalonDockAnchorGroupTemplate}" >

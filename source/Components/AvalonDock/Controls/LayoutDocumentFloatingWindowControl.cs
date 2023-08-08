@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -270,7 +271,9 @@ namespace AvalonDock.Controls
 
 		public IEnumerable<IDropArea> GetDropAreas(LayoutFloatingWindowControl draggingWindow)
 		{
-			if (_dropAreas != null) return _dropAreas;
+			Debug.WriteLine($"{draggingWindow.Model.GetType()}", "LayoutDocumentPaneControl GetDropAreas");
+
+			if(_dropAreas != null) return _dropAreas;
 			_dropAreas = new List<IDropArea>();
 			var isDraggingDocuments = draggingWindow.Model is LayoutDocumentFloatingWindow;
 

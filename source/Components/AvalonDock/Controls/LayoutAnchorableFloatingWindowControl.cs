@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -172,7 +173,9 @@ namespace AvalonDock.Controls
 
 		IEnumerable<IDropArea> IOverlayWindowHost.GetDropAreas(LayoutFloatingWindowControl draggingWindow)
 		{
-			if (_dropAreas != null) return _dropAreas;
+			Debug.WriteLine($"{draggingWindow.Model.GetType()}", "LayoutAnchorableFloatingWindowControl GetDropAreas");
+
+			if(_dropAreas != null) return _dropAreas;
 			_dropAreas = new List<IDropArea>();
 			if (draggingWindow.Model is LayoutDocumentFloatingWindow) return _dropAreas;
 			var rootVisual = (Content as FloatingWindowContentHost).RootVisual;

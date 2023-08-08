@@ -32,7 +32,7 @@ namespace AvalonDock.Controls
 
 		private LayoutAnchorable _anchorable;   // The content of this item
 		private ICommand _defaultHideCommand;
-		private ICommand _collapseCommand;
+		private ICommand _expandCommand;
 		private ICommand _defaultAutoHideCommand;
 		private ICommand _defaultDockCommand;
 		private readonly ReentrantFlag _visibilityReentrantFlag = new ReentrantFlag();
@@ -55,32 +55,33 @@ namespace AvalonDock.Controls
 		#endregion Constructors
 
 		#region Properties
-		#region CollapseCommand
-		/// <summary><see cref="CollapseCommand"/> dependency property.</summary>
-		public static readonly DependencyProperty CollapseCommandProperty = DependencyProperty.Register(nameof(CollapseCommand), typeof(ICommand), typeof(LayoutAnchorableItem),
-				new FrameworkPropertyMetadata(null, OnCollapseCommandChanged, CoerceCollapseCommandValue));
+
+		#region ExpandCommand
+		/// <summary><see cref="ExpandCommand"/> dependency property.</summary>
+		public static readonly DependencyProperty ExpandCommandProperty = DependencyProperty.Register(nameof(ExpandCommand), typeof(ICommand), typeof(LayoutAnchorableItem),
+				new FrameworkPropertyMetadata(null, OnExpandCommandChanged, CoerceExpandCommandValue));
 
 		/// <summary>Gets/sets the the command to execute when an anchorable is hidden.</summary>
 		[Bindable(true), Description("Gets/sets the the command to execute when an anchorable is hidden."), Category("Other")]
-		public ICommand CollapseCommand {
-			get => (ICommand) GetValue(CollapseCommandProperty);
-			set => SetValue(CollapseCommandProperty, value);
+		public ICommand ExpandCommand {
+			get => (ICommand) GetValue(ExpandCommandProperty);
+			set => SetValue(ExpandCommandProperty, value);
 		}
 
-		/// <summary>Handles changes to the <see cref="CollapseCommand"/> property.</summary>
-		private static void OnCollapseCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableItem) d).OnCollapseCommandChanged(e);
+		/// <summary>Handles changes to the <see cref="ExpandCommand"/> property.</summary>
+		private static void OnExpandCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableItem) d).OnExpandCommandChanged(e);
 
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="CollapseCommand"/> property.</summary>
-		protected virtual void OnCollapseCommandChanged(DependencyPropertyChangedEventArgs e) {
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="ExpandCommand"/> property.</summary>
+		protected virtual void OnExpandCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		/// <summary>Coerces the <see cref="CollapseCommand"/> value.</summary>
-		private static object CoerceCollapseCommandValue(DependencyObject d, object value) => value;
+		/// <summary>Coerces the <see cref="ExpandCommand"/> value.</summary>
+		private static object CoerceExpandCommandValue(DependencyObject d, object value) => value;
 
-		private bool CanExecuteCollapseCommand(object parameter) => LayoutElement != null && _anchorable.CanHide;
+		private bool CanExecuteExpandCommand(object parameter) => LayoutElement != null && _anchorable.CanHide;
 
-		private void ExecuteCollapseCommand(object parameter) => _anchorable?.Root?.Manager?.ExecuteCollapseCommand(_anchorable);
-		#endregion CollapseCommand
+		private void ExecuteExpandCommand(object parameter) => _anchorable?.Root?.Manager?.ExecuteExpandCommand(_anchorable);
+		#endregion ExpandCommand
 
 		#region HideCommand
 
@@ -270,7 +271,7 @@ namespace AvalonDock.Controls
 		protected override void InitDefaultCommands()
 		{
 			_defaultHideCommand = new RelayCommand<object>(ExecuteHideCommand, CanExecuteHideCommand);
-			_collapseCommand = new RelayCommand<object>(ExecuteCollapseCommand, CanExecuteCollapseCommand);
+			_expandCommand = new RelayCommand<object>(ExecuteExpandCommand, CanExecuteExpandCommand);
 			_defaultAutoHideCommand = new RelayCommand<object>(ExecuteAutoHideCommand, CanExecuteAutoHideCommand);
 			_defaultDockCommand = new RelayCommand<object>(ExecuteDockCommand, CanExecuteDockCommand);
 			base.InitDefaultCommands();
@@ -280,7 +281,7 @@ namespace AvalonDock.Controls
 		protected override void ClearDefaultBindings()
 		{
 			if (HideCommand == _defaultHideCommand) BindingOperations.ClearBinding(this, HideCommandProperty);
-			if(CollapseCommand == _collapseCommand) BindingOperations.ClearBinding(this, CollapseCommandProperty);
+			if(ExpandCommand == _expandCommand) BindingOperations.ClearBinding(this, ExpandCommandProperty);
 			if(AutoHideCommand == _defaultAutoHideCommand) BindingOperations.ClearBinding(this, AutoHideCommandProperty);
 			if (DockCommand == _defaultDockCommand) BindingOperations.ClearBinding(this, DockCommandProperty);
 			base.ClearDefaultBindings();
@@ -290,7 +291,7 @@ namespace AvalonDock.Controls
 		protected override void SetDefaultBindings()
 		{
 			if(HideCommand == null) HideCommand = _defaultHideCommand;
-			if (CollapseCommand == null) CollapseCommand = _collapseCommand;
+			if (ExpandCommand == null) ExpandCommand = _expandCommand;
 			if(AutoHideCommand == null) AutoHideCommand = _defaultAutoHideCommand;
 			if (DockCommand == null) DockCommand = _defaultDockCommand;
 			Visibility = _anchorable.IsVisible ? Visibility.Visible : Visibility.Hidden;

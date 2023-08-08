@@ -26,6 +26,12 @@ namespace AvalonDock.Controls
 
 		/// <summary>This type of drop area identifies a <see cref="LayoutAnchorablePaneControl"/>.</summary>
 		AnchorablePane,
+
+		/// <summary>This type of drop area identifies a <see cref="LayoutAnchorableExpanderControl"/>.</summary>
+		AnchorableExpanderPane,
+
+		///
+		AnchorablePaneGroup,
 	}
 
 	/// <summary>Describes a drop target which can be the final position of an item that is being dragged and dropped to dock it somewhere else in the UI of the framework.</summary>

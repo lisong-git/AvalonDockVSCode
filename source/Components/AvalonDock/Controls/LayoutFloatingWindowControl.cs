@@ -9,6 +9,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -359,7 +360,7 @@ namespace AvalonDock.Controls
 		protected virtual IntPtr FilterMessage(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 		{
 			handled = false;
-
+			Debug.WriteLine($"{msg}", "FilterMessage");
 			switch (msg)
 			{
 				case Win32Helper.WM_ACTIVATE:

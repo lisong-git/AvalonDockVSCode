@@ -204,13 +204,14 @@
 								ContentSource="SelectedContent"
 								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 						</Border>
-						<avalonDockControls:AnchorablePaneTabPanel
+						<!--<avalonDockControls:AnchorablePaneTabPanel
 							x:Name="HeaderPanel"
 							Grid.Row="1"
 							Margin="2,0,2,2"
 							Panel.ZIndex="1"
 							IsItemsHost="true"
-							KeyboardNavigation.TabIndex="1" />
+							Visibility="Collapsed"
+							KeyboardNavigation.TabIndex="1" />-->
 					</Grid>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="false">

@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -9,6 +9,7 @@
 
 using AvalonDock.Layout;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -58,6 +59,7 @@ namespace AvalonDock.Controls
 		/// <param name="floatingWindow"></param>
 		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
 		{
+			Debug.WriteLine($"{Type}", "Drop");
 			switch (Type)
 			{
 				case DropTargetType.DockingManagerDockLeft:
@@ -236,8 +238,9 @@ namespace AvalonDock.Controls
 			var layoutAnchorablePaneWithActualSize = anchorableFloatingWindowModel.RootPanel as ILayoutPositionableElementWithActualSize;
 
 			var targetScreenRect = TargetElement.GetScreenArea();
+			Debug.WriteLine($"{Type}", "GetPreviewPath");
 
-			switch (Type)
+			switch(Type)
 			{
 				case DropTargetType.DockingManagerDockLeft:
 					{

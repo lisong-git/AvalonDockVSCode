@@ -12,14 +12,13 @@ using System.Linq;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
-namespace AvalonDock.Layout
-{
+namespace AvalonDock.Layout {
 	/// <summary>Implements the model for a layout anchorable pane control (a pane in a tool window environment).
 	/// A layout anchorable pane control can have multiple LayoutAnchorable controls  as its children.
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorablePane : LayoutPositionableGroup<LayoutAnchorable>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutContentSelector, ILayoutPaneSerializable
+	public class LayoutAnchorableGroupTab : LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable
 	{
 		#region fields
 
@@ -36,12 +35,12 @@ namespace AvalonDock.Layout
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorablePane()
+		public LayoutAnchorableGroupTab()
 		{
 		}
 
 		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
-		public LayoutAnchorablePane(LayoutAnchorable anchorable)
+		public LayoutAnchorableGroupTab(LayoutAnchorableExpanderGroup anchorable)
 		{
 			Children.Add(anchorable);
 		}
@@ -92,7 +91,7 @@ namespace AvalonDock.Layout
 		}
 
 		/// <summary>Gets the selected content in the pane or null.</summary>
-		public LayoutContent SelectedContent => _selectedIndex == -1 ? null : Children[_selectedIndex];
+		public LayoutAnchorableExpanderGroup SelectedContent => _selectedIndex == -1 ? null : Children[_selectedIndex];
 
 		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
 		string ILayoutPaneSerializable.Id
@@ -187,9 +186,9 @@ namespace AvalonDock.Layout
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
 		/// </summary>
 		/// <param name="content"></param>
-		public int IndexOf(LayoutContent content)
+		public int IndexOf(LayoutAnchorableExpanderGroup content)
 		{
-			if (!(content is LayoutAnchorable anchorableChild)) return -1;
+			if (!(content is LayoutAnchorableExpanderGroup anchorableChild)) return -1;
 			return Children.IndexOf(anchorableChild);
 		}
 

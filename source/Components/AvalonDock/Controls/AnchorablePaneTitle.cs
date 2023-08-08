@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -130,18 +130,18 @@ namespace AvalonDock.Controls
 			base.OnMouseLeftButtonDown(e);
 
 			// Start a drag & drop action for a LayoutAnchorable
-			if (e.Handled || Model.CanMove == false) return;
+			if(e.Handled || Model.CanMove == false)
+				return;
 			var attachFloatingWindow = false;
 			var parentFloatingWindow = Model.FindParent<LayoutAnchorableFloatingWindow>();
-			if (parentFloatingWindow != null) attachFloatingWindow = parentFloatingWindow.Descendents().OfType<LayoutAnchorablePane>().Count() == 1;
+			if(parentFloatingWindow != null)
+				attachFloatingWindow = parentFloatingWindow.Descendents().OfType<LayoutAnchorablePane>().Count() == 1;
 
-			if (attachFloatingWindow)
-			{
+			if(attachFloatingWindow) {
 				//the pane is hosted inside a floating window that contains only an anchorable pane so drag the floating window itself
 				var floatingWndControl = Model.Root.Manager.FloatingWindows.Single(fwc => fwc.Model == parentFloatingWindow);
 				floatingWndControl.AttachDrag(false);
-			}
-			else
+			} else
 				_isMouseDown = true;//normal drag
 		}
 

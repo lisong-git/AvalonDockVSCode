@@ -13,17 +13,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <summary>
-	/// Implements a <see cref="LayoutAnchorablePaneControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorable"/>) can be dropped.
+	/// Implements a <see cref="LayoutAnchorableExpanderControl"/> drop target
+	/// on which other items (<see cref="LayoutAnchorableExpanderGroup"/>) can be dropped.
 	/// </summary>
-	internal class AnchorablePaneDropTarget : DropTarget<LayoutAnchorablePaneControl>
-	{
+	internal class AnchorableExpanderPaneDropTarget :DropTarget<LayoutAnchorableExpanderControl> {
 		#region fields
 
-		private LayoutAnchorablePaneControl _targetPane;
+		private LayoutAnchorableExpanderControl _targetPane;
 		private int _tabIndex = -1;
 
 		#endregion fields
@@ -36,11 +34,10 @@ namespace AvalonDock.Controls
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
-		internal AnchorablePaneDropTarget(LayoutAnchorablePaneControl paneControl,
+		internal AnchorableExpanderPaneDropTarget(LayoutAnchorableExpanderControl paneControl,
 																	 Rect detectionRect,
 																	 DropTargetType type)
-			: base(paneControl, detectionRect, type)
-		{
+			: base(paneControl, detectionRect, type) {
 			_targetPane = paneControl;
 		}
 
@@ -52,12 +49,11 @@ namespace AvalonDock.Controls
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
 		/// <param name="tabIndex"></param>
-		internal AnchorablePaneDropTarget(LayoutAnchorablePaneControl paneControl,
-										  Rect detectionRect,
-										  DropTargetType type,
-										  int tabIndex)
-			: base(paneControl, detectionRect, type)
-		{
+		internal AnchorableExpanderPaneDropTarget(LayoutAnchorableExpanderControl paneControl,
+											Rect detectionRect,
+											DropTargetType type,
+											int tabIndex)
+			: base(paneControl, detectionRect, type) {
 			_targetPane = paneControl;
 			_tabIndex = tabIndex;
 		}
@@ -71,14 +67,12 @@ namespace AvalonDock.Controls
 		/// by docking of the <paramref name="floatingWindow"/> into this drop target.
 		/// </summary>
 		/// <param name="floatingWindow"></param>
-		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
-		{
+		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow) {
 			ILayoutAnchorablePane targetModel = _targetPane.Model as ILayoutAnchorablePane;
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
-			Debug.WriteLine($"{Type}", "AnchorablePaneDropTarget Drop");
-			switch (Type)
-			{
-				case DropTargetType.AnchorablePaneDockBottom:
+			Debug.WriteLine($"{Type}", "AnchorableExpanderPaneDropTarget Drop 1");
+			switch(Type) {
+				case DropTargetType.AnchorableExpanderPaneDockBottom:
 
 					#region DropTargetType.AnchorablePaneDockBottom
 
@@ -87,26 +81,30 @@ namespace AvalonDock.Controls
 						var parentModelOrientable = targetModel.Parent as ILayoutOrientableGroup;
 						int insertToIndex = parentModel.IndexOfChild(targetModel);
 
-						if (parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Vertical &&
+						if(parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Vertical &&
 							parentModel.ChildrenCount == 1)
 							parentModelOrientable.Orientation = System.Windows.Controls.Orientation.Vertical;
 
-						if (parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Vertical)
-						{
+						if(parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Vertical) {
 							var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
-							if (layoutAnchorablePaneGroup != null &&
+							Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", "AnchorablePaneDropTarget Drop 2");
+							if(layoutAnchorablePaneGroup != null &&
 								(layoutAnchorablePaneGroup.Children.Count == 1 ||
-									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical))
-							{
+									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
+
 								var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
-								for (int i = 0; i < anchorablesToMove.Length; i++)
-									parentModel.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
-							}
-							else
+								for(int i = 0; i < anchorablesToMove.Length; i++) {
+									Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", "AnchorablePaneDropTarget Drop 3");
+									var la = anchorablesToMove[i].Children.First() as LayoutAnchorable;
+									var temp = new LayoutAnchorableExpander(la);
+									//parentModel.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
+									parentModel.InsertChildAt(insertToIndex + 1 + i, temp);
+								}
+							} else {
+								Debug.WriteLine($"", "AnchorablePaneDropTarget Drop 4");
 								parentModel.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
-						}
-						else
-						{
+							}
+						} else {
 							var targetModelAsPositionableElement = targetModel as ILayoutPositionableElement;
 							var newOrientedPanel = new LayoutAnchorablePaneGroup()
 							{
@@ -133,26 +131,21 @@ namespace AvalonDock.Controls
 						var parentModelOrientable = targetModel.Parent as ILayoutOrientableGroup;
 						int insertToIndex = parentModel.IndexOfChild(targetModel);
 
-						if (parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Vertical &&
+						if(parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Vertical &&
 							parentModel.ChildrenCount == 1)
 							parentModelOrientable.Orientation = System.Windows.Controls.Orientation.Vertical;
 
-						if (parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Vertical)
-						{
+						if(parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Vertical) {
 							var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
-							if (layoutAnchorablePaneGroup != null &&
+							if(layoutAnchorablePaneGroup != null &&
 								(layoutAnchorablePaneGroup.Children.Count == 1 ||
-									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical))
-							{
+									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
 								var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
-								for (int i = 0; i < anchorablesToMove.Length; i++)
+								for(int i = 0; i < anchorablesToMove.Length; i++)
 									parentModel.InsertChildAt(insertToIndex + i, anchorablesToMove[i]);
-							}
-							else
+							} else
 								parentModel.InsertChildAt(insertToIndex, floatingWindow.RootPanel);
-						}
-						else
-						{
+						} else {
 							var targetModelAsPositionableElement = targetModel as ILayoutPositionableElement;
 							var newOrientedPanel = new LayoutAnchorablePaneGroup()
 							{
@@ -180,26 +173,21 @@ namespace AvalonDock.Controls
 						var parentModelOrientable = targetModel.Parent as ILayoutOrientableGroup;
 						int insertToIndex = parentModel.IndexOfChild(targetModel);
 
-						if (parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Horizontal &&
+						if(parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Horizontal &&
 							parentModel.ChildrenCount == 1)
 							parentModelOrientable.Orientation = System.Windows.Controls.Orientation.Horizontal;
 
-						if (parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Horizontal)
-						{
+						if(parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Horizontal) {
 							var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
-							if (layoutAnchorablePaneGroup != null &&
+							if(layoutAnchorablePaneGroup != null &&
 								(layoutAnchorablePaneGroup.Children.Count == 1 ||
-									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Horizontal))
-							{
+									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Horizontal)) {
 								var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
-								for (int i = 0; i < anchorablesToMove.Length; i++)
+								for(int i = 0; i < anchorablesToMove.Length; i++)
 									parentModel.InsertChildAt(insertToIndex + i, anchorablesToMove[i]);
-							}
-							else
+							} else
 								parentModel.InsertChildAt(insertToIndex, floatingWindow.RootPanel);
-						}
-						else
-						{
+						} else {
 							var targetModelAsPositionableElement = targetModel as ILayoutPositionableElement;
 							var newOrientedPanel = new LayoutAnchorablePaneGroup()
 							{
@@ -227,26 +215,21 @@ namespace AvalonDock.Controls
 						var parentModelOrientable = targetModel.Parent as ILayoutOrientableGroup;
 						int insertToIndex = parentModel.IndexOfChild(targetModel);
 
-						if (parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Horizontal &&
+						if(parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Horizontal &&
 							parentModel.ChildrenCount == 1)
 							parentModelOrientable.Orientation = System.Windows.Controls.Orientation.Horizontal;
 
-						if (parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Horizontal)
-						{
+						if(parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Horizontal) {
 							var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
-							if (layoutAnchorablePaneGroup != null &&
+							if(layoutAnchorablePaneGroup != null &&
 								(layoutAnchorablePaneGroup.Children.Count == 1 ||
-									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Horizontal))
-							{
+									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Horizontal)) {
 								var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
-								for (int i = 0; i < anchorablesToMove.Length; i++)
+								for(int i = 0; i < anchorablesToMove.Length; i++)
 									parentModel.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
-							}
-							else
+							} else
 								parentModel.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
-						}
-						else
-						{
+						} else {
 							var targetModelAsPositionableElement = targetModel as ILayoutPositionableElement;
 							var newOrientedPanel = new LayoutAnchorablePaneGroup()
 							{
@@ -273,9 +256,8 @@ namespace AvalonDock.Controls
 						var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
 
 						int i = _tabIndex == -1 ? 0 : _tabIndex;
-						foreach (var anchorableToImport in
-							layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray())
-						{
+						foreach(var anchorableToImport in
+							layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
 							paneModel.Children.Insert(i, anchorableToImport);
 							i++;
 						}
@@ -299,12 +281,9 @@ namespace AvalonDock.Controls
 		/// <param name="floatingWindowModel"></param>
 		/// <returns>The geometry of the preview/highlighting WPF figure path.</returns>
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
-												LayoutFloatingWindow floatingWindowModel)
-		{
-			switch (Type)
-			{
-				case DropTargetType.AnchorablePaneDockBottom:
-					{
+												LayoutFloatingWindow floatingWindowModel) {
+			switch(Type) {
+				case DropTargetType.AnchorableExpanderPaneDockBottom: {
 						var targetScreenRect = TargetElement.GetScreenArea();
 						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
 
@@ -314,64 +293,13 @@ namespace AvalonDock.Controls
 						return new RectangleGeometry(targetScreenRect);
 					}
 
-				case DropTargetType.AnchorablePaneDockTop:
-					{
+				case DropTargetType.AnchorableExpanderPaneDockTop: {
 						var targetScreenRect = TargetElement.GetScreenArea();
 						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
 
 						targetScreenRect.Height /= 2.0;
 
 						return new RectangleGeometry(targetScreenRect);
-					}
-
-				case DropTargetType.AnchorablePaneDockLeft:
-					{
-						var targetScreenRect = TargetElement.GetScreenArea();
-						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-
-						targetScreenRect.Width /= 2.0;
-
-						return new RectangleGeometry(targetScreenRect);
-					}
-
-				case DropTargetType.AnchorablePaneDockRight:
-					{
-						var targetScreenRect = TargetElement.GetScreenArea();
-						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-
-						targetScreenRect.Offset(targetScreenRect.Width / 2.0, 0.0);
-						targetScreenRect.Width /= 2.0;
-
-						return new RectangleGeometry(targetScreenRect);
-					}
-
-				case DropTargetType.AnchorablePaneDockInside:
-					{
-						var targetScreenRect = TargetElement.GetScreenArea();
-						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-
-						if (_tabIndex == -1)
-							return new RectangleGeometry(targetScreenRect);
-						else
-						{
-							var translatedDetectionRect = new Rect(DetectionRects[0].TopLeft, DetectionRects[0].BottomRight);
-							translatedDetectionRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-
-							var pathFigure = new PathFigure();
-							pathFigure.StartPoint = targetScreenRect.TopLeft;
-							pathFigure.Segments.Add(new LineSegment() { Point = new Point(targetScreenRect.Left, translatedDetectionRect.Top) });
-							pathFigure.Segments.Add(new LineSegment() { Point = translatedDetectionRect.TopLeft });
-							pathFigure.Segments.Add(new LineSegment() { Point = translatedDetectionRect.BottomLeft });
-							pathFigure.Segments.Add(new LineSegment() { Point = translatedDetectionRect.BottomRight });
-							pathFigure.Segments.Add(new LineSegment() { Point = translatedDetectionRect.TopRight });
-							pathFigure.Segments.Add(new LineSegment() { Point = new Point(targetScreenRect.Right, translatedDetectionRect.Top) });
-							pathFigure.Segments.Add(new LineSegment() { Point = targetScreenRect.TopRight });
-							pathFigure.IsClosed = true;
-							pathFigure.IsFilled = true;
-							pathFigure.Freeze();
-
-							return new PathGeometry(new PathFigure[] { pathFigure });
-						}
 					}
 			}
 

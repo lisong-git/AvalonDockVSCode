@@ -31,6 +31,7 @@ namespace AvalonDock.Layout {
 		private double _autohideHeight = 0.0;
 		private double _autohideMinHeight = 100.0;
 		private bool _canHide = true;
+		private bool _isExpanded = true;
 		private bool _canAutoHide = true;
 		private bool _canDockAsTabbedDocument = true;
 		// BD: 17.08.2020 Remove that bodge and handle CanClose=false && CanHide=true in XAML
@@ -180,9 +181,22 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Gets/sets whether this object is in a state where it is visible in the UI or not.</summary>
 		[XmlIgnore]
-		public bool IsCollapsed {
-			get => Parent != null && !(Parent is LayoutRoot);
-			set { if(value) Expand(); else Collapse(); }
+		public bool IsExpanded {
+			get => _isExpanded;
+			set {
+				if(value == _isExpanded)
+					return;
+				_isExpanded = value;
+				Debug.WriteLine($"{_isExpanded}", "LayoutAnchorable IsExpanded");
+				//if(value) { 
+				//	Expand();
+				//} else {
+				//	Collapse();
+				//}
+
+				//ToggleExpanderAnchorable(true);
+
+			}
 		}
 
 		public Visibility ContentVisibility {
@@ -332,20 +346,15 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Method can be invoked to fire the <see cref="Collapsing"/> event.</summary>
 		/// <param name="args"></param>
-		protected virtual void OnCollapsing(CancelEventArgs args) => Collapsing?.Invoke(this, args);
-		public void Collapse() {
-			if(Root?.Manager is DockingManager dockingManager)
-				dockingManager.ExecuteCollapseCommand(this);
-			else
-				CollapseAnchorable(true);
-		}
+		protected virtual void OnExpanding(CancelEventArgs args) => Collapsing?.Invoke(this, args);
+
 
 
 		/// <summary>Hide this contents.</summary>
 		/// <remarks>Add this content to <see cref="ILayoutRoot.Hidden"/> collection of parent root.</remarks>
 		/// <param name="cancelable"></param>
-		internal bool CollapseAnchorable(bool cancelable) {
-			Debug.WriteLine($"{IsVisible}, {IsCollapsed}, {ContentVisibility}", "CollapseAnchorable");
+		internal bool ToggleExpanderAnchorable(bool cancelable) {
+			Debug.WriteLine($"{IsVisible}, {IsExpanded}, {Parent is LayoutAnchorableExpander}", "ToggleExpanderAnchorable 1");
 
 			if(!IsVisible) {
 				IsSelected = true;
@@ -355,27 +364,37 @@ namespace AvalonDock.Layout {
 
 			if(cancelable) {
 				var args = new CancelEventArgs();
-				OnCollapsing(args);
+				OnExpanding(args);
 				if(args.Cancel)
 					return false;
 			}
-			RaisePropertyChanging(nameof(IsCollapsed));
+
+			RaisePropertyChanging(nameof(IsExpanded));
 			RaisePropertyChanging(nameof(IsHidden));
 			RaisePropertyChanging(nameof(IsVisible));
+
+
 			if(Parent is ILayoutGroup) {
 				var parentAsGroup = Parent as ILayoutGroup;
 				PreviousContainer = parentAsGroup;
 				PreviousContainerIndex = parentAsGroup.IndexOfChild(this);
 			}
-			//Root?.Hidden?.Add(this);
-			//IsCollapsed = cancelable;
+
+			if(Parent is LayoutAnchorableExpander expanderPane) {
+				Debug.WriteLine($"{expanderPane.IsExpanded}", "ToggleExpanderAnchorable 2");
+
+				expanderPane.IsExpanded = !expanderPane.IsExpanded;
+				Debug.WriteLine($"{expanderPane.IsExpanded}", "ToggleExpanderAnchorable 3");
+				IsExpanded = expanderPane.IsExpanded;
+			}
+
 			if(ContentVisibility == Visibility.Collapsed) {
 				ContentVisibility = Visibility.Visible;
 			} else {
 				ContentVisibility = Visibility.Collapsed;
 			}
-			RaisePropertyChanging(nameof(IsCollapsed));
-			RaisePropertyChanging(nameof(ILayoutPositionableElement.DockHeight));
+			RaisePropertyChanged(nameof(IsExpanded));
+			RaisePropertyChanged(nameof(ILayoutPositionableElement.DockHeight));
 			RaisePropertyChanged(nameof(IsVisible));
 			RaisePropertyChanged(nameof(IsHidden));
 			NotifyIsVisibleChanged();
@@ -383,18 +402,25 @@ namespace AvalonDock.Layout {
 			return true;
 		}
 
-		public void Expand() {
-			if(!IsCollapsed) {
-				return;
-			}
-			Debug.WriteLine($"{IsCollapsed}", "Expand");
-			ContentVisibility = Visibility.Visible;
-		}
+		//public void Collapse() {
+		//	if(Root?.Manager is DockingManager dockingManager)
+		//		dockingManager.ExecuteExpandCommand(this);
+		//	else
+		//		ToggleExpanderAnchorable(true);
+		//}
 
-		/// <summary>Hide this contents.</summary>
-		/// <remarks>Add this content to <see cref="ILayoutRoot.Hidden"/> collection of parent root.</remarks>
-		/// <param name="cancelable"></param>
-		internal bool HideAnchorable(bool cancelable) {
+		//public void Expand() {
+		//	if(!IsExpanded) {
+		//		return;
+		//	}
+		//	Debug.WriteLine($"{IsExpanded}", "Expand");
+		//	ContentVisibility = Visibility.Visible;
+		//}
+
+			/// <summary>Hide this contents.</summary>
+			/// <remarks>Add this content to <see cref="ILayoutRoot.Hidden"/> collection of parent root.</remarks>
+			/// <param name="cancelable"></param>
+			internal bool HideAnchorable(bool cancelable) {
 			Debug.WriteLine($"{cancelable}", "HideAnchorable 1");
 
 			if(!IsVisible) {

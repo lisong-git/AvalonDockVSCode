@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -9,6 +9,7 @@
 
 using AvalonDock.Layout;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -32,6 +33,8 @@ namespace AvalonDock.Controls
 			: base(model, model.Orientation)
 		{
 			_model = model;
+			Debug.WriteLine($"11", "LayoutPanelControl");
+
 		}
 
 		#endregion Constructors

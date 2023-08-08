@@ -24,30 +24,30 @@ namespace AvalonDock.Controls
 	/// </summary>
 	/// <seealso cref="TabControlEx"/>
 	/// <seealso cref="ILayoutControl"/>
-	public class LayoutAnchorablePaneControl : TabControlEx, ILayoutControl//, ILogicalChildrenContainer
+	public class LayoutAnchorableExpanderControl : Expander, ILayoutControl//, ILogicalChildrenContainer
 	{
 		#region fields
 
-		private readonly LayoutAnchorablePane _model;
+		private readonly LayoutAnchorableExpander _model;
 
 		#endregion fields
 
 		#region Constructors
 
 		/// <summary>Static class constructor to register WPF style keys.</summary>
-		static LayoutAnchorablePaneControl()
+		static LayoutAnchorableExpanderControl()
 		{
-			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorablePaneControl), new FrameworkPropertyMetadata(false));
+			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorableExpanderControl), new FrameworkPropertyMetadata(false));
 		}
 
 		/// <summary>Class constructor from model and virtualization parameter.</summary>
 		/// <param name="model"></param>
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
-		internal LayoutAnchorablePaneControl(LayoutAnchorablePane model, bool IsVirtualizing)
-			: base(IsVirtualizing)
+		internal LayoutAnchorableExpanderControl(LayoutAnchorableExpander model, bool IsVirtualizing)
+			//: base(IsVirtualizing)
 		{
 			_model = model ?? throw new ArgumentNullException(nameof(model));
-			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
+			//SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
 			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
 			// this.LayoutUpdated += new EventHandler( OnLayoutUpdated );

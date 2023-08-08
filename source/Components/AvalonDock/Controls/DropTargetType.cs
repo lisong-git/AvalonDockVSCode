@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -74,6 +74,21 @@ namespace AvalonDock.Controls
 		AnchorablePaneDockInside,
 
 		#endregion AnchorablePane
+
+		#region AnchorableExpanderPaneGroup
+
+		/// <summary>The specific drop area is the bottom of a <see cref="LayoutAnchorableExpanderControl"/> control.</summary>
+		AnchorableExpanderPaneDockTop,
+		AnchorableExpanderPaneDockBottom,
+
+		#endregion AnchorableExpanderPaneGroup
+
+		#region AnchorablePaneGroup
+
+		/// <summary>The specific drop area is the bottom of a <see cref="LayoutAnchorableExpanderGroupControl"/> control.</summary>
+		AnchorablePaneGroupDockBottom,
+
+		#endregion AnchorablePaneGroup
 
 		#region DocumentPaneDockAsAnchorable
 

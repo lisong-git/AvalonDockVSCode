@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -9,6 +9,7 @@
 
 using AvalonDock.Layout;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -163,6 +164,8 @@ namespace AvalonDock.Controls
 		{
 			base.OnMouseEnter(e);
 			if (_draggingItem == null || _draggingItem == this || e.LeftButton != MouseButtonState.Pressed) return;
+
+			Debug.WriteLine($"", "LayoutAnchorableTabItem_OnMouseEnter");
 			var model = Model;
 			var container = model.Parent;
 			var containerPane = model.Parent as ILayoutPane;

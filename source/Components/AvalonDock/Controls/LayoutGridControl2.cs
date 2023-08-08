@@ -31,11 +31,11 @@ namespace AvalonDock.Controls {
 	/// <seealso cref="Grid"/>
 	/// <seealso cref="ILayoutControl"/>
 	/// <seealso cref="IAdjustableSizeLayout"/>
-	public abstract class LayoutGridControl<T> :Grid, ILayoutControl, IAdjustableSizeLayout where T : class, ILayoutPanelElement {
+	public abstract class LayoutGridControl2<T> :Grid, ILayoutControl, IAdjustableSizeLayout where T : class, ILayoutElement {
 		#region fields
 
-		private readonly LayoutPositionableGroup<T> _model;
-		private readonly Orientation _orientation;
+		private LayoutPositionableGroup<T> _model;
+		private readonly Orientation _orientation = Orientation.Vertical;
 		private bool _initialized;
 		private ChildrenTreeChange? _asyncRefreshCalled;
 		private readonly ReentrantFlag _fixingChildrenDockLengths = new ReentrantFlag();
@@ -52,18 +52,33 @@ namespace AvalonDock.Controls {
 		/// </summary>
 		/// <param name="model"></param>
 		/// <param name="orientation"></param>
-		internal LayoutGridControl(LayoutPositionableGroup<T> model, Orientation orientation) {
-			_model = model ?? throw new ArgumentNullException(nameof(model));
-			//_orientation = orientation;
+		internal LayoutGridControl2() {
 			FlowDirection = System.Windows.FlowDirection.LeftToRight;
 			Unloaded += OnUnloaded;
+
 		}
+
+		//internal LayoutGridControl2(LayoutPositionableGroup<T> model):base() {
+		//	_model = model ?? throw new ArgumentNullException(nameof(model));
+		//}
 
 		#endregion Constructors
 
 		#region Properties
 
-		public ILayoutElement Model => _model;
+		public virtual ILayoutElement Model {
+			get => _model;
+			set {
+				Debug.WriteLine($"{value.GetType()}", "LayoutGridControl2_Model");
+				if(_model == value)
+					return;
+				//LayoutAnchorablePaneGroup2
+				if(value is LayoutPositionableGroup<T> model) {
+					_model = model;
+					UpdateChildren();
+				}
+			}
+		}
 
 		public Orientation Orientation => (_model as ILayoutOrientableGroup).Orientation;
 
@@ -76,6 +91,8 @@ namespace AvalonDock.Controls {
 		/// <inheritdoc/>
 		protected override void OnInitialized(EventArgs e) {
 			base.OnInitialized(e);
+			if(_model == null || _model.ChildrenCount == 0) { return; }
+
 			_model.ChildrenTreeChanged += (s, args) => {
 				if(args.Change != ChildrenTreeChange.DirectChildrenChanged)
 					return;
@@ -106,6 +123,9 @@ namespace AvalonDock.Controls {
 		#region Private Methods
 
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
+			if(_model == null || _model.ChildrenCount == 0) { return; }
+
+
 			var modelWithAtcualSize = _model as ILayoutPositionableElementWithActualSize;
 			modelWithAtcualSize.ActualWidth = ActualWidth;
 			modelWithAtcualSize.ActualHeight = ActualHeight;
@@ -127,8 +147,9 @@ namespace AvalonDock.Controls {
 			Unloaded -= OnUnloaded;
 		}
 
-		private void UpdateChildren() {
-			Debug.WriteLine($"{_model?.Children?.Count}", "LayoutGridControl_UpdateChildren");
+		public void UpdateChildren() {
+			Debug.WriteLine($"{_model == null}, {_model?.Children?.Count}", "LayoutGridControl2_UpdateChildren 1");
+			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var alreadyContainedChildren = Children.OfType<ILayoutControl>().ToArray();
 			DetachOldSplitters();
@@ -141,6 +162,7 @@ namespace AvalonDock.Controls {
 				return;
 			foreach(var child in _model.Children) {
 				var foundContainedChild = alreadyContainedChildren.FirstOrDefault(chVM => chVM.Model == child);
+				Debug.WriteLine($"{child.GetType()}", "UpdateChildren 2");
 				if(foundContainedChild != null)
 					Children.Add(foundContainedChild as UIElement);
 				else
@@ -152,21 +174,27 @@ namespace AvalonDock.Controls {
 			AttachPropertyChangeHandler();
 		}
 
+		public void UpdateItem() {
+			
+		}
+
 		private void AttachPropertyChangeHandler() {
-			foreach(var child in InternalChildren.OfType<ILayoutControl>()) {
-				Debug.WriteLine($"{child != null}, {child?.Model != null}", "AttachPropertyChangeHandler");
-				if(child.Model!= null) 
+			if(_model == null || _model.ChildrenCount == 0) { return; }
+
+			foreach(var child in InternalChildren.OfType<ILayoutControl>())
 				child.Model.PropertyChanged += this.OnChildModelPropertyChanged;
-			}
 		}
 
 		private void DetachPropertyChangeHandler() {
+			if(_model == null || _model.ChildrenCount == 0) { return; }
+
 			foreach(var child in InternalChildren.OfType<ILayoutControl>())
 				child.Model.PropertyChanged -= this.OnChildModelPropertyChanged;
 		}
 
 		private void OnChildModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			Debug.WriteLine($"{e.PropertyName}", "OnChildModelPropertyChanged");
+			Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "LayoutGridControl2 OnChildModelPropertyChanged");
+			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			if(AsyncRefreshCalled)
 				return;
@@ -184,12 +212,24 @@ namespace AvalonDock.Controls {
 				var childFromModel = InternalChildren.OfType<ILayoutControl>().First(ch => ch.Model == changedElement) as UIElement;
 				var indexOfChild = InternalChildren.IndexOf(childFromModel);
 				RowDefinitions[indexOfChild].Height = changedElement.DockHeight;
-			} else if(e.PropertyName == nameof(ILayoutPositionableElement.IsVisible))
+				if(sender is LayoutAnchorableExpander pane) {
+					if(indexOfChild >0 && InternalChildren[indexOfChild - 1] is LayoutGridResizerControl sp) {
+						sp.IsEnabled = pane.IsExpanded;
+					}
+				}
+			}
+			//else if(sender is LayoutAnchorableExpanderPaneControl changedElement && _fixingChildrenDockLengths.CanEnter && e.PropertyName == nameof(LayoutAnchorableExpanderPaneControl.IsExpanded) && Orientation == Orientation.Vertical) {
+
+
+			//}
+			
+			else if(e.PropertyName == nameof(ILayoutPositionableElement.IsVisible))
 				UpdateRowColDefinitions();
 		}
 
 		private void UpdateRowColDefinitions() {
-			Debug.WriteLine($"", "LayoutGridControl UpdateRowColDefinitions");
+			Debug.WriteLine($"", "LayoutGridControl2 UpdateRowColDefinitions 1");
+			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var root = _model.Root;
 			var manager = root?.Manager;
@@ -240,9 +280,11 @@ namespace AvalonDock.Controls {
 				var iChild = 0;
 				// BD: 24.08.2020 added check for iChild against InternalChildren.Count
 				for(var iChildModel = 0; iChildModel < _model.Children.Count && iChild < InternalChildren.Count; iChildModel++, iRow++, iChild++) {
-					var childModel = _model.Children[iChildModel] as ILayoutPositionableElement;
+					var childModel = _model.Children[iChildModel] as LayoutAnchorableExpander;
+					var temp = _model.Children[iChildModel];
+					Debug.WriteLine($"{temp.GetType()}, {childModel.DockHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
 					RowDefinitions.Add(new RowDefinition {
-						Height = childModel.IsVisible ? childModel.DockHeight : new GridLength(0.0, GridUnitType.Pixel),
+						Height = childModel.IsVisible ? (childModel.IsExpanded ? childModel.DockHeight : new GridLength(25, GridUnitType.Pixel)) : new GridLength(0.0, GridUnitType.Pixel),
 						MinHeight = childModel.IsVisible ? childModel.CalculatedDockMinHeight() : 0.0
 					});
 					Grid.SetRow(InternalChildren[iChild], iRow);
@@ -257,20 +299,34 @@ namespace AvalonDock.Controls {
 					iRow++;
 
 					var nextChildModelVisibleExist = false;
+					var isNextExpanded = false;
+
 					for(var i = iChildModel + 1; i < _model.Children.Count; i++) {
 						var nextChildModel = _model.Children[i] as ILayoutPositionableElement;
 						if(!nextChildModel.IsVisible)
 							continue;
 						nextChildModelVisibleExist = true;
+						if(nextChildModel.IsVisible)
+							isNextExpanded = true;
 						break;
 					}
+
+					//var prevChild = InternalChildren[iChild-1] as FrameworkElement;
+					//var nextChild = GetNextVisibleChild(iChild);
+					//for(var i = iChild  - 1; i >= 0; i--) {
+					//	if(i>0) {
+
+					//	}
+					//}
 
 					RowDefinitions.Add(new RowDefinition {
 						Height = childModel.IsVisible && nextChildModelVisibleExist ? new GridLength(manager.GridSplitterHeight) : new GridLength(0.0, GridUnitType.Pixel)
 					});
 					//if (RowDefinitions.Last().Height.Value == 0.0)
 					//    System.Diagnostics.Debugger.Break();
+					Debug.WriteLine($"{InternalChildren.Count}, {iRow}", "UpdateRowColDefinitions 5");
 					Grid.SetRow(InternalChildren[iChild], iRow);
+					Debug.WriteLine($"{InternalChildren.Count}", "UpdateRowColDefinitions 6");
 				}
 			}
 
@@ -290,7 +346,6 @@ namespace AvalonDock.Controls {
 					splitter.Cursor = Cursors.SizeNS;
 					splitter.Style = _model.Root?.Manager?.GridSplitterHorizontalStyle;
 				}
-
 
 				Children.Insert(iChild, splitter);
 				// TODO: MK Is this a bug????
@@ -317,16 +372,19 @@ namespace AvalonDock.Controls {
 		private void OnSplitterDragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) => ShowResizerOverlayWindow(sender as LayoutGridResizerControl);
 
 		private void OnSplitterDragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
+			//Debug.WriteLine($"{e.VerticalChange}, {_initialStartPoint.Y}, {_resizerWindowHost.Height - _resizerGhost.Height}, {_resizerWindowHost.Height}, {_resizerGhost.Height}", "OnSplitterDragDelta");
 			var rootVisual = this.FindVisualTreeRoot() as Visual;
 			var trToWnd = TransformToAncestor(rootVisual);
 			var transformedDelta = trToWnd.Transform(new Point(e.HorizontalChange, e.VerticalChange)) - trToWnd.Transform(new Point());
 			if(Orientation == System.Windows.Controls.Orientation.Horizontal)
 				Canvas.SetLeft(_resizerGhost, MathHelper.MinMax(_initialStartPoint.X + transformedDelta.X, 0.0, _resizerWindowHost.Width - _resizerGhost.Width));
-			else
+			else {
 				Canvas.SetTop(_resizerGhost, MathHelper.MinMax(_initialStartPoint.Y + transformedDelta.Y, 0.0, _resizerWindowHost.Height - _resizerGhost.Height));
+			}
 		}
 
 		private void OnSplitterDragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
+			//Debug.WriteLine($"{e.VerticalChange}, {Canvas.GetTop(_resizerGhost)}, {_initialStartPoint.Y}", "OnSplitterDragCompleted");
 			var splitter = sender as LayoutGridResizerControl;
 			var rootVisual = this.FindVisualTreeRoot() as Visual;
 
@@ -367,9 +425,13 @@ namespace AvalonDock.Controls {
 					nextChildModel.DockWidth = new GridLength(double.IsNaN(resizedWidth) ? width : resizedWidth, GridUnitType.Pixel);
 				}
 			} else {
-				if(prevChildModel.DockHeight.IsStar)
+				if(prevChildModel.DockHeight.IsStar) {
+					//Debug.WriteLine($"{prevChildActualSize}, {delta}", "OnSplitterDragCompleted 1");
+
 					prevChildModel.DockHeight = new GridLength(prevChildModel.DockHeight.Value * (prevChildActualSize.Height + delta) / prevChildActualSize.Height, GridUnitType.Star);
-				else {
+					//Debug.WriteLine($"{prevChild.TransformActualSizeToAncestor()}", "OnSplitterDragCompleted 2");
+
+				} else {
 					var height = (prevChildModel.DockHeight.IsAuto) ? prevChildActualSize.Height : prevChildModel.DockHeight.Value;
 					var resizedHeight = height + delta;
 					prevChildModel.DockHeight = new GridLength(double.IsNaN(resizedHeight) ? height : resizedHeight, GridUnitType.Pixel);
@@ -591,6 +653,109 @@ namespace AvalonDock.Controls {
 			};
 			_resizerWindowHost.Show();
 		}
+
+		//private void ShowResizerOverlayWindow(LayoutGridResizerControl splitter) {
+
+		//	_resizerGhost = new Border { Background = splitter.BackgroundWhileDragging, Opacity = splitter.OpacityWhileDragging };
+
+		//	var indexOfResizer = InternalChildren.IndexOf(splitter);
+
+		//	var prevChild = InternalChildren[indexOfResizer - 1] as FrameworkElement;
+		//	//var nextChild = GetNextVisibleChild(indexOfResizer);
+
+		//	var prevChildren = InternalChildren.OfType<FrameworkElement>()
+		//		.Take(indexOfResizer);
+		//	var nextChildren = InternalChildren.OfType<FrameworkElement>()
+		//		.Skip(indexOfResizer);
+
+		//	Debug.WriteLine($"{Orientation}, {InternalChildren.Count}, {prevChildren.Count()}, {nextChildren.Count()} ", "ShowResizerOverlayWindow");
+
+		//	//var prevChildActualSize = prevChild.TransformActualSizeToAncestor();
+		//	//var nextChildActualSize = nextChild.TransformActualSizeToAncestor();
+
+		//	var prevChildrenActualSizes = prevChildren.Select(o=> o.TransformActualSizeToAncestor());
+		//	var nextChildrenActualSizes = nextChildren.Select(o=> o.TransformActualSizeToAncestor());
+
+		//	//var prevChildModel = (ILayoutPositionableElement)(prevChild as ILayoutControl).Model;
+		//	//var nextChildModel = (ILayoutPositionableElement)(nextChild as ILayoutControl).Model;
+
+		//	var prevChildrenModels = prevChildren.OfType<ILayoutControl>()
+		//		.Select(o=> o.Model)
+		//		.OfType<ILayoutPositionableElement>();
+		//	var nextChildrenModels = nextChildren.OfType<ILayoutControl>()
+		//		.Select(o=> o.Model)
+		//		.OfType<ILayoutPositionableElement>();
+
+
+		//	//var ptTopLeftScreen = prevChild.PointToScreenDPIWithoutFlowDirection(new Point());
+		//	var ptTopLeftScreen = prevChildren.First().PointToScreenDPIWithoutFlowDirection(new Point());
+
+		//	Size actualSize;
+
+		//	if(Orientation == System.Windows.Controls.Orientation.Horizontal) {
+		//		actualSize = new Size(
+		//			prevChildrenActualSizes.Select(o => o.Width).Sum() - prevChildrenModels.Select(o => o.CalculatedDockMinWidth()).Sum()
+		//				+ (prevChildrenActualSizes.Count() + nextChildrenActualSizes.Count()) * splitter.ActualWidth
+		//				+ nextChildrenActualSizes.Select(o => o.Width).Sum() - nextChildrenModels.Select(o => o.CalculatedDockMinWidth()).Sum(),
+		//				nextChildrenActualSizes.First().Height);
+
+		//		_resizerGhost.Width = splitter.ActualWidth;
+		//		_resizerGhost.Height = actualSize.Height;
+		//		ptTopLeftScreen.Offset(prevChildrenModels.Select(o => o.CalculatedDockMinWidth()).Sum(), 0.0);
+		//	} else {
+		//			actualSize = new Size(
+		//			prevChildrenActualSizes.First().Width,
+		//			prevChildrenActualSizes.Select(o=> o.Height).Sum() - prevChildrenModels.Select(o=> o.CalculatedDockMinHeight()).Sum()
+		//				+ (prevChildrenActualSizes.Count() + nextChildrenActualSizes.Count() -1) * splitter.ActualHeight
+		//				+ nextChildrenActualSizes.Select(o=> o.Height).Sum() - nextChildrenModels.Select(o=> o.CalculatedDockMinHeight()).Sum()
+		//			);
+
+		//		Debug.WriteLine($"{string.Join(",", prevChildrenActualSizes.Select(o => o.Height))}, ", "ShowResizerOverlayWindow 2 prevChildrenActualSizes: ");
+		//		Debug.WriteLine($"{prevChildrenActualSizes.Select(o => o.Height).Sum()}, ", "ShowResizerOverlayWindow 3");
+		//		Debug.WriteLine($"{string.Join(",", prevChildrenModels.Select(o => o.CalculatedDockMinHeight()))}, ", "ShowResizerOverlayWindow 4 prevChildrenModels: ");
+		//		Debug.WriteLine($"{prevChildrenModels.Select(o => o.CalculatedDockMinHeight()).Sum()}", "ShowResizerOverlayWindow 5");
+		//		Debug.WriteLine($"{actualSize.Width}, {actualSize.Height}", "ShowResizerOverlayWindow 6");
+
+		//		_resizerGhost.Height = splitter.ActualHeight;
+		//		_resizerGhost.Width = actualSize.Width;
+
+		//		//ptTopLeftScreen.Offset(0.0, prevChildModel.CalculatedDockMinHeight());
+		//		Debug.WriteLine($"{ptTopLeftScreen.Y}", "ShowResizerOverlayWindow 7");
+		//		//ptTopLeftScreen.Offset(0.0, prevChildrenModels.Select(o => o.CalculatedDockMinHeight()).Sum());
+		//		ptTopLeftScreen.Offset(0.0, 28*2+4);
+		//		Debug.WriteLine($"{ptTopLeftScreen.Y}", "ShowResizerOverlayWindow 8");
+		//	}
+		//	//Debug.WriteLine($"{Orientation}, {InternalChildren.Count}, {prevChildren.Count()}, {nextChildren.Count()} ", "ShowResizerOverlayWindow");
+
+		//	_initialStartPoint = splitter.PointToScreenDPIWithoutFlowDirection(new Point()) - ptTopLeftScreen;
+
+		//	if(Orientation == System.Windows.Controls.Orientation.Horizontal)
+		//		Canvas.SetLeft(_resizerGhost, _initialStartPoint.X);
+		//	else
+		//		Canvas.SetTop(_resizerGhost, _initialStartPoint.Y);
+
+		//	var panelHostResizer = new Canvas { HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch, VerticalAlignment = System.Windows.VerticalAlignment.Stretch };
+		//	panelHostResizer.Children.Add(_resizerGhost);
+
+		//	_resizerWindowHost = new Window {
+		//		Style = new Style(typeof(Window), null),
+		//		SizeToContent = System.Windows.SizeToContent.Manual,
+		//		ResizeMode = ResizeMode.NoResize,
+		//		WindowStyle = System.Windows.WindowStyle.None,
+		//		ShowInTaskbar = false,
+		//		AllowsTransparency = true,
+		//		Background = new SolidColorBrush(Colors.Green),
+		//		//Background = null,
+		//		Width = actualSize.Width,
+		//		Height = actualSize.Height,
+		//		Left = ptTopLeftScreen.X,
+		//		Top = ptTopLeftScreen.Y,
+		//		ShowActivated = false,
+		//		Owner = null,
+		//		Content = panelHostResizer
+		//	};
+		//	_resizerWindowHost.Show();
+		//}
 
 		private void HideResizerOverlayWindow() {
 			if(_resizerWindowHost == null)
