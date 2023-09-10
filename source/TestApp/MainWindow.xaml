@@ -361,40 +361,9 @@
 
 
 
-                    <!--<LayoutAnchorableExpanderGroupPane DockMinWidth="20" DockWidth="120">
-                        <LayoutAnchorableExpanderGroup Orientation="Vertical">
-							<LayoutAnchorableExpander IsExpanded="True" Title="自定义4">
-                                <LayoutAnchorable Title="自定义4">
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBox Text="内容1" />
-                                        <TextBox Text="内容2" />
-                                    </StackPanel>
-                                </LayoutAnchorable>
-                            </LayoutAnchorableExpander>
-							<LayoutAnchorableExpander IsExpanded="True" Title="自定义5" >
-                                <LayoutAnchorable Title="自定义5" />
-                            </LayoutAnchorableExpander>
-                            <LayoutAnchorableExpander IsExpanded="False">
-                                <LayoutAnchorable Title="自定义6">
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBox Text="内容31" />
-										<TextBox Text="内容32" />
-									</StackPanel>
-                                </LayoutAnchorable>
-                            </LayoutAnchorableExpander>
-                        </LayoutAnchorableExpanderGroup>
 
-                        <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                            <LayoutAnchorableExpander IsExpanded="True">
-								<LayoutAnchorable Title="自定义7" />
-							</LayoutAnchorableExpander>
-                            <LayoutAnchorableExpander IsExpanded="True">
-                                <LayoutAnchorable Title="自定义8" />
-                            </LayoutAnchorableExpander>
-                        </LayoutAnchorableExpanderGroup>
-                    </LayoutAnchorableExpanderGroupPane>-->
 
-                    <!--<LayoutAnchorablePane DockWidth="120">
+                    <LayoutAnchorablePane DockWidth="120">
                         <LayoutAnchorable
                             Title="Tool Window 1"
                             ContentId="toolWindow1"
@@ -409,7 +378,7 @@
                         <LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
                             <TextBlock Text="{Binding FocusedElement}" />
                         </LayoutAnchorable>
-                    </LayoutAnchorablePane>-->
+                    </LayoutAnchorablePane>
 
                     <!--<LayoutAnchorablePaneGroup DockWidth="250" Orientation="Vertical">
 						<LayoutAnchorablePane DockWidth="80">

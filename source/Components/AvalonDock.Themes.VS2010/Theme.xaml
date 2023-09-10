@@ -489,13 +489,12 @@
                         <avalonDockControls:LayoutAnchorableExpanderGroupControl
                             Grid.Row="1"
                             Background="GreenYellow"
-                            Model="{Binding Model.Children[0], RelativeSource={RelativeSource TemplatedParent}}"  
+							Model="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"
 							>
-							<!--Model="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"-->
+
 
 							<!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
                             <!--  Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
-                            <!--  Model="{Binding Model.LayoutAnchorableExpanderGroup, RelativeSource={RelativeSource TemplatedParent}}"  -->
                             <!--<Grid.RowDefinitions>
 								<RowDefinition Height="Auto" />
 								<RowDefinition Height="*" />
@@ -516,13 +515,13 @@
 			</Setter.Value>
 		</Setter>-->
 
-        <Setter Property="ContentTemplate">
+        <!--<Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+					<avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}" />
                 </DataTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
 
     </Style>
 
