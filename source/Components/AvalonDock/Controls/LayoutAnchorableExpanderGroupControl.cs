@@ -13,17 +13,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <summary>
 	/// Implements a group control that hosts a <see cref="LayoutAnchorablePaneGroup"/> model.
 	///
 	/// This Grid based control can host multiple other controls in its Children collection
 	/// (<see cref="LayoutAnchorableControl"/>).
 	/// </summary>
-	public class LayoutAnchorableExpanderGroupControl :LayoutGridControl2<ILayoutAnchorablePane>, ILayoutControl {
+	public class LayoutAnchorableExpanderGroupControl :ExpanderGridControl<LayoutAnchorableExpander>, ILayoutControl {
 		#region fields
 
 
@@ -41,7 +39,7 @@ namespace AvalonDock.Controls
 		//}
 
 		public LayoutAnchorableExpanderGroupControl() {
-			Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");
+			//Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");
 		}
 
 
@@ -58,9 +56,9 @@ namespace AvalonDock.Controls
 		public override ILayoutElement Model {
 			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
 			set {
-				Debug.WriteLine($"{value.GetType()}", "LayoutAnchorablePaneGroupControl2_Model");
-
+				Debug.WriteLine($"{value.GetType()}", "LayoutAnchorableExpanderGroupControl Model");
 				SetValue(ModelProperty, value);
+				base.Model = value;
 			}
 		}
 
@@ -76,7 +74,7 @@ namespace AvalonDock.Controls
 			//SetLayoutItem(Model?.Root?.Manager?.GetLayoutItemFromModel(Model));
 			//} else
 			//SetLayoutItem(null);
-			Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorablePaneGroupControl2_OnModelChanged");
+			Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableExpanderGroupControl OnModelChanged");
 			if(e.NewValue is LayoutAnchorableExpanderGroup model) {
 				base.Model = model;
 			}

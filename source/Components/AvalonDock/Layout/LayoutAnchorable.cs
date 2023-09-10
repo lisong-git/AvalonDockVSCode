@@ -180,24 +180,24 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Gets/sets whether this object is in a state where it is visible in the UI or not.</summary>
-		[XmlIgnore]
-		public bool IsExpanded {
-			get => _isExpanded;
-			set {
-				if(value == _isExpanded)
-					return;
-				_isExpanded = value;
-				Debug.WriteLine($"{_isExpanded}", "LayoutAnchorable IsExpanded");
-				//if(value) { 
-				//	Expand();
-				//} else {
-				//	Collapse();
-				//}
+		//[XmlIgnore]
+		//public bool IsExpanded {
+		//	get => _isExpanded;
+		//	set {
+		//		if(value == _isExpanded)
+		//			return;
+		//		_isExpanded = value;
+		//		Debug.WriteLine($"{_isExpanded}", "LayoutAnchorable IsExpanded");
+		//		//if(value) { 
+		//		//	Expand();
+		//		//} else {
+		//		//	Collapse();
+		//		//}
 
-				//ToggleExpanderAnchorable(true);
+		//		//ToggleExpanderAnchorable(true);
 
-			}
-		}
+		//	}
+		//}
 
 		public Visibility ContentVisibility {
 			get => _contentVisibility;
@@ -353,54 +353,54 @@ namespace AvalonDock.Layout {
 		/// <summary>Hide this contents.</summary>
 		/// <remarks>Add this content to <see cref="ILayoutRoot.Hidden"/> collection of parent root.</remarks>
 		/// <param name="cancelable"></param>
-		internal bool ToggleExpanderAnchorable(bool cancelable) {
-			Debug.WriteLine($"{IsVisible}, {IsExpanded}, {Parent is LayoutAnchorableExpander}", "ToggleExpanderAnchorable 1");
+		//internal bool ToggleExpanderAnchorable(bool cancelable) {
+		//	Debug.WriteLine($"{IsVisible}, {IsExpanded}, {Parent is LayoutAnchorableExpander}", "ToggleExpanderAnchorable 1");
 
-			if(!IsVisible) {
-				IsSelected = true;
-				IsActive = true;
-				return false;
-			}
+		//	if(!IsVisible) {
+		//		IsSelected = true;
+		//		IsActive = true;
+		//		return false;
+		//	}
 
-			if(cancelable) {
-				var args = new CancelEventArgs();
-				OnExpanding(args);
-				if(args.Cancel)
-					return false;
-			}
+		//	if(cancelable) {
+		//		var args = new CancelEventArgs();
+		//		OnExpanding(args);
+		//		if(args.Cancel)
+		//			return false;
+		//	}
 
-			RaisePropertyChanging(nameof(IsExpanded));
-			RaisePropertyChanging(nameof(IsHidden));
-			RaisePropertyChanging(nameof(IsVisible));
+		//	RaisePropertyChanging(nameof(IsExpanded));
+		//	RaisePropertyChanging(nameof(IsHidden));
+		//	RaisePropertyChanging(nameof(IsVisible));
 
 
-			if(Parent is ILayoutGroup) {
-				var parentAsGroup = Parent as ILayoutGroup;
-				PreviousContainer = parentAsGroup;
-				PreviousContainerIndex = parentAsGroup.IndexOfChild(this);
-			}
+		//	if(Parent is ILayoutGroup) {
+		//		var parentAsGroup = Parent as ILayoutGroup;
+		//		PreviousContainer = parentAsGroup;
+		//		PreviousContainerIndex = parentAsGroup.IndexOfChild(this);
+		//	}
 
-			if(Parent is LayoutAnchorableExpander expanderPane) {
-				Debug.WriteLine($"{expanderPane.IsExpanded}", "ToggleExpanderAnchorable 2");
+		//	if(Parent is LayoutAnchorableExpander expanderPane) {
+		//		Debug.WriteLine($"{expanderPane.IsExpanded}", "ToggleExpanderAnchorable 2");
 
-				expanderPane.IsExpanded = !expanderPane.IsExpanded;
-				Debug.WriteLine($"{expanderPane.IsExpanded}", "ToggleExpanderAnchorable 3");
-				IsExpanded = expanderPane.IsExpanded;
-			}
+		//		expanderPane.IsExpanded = !expanderPane.IsExpanded;
+		//		Debug.WriteLine($"{expanderPane.IsExpanded}", "ToggleExpanderAnchorable 3");
+		//		IsExpanded = expanderPane.IsExpanded;
+		//	}
 
-			if(ContentVisibility == Visibility.Collapsed) {
-				ContentVisibility = Visibility.Visible;
-			} else {
-				ContentVisibility = Visibility.Collapsed;
-			}
-			RaisePropertyChanged(nameof(IsExpanded));
-			RaisePropertyChanged(nameof(ILayoutPositionableElement.DockHeight));
-			RaisePropertyChanged(nameof(IsVisible));
-			RaisePropertyChanged(nameof(IsHidden));
-			NotifyIsVisibleChanged();
+		//	if(ContentVisibility == Visibility.Collapsed) {
+		//		ContentVisibility = Visibility.Visible;
+		//	} else {
+		//		ContentVisibility = Visibility.Collapsed;
+		//	}
+		//	RaisePropertyChanged(nameof(IsExpanded));
+		//	RaisePropertyChanged(nameof(ILayoutPositionableElement.DockHeight));
+		//	RaisePropertyChanged(nameof(IsVisible));
+		//	RaisePropertyChanged(nameof(IsHidden));
+		//	NotifyIsVisibleChanged();
 
-			return true;
-		}
+		//	return true;
+		//}
 
 		//public void Collapse() {
 		//	if(Root?.Manager is DockingManager dockingManager)

@@ -412,15 +412,15 @@ namespace AvalonDock {
 
 		#region AnchorableGroupTabControlStyle
 
-		/// <summary><see cref="AnchorableGroupTabControlStyle"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorableGroupTabControlStyleProperty = DependencyProperty.Register(nameof(AnchorableGroupTabControlStyle), typeof(Style), typeof(DockingManager),
+		/// <summary><see cref="AnchorableExpanderGroupPaneControlStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty AnchorableExpanderGroupPaneControlStyleProperty = DependencyProperty.Register(nameof(AnchorableExpanderGroupPaneControlStyle), typeof(Style), typeof(DockingManager),
 				new FrameworkPropertyMetadata(null, OnAnchorableGroupTabControlChanged));
 
 		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorablePaneControl"/>.</summary>
 		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl."), Category("Anchorable")]
-		public Style AnchorableGroupTabControlStyle {
-			get => (Style) GetValue(AnchorableGroupTabControlStyleProperty);
-			set => SetValue(AnchorableGroupTabControlStyleProperty, value);
+		public Style AnchorableExpanderGroupPaneControlStyle {
+			get => (Style) GetValue(AnchorableExpanderGroupPaneControlStyleProperty);
+			set => SetValue(AnchorableExpanderGroupPaneControlStyleProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="AnchorablePaneControlStyle"/> property.</summary>
@@ -439,7 +439,7 @@ namespace AvalonDock {
 		public static readonly DependencyProperty AnchorablePaneControl2StyleProperty = DependencyProperty.Register(nameof(AnchorablePaneControl2Style), typeof(Style), typeof(DockingManager),
 				new FrameworkPropertyMetadata(null, OnAnchorablePaneControl2StyleChanged));
 
-		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableGroupBoxControl"/>.</summary>
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderGroupBoxControl"/>.</summary>
 		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl2."), Category("Anchorable")]
 		public Style AnchorablePaneControl2Style {
 			get => (Style) GetValue(AnchorablePaneControl2StyleProperty);
@@ -1527,16 +1527,20 @@ namespace AvalonDock {
 				}
 			}
 
-			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
-				_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpanderPane));
-			}
+			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpanderPane));
+			//}
 
-			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()) {
-				Debug.WriteLine($"{areaHost.EmptyLength()}", "GetDropAreas");
-				if(areaHost.EmptyLength() > 1) {
-					_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorablePaneGroup));
-				}
+			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
+				_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderPane));
 			}
+			
+			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()) {
+			//	Debug.WriteLine($"{areaHost.EmptyLength()}", "GetDropAreas");
+			//	if(areaHost.EmptyLength() > 1) {
+			//		_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorableExpanderPaneGroup));
+			//	}
+			//}
 
 			return _areas;
 		}
@@ -1654,13 +1658,13 @@ namespace AvalonDock {
 				templateModelView.SetBinding(StyleProperty, new Binding(AnchorablePaneControlStyleProperty.Name) { Source = this });
 				return templateModelView;
 			}
-			if(model is LayoutAnchorableGroupTab layoutAnchorableGroupTabModel) {
-				var templateModelView = new LayoutAnchorableGroupTabControl(layoutAnchorableGroupTabModel, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableGroupTabControlStyleProperty.Name) { Source = this });
+			if(model is LayoutAnchorableExpanderGroupPane layoutAnchorableGroupTabModel) {
+				var templateModelView = new LayoutAnchorableExpanderGroupPaneControl(layoutAnchorableGroupTabModel, IsVirtualizingAnchorable);
+				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderGroupPaneControlStyleProperty.Name) { Source = this });
 				return templateModelView;
 			}
-			if(model is LayoutAnchorableGroupBox) {
-				var templateModelView = new LayoutAnchorableGroupBoxControl(model as LayoutAnchorableGroupBox, IsVirtualizingAnchorable);
+			if(model is LayoutAnchorableExpanderGroupBox) {
+				var templateModelView = new LayoutAnchorableExpanderGroupBoxControl(model as LayoutAnchorableExpanderGroupBox, IsVirtualizingAnchorable);
 				templateModelView.SetBinding(StyleProperty, new Binding(AnchorablePaneControl2StyleProperty.Name) { Source = this });
 				templateModelView.Background = new SolidColorBrush(Colors.BlueViolet);
 				//templateModelView.M
@@ -1674,8 +1678,9 @@ namespace AvalonDock {
 				return templateModelView;
 			}
 			if (model is LayoutAnchorable) {
-				var templateModelView = new LayoutAnchorableControl();
-				templateModelView.Model = model as LayoutAnchorable;
+				var templateModelView = new LayoutAnchorableControl {
+					Model = model as LayoutAnchorable
+				};
 				return templateModelView;
 			}
 			//if(model is LayoutAnchorablePaneGroup2) {
@@ -1991,25 +1996,25 @@ namespace AvalonDock {
 			}
 		}
 
-		internal void ExecuteExpandCommand(LayoutAnchorable anchorable) {
-			Debug.WriteLine($"=============================================");
+		//internal void ExecuteExpandCommand(LayoutAnchorable anchorable) {
+		//	Debug.WriteLine($"=============================================");
 
-			Debug.WriteLine($"{anchorable != null}", "ExecuteExpandCommand");
-			if(!(anchorable is LayoutAnchorable model))
-				return;
+		//	Debug.WriteLine($"{anchorable != null}", "ExecuteExpandCommand");
+		//	if(!(anchorable is LayoutAnchorable model))
+		//		return;
 
-			AnchorableExpandingEventArgs expandArgs = null;
-			AnchorableExpanding?.Invoke(this, expandArgs = new AnchorableExpandingEventArgs(model));
-			//if(expandArgs?.IsExpanded == true) {
-			//	ExecuteExpandCommand(model);
-			//	return;
-			//}
-			if(expandArgs?.Cancel == true)
-				return;
+		//	AnchorableExpandingEventArgs expandArgs = null;
+		//	AnchorableExpanding?.Invoke(this, expandArgs = new AnchorableExpandingEventArgs(model));
+		//	//if(expandArgs?.IsExpanded == true) {
+		//	//	ExecuteExpandCommand(model);
+		//	//	return;
+		//	//}
+		//	if(expandArgs?.Cancel == true)
+		//		return;
 
-			if(model.ToggleExpanderAnchorable(true))
-				AnchorableExpanded?.Invoke(this, new AnchorableExpandEventArgs(model));
-		}
+		//	if(model.ToggleExpanderAnchorable(true))
+		//		AnchorableExpanded?.Invoke(this, new AnchorableExpandEventArgs(model));
+		//}
 
 		internal void ExecuteHideCommand(LayoutAnchorable anchorable) {
 			Debug.WriteLine($"{anchorable != null}", "ExecuteHideCommand 1");

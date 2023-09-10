@@ -24,26 +24,26 @@ namespace AvalonDock.Controls
 	/// </summary>
 	/// <seealso cref="TabControlEx"/>
 	/// <seealso cref="ILayoutControl"/>
-	public class LayoutAnchorableGroupTabControl : TabControlEx, ILayoutControl//, ILogicalChildrenContainer
+	public class LayoutAnchorableExpanderGroupPaneControl : TabControlEx, ILayoutControl//, ILogicalChildrenContainer
 	{
 		#region fields
 
-		private readonly LayoutAnchorableGroupTab _model;
+		private readonly LayoutAnchorableExpanderGroupPane _model;
 
 		#endregion fields
 
 		#region Constructors
 
 		/// <summary>Static class constructor to register WPF style keys.</summary>
-		static LayoutAnchorableGroupTabControl()
+		static LayoutAnchorableExpanderGroupPaneControl()
 		{
-			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorableGroupTabControl), new FrameworkPropertyMetadata(false));
+			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorableExpanderGroupPaneControl), new FrameworkPropertyMetadata(false));
 		}
 
 		/// <summary>Class constructor from model and virtualization parameter.</summary>
 		/// <param name="model"></param>
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
-		internal LayoutAnchorableGroupTabControl(LayoutAnchorableGroupTab model, bool IsVirtualizing)
+		internal LayoutAnchorableExpanderGroupPaneControl(LayoutAnchorableExpanderGroupPane model, bool IsVirtualizing)
 			: base(IsVirtualizing)
 		{
 			_model = model ?? throw new ArgumentNullException(nameof(model));

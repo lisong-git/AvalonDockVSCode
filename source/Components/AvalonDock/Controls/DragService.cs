@@ -96,7 +96,7 @@ namespace AvalonDock.Controls
 			}
 
 			var newHost = _overlayWindowHosts.FirstOrDefault(oh => oh.HitTestScreen(dragPosition));
-			Debug.WriteLine($"{newHost}", "UpdateMouseLocation");
+			Debug.WriteLine($"{newHost}", "DragService UpdateMouseLocation");
 			if (_currentHost != null || _currentHost != newHost)
 			{
 				//is mouse still inside current overlay window host?
@@ -185,7 +185,8 @@ namespace AvalonDock.Controls
 			Debug.WriteLine($"=================================================================================");
 			_currentWindowAreas.AddRange(areasToAdd);
 
-			Debug.WriteLineIf(areasToAdd.Any(),$"{string.Join(",", areasToAdd.Select(o=> o.Type))}", "UpdateMouseLocation 1");
+			Debug.WriteLine( $"{areasToAdd.Count}", "UpdateMouseLocation 1");
+			//Debug.WriteLineIf(areasToAdd.Any(), $"{string.Join(",", areasToAdd.Select(o => o.Type))}", "UpdateMouseLocation 1");
 			//显示可插入区域小图预览
 			areasToAdd.ForEach(a =>
 				_currentWindow.DragEnter(a));

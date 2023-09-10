@@ -21,28 +21,28 @@ namespace AvalonDock.Controls {
 	/// Provides a control to display multible (or just one) LayoutAnchorable(s).
 	/// See also <seealso cref="AnchorablePaneTabPanel"/>.
 	/// </summary>
-	/// <seealso cref="TabControlEx"/>
+	/// <seealso cref="GroupBox"/>
 	/// <seealso cref="ILayoutControl"/>
-	public class LayoutAnchorableGroupBoxControl :GroupBox, ILayoutControl//, ILogicalChildrenContainer
+	public class LayoutAnchorableExpanderGroupBoxControl :GroupBox, ILayoutControl//, ILogicalChildrenContainer
 	{
 		#region fields
 
-		private readonly LayoutAnchorableGroupBox _model;
+		private readonly LayoutAnchorableExpanderGroupBox _model;
 
 		#endregion fields
 
 		#region Constructors
 
 		/// <summary>Static class constructor to register WPF style keys.</summary>
-		static LayoutAnchorableGroupBoxControl() {
+		static LayoutAnchorableExpanderGroupBoxControl() {
 			//DefaultStyleKeyProperty.OverrideMetadata(typeof(LayoutAnchorablePaneControl2), new FrameworkPropertyMetadata(typeof(LayoutAnchorablePaneControl2)));
-			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorableGroupBoxControl), new FrameworkPropertyMetadata(false));
+			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorableExpanderGroupBoxControl), new FrameworkPropertyMetadata(false));
 		}
 
 		/// <summary>Class constructor from model and virtualization parameter.</summary>
 		/// <param name="model"></param>
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
-		internal LayoutAnchorableGroupBoxControl(LayoutAnchorableGroupBox model, bool IsVirtualizing) {
+		internal LayoutAnchorableExpanderGroupBoxControl(LayoutAnchorableExpanderGroupBox model, bool IsVirtualizing) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			//SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });

@@ -8,6 +8,7 @@
  ************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Markup;
 using System.Xml.Serialization;
@@ -18,7 +19,7 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableGroupBox : LayoutPositionableGroup<LayoutPositionableGroup<ILayoutAnchorablePane>>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpanderGroupPane :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable {
 		#region fields
 
 		private int _selectedIndex = -1;
@@ -34,20 +35,28 @@ namespace AvalonDock.Layout {
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableGroupBox() {
+		public LayoutAnchorableExpanderGroupPane() {
 		}
 
-		public LayoutAnchorableExpanderGroup LayoutAnchorablePaneGroup2;
-
-		/// <summary>Class constructor from <see cref="LayoutPositionableGroup"/> which will be added into its children collection.</summary>
-		public LayoutAnchorableGroupBox(LayoutPositionableGroup<ILayoutAnchorablePane> anchorable) {
+		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
+		public LayoutAnchorableExpanderGroupPane(LayoutAnchorableExpanderGroup anchorable) {
+			Children.Add(anchorable);
 		}
 
 		#endregion Constructors
 
 		#region Properties
 
-		public LayoutAnchorableExpanderGroup MM => (LayoutAnchorableExpanderGroup)Children.FirstOrDefault(o => o is LayoutAnchorableExpanderGroup);
+		//public List<LayoutAnchorable> LayoutAnchorables => Children.Select(o => o.Children.First().Children.First())
+		public List<LayoutAnchorable> LayoutAnchorables => Children.Select(o => o.Children.First().Content)
+			.OfType<LayoutAnchorable>()
+			.ToList();
+
+		/// <summary>Gets whether the pane can be hidden.</summary>
+		public bool CanHide => Children.All(a => a.CanHide);
+
+		/// <summary>Gets whether the pane can be closed.</summary>
+		public bool CanClose => Children.All(a => a.CanClose);
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
@@ -56,12 +65,36 @@ namespace AvalonDock.Layout {
 		public string Name {
 			get => _name;
 			set {
-				if (value == _name)
+				if(value == _name)
 					return;
 				_name = value;
 				RaisePropertyChanged(nameof(Name));
 			}
 		}
+
+		/// <summary>Gets or sets the index of the selected content in the pane.</summary>
+		public int SelectedContentIndex {
+			get => _selectedIndex;
+			set {
+				if(value < 0 || value >= Children.Count)
+					value = -1;
+				if(value == _selectedIndex)
+					return;
+				RaisePropertyChanging(nameof(SelectedContentIndex));
+				RaisePropertyChanging(nameof(SelectedContent));
+				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
+					Children[_selectedIndex].IsSelected = false;
+				_selectedIndex = value;
+				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
+					Children[_selectedIndex].IsSelected = true;
+				RaisePropertyChanged(nameof(SelectedContentIndex));
+				RaisePropertyChanged(nameof(SelectedContent));
+			}
+		}
+
+		/// <summary>Gets the selected content in the pane or null.</summary>
+		public LayoutAnchorableExpanderGroup SelectedContent2 => _selectedIndex == -1 ? null : Children[_selectedIndex];
+		public LayoutContent SelectedContent => SelectedContent2?.Current;
 
 		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
 		string ILayoutPaneSerializable.Id {
@@ -78,40 +111,53 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		protected override void ChildMoved(int oldIndex, int newIndex) {
-
+			if(_selectedIndex == oldIndex) {
+				RaisePropertyChanging(nameof(SelectedContentIndex));
+				_selectedIndex = newIndex;
+				RaisePropertyChanged(nameof(SelectedContentIndex));
+			}
 			base.ChildMoved(oldIndex, newIndex);
 		}
 
 		/// <inheritdoc />
 		protected override void OnChildrenCollectionChanged() {
-
+			AutoFixSelectedContent();
+			for(var i = 0; i < Children.Count; i++) {
+				if(!Children[i].IsSelected)
+					continue;
+				SelectedContentIndex = i;
+				break;
+			}
+			RaisePropertyChanged(nameof(CanClose));
+			RaisePropertyChanged(nameof(CanHide));
+			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 			base.OnChildrenCollectionChanged();
 		}
 
 		/// <inheritdoc />
 		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
-			if (oldValue is ILayoutGroup oldGroup)
+			if(oldValue is ILayoutGroup oldGroup)
 				oldGroup.ChildrenCollectionChanged -= OnParentChildrenCollectionChanged;
 			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-			if (newValue is ILayoutGroup newGroup)
+			if(newValue is ILayoutGroup newGroup)
 				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
 			base.OnParentChanged(oldValue, newValue);
 		}
 
 		/// <inheritdoc />
 		public override void WriteXml(System.Xml.XmlWriter writer) {
-			if (_id != null)
+			if(_id != null)
 				writer.WriteAttributeString(nameof(ILayoutPaneSerializable.Id), _id);
-			if (_name != null)
+			if(_name != null)
 				writer.WriteAttributeString(nameof(Name), _name);
 			base.WriteXml(writer);
 		}
 
 		/// <inheritdoc />
 		public override void ReadXml(System.Xml.XmlReader reader) {
-			if (reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id)))
+			if(reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id)))
 				_id = reader.Value;
-			if (reader.MoveToAttribute(nameof(Name)))
+			if(reader.MoveToAttribute(nameof(Name)))
 				_name = reader.Value;
 			_autoFixSelectedContent = false;
 			base.ReadXml(reader);
@@ -125,14 +171,25 @@ namespace AvalonDock.Layout {
 			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
 			System.Diagnostics.Trace.WriteLine("AnchorablePane()");
 
-			//foreach(ILayoutPositionableElement child in Children)
-			//	child.ConsoleDump(tab + 1);
+			foreach(LayoutElement child in Children)
+				child.ConsoleDump(tab + 1);
 		}
 #endif
 
 		#endregion Overrides
 
 		#region Public Methods
+
+		/// <summary>
+		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
+		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
+		/// </summary>
+		/// <param name="content"></param>
+		public int IndexOf(LayoutAnchorableExpanderGroup content) {
+			if(!(content is LayoutAnchorableExpanderGroup anchorableChild))
+				return -1;
+			return Children.IndexOf(anchorableChild);
+		}
 
 		/// <summary>
 		/// Gets whether the model hosts only 1 <see cref="LayoutAnchorable"/> (True)
@@ -151,7 +208,16 @@ namespace AvalonDock.Layout {
 
 		#region Internal Methods
 
-
+		/// <summary>Invalidates the current <see cref="SelectedContentIndex"/> and sets the index for the next avialable child with IsEnabled == true.</summary>
+		internal void SetNextSelectedIndex() {
+			SelectedContentIndex = -1;
+			for(var i = 0; i < Children.Count; ++i) {
+				if(!Children[i].IsEnabled)
+					continue;
+				SelectedContentIndex = i;
+				return;
+			}
+		}
 
 		/// <summary>
 		/// Updates whether this object is hosted at the root level of a floating window control or not.
@@ -163,15 +229,18 @@ namespace AvalonDock.Layout {
 		#region Private Methods
 
 		private void AutoFixSelectedContent() {
-			if (!_autoFixSelectedContent)
+			if(!_autoFixSelectedContent)
 				return;
-			SetLastActivatedIndex();
+			if(SelectedContentIndex >= ChildrenCount)
+				SelectedContentIndex = Children.Count - 1;
+			if(SelectedContentIndex == -1 && ChildrenCount > 0)
+				SetLastActivatedIndex();
 		}
 
 		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
 		private void SetLastActivatedIndex() {
-			//var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
-			//SelectedContentIndex = Children.IndexOf(lastActivatedDocument);
+			var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
+			SelectedContentIndex = Children.IndexOf(lastActivatedDocument);
 		}
 
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));

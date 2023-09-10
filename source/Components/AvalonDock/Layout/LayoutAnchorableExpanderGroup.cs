@@ -22,11 +22,11 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<ILayoutAnchorablePane>, ILayoutAnchorablePane, ILayoutOrientableGroup {
+	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutOrientableGroup {
 		#region fields
 
 		private Orientation _orientation;
-
+		private LayoutContent _current;
 		#endregion fields
 
 		#region Constructors
@@ -36,13 +36,19 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Class constructor <paramref name="firstChild"/> to be inserted into collection of children models.</summary>
-		public LayoutAnchorableExpanderGroup(ILayoutAnchorablePane firstChild) {
+		public LayoutAnchorableExpanderGroup(LayoutAnchorableExpander firstChild) {
 			Children.Add(firstChild);
 		}
 
 		#endregion Constructors
 
 		#region Properties
+
+		public LayoutContent Current {
+			get => _current ?? Children.First(); 
+			set => _current = value;
+		}
+	
 
 		/// <summary>
 		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
@@ -134,8 +140,6 @@ namespace AvalonDock.Layout {
 		public bool CanHide => true;
 		public bool CanClose => true;
 
-
-
 		#region IsSelected
 
 		private bool _isSelected = false;
@@ -180,12 +184,11 @@ namespace AvalonDock.Layout {
 				var oldValue = _isActive;
 				_isActive = value;
 				var root = Root;
-				var v = Children.First().Children.OfType<LayoutAnchorable>().First();
 				if(root != null) {
-					if(root.ActiveContent != v && value)
-						Root.ActiveContent = v;
-					if(_isActive && root.ActiveContent != v)
-						root.ActiveContent = v;
+					if(root.ActiveContent != Current && value)
+						Root.ActiveContent = Current;
+					if(_isActive && root.ActiveContent != Current)
+						root.ActiveContent = Current;
 				}
 				if(_isActive)
 					IsSelected = true;
@@ -208,7 +211,6 @@ namespace AvalonDock.Layout {
 		#endregion IsActive
 
 		public bool IsEnabled => true;
-
 
 		private DateTime? _lastActivationTimeStamp = null;
 

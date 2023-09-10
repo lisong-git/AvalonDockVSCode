@@ -17,23 +17,20 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
-namespace AvalonDock.Layout
-{
+namespace AvalonDock.Layout {
 	/// <summary>
 	/// Provides an abstract base class for common properties and methods of
 	/// the <see cref="LayoutAnchorable"/> and <see cref="LayoutDocument"/> classes.
 	/// </summary>
 	[ContentProperty(nameof(Content))]
 	[Serializable]
-	public abstract class LayoutContent : LayoutElement, IXmlSerializable, ILayoutElementForFloatingWindow, IComparable<LayoutContent>, ILayoutPreviousContainer
-	{
+	public abstract class LayoutContent :LayoutElement, IXmlSerializable, ILayoutElementForFloatingWindow, IComparable<LayoutContent>, ILayoutPreviousContainer {
 		#region Constructors
 
 		/// <summary>
 		/// Class constructor
 		/// </summary>
-		internal LayoutContent()
-		{
+		internal LayoutContent() {
 		}
 
 		#endregion Constructors
@@ -65,20 +62,19 @@ namespace AvalonDock.Layout
 
 		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(LayoutContent), new UIPropertyMetadata(null, OnTitlePropertyChanged, CoerceTitleValue));
 
-		public string Title
-		{
-			get => (string)GetValue(TitleProperty);
+		public string Title {
+			get => (string) GetValue(TitleProperty);
 			set => SetValue(TitleProperty, value);
 		}
 
-		private static object CoerceTitleValue(DependencyObject obj, object value)
-		{
+		private static object CoerceTitleValue(DependencyObject obj, object value) {
 			var lc = (LayoutContent)obj;
-			if ((string)value != lc.Title) lc.RaisePropertyChanging(TitleProperty.Name);
+			if((string) value != lc.Title)
+				lc.RaisePropertyChanging(TitleProperty.Name);
 			return value;
 		}
 
-		private static void OnTitlePropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args) => ((LayoutContent)obj).RaisePropertyChanged(TitleProperty.Name);
+		private static void OnTitlePropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args) => ((LayoutContent) obj).RaisePropertyChanged(TitleProperty.Name);
 
 		#endregion Title
 
@@ -88,16 +84,16 @@ namespace AvalonDock.Layout
 		private object _content = null;
 
 		[XmlIgnore]
-		public object Content
-		{
+		public object Content {
 			get => _content;
-			set
-			{
-				if (value == _content) return;
+			set {
+				if(value == _content)
+					return;
 				RaisePropertyChanging(nameof(Content));
 				_content = value;
 				RaisePropertyChanged(nameof(Content));
-				if (ContentId == null) SetContentIdFromContent();
+				if(ContentId == null)
+					SetContentIdFromContent();
 			}
 		}
 
@@ -107,33 +103,32 @@ namespace AvalonDock.Layout
 
 		public static readonly DependencyProperty ContentIdProperty = DependencyProperty.Register(nameof(ContentId), typeof(string), typeof(LayoutContent), new UIPropertyMetadata(null, OnContentIdPropertyChanged));
 
-		public string ContentId
-		{
-			get
-			{
+		public string ContentId {
+			get {
 				var value = (string)GetValue(ContentIdProperty);
-				if (!string.IsNullOrWhiteSpace(value)) return value;
+				if(!string.IsNullOrWhiteSpace(value))
+					return value;
 				// #83 - if Content.Name is empty at setting content and will be set later, ContentId will stay null.
 				SetContentIdFromContent();
-				return (string)GetValue(ContentIdProperty);
+				return (string) GetValue(ContentIdProperty);
 			}
 			set => SetValue(ContentIdProperty, value);
 		}
 
-		private static void OnContentIdPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-		{
-			if (obj is LayoutContent layoutContent) layoutContent.OnContentIdPropertyChanged((string)args.OldValue, (string)args.NewValue);
+		private static void OnContentIdPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args) {
+			if(obj is LayoutContent layoutContent)
+				layoutContent.OnContentIdPropertyChanged((string) args.OldValue, (string) args.NewValue);
 		}
 
-		private void OnContentIdPropertyChanged(string oldValue, string newValue)
-		{
-			if (oldValue != newValue) RaisePropertyChanged(nameof(ContentId));
+		private void OnContentIdPropertyChanged(string oldValue, string newValue) {
+			if(oldValue != newValue)
+				RaisePropertyChanged(nameof(ContentId));
 		}
 
-		private void SetContentIdFromContent()
-		{
+		private void SetContentIdFromContent() {
 			var contentAsControl = _content as FrameworkElement;
-			if (!string.IsNullOrWhiteSpace(contentAsControl?.Name)) SetCurrentValue(ContentIdProperty, contentAsControl.Name);
+			if(!string.IsNullOrWhiteSpace(contentAsControl?.Name))
+				SetCurrentValue(ContentIdProperty, contentAsControl.Name);
 		}
 
 		#endregion ContentId
@@ -142,16 +137,16 @@ namespace AvalonDock.Layout
 
 		private bool _isSelected = false;
 
-		public bool IsSelected
-		{
+		public bool IsSelected {
 			get => _isSelected;
-			set
-			{
-				if (value == _isSelected) return;
+			set {
+				if(value == _isSelected)
+					return;
 				var oldValue = _isSelected;
 				RaisePropertyChanging(nameof(IsSelected));
 				_isSelected = value;
-				if (Parent is ILayoutContentSelector parentSelector) parentSelector.SelectedContentIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
+				if(Parent is ILayoutContentSelector parentSelector)
+					parentSelector.SelectedContentIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
 				LayoutAnchorableTabItem.CancelMouseLeave();
@@ -173,22 +168,23 @@ namespace AvalonDock.Layout
 		private bool _isActive = false;
 
 		[XmlIgnore]
-		public bool IsActive
-		{
+		public bool IsActive {
 			get => _isActive;
-			set
-			{
-				if (value == _isActive) return;
+			set {
+				if(value == _isActive)
+					return;
 				RaisePropertyChanging(nameof(IsActive));
 				var oldValue = _isActive;
 				_isActive = value;
 				var root = Root;
-				if (root != null)
-				{
-					if (root.ActiveContent != this && value) Root.ActiveContent = this;
-					if (_isActive && root.ActiveContent != this) root.ActiveContent = this;
+				if(root != null) {
+					if(root.ActiveContent != this && value)
+						Root.ActiveContent = this;
+					if(_isActive && root.ActiveContent != this)
+						root.ActiveContent = this;
 				}
-				if (_isActive) IsSelected = true;
+				if(_isActive)
+					IsSelected = true;
 				OnIsActiveChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsActive));
 			}
@@ -197,9 +193,9 @@ namespace AvalonDock.Layout
 		/// <summary>
 		/// Provides derived classes an opportunity to handle changes to the <see cref="IsActive"/> property.
 		/// </summary>
-		protected virtual void OnIsActiveChanged(bool oldValue, bool newValue)
-		{
-			if (newValue) LastActivationTimeStamp = DateTime.Now;
+		protected virtual void OnIsActiveChanged(bool oldValue, bool newValue) {
+			if(newValue)
+				LastActivationTimeStamp = DateTime.Now;
 			IsActiveChanged?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -211,12 +207,11 @@ namespace AvalonDock.Layout
 
 		private bool _isLastFocusedDocument = false;
 
-		public bool IsLastFocusedDocument
-		{
+		public bool IsLastFocusedDocument {
 			get => _isLastFocusedDocument;
-			internal set
-			{
-				if (value == _isLastFocusedDocument) return;
+			internal set {
+				if(value == _isLastFocusedDocument)
+					return;
 				RaisePropertyChanging(nameof(IsLastFocusedDocument));
 				_isLastFocusedDocument = value;
 				RaisePropertyChanged(nameof(IsLastFocusedDocument));
@@ -231,32 +226,29 @@ namespace AvalonDock.Layout
 		private ILayoutContainer _previousContainer = null;
 
 		[XmlIgnore]
-		ILayoutContainer ILayoutPreviousContainer.PreviousContainer
-		{
+		ILayoutContainer ILayoutPreviousContainer.PreviousContainer {
 			get => _previousContainer;
-			set
-			{
-				if (value == _previousContainer) return;
+			set {
+				if(value == _previousContainer)
+					return;
 				_previousContainer = value;
 				RaisePropertyChanged(nameof(PreviousContainer));
-				if (_previousContainer is ILayoutPaneSerializable paneSerializable && paneSerializable.Id == null)
+				if(_previousContainer is ILayoutPaneSerializable paneSerializable && paneSerializable.Id == null)
 					paneSerializable.Id = Guid.NewGuid().ToString();
 			}
 		}
 
-		protected ILayoutContainer PreviousContainer
-		{
-			get => ((ILayoutPreviousContainer)this).PreviousContainer;
-			set => ((ILayoutPreviousContainer)this).PreviousContainer = value;
+		protected ILayoutContainer PreviousContainer {
+			get => ((ILayoutPreviousContainer) this).PreviousContainer;
+			set => ((ILayoutPreviousContainer) this).PreviousContainer = value;
 		}
 
 		[XmlIgnore]
 		string ILayoutPreviousContainer.PreviousContainerId { get; set; }
 
-		protected string PreviousContainerId
-		{
-			get => ((ILayoutPreviousContainer)this).PreviousContainerId;
-			set => ((ILayoutPreviousContainer)this).PreviousContainerId = value;
+		protected string PreviousContainerId {
+			get => ((ILayoutPreviousContainer) this).PreviousContainerId;
+			set => ((ILayoutPreviousContainer) this).PreviousContainerId = value;
 		}
 
 		#endregion PreviousContainer
@@ -267,12 +259,11 @@ namespace AvalonDock.Layout
 		private int _previousContainerIndex = -1;
 
 		[XmlIgnore]
-		public int PreviousContainerIndex
-		{
+		public int PreviousContainerIndex {
 			get => _previousContainerIndex;
-			set
-			{
-				if (value == _previousContainerIndex) return;
+			set {
+				if(value == _previousContainerIndex)
+					return;
 				_previousContainerIndex = value;
 				RaisePropertyChanged(nameof(PreviousContainerIndex));
 			}
@@ -284,12 +275,11 @@ namespace AvalonDock.Layout
 
 		private DateTime? _lastActivationTimeStamp = null;
 
-		public DateTime? LastActivationTimeStamp
-		{
+		public DateTime? LastActivationTimeStamp {
 			get => _lastActivationTimeStamp;
-			set
-			{
-				if (value == _lastActivationTimeStamp) return;
+			set {
+				if(value == _lastActivationTimeStamp)
+					return;
 				_lastActivationTimeStamp = value;
 				RaisePropertyChanged(nameof(LastActivationTimeStamp));
 			}
@@ -301,12 +291,11 @@ namespace AvalonDock.Layout
 
 		private double _floatingWidth = 0.0;
 
-		public double FloatingWidth
-		{
+		public double FloatingWidth {
 			get => _floatingWidth;
-			set
-			{
-				if (value == _floatingWidth) return;
+			set {
+				if(value == _floatingWidth)
+					return;
 				RaisePropertyChanging(nameof(FloatingWidth));
 				_floatingWidth = value;
 				RaisePropertyChanged(nameof(FloatingWidth));
@@ -319,12 +308,11 @@ namespace AvalonDock.Layout
 
 		private double _floatingHeight = 0.0;
 
-		public double FloatingHeight
-		{
+		public double FloatingHeight {
 			get => _floatingHeight;
-			set
-			{
-				if (value == _floatingHeight) return;
+			set {
+				if(value == _floatingHeight)
+					return;
 				RaisePropertyChanging(nameof(FloatingHeight));
 				_floatingHeight = value;
 				RaisePropertyChanged(nameof(FloatingHeight));
@@ -337,12 +325,11 @@ namespace AvalonDock.Layout
 
 		private double _floatingLeft = 0.0;
 
-		public double FloatingLeft
-		{
+		public double FloatingLeft {
 			get => _floatingLeft;
-			set
-			{
-				if (value == _floatingLeft) return;
+			set {
+				if(value == _floatingLeft)
+					return;
 				RaisePropertyChanging(nameof(FloatingLeft));
 				_floatingLeft = value;
 				RaisePropertyChanged(nameof(FloatingLeft));
@@ -355,12 +342,11 @@ namespace AvalonDock.Layout
 
 		private double _floatingTop = 0.0;
 
-		public double FloatingTop
-		{
+		public double FloatingTop {
 			get => _floatingTop;
-			set
-			{
-				if (value == _floatingTop) return;
+			set {
+				if(value == _floatingTop)
+					return;
 				RaisePropertyChanging(nameof(FloatingTop));
 				_floatingTop = value;
 				RaisePropertyChanged(nameof(FloatingTop));
@@ -373,12 +359,11 @@ namespace AvalonDock.Layout
 
 		private bool _isMaximized = false;
 
-		public bool IsMaximized
-		{
+		public bool IsMaximized {
 			get => _isMaximized;
-			set
-			{
-				if (value == _isMaximized) return;
+			set {
+				if(value == _isMaximized)
+					return;
 				RaisePropertyChanging(nameof(IsMaximized));
 				_isMaximized = value;
 				RaisePropertyChanged(nameof(IsMaximized));
@@ -391,12 +376,11 @@ namespace AvalonDock.Layout
 
 		private object _toolTip = null;
 
-		public object ToolTip
-		{
+		public object ToolTip {
 			get => _toolTip;
-			set
-			{
-				if (value == _toolTip) return;
+			set {
+				if(value == _toolTip)
+					return;
 				_toolTip = value;
 				RaisePropertyChanged(nameof(ToolTip));
 			}
@@ -412,12 +396,11 @@ namespace AvalonDock.Layout
 
 		private ImageSource _iconSource = null;
 
-		public ImageSource IconSource
-		{
+		public ImageSource IconSource {
 			get => _iconSource;
-			set
-			{
-				if (value == _iconSource) return;
+			set {
+				if(value == _iconSource)
+					return;
 				_iconSource = value;
 				RaisePropertyChanged(nameof(IconSource));
 			}
@@ -432,12 +415,11 @@ namespace AvalonDock.Layout
 		//     With previous code it was not possible to serialize CanClose if set to true for LayoutAnchorable instance
 		internal bool _canClose = true, _canCloseDefault = true;
 
-		public bool CanClose
-		{
+		public bool CanClose {
 			get => _canClose;
-			set
-			{
-				if (_canClose == value) return;
+			set {
+				if(_canClose == value)
+					return;
 				_canClose = value;
 				RaisePropertyChanged(nameof(CanClose));
 			}
@@ -449,12 +431,11 @@ namespace AvalonDock.Layout
 
 		private bool _canFloat = true;
 
-		public bool CanFloat
-		{
+		public bool CanFloat {
 			get => _canFloat;
-			set
-			{
-				if (value == _canFloat) return;
+			set {
+				if(value == _canFloat)
+					return;
 				_canFloat = value;
 				RaisePropertyChanged(nameof(CanFloat));
 			}
@@ -473,12 +454,11 @@ namespace AvalonDock.Layout
 		/// will cause the anchorable to show itself.
 		/// </summary>
 		/// <remarks>Defaults to true</remarks>
-		public bool CanShowOnHover
-		{
+		public bool CanShowOnHover {
 			get => _canShowOnHover;
-			set
-			{
-				if (value == _canShowOnHover) return;
+			set {
+				if(value == _canShowOnHover)
+					return;
 				_canShowOnHover = value;
 				RaisePropertyChanged(nameof(CanShowOnHover));
 			}
@@ -490,12 +470,11 @@ namespace AvalonDock.Layout
 
 		private bool _isEnabled = true;
 
-		public bool IsEnabled
-		{
+		public bool IsEnabled {
 			get => _isEnabled;
-			set
-			{
-				if (value == _isEnabled) return;
+			set {
+				if(value == _isEnabled)
+					return;
 				_isEnabled = value;
 				RaisePropertyChanged(nameof(IsEnabled));
 			}
@@ -521,107 +500,110 @@ namespace AvalonDock.Layout
 		public System.Xml.Schema.XmlSchema GetSchema() => null;
 
 		/// <inheritdoc />
-		public virtual void ReadXml(System.Xml.XmlReader reader)
-		{
-			if (reader.MoveToAttribute(nameof(Title)))
+		public virtual void ReadXml(System.Xml.XmlReader reader) {
+			if(reader.MoveToAttribute(nameof(Title)))
 				Title = reader.Value;
 			//if (reader.MoveToAttribute("IconSource"))
 			//    IconSource = new Uri(reader.Value, UriKind.RelativeOrAbsolute);
 
-			if (reader.MoveToAttribute(nameof(IsSelected)))
+			if(reader.MoveToAttribute(nameof(IsSelected)))
 				IsSelected = bool.Parse(reader.Value);
-			if (reader.MoveToAttribute(nameof(ContentId)))
+			if(reader.MoveToAttribute(nameof(ContentId)))
 				ContentId = reader.Value;
-			if (reader.MoveToAttribute(nameof(IsLastFocusedDocument)))
+			if(reader.MoveToAttribute(nameof(IsLastFocusedDocument)))
 				IsLastFocusedDocument = bool.Parse(reader.Value);
-			if (reader.MoveToAttribute(nameof(PreviousContainerId)))
+			if(reader.MoveToAttribute(nameof(PreviousContainerId)))
 				PreviousContainerId = reader.Value;
-			if (reader.MoveToAttribute(nameof(PreviousContainerIndex)))
+			if(reader.MoveToAttribute(nameof(PreviousContainerIndex)))
 				PreviousContainerIndex = int.Parse(reader.Value);
 
-			if (reader.MoveToAttribute(nameof(FloatingLeft)))
+			if(reader.MoveToAttribute(nameof(FloatingLeft)))
 				FloatingLeft = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-			if (reader.MoveToAttribute(nameof(FloatingTop)))
+			if(reader.MoveToAttribute(nameof(FloatingTop)))
 				FloatingTop = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-			if (reader.MoveToAttribute(nameof(FloatingWidth)))
+			if(reader.MoveToAttribute(nameof(FloatingWidth)))
 				FloatingWidth = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-			if (reader.MoveToAttribute(nameof(FloatingHeight)))
+			if(reader.MoveToAttribute(nameof(FloatingHeight)))
 				FloatingHeight = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-			if (reader.MoveToAttribute(nameof(IsMaximized)))
+			if(reader.MoveToAttribute(nameof(IsMaximized)))
 				IsMaximized = bool.Parse(reader.Value);
-			if (reader.MoveToAttribute(nameof(CanClose)))
+			if(reader.MoveToAttribute(nameof(CanClose)))
 				CanClose = bool.Parse(reader.Value);
-			if (reader.MoveToAttribute(nameof(CanFloat)))
+			if(reader.MoveToAttribute(nameof(CanFloat)))
 				CanFloat = bool.Parse(reader.Value);
-			if (reader.MoveToAttribute(nameof(LastActivationTimeStamp)))
+			if(reader.MoveToAttribute(nameof(LastActivationTimeStamp)))
 				LastActivationTimeStamp = DateTime.Parse(reader.Value, CultureInfo.InvariantCulture);
-			if (reader.MoveToAttribute(nameof(CanShowOnHover)))
+			if(reader.MoveToAttribute(nameof(CanShowOnHover)))
 				CanShowOnHover = bool.Parse(reader.Value);
 
 			reader.Read();
 		}
 
 		/// <inheritdoc />
-		public virtual void WriteXml(System.Xml.XmlWriter writer)
-		{
-			if (!string.IsNullOrWhiteSpace(Title))
+		public virtual void WriteXml(System.Xml.XmlWriter writer) {
+			if(!string.IsNullOrWhiteSpace(Title))
 				writer.WriteAttributeString(nameof(Title), Title);
 
 			//if (IconSource != null)
 			//    writer.WriteAttributeString("IconSource", IconSource.ToString());
 
-			if (IsSelected)
+			if(IsSelected)
 				writer.WriteAttributeString(nameof(IsSelected), IsSelected.ToString());
 
-			if (IsLastFocusedDocument)
+			if(IsLastFocusedDocument)
 				writer.WriteAttributeString(nameof(IsLastFocusedDocument), IsLastFocusedDocument.ToString());
 
-			if (!string.IsNullOrWhiteSpace(ContentId))
+			if(!string.IsNullOrWhiteSpace(ContentId))
 				writer.WriteAttributeString(nameof(ContentId), ContentId);
 
-			if (ToolTip is string toolTip && !string.IsNullOrWhiteSpace(toolTip))
+			if(ToolTip is string toolTip && !string.IsNullOrWhiteSpace(toolTip))
 				writer.WriteAttributeString(nameof(ToolTip), toolTip);
 
-			if (FloatingLeft != 0.0) writer.WriteAttributeString(nameof(FloatingLeft), FloatingLeft.ToString(CultureInfo.InvariantCulture));
-			if (FloatingTop != 0.0) writer.WriteAttributeString(nameof(FloatingTop), FloatingTop.ToString(CultureInfo.InvariantCulture));
-			if (FloatingWidth != 0.0) writer.WriteAttributeString(nameof(FloatingWidth), FloatingWidth.ToString(CultureInfo.InvariantCulture));
-			if (FloatingHeight != 0.0) writer.WriteAttributeString(nameof(FloatingHeight), FloatingHeight.ToString(CultureInfo.InvariantCulture));
+			if(FloatingLeft != 0.0)
+				writer.WriteAttributeString(nameof(FloatingLeft), FloatingLeft.ToString(CultureInfo.InvariantCulture));
+			if(FloatingTop != 0.0)
+				writer.WriteAttributeString(nameof(FloatingTop), FloatingTop.ToString(CultureInfo.InvariantCulture));
+			if(FloatingWidth != 0.0)
+				writer.WriteAttributeString(nameof(FloatingWidth), FloatingWidth.ToString(CultureInfo.InvariantCulture));
+			if(FloatingHeight != 0.0)
+				writer.WriteAttributeString(nameof(FloatingHeight), FloatingHeight.ToString(CultureInfo.InvariantCulture));
 
-			if (IsMaximized) writer.WriteAttributeString(nameof(IsMaximized), IsMaximized.ToString());
+			if(IsMaximized)
+				writer.WriteAttributeString(nameof(IsMaximized), IsMaximized.ToString());
 			// BD: 14.08.2020 changed to check CanClose value against the default in _canCloseDefault
 			//     thus CanClose property will be serialized only when not equal to its default for given class
 			//     With previous code it was not possible to serialize CanClose if set to true for LayoutAnchorable instance
-			if (CanClose != _canCloseDefault) writer.WriteAttributeString(nameof(CanClose), CanClose.ToString());
-			if (!CanFloat) writer.WriteAttributeString(nameof(CanFloat), CanFloat.ToString());
+			if(CanClose != _canCloseDefault)
+				writer.WriteAttributeString(nameof(CanClose), CanClose.ToString());
+			if(!CanFloat)
+				writer.WriteAttributeString(nameof(CanFloat), CanFloat.ToString());
 
-			if (LastActivationTimeStamp != null) writer.WriteAttributeString(nameof(LastActivationTimeStamp), LastActivationTimeStamp.Value.ToString(CultureInfo.InvariantCulture));
+			if(LastActivationTimeStamp != null)
+				writer.WriteAttributeString(nameof(LastActivationTimeStamp), LastActivationTimeStamp.Value.ToString(CultureInfo.InvariantCulture));
 
-			if (!CanShowOnHover) writer.WriteAttributeString(nameof(CanShowOnHover), CanShowOnHover.ToString());
+			if(!CanShowOnHover)
+				writer.WriteAttributeString(nameof(CanShowOnHover), CanShowOnHover.ToString());
 
-			if (_previousContainer is ILayoutPaneSerializable paneSerializable)
-			{
+			if(_previousContainer is ILayoutPaneSerializable paneSerializable) {
 				writer.WriteAttributeString("PreviousContainerId", paneSerializable.Id);
 				writer.WriteAttributeString("PreviousContainerIndex", _previousContainerIndex.ToString());
 			}
 		}
 
-		public int CompareTo(LayoutContent other)
-		{
-			if (Content is IComparable contentAsComparable)
+		public int CompareTo(LayoutContent other) {
+			if(Content is IComparable contentAsComparable)
 				return contentAsComparable.CompareTo(other.Content);
 			return string.Compare(Title, other.Title);
 		}
 
 		/// <summary>Float the content in a popup window</summary>
-		public void Float()
-		{
-			if (PreviousContainer != null && PreviousContainer.FindParent<LayoutFloatingWindow>() != null)
-			{
+		public void Float() {
+			if(PreviousContainer != null && PreviousContainer.FindParent<LayoutFloatingWindow>() != null) {
 				var currentContainer = Parent as ILayoutPane;
 				var currentContainerIndex = (currentContainer as ILayoutGroup).IndexOfChild(this);
 				var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;
 
-				if (PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount)
+				if(PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount)
 					previousContainerAsLayoutGroup.InsertChildAt(PreviousContainerIndex, this);
 				else
 					previousContainerAsLayoutGroup.InsertChildAt(previousContainerAsLayoutGroup.ChildrenCount, this);
@@ -631,37 +613,33 @@ namespace AvalonDock.Layout
 				IsSelected = true;
 				IsActive = true;
 				Root.CollectGarbage();
-			}
-			else
-			{
+			} else {
 				Root.Manager.StartDraggingFloatingWindowForContent(this, false);
 				IsSelected = true;
 				IsActive = true;
 			}
 
-            // BD: 14.08.2020 raise IsFloating property changed
-            RaisePropertyChanged(nameof(IsFloating));
-        }
+			// BD: 14.08.2020 raise IsFloating property changed
+			RaisePropertyChanged(nameof(IsFloating));
+		}
 
-        /// <summary>Dock the content as document.</summary>
-        public void DockAsDocument()
-		{
-			if (!(Root is LayoutRoot root)) throw new InvalidOperationException();
+		/// <summary>Dock the content as document.</summary>
+		public void DockAsDocument() {
+			if(!(Root is LayoutRoot root))
+				throw new InvalidOperationException();
 
-			if (PreviousContainer is LayoutDocumentPane)
-			{
+			if(PreviousContainer is LayoutDocumentPane) {
 				Dock();
 				return;
 			}
 
 			LayoutDocumentPane newParentPane;
-			if (root.LastFocusedDocument != null)
+			if(root.LastFocusedDocument != null)
 				newParentPane = root.LastFocusedDocument.Parent as LayoutDocumentPane;
 			else
 				newParentPane = root.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
 
-			if (newParentPane != null)
-			{
+			if(newParentPane != null) {
 				newParentPane.Children.Add(this);
 				root.CollectGarbage();
 			}
@@ -670,62 +648,54 @@ namespace AvalonDock.Layout
 
 			// BD: 14.08.2020 raise IsFloating property changed
 			RaisePropertyChanged(nameof(IsFloating));
-        }
+		}
 
-        /// <summary>Re-dock the content to its previous container</summary>
-        public void Dock()
-		{
-			if (PreviousContainer != null)
-			{
+		/// <summary>Re-dock the content to its previous container</summary>
+		public void Dock() {
+			if(PreviousContainer != null) {
 				var currentContainer = Parent;
 				var currentContainerIndex = currentContainer is ILayoutGroup ? (currentContainer as ILayoutGroup).IndexOfChild(this) : -1;
 				var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;
 
-				if (PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount)
+				if(PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount)
 					previousContainerAsLayoutGroup.InsertChildAt(PreviousContainerIndex, this);
 				else
 					previousContainerAsLayoutGroup.InsertChildAt(previousContainerAsLayoutGroup.ChildrenCount, this);
 
-				if (currentContainerIndex > -1)
-				{
+				if(currentContainerIndex > -1) {
 					PreviousContainer = currentContainer;
 					PreviousContainerIndex = currentContainerIndex;
-				}
-				else
-				{
+				} else {
 					PreviousContainer = null;
 					PreviousContainerIndex = 0;
 				}
 
 				IsSelected = true;
 				IsActive = true;
-			}
-			else
+			} else
 				InternalDock();
 
 			Root.CollectGarbage();
 
 			// BD: 14.08.2020 raise IsFloating property changed
 			RaisePropertyChanged(nameof(IsFloating));
-        }
+		}
 
 		#endregion Public Methods
 
 		#region Overrides
 
 		/// <inheritdoc />
-		protected override void OnParentChanging(ILayoutContainer oldValue, ILayoutContainer newValue)
-		{
-			if (oldValue != null) IsSelected = false;
+		protected override void OnParentChanging(ILayoutContainer oldValue, ILayoutContainer newValue) {
+			if(oldValue != null)
+				IsSelected = false;
 
 			base.OnParentChanging(oldValue, newValue);
 		}
 
 		/// <inheritdoc />
-		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue)
-		{
-			if (IsSelected && Parent is ILayoutContentSelector)
-			{
+		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
+			if(IsSelected && Parent is ILayoutContentSelector) {
 				var parentSelector = Parent as ILayoutContentSelector;
 				parentSelector.SelectedContentIndex = parentSelector.IndexOf(this);
 			}
@@ -739,35 +709,30 @@ namespace AvalonDock.Layout
 
 		/// <summary>Test if the content can be closed. </summary>
 		/// <returns></returns>
-		internal bool TestCanClose()
-		{
+		internal bool TestCanClose() {
 			var args = new CancelEventArgs();
 			OnClosing(args);
 			return !args.Cancel;
 		}
 
-		internal void CloseInternal()
-		{
+		internal void CloseInternal() {
 			var root = Root;
 			var parentAsContainer = Parent;
 
-			if (PreviousContainer == null)
-			{
+			if(PreviousContainer == null) {
 				var parentAsGroup = Parent as ILayoutGroup;
 				PreviousContainer = parentAsContainer;
 				PreviousContainerIndex = parentAsGroup.IndexOfChild(this);
 
-				if (parentAsGroup is ILayoutPaneSerializable layoutPaneSerializable)
-				{
+				if(parentAsGroup is ILayoutPaneSerializable layoutPaneSerializable) {
 					PreviousContainerId = layoutPaneSerializable.Id;
 					// This parentAsGroup will be removed in the GarbageCollection below
-					if (parentAsGroup.Children.Count() == 1 && parentAsGroup.Parent != null && Root.Manager != null)
-					{
+					if(parentAsGroup.Children.Count() == 1 && parentAsGroup.Parent != null && Root.Manager != null) {
 						Parent = Root.Manager.Layout;
 						PreviousContainer = parentAsGroup.Parent;
 						PreviousContainerIndex = -1;
 
-						if (parentAsGroup.Parent is ILayoutPaneSerializable paneSerializable)
+						if(parentAsGroup.Parent is ILayoutPaneSerializable paneSerializable)
 							PreviousContainerId = paneSerializable.Id;
 						else
 							PreviousContainerId = null;
@@ -776,7 +741,7 @@ namespace AvalonDock.Layout
 			}
 
 			parentAsContainer.RemoveChild(this);
-			root?.CollectGarbage();			
+			root?.CollectGarbage();
 			OnClosed();
 		}
 
@@ -784,8 +749,7 @@ namespace AvalonDock.Layout
 
 		protected virtual void OnClosing(CancelEventArgs args) => Closing?.Invoke(this, args);
 
-		protected virtual void InternalDock()
-		{
+		protected virtual void InternalDock() {
 		}
 
 		void ILayoutElementForFloatingWindow.RaiseFloatingPropertiesUpdated() => FloatingPropertiesUpdated?.Invoke(this, EventArgs.Empty);

@@ -128,7 +128,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void UpdateChildren() {
-			Debug.WriteLine($"{_model?.Children?.Count}", "LayoutGridControl_UpdateChildren");
+			Debug.WriteLine($"{_model?.Children?.Count}", "LayoutGridControl UpdateChildren 1");
 
 			var alreadyContainedChildren = Children.OfType<ILayoutControl>().ToArray();
 			DetachOldSplitters();
@@ -141,6 +141,8 @@ namespace AvalonDock.Controls {
 				return;
 			foreach(var child in _model.Children) {
 				var foundContainedChild = alreadyContainedChildren.FirstOrDefault(chVM => chVM.Model == child);
+				Debug.WriteLine($"{child}, {Children == null}, {manager == null}", "LayoutGridControl UpdateChildren 2");
+
 				if(foundContainedChild != null)
 					Children.Add(foundContainedChild as UIElement);
 				else

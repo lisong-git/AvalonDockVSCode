@@ -18,10 +18,10 @@ namespace AvalonDock.Controls {
 	/// Implements a <see cref="LayoutAnchorableExpanderControl"/> drop target
 	/// on which other items (<see cref="LayoutAnchorableExpanderGroup"/>) can be dropped.
 	/// </summary>
-	internal class AnchorableExpanderPaneDropTarget :DropTarget<LayoutAnchorableExpanderControl> {
+	internal class AnchorableExpanderPaneDropTarget :DropTarget<LayoutAnchorableExpanderGroupPaneControl> {
 		#region fields
 
-		private LayoutAnchorableExpanderControl _targetPane;
+		private LayoutAnchorableExpanderGroupPaneControl _targetPane;
 		private int _tabIndex = -1;
 
 		#endregion fields
@@ -34,7 +34,7 @@ namespace AvalonDock.Controls {
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
-		internal AnchorableExpanderPaneDropTarget(LayoutAnchorableExpanderControl paneControl,
+		internal AnchorableExpanderPaneDropTarget(LayoutAnchorableExpanderGroupPaneControl paneControl,
 																	 Rect detectionRect,
 																	 DropTargetType type)
 			: base(paneControl, detectionRect, type) {
@@ -48,8 +48,8 @@ namespace AvalonDock.Controls {
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
-		/// <param name="tabIndex"></param>
-		internal AnchorableExpanderPaneDropTarget(LayoutAnchorableExpanderControl paneControl,
+		/// <param name="tabIndex"></paramLayoutAnchorableExpanderGroupPaneControl
+		internal AnchorableExpanderPaneDropTarget(LayoutAnchorableExpanderGroupPaneControl paneControl,
 											Rect detectionRect,
 											DropTargetType type,
 											int tabIndex)
@@ -74,53 +74,37 @@ namespace AvalonDock.Controls {
 			switch(Type) {
 				case DropTargetType.AnchorableExpanderPaneDockBottom:
 
-					#region DropTargetType.AnchorablePaneDockBottom
+					#region DropTargetType.AnchorableExpanderPaneDockBottom
 
 					{
 						var parentModel = targetModel.Parent as ILayoutGroup;
 						var parentModelOrientable = targetModel.Parent as ILayoutOrientableGroup;
 						int insertToIndex = parentModel.IndexOfChild(targetModel);
 
-						if(parentModelOrientable.Orientation != System.Windows.Controls.Orientation.Vertical &&
-							parentModel.ChildrenCount == 1)
-							parentModelOrientable.Orientation = System.Windows.Controls.Orientation.Vertical;
+						parentModelOrientable.Orientation = System.Windows.Controls.Orientation.Vertical;
 
-						if(parentModelOrientable.Orientation == System.Windows.Controls.Orientation.Vertical) {
-							var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
-							Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", "AnchorablePaneDropTarget Drop 2");
-							if(layoutAnchorablePaneGroup != null &&
-								(layoutAnchorablePaneGroup.Children.Count == 1 ||
-									layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
+						var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
+						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", "AnchorableExpanderPaneDropTarget Drop 2");
+						if(layoutAnchorablePaneGroup != null &&
+							(layoutAnchorablePaneGroup.Children.Count == 1 ||
+								layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
 
-								var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
-								for(int i = 0; i < anchorablesToMove.Length; i++) {
-									Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", "AnchorablePaneDropTarget Drop 3");
-									var la = anchorablesToMove[i].Children.First() as LayoutAnchorable;
-									var temp = new LayoutAnchorableExpander(la);
-									//parentModel.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
-									parentModel.InsertChildAt(insertToIndex + 1 + i, temp);
-								}
-							} else {
-								Debug.WriteLine($"", "AnchorablePaneDropTarget Drop 4");
-								parentModel.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
+							var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
+							for(int i = 0; i < anchorablesToMove.Length; i++) {
+								Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", "AnchorableExpanderPaneDropTarget Drop 3");
+								var la = anchorablesToMove[i].Children.First() as LayoutAnchorable;
+								var temp = new LayoutAnchorableExpander(la);
+								//parentModel.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
+								parentModel.InsertChildAt(insertToIndex + 1 + i, temp);
 							}
 						} else {
-							var targetModelAsPositionableElement = targetModel as ILayoutPositionableElement;
-							var newOrientedPanel = new LayoutAnchorablePaneGroup()
-							{
-								Orientation = System.Windows.Controls.Orientation.Vertical,
-								DockWidth = targetModelAsPositionableElement.DockWidth,
-								DockHeight = targetModelAsPositionableElement.DockHeight,
-							};
-
-							parentModel.InsertChildAt(insertToIndex, newOrientedPanel);
-							newOrientedPanel.Children.Add(targetModel);
-							newOrientedPanel.Children.Add(floatingWindow.RootPanel);
+							Debug.WriteLine($"", "AnchorableExpanderPaneDropTarget Drop 4");
+							parentModel.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
 						}
 					}
 					break;
 
-				#endregion DropTargetType.AnchorablePaneDockBottom
+				#endregion DropTargetType.AnchorableExpanderPaneDockBottom
 
 				case DropTargetType.AnchorablePaneDockTop:
 

@@ -80,6 +80,7 @@ namespace AvalonDock.Controls
 		/// <summary>The specific drop area is the bottom of a <see cref="LayoutAnchorableExpanderControl"/> control.</summary>
 		AnchorableExpanderPaneDockTop,
 		AnchorableExpanderPaneDockBottom,
+		AnchorableExpanderPaneDockInside,
 
 		#endregion AnchorableExpanderPaneGroup
 

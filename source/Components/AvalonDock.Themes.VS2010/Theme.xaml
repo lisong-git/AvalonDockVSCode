@@ -54,6 +54,7 @@
         </Style.Triggers>
     </Style>
 
+
     <Style x:Key="AvalonDock_ThemeVS2010_ButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
@@ -430,15 +431,13 @@
     </Style>
 
 
-
-
-    <!--  AvalonDock_ThemeVS2010_AnchorablePaneControl2Style  -->
-    <Style x:Key="AvalonDock_ThemeVS2010_AnchorablePaneControl2Style" TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupBoxControl}">
+    <!--  AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle  -->
+	<Style x:Key="AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
         <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Background" Value="BlueViolet" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupBoxControl}">
+				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
                     <Grid ClipToBounds="true" SnapsToDevicePixels="true">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -489,22 +488,26 @@
 
                         <avalonDockControls:LayoutAnchorableExpanderGroupControl
                             Grid.Row="1"
-                            Background="Pink"
-                            Model="{Binding Model.MM, RelativeSource={RelativeSource TemplatedParent}}">
-                            <!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
-                            <!--  Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                            Background="GreenYellow"
+                            Model="{Binding Model.Children[0], RelativeSource={RelativeSource TemplatedParent}}"  
+							>
+							<!--Model="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"-->
 
+							<!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                            <!--  Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                            <!--  Model="{Binding Model.LayoutAnchorableExpanderGroup, RelativeSource={RelativeSource TemplatedParent}}"  -->
                             <!--<Grid.RowDefinitions>
 								<RowDefinition Height="Auto" />
 								<RowDefinition Height="*" />
 							</Grid.RowDefinitions>
-							<TextBlock Grid.Row="0" Text="TTTTTTTTTTTTTTTTTTTTT"/>
-							<TextBlock Grid.Row="1" Text="GGGGGGGGGGGGGGGGGGGGG"/>-->
+							<TextBlock Grid.Row="0" Text="TTTT"/>
+							<TextBlock Grid.Row="1" Text="GGGG"/>-->
                         </avalonDockControls:LayoutAnchorableExpanderGroupControl>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
         <!--<Setter Property="HeaderTemplate">
 			<Setter.Value>
 				<DataTemplate>
@@ -513,18 +516,19 @@
 			</Setter.Value>
 		</Setter>-->
 
-        <!--<Setter Property="ContentTemplate">
-			<Setter.Value>
-				<DataTemplate>
-					<avalonDockControls:LayoutAnchorablePaneGroupControl2 Model="{Binding}" />
-				</DataTemplate>
-			</Setter.Value>
-		</Setter>-->
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+
     </Style>
 
 
     <!--  AvalonDock_ThemeVS2010_LayoutAnchorableGroupTabControlStyle  -->
-    <Style x:Key="AvalonDock_ThemeVS2010_AnchorableGroupTabControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupTabControl}">
+    <Style x:Key="AvalonDock_ThemeVS2010_AnchorableExpanderGroupPaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
         <Setter Property="TabStripPlacement" Value="Bottom" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderThickness" Value="0" />
@@ -532,7 +536,7 @@
         <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupTabControl}">
+                <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
                     <Grid
                         ClipToBounds="true"
                         KeyboardNavigation.TabNavigation="Local"
@@ -648,7 +652,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-					<avalonDockControls:LayoutAnchorableTabItem Model="{Binding}" DataContext="{Binding Children[0].Children[0]}"/>
+                    <avalonDockControls:LayoutAnchorableTabItem Model="{Binding Current}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -663,8 +667,8 @@
     </Style>
 
 
-    <!--  AnchorableExpanderPaneControlStyle  -->
-    <Style x:Key="AvalonDock_ThemeVS2010_AnchorableExpanderPaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderControl}">
+    <!--  AnchorableExpanderExpanderControlStyle  -->
+    <Style x:Key="AvalonDock_ThemeVS2010_AnchorableExpanderControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderControl}">
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
@@ -677,57 +681,79 @@
                         <!--  Following border is required to catch mouse events  -->
                         <!--<Border Grid.RowSpan="2" Background="Transparent" />-->
 
-                        <!--<Grid x:Name="HeaderSite" DockPanel.Dock="Top" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="28" />
-                                <ColumnDefinition Width="16" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                        -->
-                        <!--<ToggleButton
-                                Grid.Column="0"
-                                Height="28"
-                                Content="&gt;"
-                                DockPanel.Dock="Top"
-								Background="Transparent"
-                                IsChecked="True" />-->
-                        <!--
-
-                            <AnchorablePaneTitle
-                                Grid.Column="2"
-								 x:Name="HeaderSite"
-								Style="{StaticResource AnchorablePaneTitleStyle}"
-                                Height="28"
-                                DockPanel.Dock="Left"
-                                Model="{Binding Model.Children[0], RelativeSource={RelativeSource TemplatedParent}}" />
-                        </Grid>-->
-
                         <AnchorablePaneTitle
                             x:Name="HeaderSite"
                             Grid.Column="2"
                             Height="28"
                             Cursor="Hand"
                             DockPanel.Dock="Top"
-                            Model="{Binding Model.Children[0], RelativeSource={RelativeSource TemplatedParent}}"
+                            Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
                             Style="{DynamicResource AnchorablePaneTitleStyle}" />
 
                         <Border
                             x:Name="ExpandSite"
                             HorizontalAlignment="Stretch"
-                            Background="Orange"
+                            Background="GreenYellow"
                             DockPanel.Dock="Bottom">
-                            <ContentPresenter
+                            <LayoutAnchorableControl 
+								Style="{DynamicResource LayoutAnchorableStyle}" 
+								Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" 
+								/>
+                            <!--  Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                            <!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
+
+                            <!--<ContentPresenter
+								x:Name="Part_Content"
+								Grid.Row="1"
+                                Content="{Binding Model.Children[0].LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
+                                ContentTemplate="{Binding Model.Children[0].LayoutItem.View.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                ContentTemplateSelector="{Binding Model.Children[0].LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
+                                FlowDirection="{TemplateBinding FlowDirection}" />-->
+
+
+                            <!--<ContentPresenter
                                 x:Name="Part_Content"
                                 Grid.Row="1"
                                 Margin="{TemplateBinding Padding}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
                                 Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
                                 ContentTemplate="{Binding Model.Root.Manager.AnchorableTitleTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                                 ContentTemplateSelector="{Binding Model.Root.Manager.AnchorableTitleTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
-                                Focusable="false" />
+                                Focusable="false" />-->
+
+                            <!--<ContentPresenter
+                                x:Name="Part_Content"
+                                Margin="{TemplateBinding Padding}"
+                                ContentSource="{Binding Content}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
+
+                            <!--  ContentSource="SelectedContent"  -->
+                            <!--
+                                Content="{Binding Model.LayoutAnchorable, RelativeSource={RelativeSource TemplatedParent}}"
+                                ContentTemplate="{Binding Model.Root.Manager.AnchorablePaneTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                            -->
                         </Border>
+
+
+                        <!--<Border
+                            x:Name="ContentPanel"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            KeyboardNavigation.DirectionalNavigation="Contained"
+                            KeyboardNavigation.TabIndex="2"
+                            KeyboardNavigation.TabNavigation="Cycle"
+                            Visibility="Visible">
+							<ContentPresenter
+                                x:Name="PART_SelectedContentHost"
+                                Margin="{TemplateBinding Padding}"
+                                ContentSource="SelectedContent"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+						</Border>-->
                     </DockPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -737,11 +763,10 @@
         <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <avalonDockControls:LayoutAnchorableTabItem Model="{Binding}" />
+                    <avalonDockControls:AnchorablePaneTitle Model="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-
 
         <Setter Property="ContentTemplate">
             <Setter.Value>
@@ -752,6 +777,7 @@
         </Setter>
     </Style>
 
+    <!--  AvalonDock_ThemeVS2010_AnchorableExpanderPaneControlStyle  -->
     <!--<Style x:Key="AvalonDock_ThemeVS2010_AnchorableExpanderPaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderPaneControl}">
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderThickness" Value="0" />
@@ -810,8 +836,8 @@
                                 </Grid>
                             </Border>
                         </DockPanel>
-    -->
-    <!--<VisualStateManager.VisualStateGroups>
+
+    <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ExpansionStates">
 
                                 <VisualStateGroup.Transitions>
@@ -913,8 +939,8 @@
                                 </VisualState>
 
                             </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>-->
-    <!--
+                        </VisualStateManager.VisualStateGroups>
+
                     </Border>
                     <ControlTemplate.Triggers>
 
@@ -941,25 +967,24 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    -->
-    <!--<Setter Property="HeaderTemplate">
+
+    <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <avalonDockControls:LayoutAnchorableTabItem Model="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
-        </Setter>-->
+        </Setter>
 
-    <!--<Setter Property="ContentTemplate">
+    <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <avalonDockControls:LayoutAnchorableControl Model="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
-        </Setter>-->
-    <!--
-    </Style>-->
+        </Setter>
 
+    </Style>-->
 
 
     <Duration x:Key="ExpandDuration">0:0:0.250</Duration>
@@ -1114,16 +1139,6 @@
     </Style>
 
 
-
-
-
-
-
-
-
-
-
-
     <!--<Style x:Key="LayoutAnchorablePaneGroupControl2Style" TargetType="{x:Type avalonDockControls:LayoutAnchorablePaneGroupControl2}">
 		<Setter Property="TabStripPlacement" Value="Bottom" />
 		<Setter Property="Padding" Value="0" />
@@ -1140,9 +1155,9 @@
                         </Grid.RowDefinitions>
                         <Border Grid.RowSpan="2" Background="Transparent" />
 
-    -->
-    <!--<TextBlock Grid.Row="0" Text="测试标题" />-->
-    <!--
+
+    <TextBlock Grid.Row="0" Text="测试标题" />
+
 
                         <ContentPresenter
 							Grid.Row="1"
@@ -1163,6 +1178,7 @@
             </Setter.Value>
         </Setter>
     </Style>-->
+
 
     <Style TargetType="avalonDockControls:AnchorablePaneTitle">
         <Setter Property="Template">
@@ -1309,9 +1325,8 @@
                             <ToggleButton
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
-                                DataContext="{Binding Path=Model.Parent, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                 Foreground="{TemplateBinding Foreground}"
-                                IsChecked="{Binding Path=Model.Parent.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsChecked="{Binding Path=Model.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                 RenderTransformOrigin="0.5 0.5"
                                 Style="{DynamicResource MaterialDesignExpanderToggleButton}" />
                             <!--  Command="{Binding Path=LayoutItem.ExpandCommand, RelativeSource={RelativeSource TemplatedParent}}"  -->
@@ -1562,7 +1577,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
 
     <!--  侧停靠栏整体  -->
@@ -2030,6 +2044,7 @@
     <!--  Anchorable 顶部的标题样式  -->
     <DataTemplate x:Key="AvalonDock_ThemeVS2010_AnchorableTitleTemplate">
         <TextBlock
+            VerticalAlignment="Center"
             Background="Transparent"
             Text="{Binding Title}"
             TextTrimming="CharacterEllipsis" />
@@ -2110,9 +2125,9 @@
         <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor1}" />
         <Setter Property="DocumentPaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_DocumentPaneControlStyle}" />
         <Setter Property="AnchorablePaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorablePaneControlStyle}" />
-        <Setter Property="AnchorableExpanderPaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableExpanderPaneControlStyle}" />
-        <Setter Property="AnchorableGroupTabControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableGroupTabControlStyle}" />
-        <Setter Property="AnchorablePaneControl2Style" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorablePaneControl2Style}" />
+        <Setter Property="AnchorableExpanderPaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableExpanderControlStyle}" />
+        <Setter Property="AnchorableExpanderGroupPaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableExpanderGroupPaneControlStyle}" />
+        <Setter Property="AnchorablePaneControl2Style" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle}" />
         <!--<Setter Property="LayoutAnchorablePaneGroupControl2Style" Value="{StaticResource LayoutAnchorablePaneGroupControl2Style}"/>-->
         <Setter Property="AnchorSideTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorSideTemplate}" />
         <Setter Property="AnchorGroupTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorGroupTemplate}" />
@@ -2358,6 +2373,7 @@
                                 FlowDirection="{TemplateBinding FlowDirection}"
                                 Visibility="{Binding ContentVisibility}" />
 
+
                             <!--<ContentPresenter
                                 Content="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"
                                 ContentTemplate="{Binding LayoutItemTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
@@ -2394,6 +2410,52 @@
         </Setter>
     </Style>
 
+    <Style x:Key="LayoutAnchorableStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableControl}">
+                    <!--  Background="{TemplateBinding Background}"  -->
+                    <Border
+                        x:Name="Bd"
+                        Background="Green"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+
+                        <ContentPresenter
+                            Grid.Row="1"
+                            Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
+                            ContentTemplate="{Binding LayoutItem.View.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                            ContentTemplateSelector="{Binding LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
+                            FlowDirection="{TemplateBinding FlowDirection}"
+                            Visibility="{Binding ContentVisibility}" />
+
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <!--
+                                Hide the title if the control is directly hosted in floating window
+                                The floating window control will show the title if there is only one control to host
+                                without any other LayoutAnchorableControl
+                            -->
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.IsFloating}" Value="True" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.Parent.IsDirectlyHostedInFloatingWindow}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <!--
+                                Also hide the title, if model cannot be bound which can happen when using virtualization
+                                See Issue #148 Drop Down Menu for LayoutAnchorables is not correct with Virtualization
+                            -->
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model}" Value="{x:Null}" />
+                            </MultiDataTrigger.Conditions>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
     <Style x:Key="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}" TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">

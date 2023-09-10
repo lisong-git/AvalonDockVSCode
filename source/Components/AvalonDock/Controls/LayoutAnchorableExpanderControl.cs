@@ -16,13 +16,13 @@ using System.Windows.Data;
 
 namespace AvalonDock.Controls
 {
-	/// <inheritdoc cref="TabControl"/>
+	/// <inheritdoc cref="Expander"/>
 	/// <inheritdoc cref="ILayoutControl"/>
 	/// <summary>
 	/// Provides a control to display multible (or just one) LayoutAnchorable(s).
 	/// See also <seealso cref="AnchorablePaneTabPanel"/>.
 	/// </summary>
-	/// <seealso cref="TabControlEx"/>
+	/// <seealso cref="Expander"/>
 	/// <seealso cref="ILayoutControl"/>
 	public class LayoutAnchorableExpanderControl : Expander, ILayoutControl//, ILogicalChildrenContainer
 	{
@@ -59,7 +59,7 @@ namespace AvalonDock.Controls
 		#region Properties
 
 		/// <summary>Gets the layout model of this control.</summary>
-		[Bindable(false), Description("Gets the layout model of this control."), Category("Other")]
+		[Bindable(true), Description("Gets the layout model of this control."), Category("Other")]
 		public ILayoutElement Model => _model;
 
 		#endregion Properties
@@ -74,7 +74,7 @@ namespace AvalonDock.Controls
 		/// <param name="e">The <see cref="System.Windows.Input.KeyboardFocusChangedEventArgs"/> that contains the event data.</param>
 		protected override void OnGotKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventArgs e)
 		{
-			if (_model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
+			//if (_model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
 			base.OnGotKeyboardFocus(e);
 		}
 
@@ -88,7 +88,7 @@ namespace AvalonDock.Controls
 		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
 		{
 			base.OnMouseLeftButtonDown(e);
-			if (!e.Handled && _model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
+			//if (!e.Handled && _model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace AvalonDock.Controls
 		protected override void OnMouseRightButtonDown(System.Windows.Input.MouseButtonEventArgs e)
 		{
 			base.OnMouseRightButtonDown(e);
-			if (!e.Handled && _model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
+			//if (!e.Handled && _model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
 		}
 
 		#endregion Overrides

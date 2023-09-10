@@ -78,9 +78,9 @@ namespace AvalonDock.Controls
 		/// <summary>Coerces the <see cref="ExpandCommand"/> value.</summary>
 		private static object CoerceExpandCommandValue(DependencyObject d, object value) => value;
 
-		private bool CanExecuteExpandCommand(object parameter) => LayoutElement != null && _anchorable.CanHide;
+		//private bool CanExecuteExpandCommand(object parameter) => LayoutElement != null && _anchorable.CanHide;
 
-		private void ExecuteExpandCommand(object parameter) => _anchorable?.Root?.Manager?.ExecuteExpandCommand(_anchorable);
+		//private void ExecuteExpandCommand(object parameter) => _anchorable?.Root?.Manager?.ExecuteExpandCommand(_anchorable);
 		#endregion ExpandCommand
 
 		#region HideCommand
@@ -271,7 +271,7 @@ namespace AvalonDock.Controls
 		protected override void InitDefaultCommands()
 		{
 			_defaultHideCommand = new RelayCommand<object>(ExecuteHideCommand, CanExecuteHideCommand);
-			_expandCommand = new RelayCommand<object>(ExecuteExpandCommand, CanExecuteExpandCommand);
+			//_expandCommand = new RelayCommand<object>(ExecuteExpandCommand, CanExecuteExpandCommand);
 			_defaultAutoHideCommand = new RelayCommand<object>(ExecuteAutoHideCommand, CanExecuteAutoHideCommand);
 			_defaultDockCommand = new RelayCommand<object>(ExecuteDockCommand, CanExecuteDockCommand);
 			base.InitDefaultCommands();
@@ -281,7 +281,7 @@ namespace AvalonDock.Controls
 		protected override void ClearDefaultBindings()
 		{
 			if (HideCommand == _defaultHideCommand) BindingOperations.ClearBinding(this, HideCommandProperty);
-			if(ExpandCommand == _expandCommand) BindingOperations.ClearBinding(this, ExpandCommandProperty);
+			//if(ExpandCommand == _expandCommand) BindingOperations.ClearBinding(this, ExpandCommandProperty);
 			if(AutoHideCommand == _defaultAutoHideCommand) BindingOperations.ClearBinding(this, AutoHideCommandProperty);
 			if (DockCommand == _defaultDockCommand) BindingOperations.ClearBinding(this, DockCommandProperty);
 			base.ClearDefaultBindings();

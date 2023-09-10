@@ -31,7 +31,7 @@ namespace AvalonDock.Controls {
 	/// <seealso cref="Grid"/>
 	/// <seealso cref="ILayoutControl"/>
 	/// <seealso cref="IAdjustableSizeLayout"/>
-	public abstract class LayoutGridControl2<T> :Grid, ILayoutControl, IAdjustableSizeLayout where T : class, ILayoutElement {
+	public abstract class ExpanderGridControl<T> :Grid, ILayoutControl, IAdjustableSizeLayout where T : class, ILayoutElement {
 		#region fields
 
 		private LayoutPositionableGroup<T> _model;
@@ -52,7 +52,7 @@ namespace AvalonDock.Controls {
 		/// </summary>
 		/// <param name="model"></param>
 		/// <param name="orientation"></param>
-		internal LayoutGridControl2() {
+		internal ExpanderGridControl() {
 			FlowDirection = System.Windows.FlowDirection.LeftToRight;
 			Unloaded += OnUnloaded;
 
@@ -148,7 +148,7 @@ namespace AvalonDock.Controls {
 		}
 
 		public void UpdateChildren() {
-			Debug.WriteLine($"{_model == null}, {_model?.Children?.Count}", "LayoutGridControl2_UpdateChildren 1");
+			Debug.WriteLine($"{_model == null}, {_model?.Children?.Count}", "ExpanderGridControl UpdateChildren 1");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var alreadyContainedChildren = Children.OfType<ILayoutControl>().ToArray();
@@ -162,7 +162,7 @@ namespace AvalonDock.Controls {
 				return;
 			foreach(var child in _model.Children) {
 				var foundContainedChild = alreadyContainedChildren.FirstOrDefault(chVM => chVM.Model == child);
-				Debug.WriteLine($"{child.GetType()}", "UpdateChildren 2");
+				Debug.WriteLine($"{child.GetType()}", "ExpanderGridControl UpdateChildren 2");
 				if(foundContainedChild != null)
 					Children.Add(foundContainedChild as UIElement);
 				else
@@ -193,7 +193,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void OnChildModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "LayoutGridControl2 OnChildModelPropertyChanged");
+			Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "ExpanderGridControl OnChildModelPropertyChanged");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			if(AsyncRefreshCalled)
@@ -228,7 +228,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void UpdateRowColDefinitions() {
-			Debug.WriteLine($"", "LayoutGridControl2 UpdateRowColDefinitions 1");
+			Debug.WriteLine($"", "ExpanderGridControl UpdateRowColDefinitions 1");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var root = _model.Root;
@@ -450,7 +450,7 @@ namespace AvalonDock.Controls {
 		}
 
 		public virtual void AdjustFixedChildrenPanelSizes(Size? parentSize = null) {
-			Debug.WriteLine($"", "AdjustFixedChildrenPanelSizes");
+			Debug.WriteLine($"", "ExpanderGridControl AdjustFixedChildrenPanelSizes");
 
 			var visibleChildren = GetVisibleChildren();
 			if(visibleChildren.Count == 0)

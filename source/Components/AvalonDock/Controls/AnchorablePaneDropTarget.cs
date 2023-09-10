@@ -50,7 +50,7 @@ namespace AvalonDock.Controls
 		/// </summary>
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
-		/// <param name="type"></param>
+		/// <param name="type"></param>  
 		/// <param name="tabIndex"></param>
 		internal AnchorablePaneDropTarget(LayoutAnchorablePaneControl paneControl,
 										  Rect detectionRect,
@@ -357,8 +357,9 @@ namespace AvalonDock.Controls
 							var translatedDetectionRect = new Rect(DetectionRects[0].TopLeft, DetectionRects[0].BottomRight);
 							translatedDetectionRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
 
-							var pathFigure = new PathFigure();
-							pathFigure.StartPoint = targetScreenRect.TopLeft;
+							var pathFigure = new PathFigure {
+								StartPoint = targetScreenRect.TopLeft
+							};
 							pathFigure.Segments.Add(new LineSegment() { Point = new Point(targetScreenRect.Left, translatedDetectionRect.Top) });
 							pathFigure.Segments.Add(new LineSegment() { Point = translatedDetectionRect.TopLeft });
 							pathFigure.Segments.Add(new LineSegment() { Point = translatedDetectionRect.BottomLeft });

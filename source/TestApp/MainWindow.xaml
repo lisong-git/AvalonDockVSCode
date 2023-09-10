@@ -13,10 +13,7 @@
     x:Class="TestApp.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TestApp"
-    xmlns:winformsIntegration="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
     Title="MainWindow"
     Width="525"
     Height="350"
@@ -170,6 +167,7 @@
                         </LayoutAnchorablePane>
 
                     -->
+
                     <!--<LayoutAnchorablePane>
 							<LayoutAnchorable
                                 Title="Tool Window 1"
@@ -184,6 +182,7 @@
 								<TextBlock Text="{Binding FocusedElement}" />
 							</LayoutAnchorable>
 						</LayoutAnchorablePane>-->
+
                     <!--
 
                     </avalonDock:LayoutAnchorablePaneGroup>-->
@@ -279,19 +278,22 @@
                         </LayoutAnchorablePane2>
                     </LayoutAnchorablePaneGroup2>-->
 
-                    <LayoutAnchorableGroupBox DockWidth="160">
+                    <LayoutAnchorableExpanderGroupBox DockWidth="160">
                         <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                            <LayoutAnchorableExpander IsExpanded="True">
-                                <LayoutAnchorable Title="自定义1" />
+							<LayoutAnchorableExpander IsExpanded="True" Title="自定义1" >
+								<TextBox Text="内容一" />
+							</LayoutAnchorableExpander>
+							<LayoutAnchorableExpander IsExpanded="True" Title="自定义2">
+                                    <StackPanel>
+                                        <TextBox Text="内容一" />
+                                        <TextBox Text="内容二" />
+                                    </StackPanel>
                             </LayoutAnchorableExpander>
-                            <LayoutAnchorableExpander IsExpanded="True">
-                                <LayoutAnchorable Title="自定义2" />
-                            </LayoutAnchorableExpander>
-                            <LayoutAnchorableExpander IsExpanded="False">
-                                <LayoutAnchorable Title="自定义3" />
-                            </LayoutAnchorableExpander>
+							<LayoutAnchorableExpander IsExpanded="False" Title="自定义3" >
+								<TextBox Text="内容二" />
+							</LayoutAnchorableExpander>
                         </LayoutAnchorableExpanderGroup>
-                    </LayoutAnchorableGroupBox>
+					</LayoutAnchorableExpanderGroupBox>
 
                     <LayoutDocumentPaneGroup>
                         <LayoutDocumentPane x:Name="LayoutDocumentPane">
@@ -322,34 +324,95 @@
                         </LayoutDocumentPane>
                     </LayoutDocumentPaneGroup>
 
-                    <LayoutAnchorableGroupTab DockMinWidth="20" DockWidth="120">
+
+                    <LayoutAnchorableExpanderGroupPane DockMinWidth="20" DockWidth="120">
                         <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                            <LayoutAnchorableExpander IsExpanded="True">
-                                <LayoutAnchorable Title="自定义1" />
+                            <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox Text="内容1" />
+                                    <TextBox Text="内容2" />
+                                </StackPanel>
                             </LayoutAnchorableExpander>
-                            <LayoutAnchorableExpander IsExpanded="True">
-                                <LayoutAnchorable Title="自定义2" />
+                            <LayoutAnchorableExpander Title="自定义2" IsExpanded="True">
+                                <TextBox Text="内容5" />
                             </LayoutAnchorableExpander>
-                            <LayoutAnchorableExpander IsExpanded="False">
-                                <LayoutAnchorable Title="自定义3" />
+                            <LayoutAnchorableExpander Title="自定义3" IsExpanded="False">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox Text="内容31" />
+                                    <TextBox Text="内容32" />
+                                </StackPanel>
                             </LayoutAnchorableExpander>
                         </LayoutAnchorableExpanderGroup>
 
                         <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                            <LayoutAnchorableExpander IsExpanded="True">
-                                <LayoutAnchorable Title="自定义4" />
+                            <LayoutAnchorableExpander Title="自定义4" IsExpanded="True">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox Text="内容1" />
+                                    <TextBox Text="内容2" />
+                                </StackPanel>
                             </LayoutAnchorableExpander>
-                            <LayoutAnchorableExpander IsExpanded="True">
+                            <LayoutAnchorableExpander Title="自定义5" IsExpanded="True">
+                                <TextBox Text="内容5" />
+                            </LayoutAnchorableExpander>
+
+                        </LayoutAnchorableExpanderGroup>
+
+                    </LayoutAnchorableExpanderGroupPane>
+
+
+
+                    <!--<LayoutAnchorableExpanderGroupPane DockMinWidth="20" DockWidth="120">
+                        <LayoutAnchorableExpanderGroup Orientation="Vertical">
+							<LayoutAnchorableExpander IsExpanded="True" Title="自定义4">
+                                <LayoutAnchorable Title="自定义4">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBox Text="内容1" />
+                                        <TextBox Text="内容2" />
+                                    </StackPanel>
+                                </LayoutAnchorable>
+                            </LayoutAnchorableExpander>
+							<LayoutAnchorableExpander IsExpanded="True" Title="自定义5" >
                                 <LayoutAnchorable Title="自定义5" />
                             </LayoutAnchorableExpander>
-
+                            <LayoutAnchorableExpander IsExpanded="False">
+                                <LayoutAnchorable Title="自定义6">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBox Text="内容31" />
+										<TextBox Text="内容32" />
+									</StackPanel>
+                                </LayoutAnchorable>
+                            </LayoutAnchorableExpander>
                         </LayoutAnchorableExpanderGroup>
-                    </LayoutAnchorableGroupTab>
 
+                        <LayoutAnchorableExpanderGroup Orientation="Vertical">
+                            <LayoutAnchorableExpander IsExpanded="True">
+								<LayoutAnchorable Title="自定义7" />
+							</LayoutAnchorableExpander>
+                            <LayoutAnchorableExpander IsExpanded="True">
+                                <LayoutAnchorable Title="自定义8" />
+                            </LayoutAnchorableExpander>
+                        </LayoutAnchorableExpanderGroup>
+                    </LayoutAnchorableExpanderGroupPane>-->
 
+                    <!--<LayoutAnchorablePane DockWidth="120">
+                        <LayoutAnchorable
+                            Title="Tool Window 1"
+                            ContentId="toolWindow1"
+                            Hiding="OnToolWindow1Hiding">
+                            <StackPanel MinHeight="450">
 
-                    <!--<LayoutAnchorablePaneGroup DockWidth="250" Orientation="Vertical">-->
-                    <!--<LayoutAnchorablePane DockWidth="80">
+                                <local:TestUserControl />
+
+                                <TextBox Text="{Binding TestTimer, Mode=OneWay, StringFormat='Tool Window 1 Attached to Timer ->\{0\}'}" />
+                            </StackPanel>
+                        </LayoutAnchorable>
+                        <LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
+                            <TextBlock Text="{Binding FocusedElement}" />
+                        </LayoutAnchorable>
+                    </LayoutAnchorablePane>-->
+
+                    <!--<LayoutAnchorablePaneGroup DockWidth="250" Orientation="Vertical">
+						<LayoutAnchorablePane DockWidth="80">
 							<LayoutAnchorable
                                 Title="Tool Window 1"
                                 ContentId="toolWindow1"
@@ -364,9 +427,9 @@
 							<LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
 								<TextBlock Text="{Binding FocusedElement}" />
 							</LayoutAnchorable>
-						</LayoutAnchorablePane>-->
+						</LayoutAnchorablePane>
 
-                    <!--<LayoutAnchorablePane>
+						<LayoutAnchorablePane>
 							<LayoutAnchorable
                                 Title="Tool Window 1"
                                 ContentId="toolWindow1"

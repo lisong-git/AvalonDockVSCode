@@ -24,21 +24,21 @@ namespace AvalonDock.Controls
 	/// of a <see cref="LayoutAnchorablePaneControl"/>.
 	/// </summary>
 	/// <seealso cref="Control"/>
-	public class LayoutAnchorableTabItem : Control
+	public class LayoutAnchorableExpanderGroupTabItem : Control
 	{
 		#region fields
 
 		private bool _isMouseDown = false;
-		private static LayoutAnchorableTabItem _draggingItem = null;
+		private static LayoutAnchorableExpanderGroupTabItem _draggingItem = null;
 		private static bool _cancelMouseLeave = false;
 
 		#endregion fields
 
 		#region Constructors
 
-		static LayoutAnchorableTabItem()
+		static LayoutAnchorableExpanderGroupTabItem()
 		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(LayoutAnchorableTabItem), new FrameworkPropertyMetadata(typeof(LayoutAnchorableTabItem)));
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(LayoutAnchorableExpanderGroupTabItem), new FrameworkPropertyMetadata(typeof(LayoutAnchorableExpanderGroupTabItem)));
 		}
 
 		#endregion Constructors
@@ -48,7 +48,7 @@ namespace AvalonDock.Controls
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutContent), typeof(LayoutAnchorableTabItem),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutContent), typeof(LayoutAnchorableExpanderGroupTabItem),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
@@ -60,7 +60,7 @@ namespace AvalonDock.Controls
 		}
 
 		/// <summary>Handles changes to the <see cref="Model"/> property.</summary>
-		private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableTabItem)d).OnModelChanged(e);
+		private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableExpanderGroupTabItem) d).OnModelChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e)
@@ -98,7 +98,7 @@ namespace AvalonDock.Controls
 
 		internal static bool IsDraggingItem() => _draggingItem != null;
 
-		internal static LayoutAnchorableTabItem GetDraggingItem() => _draggingItem;
+		internal static LayoutAnchorableExpanderGroupTabItem GetDraggingItem() => _draggingItem;
 
 		internal static void ResetDraggingItem() => _draggingItem = null;
 
@@ -142,10 +142,7 @@ namespace AvalonDock.Controls
 		{
 			_isMouseDown = false;
 			base.OnMouseLeftButtonUp(e);
-			Debug.WriteLine($"{Model}", $"{nameof(LayoutAnchorableTabItem)} OnMouseLeftButtonUp");
-			if(Model!=null) {
-				Model.IsActive = true;				
-			}
+			Model.IsActive = true;
 		}
 
 		/// <inheritdoc />
