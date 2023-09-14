@@ -24,7 +24,7 @@ namespace AvalonDock.Layout
 	{
 		#region fields
 
-		private LayoutAnchorablePaneGroup _rootPanel;
+		private LayoutAnchorableExpanderGroup _rootPanel;
 
 		[NonSerialized]
 		private bool _isVisible = true;
@@ -57,7 +57,7 @@ namespace AvalonDock.Layout
 			}
 		}
 
-		public LayoutAnchorablePaneGroup RootPanel
+		public LayoutAnchorableExpanderGroup RootPanel
 		{
 			get => _rootPanel;
 			set
@@ -120,7 +120,7 @@ namespace AvalonDock.Layout
 		public override void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement)
 		{
 			Debug.Assert(oldElement == RootPanel && oldElement != null);
-			RootPanel = newElement as LayoutAnchorablePaneGroup;
+			RootPanel = newElement as LayoutAnchorableExpanderGroup;
 		}
 
 		/// <inheritdoc />
@@ -163,7 +163,7 @@ namespace AvalonDock.Layout
 						throw new ArgumentException("AvalonDock.LayoutAnchorableFloatingWindow doesn't know how to deserialize " + reader.LocalName);
 					serializer = XmlSerializersCache.GetSerializer(type);
 				}
-				RootPanel = (LayoutAnchorablePaneGroup)serializer.Deserialize(reader);
+				RootPanel = (LayoutAnchorableExpanderGroup) serializer.Deserialize(reader);
 			}
 			reader.ReadEndElement();
 		}

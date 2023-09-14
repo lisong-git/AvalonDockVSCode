@@ -414,36 +414,49 @@ namespace AvalonDock.Controls {
 					case DropAreaType.AnchorableExpanderPane: {
 							// Dragging over AnchorablePane -> Add DropTarget Area
 							Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 1");
-							var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderGroupPaneControl>;
-							yield return new AnchorableExpanderPaneDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetTop.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockTop);
-							yield return new AnchorableExpanderPaneDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetBottom.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockBottom);
+							var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderControl>;
+							//var dropAreaExpanderGroup = 
+							yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetTop.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockTop);
+							yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetBottom.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockBottom);
 
 							//Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 2");
 
-							var parentPaneModel = dropAreaAnchorablePane.AreaElement.Model as LayoutAnchorableExpanderGroupPane;
-							LayoutAnchorableTabItem lastAreaTabItem = null;
-							foreach(var dropAreaTabItem in dropAreaAnchorablePane.AreaElement.FindVisualChildren<LayoutAnchorableTabItem>()) {
-								var tabItemModel = dropAreaTabItem.Model as LayoutAnchorable;
-								lastAreaTabItem = lastAreaTabItem == null || lastAreaTabItem.GetScreenArea().Right < dropAreaTabItem.GetScreenArea().Right ?
-									dropAreaTabItem : lastAreaTabItem;
-								//int tabIndex = parentPaneModel.Children.IndexOf(tabItemModel);
-								int tabIndex = parentPaneModel.LayoutAnchorables.IndexOf(tabItemModel);
-								yield return new AnchorableExpanderPaneDropTarget(dropAreaAnchorablePane.AreaElement, dropAreaTabItem.GetScreenArea(), DropTargetType.AnchorablePaneDockInside, tabIndex);
-							}
-
-							if(lastAreaTabItem != null) {
-								var lastAreaTabItemScreenArea = lastAreaTabItem.GetScreenArea();
-								var newAreaTabItemScreenArea = new Rect(lastAreaTabItemScreenArea.TopRight, new Point(lastAreaTabItemScreenArea.Right + lastAreaTabItemScreenArea.Width, lastAreaTabItemScreenArea.Bottom));
-								if(newAreaTabItemScreenArea.Right < dropAreaAnchorablePane.AreaElement.GetScreenArea().Right)
-									yield return new AnchorableExpanderPaneDropTarget(dropAreaAnchorablePane.AreaElement, newAreaTabItemScreenArea, DropTargetType.AnchorablePaneDockInside, parentPaneModel.Children.Count);
-							}
-
-							var dropAreaTitle = dropAreaAnchorablePane.AreaElement.FindVisualChildren<AnchorablePaneTitle>().FirstOrDefault();
-							if(dropAreaTitle != null)
-								yield return new AnchorableExpanderPaneDropTarget(dropAreaAnchorablePane.AreaElement, dropAreaTitle.GetScreenArea(), DropTargetType.AnchorablePaneDockInside);
-
 						}
 						break;
+
+					//case DropAreaType.AnchorableExpanderPane: {
+					//		// Dragging over AnchorablePane -> Add DropTarget Area
+					//		Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 1");
+					//		var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderGroupPaneControl>;
+					//		yield return new AnchorableExpanderGroupPaneDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetTop.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockTop);
+					//		yield return new AnchorableExpanderGroupPaneDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetBottom.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockBottom);
+
+					//		//Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 2");
+
+					//		var parentPaneModel = dropAreaAnchorablePane.AreaElement.Model as LayoutAnchorableExpanderGroupPane;
+					//		LayoutAnchorableTabItem lastAreaTabItem = null;
+					//		foreach(var dropAreaTabItem in dropAreaAnchorablePane.AreaElement.FindVisualChildren<LayoutAnchorableTabItem>()) {
+					//			var tabItemModel = dropAreaTabItem.Model as LayoutAnchorable;
+					//			lastAreaTabItem = lastAreaTabItem == null || lastAreaTabItem.GetScreenArea().Right < dropAreaTabItem.GetScreenArea().Right ?
+					//				dropAreaTabItem : lastAreaTabItem;
+					//			//int tabIndex = parentPaneModel.Children.IndexOf(tabItemModel);
+					//			int tabIndex = parentPaneModel.LayoutAnchorables.IndexOf(tabItemModel);
+					//			yield return new AnchorableExpanderGroupPaneDropTarget(dropAreaAnchorablePane.AreaElement, dropAreaTabItem.GetScreenArea(), DropTargetType.AnchorablePaneDockInside, tabIndex);
+					//		}
+
+					//		if(lastAreaTabItem != null) {
+					//			var lastAreaTabItemScreenArea = lastAreaTabItem.GetScreenArea();
+					//			var newAreaTabItemScreenArea = new Rect(lastAreaTabItemScreenArea.TopRight, new Point(lastAreaTabItemScreenArea.Right + lastAreaTabItemScreenArea.Width, lastAreaTabItemScreenArea.Bottom));
+					//			if(newAreaTabItemScreenArea.Right < dropAreaAnchorablePane.AreaElement.GetScreenArea().Right)
+					//				yield return new AnchorableExpanderGroupPaneDropTarget(dropAreaAnchorablePane.AreaElement, newAreaTabItemScreenArea, DropTargetType.AnchorablePaneDockInside, parentPaneModel.Children.Count);
+					//		}
+
+					//		var dropAreaTitle = dropAreaAnchorablePane.AreaElement.FindVisualChildren<AnchorablePaneTitle>().FirstOrDefault();
+					//		if(dropAreaTitle != null)
+					//			yield return new AnchorableExpanderGroupPaneDropTarget(dropAreaAnchorablePane.AreaElement, dropAreaTitle.GetScreenArea(), DropTargetType.AnchorablePaneDockInside);
+
+					//	}
+					//	break;
 
 					//case DropAreaType.AnchorableExpanderPaneGroup: {
 					//		var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderGroupControl>;
@@ -602,9 +615,9 @@ namespace AvalonDock.Controls {
 					break;
 				case DropAreaType.AnchorableExpanderPane: {
 						areaElement = _gridAnchorableExpanderPaneDropTargets;
-						var dropAreaAnchorableExpanderGroupPane = area as DropArea<LayoutAnchorableExpanderGroupPaneControl>;
+						var dropAreaAnchorableExpanderGroupPane = area as DropArea<LayoutAnchorableExpanderControl>;
 
-						var layoutExpanderGroupPane = dropAreaAnchorableExpanderGroupPane.AreaElement.Model as LayoutAnchorableExpanderGroupPane;
+						var layoutExpanderGroupPane = dropAreaAnchorableExpanderGroupPane.AreaElement.Model as LayoutAnchorableExpander;
 						if(layoutExpanderGroupPane.Root.Manager != floatingWindowManager) {
 							_visibleAreas.Remove(area);
 							return;
@@ -805,7 +818,7 @@ namespace AvalonDock.Controls {
 		/// <inheritdoc cref="IOverlayWindow"/>
 		void IOverlayWindow.DragEnter(IDropTarget target) {
 			var previewBoxPath = target.GetPreviewPath(this, _floatingWindow.Model as LayoutFloatingWindow);
-			Debug.WriteLine($"{previewBoxPath}", "DragEnter");
+			Debug.WriteLine($"{previewBoxPath}, {target.Type}", "DragEnter");
 			if(previewBoxPath != null) {
 				_previewBox.Data = previewBoxPath;
 				_previewBox.Visibility = System.Windows.Visibility.Visible;

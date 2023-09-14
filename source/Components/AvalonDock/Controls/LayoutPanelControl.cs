@@ -33,8 +33,7 @@ namespace AvalonDock.Controls
 			: base(model, model.Orientation)
 		{
 			_model = model;
-			Debug.WriteLine($"11", "LayoutPanelControl");
-
+			//Debug.WriteLine($"11", "LayoutPanelControl");
 		}
 
 		#endregion Constructors

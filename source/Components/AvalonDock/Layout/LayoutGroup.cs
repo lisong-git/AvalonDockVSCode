@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -89,6 +90,7 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc cref="ILayoutGroup" />
 		public void InsertChildAt(int index, ILayoutElement element) {
+			Debug.WriteLine($"{typeof(T)}, {element is T}", $"{nameof(LayoutGroup<T>)} InsertChildAt");
 			if(element is T t)
 				_children.Insert(index, t);
 		}
@@ -189,6 +191,7 @@ namespace AvalonDock.Layout {
 		#region Private Methods
 
 		private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+			Debug.WriteLine($"{e.Action}", "LayoutGroup_Children CollectionChanged");
 			if(e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {
 				if(e.OldItems != null) {
 					foreach(LayoutElement element in e.OldItems)
@@ -219,6 +222,8 @@ namespace AvalonDock.Layout {
 		}
 
 		private void UpdateParentVisibility() {
+			Debug.WriteLine($"", "LayoutGroup_Children UpdateParentVisibility");
+
 			if(Parent is ILayoutElementWithVisibility parentPane)
 				parentPane.ComputeVisibility();
 		}

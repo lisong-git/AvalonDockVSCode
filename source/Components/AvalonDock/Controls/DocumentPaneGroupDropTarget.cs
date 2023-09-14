@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -94,7 +94,7 @@ namespace AvalonDock.Controls
 					{
 						var paneGroupModel = targetModel as LayoutDocumentPaneGroup;
 						var paneModel = paneGroupModel.Children[0] as LayoutDocumentPane;
-						var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
+						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
 
 						int i = 0;
 						foreach (var anchorableToImport in layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray())

@@ -52,6 +52,8 @@ namespace AvalonDock.Layout {
 			.OfType<LayoutAnchorable>()
 			.ToList();
 
+		public LayoutAnchorableExpanderGroup Selected => Children[SelectedContentIndex];
+
 		/// <summary>Gets whether the pane can be hidden.</summary>
 		public bool CanHide => Children.All(a => a.CanHide);
 
@@ -93,8 +95,9 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Gets the selected content in the pane or null.</summary>
-		public LayoutAnchorableExpanderGroup SelectedContent2 => _selectedIndex == -1 ? null : Children[_selectedIndex];
-		public LayoutContent SelectedContent => SelectedContent2?.Current;
+		private LayoutAnchorableExpanderGroup SelectedContent2 => _selectedIndex == -1 ? null : Children[_selectedIndex];
+
+		public LayoutContent SelectedContent => SelectedContent2?.SelectedContent;
 
 		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
 		string ILayoutPaneSerializable.Id {

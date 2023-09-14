@@ -10,6 +10,7 @@
 using AvalonDock.Layout;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -93,6 +94,15 @@ namespace AvalonDock.Controls
 
 		/// <summary>
 		/// Method is invoked to complete a drag & drop operation with a (new) docking position
+		/// by docking of the LayoutAnchorable <paramref name="floatingWindow"/> into this drop target.
+		///
+		/// Inheriting classes should override this method to implement their own custom logic.
+		/// </summary>
+		/// <param name="floatingWindow"></param>
+		//protected virtual void Drop(LayoutAnchorableExpanderFloatingWindow floatingWindow) { }
+
+		/// <summary>
+		/// Method is invoked to complete a drag & drop operation with a (new) docking position
 		/// by docking of the LayoutDocument <paramref name="floatingWindow"/> into this drop target.
 		///
 		/// Inheriting classes should override this method to implement their own custom logic.
@@ -113,6 +123,7 @@ namespace AvalonDock.Controls
 
 		public void Drop(LayoutFloatingWindow floatingWindow)
 		{
+			Debug.WriteLine($"{Type}, {TargetElement.GetType()}", $"{nameof(DropTarget<T>)} Drop");
 			var root = floatingWindow.Root;
 			var currentActiveContent = floatingWindow.Root.ActiveContent;
 			var fwAsAnchorable = floatingWindow as LayoutAnchorableFloatingWindow;

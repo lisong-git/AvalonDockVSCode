@@ -41,16 +41,16 @@ namespace AvalonDock.Controls
 		{
 			if (_managers.Count == 0)
 			{
-				//InputManager.Current.EnterMenuMode += new EventHandler(InputManager_EnterMenuMode);
-				//InputManager.Current.LeaveMenuMode += new EventHandler(InputManager_LeaveMenuMode);
+				//InputManager.SelectedContent.EnterMenuMode += new EventHandler(InputManager_EnterMenuMode);
+				//InputManager.SelectedContent.LeaveMenuMode += new EventHandler(InputManager_LeaveMenuMode);
 				_windowHandler = new WindowHookHandler();
 				_windowHandler.FocusChanged += new EventHandler<FocusChangeEventArgs>(WindowFocusChanging);
 				//_windowHandler.Activate += new EventHandler<WindowActivateEventArgs>(WindowActivating);
 				_windowHandler.Attach();
 				if (Application.Current != null)
 				{
-					//Application.Current.Exit += new ExitEventHandler( Current_Exit );
-					//Application.Current.Dispatcher.Invoke(new Action(() => Application.Current.Exit += new ExitEventHandler(Current_Exit)));
+					//Application.SelectedContent.Exit += new ExitEventHandler( Current_Exit );
+					//Application.SelectedContent.Dispatcher.Invoke(new Action(() => Application.SelectedContent.Exit += new ExitEventHandler(Current_Exit)));
 					var disp = Application.Current.Dispatcher;
 					Action subscribeToExitAction = new Action(() => Application.Current.Exit += new ExitEventHandler(Current_Exit));
 					if (disp.CheckAccess())
@@ -82,8 +82,8 @@ namespace AvalonDock.Controls
 
 			if (_managers.Count == 0)
 			{
-				//InputManager.Current.EnterMenuMode -= new EventHandler(InputManager_EnterMenuMode);
-				//InputManager.Current.LeaveMenuMode -= new EventHandler(InputManager_LeaveMenuMode);
+				//InputManager.SelectedContent.EnterMenuMode -= new EventHandler(InputManager_EnterMenuMode);
+				//InputManager.SelectedContent.LeaveMenuMode -= new EventHandler(InputManager_LeaveMenuMode);
 				if (_windowHandler != null)
 				{
 					_windowHandler.FocusChanged -= new EventHandler<FocusChangeEventArgs>(WindowFocusChanging);

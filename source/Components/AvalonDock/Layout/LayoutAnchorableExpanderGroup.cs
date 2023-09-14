@@ -22,11 +22,13 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutOrientableGroup {
+	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup {
 		#region fields
 
 		private Orientation _orientation;
 		private LayoutContent _current;
+		private int _selectedIndex;
+
 		#endregion fields
 
 		#region Constructors
@@ -44,29 +46,60 @@ namespace AvalonDock.Layout {
 
 		#region Properties
 
-		public LayoutContent Current {
-			get => _current ?? Children.First(); 
-			set => _current = value;
-		}
-	
+		//public LayoutContent SelectedContent {
+		//	get => _current ?? Children.First(); 
+		//	//set => _current = value;
+		//}
 
+		public int SelectedContentIndex {
+			get => _selectedIndex;
+			set {
+				if(value < 0 || value >= Children.Count)
+					value = -1;
+				if(value == _selectedIndex)
+					return;
+				RaisePropertyChanging(nameof(SelectedContentIndex));
+				RaisePropertyChanging(nameof(SelectedContent));
+				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
+					Children[_selectedIndex].IsSelected = false;
+				_selectedIndex = value;
+				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
+					Children[_selectedIndex].IsSelected = true;
+				RaisePropertyChanged(nameof(SelectedContentIndex));
+				RaisePropertyChanged(nameof(SelectedContent));
+			}
+		}
+
+		/// <summary>Gets the selected content in the pane or null.</summary>
+		public LayoutContent SelectedContent => _selectedIndex == -1 ? null : Children[_selectedIndex];
 		/// <summary>
 		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
 		/// </summary>
 		public Orientation Orientation {
-			get => _orientation;
+			get => Orientation.Vertical;
 			set {
-				if(value == _orientation)
-					return;
-				RaisePropertyChanging(nameof(Orientation));
-				_orientation = value;
-				RaisePropertyChanged(nameof(Orientation));
+				//if(value == _orientation)
+				//	return;
+				//RaisePropertyChanging(nameof(Orientation));
+				//_orientation = value;
+				//RaisePropertyChanged(nameof(Orientation));
 			}
 		}
 
 		#endregion Properties
 
 		#region Overrides
+
+		/// <summary>
+		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
+		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
+		/// </summary>
+		/// <param name="content"></param>
+		public int IndexOf(LayoutContent content) {
+			if(!(content is LayoutAnchorableExpander anchorableChild))
+				return -1;
+			return Children.IndexOf(anchorableChild);
+		}
 
 		/// <inheritdoc />
 		protected override bool GetVisibility() => Children.Count > 0 && Children.Any(c => c.IsVisible);
@@ -185,10 +218,10 @@ namespace AvalonDock.Layout {
 				_isActive = value;
 				var root = Root;
 				if(root != null) {
-					if(root.ActiveContent != Current && value)
-						Root.ActiveContent = Current;
-					if(_isActive && root.ActiveContent != Current)
-						root.ActiveContent = Current;
+					if(root.ActiveContent != SelectedContent && value)
+						Root.ActiveContent = SelectedContent;
+					if(_isActive && root.ActiveContent != SelectedContent)
+						root.ActiveContent = SelectedContent;
 				}
 				if(_isActive)
 					IsSelected = true;

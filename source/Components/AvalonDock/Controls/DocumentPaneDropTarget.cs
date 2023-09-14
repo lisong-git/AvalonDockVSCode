@@ -442,7 +442,7 @@ namespace AvalonDock.Controls
 
 					{
 						var paneModel = targetModel as LayoutDocumentPane;
-						var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
+						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
 
 						bool checkPreviousContainer = true;
 						int i = 0;

@@ -20,7 +20,7 @@
 		public void Before()
 		{
 			var message = $"Setup for test '{this.TestContext.TestName}' with Thread.CurrentThread: {Thread.CurrentThread.ManagedThreadId}" +
-						  $" and Current.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
+						  $" and SelectedContent.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
 			this.TestContext.WriteLine(message);
 		}
 
@@ -37,7 +37,7 @@
 			});
 
 			var message = $"TearDown for test '{this.TestContext.TestName}' with Thread.CurrentThread: {Thread.CurrentThread.ManagedThreadId}" +
-						  $" and Current.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
+						  $" and SelectedContent.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
 			this.TestContext.WriteLine(message);
 		}
 

@@ -9,18 +9,14 @@
 
 using System;
 using System.Linq;
-using System.Windows;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
 namespace AvalonDock.Layout {
 
-
-
-
 	[ContentProperty(nameof(Content))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutPanelElement, ILayoutPositionableElement, ILayoutPaneSerializable {
 		#region fields
 
 		[XmlIgnore]
@@ -37,17 +33,10 @@ namespace AvalonDock.Layout {
 		public LayoutAnchorableExpanderGroupBox() {
 		}
 
-		//public LayoutAnchorableExpanderGroup LayoutAnchorablePaneGroup2;
-
-		/// <summary>Class constructor from <see cref="LayoutPositionableGroup"/> which will be added into its children collection.</summary>
-		//public LayoutAnchorableExpanderGroupBox(LayoutPositionableGroup<LayoutAnchorableExpander> anchorable) {
-		//}
 
 		#endregion Constructors
 
 		#region Properties
-
-		//public LayoutAnchorableExpanderGroup MM => (LayoutAnchorableExpanderGroup) Children.FirstOrDefault(o => o is LayoutAnchorableExpanderGroup);
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		//public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
@@ -192,152 +181,4 @@ namespace AvalonDock.Layout {
 		#endregion Private Methods
 	}
 
-
-
-
-
-	/// <summary>Implements the model for a layout anchorable pane control (a pane in a tool window environment).
-	/// A layout anchorable pane control can have multiple LayoutAnchorable controls  as its children.
-	/// </summary>
-	//[ContentProperty(nameof(Content))]
-	//	[Serializable]
-	//	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutPositionableGroup<ILayoutAnchorablePane>>, ILayoutPanelElement, ILayoutPositionableElement, ILayoutPaneSerializable {
-	//		#region fields
-
-	//		private string _name = null;
-	//		private string _id;
-	//		//private LayoutAnchorableExpanderGroup _content;
-	//		#endregion fields
-
-	//		#region Constructors
-
-	//		/// <summary>Class constructor</summary>
-	//		public LayoutAnchorableExpanderGroupBox() {
-	//		}
-
-	//		//public LayoutAnchorableExpanderGroup LayoutAnchorablePaneGroup2;
-
-	//		/// <summary>Class constructor from <see cref="LayoutPositionableGroup"/> which will be added into its children collection.</summary>
-	//		//public LayoutAnchorableExpanderGroupBox(LayoutPositionableGroup<ILayoutAnchorablePane> anchorable) {
-	//		//	//Content = anchorable;
-	//		//}
-
-	//		#endregion Constructors
-
-	//		#region Properties
-
-	//		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
-	//		public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
-
-	//		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
-	//		public string Name {
-	//			get => _name;
-	//			set {
-	//				if (value == _name)
-	//					return;
-	//				_name = value;
-	//				RaisePropertyChanged(nameof(Name));
-	//			}
-	//		}
-	//		//public LayoutAnchorableExpanderGroup Content {
-	//		//	get => _content;
-	//		//	set {
-	//		//		if(value == _content)
-	//		//			return;
-	//		//		_content = value;
-	//		//		RaisePropertyChanged(nameof(Content));
-	//		//	}
-	//		//}
-	//		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
-	//		string ILayoutPaneSerializable.Id {
-	//			get => _id;
-	//			set => _id = value;
-	//		}
-
-	//		#endregion Properties
-
-	//		#region Overrides
-
-	//		/// <inheritdoc />
-	//		//protected override bool GetVisibility() => Children.Count > 0 && Children.Any(c => c.IsVisible);
-
-
-	//		/// <inheritdoc />
-	//		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
-	//			if (oldValue is ILayoutGroup oldGroup)
-	//				oldGroup.ChildrenCollectionChanged -= OnParentChildrenCollectionChanged;
-	//			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-	//			if (newValue is ILayoutGroup newGroup)
-	//				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
-	//			base.OnParentChanged(oldValue, newValue);
-	//		}
-
-
-
-	//#if TRACE
-	//		/// <inheritdoc />
-	//		public override void ConsoleDump(int tab) {
-	//			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-	//			System.Diagnostics.Trace.WriteLine("AnchorablePane()");
-
-	//			//foreach(ILayoutPositionableElement child in Children)
-	//			//	child.ConsoleDump(tab + 1);
-	//		}
-	//#endif
-
-	//		#endregion Overrides
-
-	//		#region Public Methods
-
-	//		/// <summary>
-	//		/// Gets whether the model hosts only 1 <see cref="LayoutAnchorable"/> (True)
-	//		/// or whether there are more than one <see cref="LayoutAnchorable"/>s below
-	//		/// this model pane.
-	//		/// </summary>
-	//		//public bool IsDirectlyHostedInFloatingWindow {
-	//		//	get {
-	//		//		var parentFloatingWindow = this.FindParent<LayoutAnchorableFloatingWindow>();
-	//		//		return parentFloatingWindow != null && parentFloatingWindow.IsSinglePane;
-	//		//		//return Parent != null && Parent.ChildrenCount == 1 && Parent.Parent is LayoutFloatingWindow;
-	//		//	}
-	//		//}
-
-	//		/// <summary>Gets whether this object is visible or not.</summary>
-	//		//public bool IsVisible {
-	//		//	get => _isVisible;
-	//		//	protected set {
-	//		//		if(value == _isVisible)
-	//		//			return;
-	//		//		RaisePropertyChanging(nameof(IsVisible));
-	//		//		_isVisible = value;
-
-	//		//		if(Parent is ILayoutElementWithVisibility parentPane)
-	//		//			parentPane.ComputeVisibility();
-
-	//		//		RaisePropertyChanged(nameof(IsVisible));
-	//		//	}
-	//		//}
-	//		#endregion Public Methods
-
-	//		#region Internal Methods
-
-
-
-	//		/// <summary>
-	//		/// Updates whether this object is hosted at the root level of a floating window control or not.
-	//		/// </summary>
-	//		//internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-
-	//		#endregion Internal Methods
-
-	//		#region Private Methods
-
-
-
-	//		//private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-
-
-
-	//		#endregion Private Methods
-	//	}
 }

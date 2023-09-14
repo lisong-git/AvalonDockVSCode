@@ -37,14 +37,14 @@ namespace AvalonDock.Layout {
 		private double? _resizableAbsoluteDockHeight;
 
 		private bool _allowDuplicateContent = true;
-		private bool _canRepositionItems = true;
+		//private bool _canRepositionItems = true;
 
 		private double _dockMinWidth = 25.0;
 		private double _dockMinHeight = 25.0;
-		private double _floatingWidth = 0.0;
-		private double _floatingHeight = 0.0;
-		private double _floatingLeft = 0.0;
-		private double _floatingTop = 0.0;
+		//private double _floatingWidth = 0.0;
+		//private double _floatingHeight = 0.0;
+		//private double _floatingLeft = 0.0;
+		//private double _floatingTop = 0.0;
 
 		private bool _isMaximized = false;
 
@@ -312,9 +312,10 @@ namespace AvalonDock.Layout {
 		//	}
 		//}
 
-		protected virtual void OnIsVisibleChanged() {
-			UpdateParentVisibility();
-		}
+		//protected virtual void OnIsVisibleChanged() {
+		//	UpdateParentVisibility();
+		//}
+
 		private void UpdateParentVisibility() {
 			if(Parent is ILayoutElementWithVisibility parentPane)
 				parentPane.ComputeVisibility();

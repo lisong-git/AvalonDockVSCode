@@ -338,7 +338,7 @@ namespace AvalonDock.Controls
 		/// <returns>All the anchorable items found.</returns>
 		/// <seealso cref="LayoutAnchorable"/>
 		/// <seealso cref="LayoutAnchorablePaneGroup"/>
-		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorablePaneGroup layoutAnchPaneGroup)
+		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorableExpanderGroup layoutAnchPaneGroup)
 		{
 			if (layoutAnchPaneGroup == null) yield break;
 			foreach (var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorable>())

@@ -432,12 +432,12 @@
 
 
     <!--  AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle  -->
-	<Style x:Key="AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
+    <Style x:Key="AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
         <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Background" Value="BlueViolet" />
         <Setter Property="Template">
             <Setter.Value>
-				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
+                <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
                     <Grid ClipToBounds="true" SnapsToDevicePixels="true">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -489,11 +489,10 @@
                         <avalonDockControls:LayoutAnchorableExpanderGroupControl
                             Grid.Row="1"
                             Background="GreenYellow"
-                            Model="{Binding Model.Children[0], RelativeSource={RelativeSource TemplatedParent}}"  
-							>
-							<!--Model="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"-->
+                            Model="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}">
+                            <!--  Model="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"  -->
 
-							<!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                            <!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
                             <!--  Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
                             <!--  Model="{Binding Model.LayoutAnchorableExpanderGroup, RelativeSource={RelativeSource TemplatedParent}}"  -->
                             <!--<Grid.RowDefinitions>
@@ -516,13 +515,13 @@
 			</Setter.Value>
 		</Setter>-->
 
-        <Setter Property="ContentTemplate">
+        <!--<Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
 
     </Style>
 
@@ -652,7 +651,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <avalonDockControls:LayoutAnchorableTabItem Model="{Binding Current}" />
+                    <avalonDockControls:LayoutAnchorableTabItem Model="{Binding SelectedContent}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -695,10 +694,7 @@
                             HorizontalAlignment="Stretch"
                             Background="GreenYellow"
                             DockPanel.Dock="Bottom">
-                            <LayoutAnchorableControl 
-								Style="{DynamicResource LayoutAnchorableStyle}" 
-								Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" 
-								/>
+                            <LayoutAnchorableControl Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource LayoutAnchorableStyle}" />
                             <!--  Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"  -->
                             <!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
 
@@ -1671,7 +1667,11 @@
                             StrokeThickness="0" />
                         <!--  Stroke="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"  -->
 
-                        <Grid x:Name="PART_DockingManagerDropTargets">
+						<Path x:Name="PART_InsertLine"
+							  Fill="WhiteSmoke"
+							  StrokeThickness="0"/>
+
+						<Grid x:Name="PART_DockingManagerDropTargets">
                             <Image
                                 x:Name="PART_DockingManagerDropTargetLeft"
                                 HorizontalAlignment="Left"
@@ -1763,21 +1763,22 @@
                                     <RowDefinition Height="1*" />
                                     <RowDefinition Height="1*" />
                                 </Grid.RowDefinitions>
-                                <Image
+                                <!--<Image
                                     Grid.RowSpan="3"
                                     Grid.ColumnSpan="3"
                                     Margin="0,0.5,0,-0.5"
                                     Source="Images/DockPaneEmpty.png"
                                     Stretch="None"
-                                    Visibility="Collapsed" />
-
+                                    Visibility="Collapsed" />-->
+								
+								
                                 <Border
                                     Name="PART_AnchorableExpanderPaneDropTargetTop"
                                     Grid.Row="0"
                                     Margin="0,3.5,0,0"
                                     VerticalAlignment="Stretch"
                                     Background="Transparent">
-                                    <Image Source="Images/DockDocumentAsAnchorableTop.png" Stretch="None" />
+                                    <!--<Image Source="Images/DockDocumentAsAnchorableTop.png" Stretch="None" />-->
                                 </Border>
                                 <Border
                                     Name="PART_AnchorableExpanderPaneDropTargetBottom"
@@ -1785,7 +1786,7 @@
                                     Margin="0,-0.5,0,0"
                                     VerticalAlignment="Stretch"
                                     Background="Transparent">
-                                    <Image Source="Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />
+                                    <!--<Image Source="Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />-->
                                 </Border>
 
                             </Grid>

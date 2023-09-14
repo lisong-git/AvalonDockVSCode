@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -286,7 +286,7 @@ namespace Microsoft.Windows.Shell
 		#endregion Initialization and Update Methods
 
 		/// <summary>
-		/// Private constructor.  The public way to access this class is through the static Current property.
+		/// Private constructor.  The public way to access this class is through the static Content property.
 		/// </summary>
 		private SystemParameters2()
 		{

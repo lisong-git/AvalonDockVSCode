@@ -201,7 +201,7 @@ namespace AvalonDock.Controls
 
 					_currentDropTarget = _currentWindow.GetTargets().FirstOrDefault(dt => dt.HitTestScreen(dragPosition));
 					if(_currentDropTarget != null) {
-						Debug.WriteLine($"{_currentDropTarget.GetType().Name}", "UpdateMouseLocation 4");
+						Debug.WriteLine($"{_currentDropTarget.Type}", "UpdateMouseLocation 4");
 						// 显示可插入区域大图预览
 						_currentWindow.DragEnter(_currentDropTarget);
 						BringWindowToTop2((Window) _currentWindow);

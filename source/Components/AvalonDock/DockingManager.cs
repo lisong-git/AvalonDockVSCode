@@ -1527,20 +1527,21 @@ namespace AvalonDock {
 				}
 			}
 
-			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
-			//	_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpanderPane));
+			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
+				_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpanderPane));
+			}
+
+			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderPane));
 			//}
 
-			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
-				_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderPane));
-			}
-			
 			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()) {
 			//	Debug.WriteLine($"{areaHost.EmptyLength()}", "GetDropAreas");
 			//	if(areaHost.EmptyLength() > 1) {
 			//		_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorableExpanderPaneGroup));
 			//	}
 			//}
+
 
 			return _areas;
 		}
@@ -1572,7 +1573,7 @@ namespace AvalonDock {
 		/// <returns>All the anchorable items found.</returns>
 		/// <seealso cref="LayoutAnchorable"/>
 		/// <seealso cref="LayoutAnchorablePaneGroup"/>
-		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorablePaneGroup layoutAnchPaneGroup) {
+		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorableExpanderGroup layoutAnchPaneGroup) {
 			if(layoutAnchPaneGroup == null)
 				yield break;
 			foreach(var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorable>())
@@ -1591,9 +1592,9 @@ namespace AvalonDock {
 		}
 
 		public LayoutFloatingWindowControl CreateFloatingWindow(LayoutContent contentModel, bool isContentImmutable) {
-			if(contentModel is LayoutAnchorable anchorable) {
+			if(contentModel is LayoutAnchorableExpander anchorable) {
 				if(!(contentModel.Parent is ILayoutPane)) {
-					var pane = new LayoutAnchorablePane(anchorable)
+					var pane = new LayoutAnchorableExpanderGroup(anchorable)
 					{
 						FloatingTop = contentModel.FloatingTop,
 						FloatingLeft = contentModel.FloatingLeft,
@@ -1667,7 +1668,6 @@ namespace AvalonDock {
 				var templateModelView = new LayoutAnchorableExpanderGroupBoxControl(model as LayoutAnchorableExpanderGroupBox, IsVirtualizingAnchorable);
 				templateModelView.SetBinding(StyleProperty, new Binding(AnchorablePaneControl2StyleProperty.Name) { Source = this });
 				templateModelView.Background = new SolidColorBrush(Colors.BlueViolet);
-				//templateModelView.M
 				return templateModelView;
 			}
 			if (model is LayoutAnchorableExpander) {
@@ -1829,6 +1829,17 @@ namespace AvalonDock {
 		/// </summary>
 		/// <param name="paneModel"></param>
 		internal void StartDraggingFloatingWindowForPane(LayoutAnchorablePane paneModel) {
+			//var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);
+			//if(fwc == null)
+			//	return;
+
+			//LayoutFloatingWindowControlCreated?.Invoke(this, new LayoutFloatingWindowControlCreatedEventArgs(fwc));
+			MessageBox.Show("Empty Function", "StartDraggingFloatingWindowForPane");
+			//fwc.AttachDrag();
+			//fwc.Show();
+		}
+
+		internal void StartDraggingFloatingWindowForPane(LayoutAnchorableExpanderGroup  paneModel) {
 			var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);
 			if(fwc == null)
 				return;
@@ -2467,7 +2478,7 @@ namespace AvalonDock {
 			}
 			_suspendLayoutItemCreation = true;
 			foreach(var anchorableContentToImport in listOfAnchorablesToImport) {
-				var anchorableToImport = new LayoutAnchorable { Content = anchorableContentToImport };
+				var anchorableToImport = new LayoutAnchorableExpander { Content = anchorableContentToImport };
 				var added = false;
 				if(LayoutUpdateStrategy != null)
 					added = LayoutUpdateStrategy.BeforeInsertAnchorable(layout, anchorableToImport, anchorablePane);
@@ -2534,7 +2545,7 @@ namespace AvalonDock {
 					}
 					_suspendLayoutItemCreation = true;
 					foreach(var anchorableContentToImport in e.NewItems) {
-						var anchorableToImport = new LayoutAnchorable { Content = anchorableContentToImport };
+						var anchorableToImport = new LayoutAnchorableExpander { Content = anchorableContentToImport };
 						var added = false;
 						if(LayoutUpdateStrategy != null)
 							added = LayoutUpdateStrategy.BeforeInsertAnchorable(Layout, anchorableToImport, anchorablePane);
@@ -2751,7 +2762,7 @@ namespace AvalonDock {
 			_navigatorWindow = null;
 		}
 
-		private LayoutFloatingWindowControl CreateFloatingWindowForLayoutAnchorableWithoutParent(LayoutAnchorablePane paneModel, bool isContentImmutable) {
+		private LayoutFloatingWindowControl CreateFloatingWindowForLayoutAnchorableWithoutParent(LayoutAnchorableExpanderGroup paneModel, bool isContentImmutable) {
 			if(paneModel.Children.Any(c => !c.CanFloat))
 				return null;
 			var paneAsPositionableElement = paneModel as ILayoutPositionableElement;
@@ -2767,43 +2778,38 @@ namespace AvalonDock {
 			if(fwHeight == 0.0)
 				fwHeight = paneAsWithActualSize.ActualHeight + 10;   //10 includes BorderThickness and Margins inside LayoutAnchorableFloatingWindowControl.
 
-			var destPane = new LayoutAnchorablePane
-			{
-				DockWidth = paneAsPositionableElement.DockWidth,
-				DockHeight = paneAsPositionableElement.DockHeight,
-				DockMinHeight = paneAsPositionableElement.DockMinHeight,
-				DockMinWidth = paneAsPositionableElement.DockMinWidth,
-				FloatingLeft = paneAsPositionableElement.FloatingLeft,
-				FloatingTop = paneAsPositionableElement.FloatingTop,
-				FloatingWidth = paneAsPositionableElement.FloatingWidth,
-				FloatingHeight = paneAsPositionableElement.FloatingHeight,
-			};
+			//var destPane = new LayoutAnchorablePane
+			//{
+			//	DockWidth = paneAsPositionableElement.DockWidth,
+			//	DockHeight = paneAsPositionableElement.DockHeight,
+			//	DockMinHeight = paneAsPositionableElement.DockMinHeight,
+			//	DockMinWidth = paneAsPositionableElement.DockMinWidth,
+			//	FloatingLeft = paneAsPositionableElement.FloatingLeft,
+			//	FloatingTop = paneAsPositionableElement.FloatingTop,
+			//	FloatingWidth = paneAsPositionableElement.FloatingWidth,
+			//	FloatingHeight = paneAsPositionableElement.FloatingHeight,
+			//};
 
-			var savePreviousContainer = paneModel.FindParent<LayoutFloatingWindow>() == null;
-			var currentSelectedContentIndex = paneModel.SelectedContentIndex;
-			while(paneModel.Children.Count > 0) {
-				var contentModel = paneModel.Children[paneModel.Children.Count - 1];
+			//var savePreviousContainer = paneModel.FindParent<LayoutFloatingWindow>() == null;
+			//var currentSelectedContentIndex = paneModel.SelectedContentIndex;
+			//while(paneModel.Children.Count > 0) {
+			//	var contentModel = paneModel.Children[paneModel.Children.Count - 1];
 
-				if(savePreviousContainer) {
-					((ILayoutPreviousContainer) contentModel).PreviousContainer = paneModel;
-					contentModel.PreviousContainerIndex = paneModel.Children.Count - 1;
-				}
+			//	if(savePreviousContainer) {
+			//		((ILayoutPreviousContainer) contentModel).PreviousContainer = paneModel;
+			//		contentModel.PreviousContainerIndex = paneModel.Children.Count - 1;
+			//	}
 
-				paneModel.RemoveChildAt(paneModel.Children.Count - 1);
-				destPane.Children.Insert(0, contentModel);
-			}
+			//	paneModel.RemoveChildAt(paneModel.Children.Count - 1);
+			//	destPane.Children.Insert(0, contentModel);
+			//}
 
-			if(destPane.Children.Count > 0)
-				destPane.SelectedContentIndex = currentSelectedContentIndex;
+			//if(destPane.Children.Count > 0)
+			//	destPane.SelectedContentIndex = currentSelectedContentIndex;
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
 			fw = new LayoutAnchorableFloatingWindow {
-				RootPanel = new LayoutAnchorablePaneGroup(destPane) {
-					DockHeight = destPane.DockHeight,
-					DockWidth = destPane.DockWidth,
-					DockMinHeight = destPane.DockMinHeight,
-					DockMinWidth = destPane.DockMinWidth,
-				}
+				RootPanel = paneModel
 			};
 
 			Layout.FloatingWindows.Add(fw);
@@ -2855,19 +2861,24 @@ namespace AvalonDock {
 
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
-			if(contentModel is LayoutAnchorable) {
-				var anchorableContent = contentModel as LayoutAnchorable;
+
+			if(contentModel is LayoutAnchorableExpander) {
+				var anchorableContent = contentModel as LayoutAnchorableExpander;
+				//fw = new LayoutAnchorableFloatingWindow {
+				//	RootPanel = new LayoutAnchorablePaneGroup(new LayoutAnchorablePane(anchorableContent) {
+				//		DockWidth = parentPaneAsPositionableElement.DockWidth,
+				//		DockHeight = parentPaneAsPositionableElement.DockHeight,
+				//		DockMinHeight = parentPaneAsPositionableElement.DockMinHeight,
+				//		DockMinWidth = parentPaneAsPositionableElement.DockMinWidth,
+				//		FloatingLeft = parentPaneAsPositionableElement.FloatingLeft,
+				//		FloatingTop = parentPaneAsPositionableElement.FloatingTop,
+				//		FloatingWidth = parentPaneAsPositionableElement.FloatingWidth,
+				//		FloatingHeight = parentPaneAsPositionableElement.FloatingHeight,
+				//	})
+				//};
+
 				fw = new LayoutAnchorableFloatingWindow {
-					RootPanel = new LayoutAnchorablePaneGroup(new LayoutAnchorablePane(anchorableContent) {
-						DockWidth = parentPaneAsPositionableElement.DockWidth,
-						DockHeight = parentPaneAsPositionableElement.DockHeight,
-						DockMinHeight = parentPaneAsPositionableElement.DockMinHeight,
-						DockMinWidth = parentPaneAsPositionableElement.DockMinWidth,
-						FloatingLeft = parentPaneAsPositionableElement.FloatingLeft,
-						FloatingTop = parentPaneAsPositionableElement.FloatingTop,
-						FloatingWidth = parentPaneAsPositionableElement.FloatingWidth,
-						FloatingHeight = parentPaneAsPositionableElement.FloatingHeight,
-					})
+					RootPanel = new LayoutAnchorableExpanderGroup(anchorableContent)
 				};
 
 				Layout.FloatingWindows.Add(fw);
@@ -2877,6 +2888,8 @@ namespace AvalonDock {
 					Left = contentModel.FloatingLeft,
 					Top = contentModel.FloatingTop
 				};
+
+			
 			} else {
 				var anchorableDocument = contentModel as LayoutDocument;
 				fw = new LayoutDocumentFloatingWindow {
