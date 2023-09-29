@@ -164,7 +164,6 @@
 
         <LayoutRoot.ActivityBar>
           <LayoutActivityBar>
-            <LayoutAnchorableExpanderGroupBox Name="测试标题组1" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
                 <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
                   <TextBox Text="内容一" />
@@ -179,64 +178,47 @@
                   <TextBox Text="内容二" />
                 </LayoutAnchorableExpander>
               </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
 
-            <LayoutAnchorableExpanderGroupBox Name="测试标题组2" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox3" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox4" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox5" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox6" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox7" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox8" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox9" DockWidth="160">
               <LayoutAnchorableExpanderGroup Orientation="Vertical">
 								<LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
 									<TextBox Text="内容一" />
 								</LayoutAnchorableExpander>
 							</LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
           </LayoutActivityBar>
         </LayoutRoot.ActivityBar>
 

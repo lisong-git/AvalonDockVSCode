@@ -1701,17 +1701,18 @@ namespace AvalonDock {
 				return v;			
 			}
 			if(model is LayoutActivityBar layoutActivityBar) {
+
 				var templateModelView = new LayoutActivityBarControl(layoutActivityBar);
 				templateModelView.SetBinding(StyleProperty, new Binding(ActivityBarControlStyleProperty.Name) { Source = this });
 				return templateModelView;
 			}
-			if(model is LayoutAnchorablePaneGroup) {
-				var v = new LayoutAnchorablePaneGroupControl(model as LayoutAnchorablePaneGroup) {
-					//Background = new SolidColorBrush(Colors.Aqua),
-					//Margin = new Thickness(5, 5, 5, 5)
-				};
-				return v;
-			}
+			//if(model is LayoutAnchorablePaneGroup) {
+			//	var v = new LayoutAnchorablePaneGroupControl(model as LayoutAnchorablePaneGroup) {
+			//		//Background = new SolidColorBrush(Colors.Aqua),
+			//		//Margin = new Thickness(5, 5, 5, 5)
+			//	};
+			//	return v;
+			//}
 			if(model is LayoutDocumentPaneGroup)
 				return new LayoutDocumentPaneGroupControl(model as LayoutDocumentPaneGroup);
 
@@ -2232,6 +2233,7 @@ namespace AvalonDock {
 				RightSidePanel = CreateUIElementForModel(Layout.RightSide) as LayoutAnchorSideControl;
 				BottomSidePanel = CreateUIElementForModel(Layout.BottomSide) as LayoutAnchorSideControl;
 				ActivityBar = CreateUIElementForModel(Layout.ActivityBar) as LayoutActivityBarControl; 
+
 				// In order to prevent resource leaks, unsubscribe from SizeChanged event for case when we have no stored Layout settings.
 				SizeChanged -= OnSizeChanged;
 				SizeChanged += OnSizeChanged;
@@ -2391,6 +2393,8 @@ namespace AvalonDock {
 			if(documentsSource is INotifyCollectionChanged documentsSourceAsNotifier)
 				documentsSourceAsNotifier.CollectionChanged += DocumentsSourceElementsChanged;
 		}
+
+
 
 		private void DocumentsSourceElementsChanged(object sender, NotifyCollectionChangedEventArgs e) {
 			if(Layout == null)
