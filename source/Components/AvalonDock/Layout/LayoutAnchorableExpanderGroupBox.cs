@@ -8,7 +8,9 @@
  ************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
@@ -24,6 +26,7 @@ namespace AvalonDock.Layout {
 		private LayoutAnchorableExpanderGroup _content;
 		private string _name = null;
 		private string _id;
+		private bool _isActive = false;
 
 		#endregion fields
 
@@ -32,7 +35,6 @@ namespace AvalonDock.Layout {
 		/// <summary>Class constructor</summary>
 		public LayoutAnchorableExpanderGroupBox() {
 		}
-
 
 		#endregion Constructors
 
@@ -45,11 +47,30 @@ namespace AvalonDock.Layout {
 		public string Name {
 			get => _name;
 			set {
-				if(value == _name)
-					return;
-				_name = value;
-				RaisePropertyChanged(nameof(Name));
+				if(value != _name) {
+					_name = value;
+					RaisePropertyChanged(nameof(Name));
+				}
 			}
+		}
+
+		public bool IsActive {
+			get => _isActive;
+			set {
+				var watch = Stopwatch.StartNew();
+				if(value != _isActive) {
+					_isActive = value;
+
+					RaisePropertyChanged(nameof(IsActive));
+					watch.Stop();
+					Debug.WriteLine($"程序耗时: {watch.ElapsedMilliseconds}, {_isActive}", "IsActive");
+					//MessageBox.Show($"{watch.ElapsedMilliseconds}", "IsActive");
+				}
+			}
+		}
+
+		public void SetVisble(bool isVisble) {
+			IsVisible = isVisble;
 		}
 
 		public LayoutAnchorableExpanderGroup Content {
@@ -80,13 +101,11 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		protected override void ChildMoved(int oldIndex, int newIndex) {
-
 			base.ChildMoved(oldIndex, newIndex);
 		}
 
 		/// <inheritdoc />
 		protected override void OnChildrenCollectionChanged() {
-
 			base.OnChildrenCollectionChanged();
 		}
 
@@ -171,7 +190,8 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
-		private void SetLastActivatedIndex() {
+		private void
+			SetLastActivatedIndex() {
 			//var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
 			//SelectedContentIndex = Children.IndexOf(lastActivatedDocument);
 		}

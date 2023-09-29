@@ -79,6 +79,7 @@ namespace AvalonDock.Controls
 
 		#region Internal Methods
 
+		static int debugCount = 0;
 		/// <summary>
 		/// Method is invoked by the <see cref="LayoutFloatingWindowControl"/> to update the
 		/// current mouse position as the user drags the floating window with the mouse cursor.
@@ -96,9 +97,9 @@ namespace AvalonDock.Controls
 			}
 
 			var newHost = _overlayWindowHosts.FirstOrDefault(oh => oh.HitTestScreen(dragPosition));
-			Debug.WriteLine($"{newHost}", "DragService UpdateMouseLocation");
 			if (_currentHost != null || _currentHost != newHost)
 			{
+			//Debug.WriteLine($"{newHost}", "DragService UpdateMouseLocation");
 				//is mouse still inside current overlay window host?
 				if ((_currentHost != null && !_currentHost.HitTestScreen(dragPosition)) ||
 					_currentHost != newHost)
@@ -133,23 +134,23 @@ namespace AvalonDock.Controls
 					_currentWindow.DragEnter(_floatingWindow);
 
 					// Set the target window to topmost
-					if (_currentHost is LayoutFloatingWindowControl fwc &&
-						(fwc.OwnedByDockingManagerWindow == _floatingWindow.OwnedByDockingManagerWindow || fwc.OwnedByDockingManagerWindow))
-					{
-						BringWindowToTop2(fwc);
-					}
-					else if (_currentHost is DockingManager dockingManager)
-					{
-						BringWindowToTop2(Window.GetWindow(dockingManager));
-					}
+					//if (_currentHost is LayoutFloatingWindowControl fwc &&
+					//	(fwc.OwnedByDockingManagerWindow == _floatingWindow.OwnedByDockingManagerWindow || fwc.OwnedByDockingManagerWindow))
+					//{
+					//	BringWindowToTop2(fwc);
+					//}
+					//else if (_currentHost is DockingManager dockingManager)
+					//{
+					//	BringWindowToTop2(Window.GetWindow(dockingManager));
+					//}
 
-					GetOverlayWindowHosts();
+					//GetOverlayWindowHosts();
 
-					BringWindowToTop2(_floatingWindow);
-					if (_currentWindow is Window overlayWindow)
-					{
-						BringWindowToTop2(overlayWindow);
-					}
+					//BringWindowToTop2(_floatingWindow);
+					_floatingWindow.Topmost = true; 
+					//if(_currentWindow is Window overlayWindow) {
+					//	BringWindowToTop2(overlayWindow);
+					//}
 				}
 			}
 
@@ -177,6 +178,9 @@ namespace AvalonDock.Controls
 			areasToRemove.ForEach(a =>
 				_currentWindowAreas.Remove(a));
 
+			foreach(var v in _currentHost.GetDropAreas(_floatingWindow)) {
+				Debug.WriteLine($"{v.Type}", "UpdateMouseLocation 01");
+			}
 			var areasToAdd =
 				_currentHost.GetDropAreas(_floatingWindow)
 				//.Where(o=> o.)
@@ -185,7 +189,7 @@ namespace AvalonDock.Controls
 			Debug.WriteLine($"=================================================================================");
 			_currentWindowAreas.AddRange(areasToAdd);
 
-			Debug.WriteLine( $"{areasToAdd.Count}", "UpdateMouseLocation 1");
+			Debug.WriteLine( $"{areasToAdd.Count}; {string.Join(",", areasToAdd.Select(o=> o.Type))}", "UpdateMouseLocation 1");
 			//Debug.WriteLineIf(areasToAdd.Any(), $"{string.Join(",", areasToAdd.Select(o => o.Type))}", "UpdateMouseLocation 1");
 			//显示可插入区域小图预览
 			areasToAdd.ForEach(a =>
@@ -197,11 +201,11 @@ namespace AvalonDock.Controls
 					if(_currentDropTarget != null)
 						return;
 
-					Debug.WriteLine($"{string.Join($";", _currentWindow.GetTargets().Select(o => o.GetType().Name))}", "UpdateMouseLocation 3");
+					//Debug.WriteLine($"{string.Join($";", _currentWindow.GetTargets().Select(o => o.GetType().Name).ToHashSet<string>())}", "UpdateMouseLocation 3");
 
 					_currentDropTarget = _currentWindow.GetTargets().FirstOrDefault(dt => dt.HitTestScreen(dragPosition));
 					if(_currentDropTarget != null) {
-						Debug.WriteLine($"{_currentDropTarget.Type}", "UpdateMouseLocation 4");
+						//Debug.WriteLine($"{_currentDropTarget.Type}", "UpdateMouseLocation 4");
 						// 显示可插入区域大图预览
 						_currentWindow.DragEnter(_currentDropTarget);
 						BringWindowToTop2((Window) _currentWindow);

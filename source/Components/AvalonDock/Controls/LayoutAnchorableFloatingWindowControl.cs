@@ -196,6 +196,8 @@ namespace AvalonDock.Controls
 
 		#region Overrides
 
+		 
+
 		/// <inheritdoc />
 		protected override void OnInitialized(EventArgs e)
 		{

@@ -36,7 +36,7 @@ namespace AvalonDock.Controls
 		/// <summary>
 		/// 
 		/// </summary>
-		//AnchorableExpanderPaneGroup,
+		AnchorableItem,
 	}
 
 	/// <summary>Describes a drop target which can be the final position of an item that is being dragged and dropped to dock it somewhere else in the UI of the framework.</summary>

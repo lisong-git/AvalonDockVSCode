@@ -272,7 +272,7 @@ namespace AvalonDock.Controls
 				//		var paneModel = targetModel as LayoutAnchorablePane;
 				//		var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
 
-				//		int i = _tabIndex == -1 ? 0 : _tabIndex;
+				//		int i = _index == -1 ? 0 : _index;
 				//		foreach (var anchorableToImport in
 				//			layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray())
 				//		{

@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Xml;
@@ -39,6 +40,7 @@ namespace AvalonDock.Layout {
 		private LayoutAnchorSide _topSide = null;
 		private LayoutAnchorSide _rightSide;
 		private LayoutAnchorSide _leftSide = null;
+		private LayoutActivityBar _activityBar = null;
 		private LayoutAnchorSide _bottomSide = null;
 
 		private ObservableCollection<LayoutFloatingWindow> _floatingWindows = null;
@@ -65,6 +67,7 @@ namespace AvalonDock.Layout {
 			LeftSide = new LayoutAnchorSide();
 			TopSide = new LayoutAnchorSide();
 			BottomSide = new LayoutAnchorSide();
+			ActivityBar = new LayoutActivityBar();
 			RootPanel = new LayoutPanel(new LayoutDocumentPane());
 		}
 
@@ -107,6 +110,7 @@ namespace AvalonDock.Layout {
 						ActiveContent = activeContent;
 					}
 				}
+
 				RaisePropertyChanged(nameof(RootPanel));
 			}
 		}
@@ -152,6 +156,96 @@ namespace AvalonDock.Layout {
 				RaisePropertyChanged(nameof(LeftSide));
 			}
 		}
+		public LayoutActivityBar ActivityBar {
+			get => _activityBar;
+			set {
+
+				if(value == _activityBar)
+					return;
+				RaisePropertyChanging(nameof(ActivityBar));
+
+				if(_activeContent!=null)
+				_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;			
+				_activityBar = value;
+				if(_activityBar != null) {
+					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
+					_activityBar.Parent = this;
+					PrimarySideBar = _activityBar.Current;
+					RaisePropertyChanged(nameof(ActivityBar));
+				}
+			}
+		}
+
+		private void ActivityBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+			if(e.PropertyName == nameof(LayoutActivityBar.Current) && sender is LayoutActivityBar activityBar) {
+				//Debug.WriteLine($"{sender.GetType()}", "ActivityBar_PropertyChanged 1");
+				Stopwatch watch = Stopwatch.StartNew();
+
+				if(PrimarySideBar == activityBar.Current) {
+					//PrimarySideBar.SetVisble(false);
+					watch.Stop();
+					Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
+				} else {
+					PrimarySideBar = activityBar.Current;
+					watch.Stop();
+					Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
+					//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
+				}
+			}
+		}
+
+		private LayoutAnchorableExpanderGroupBox _primarySideBar;
+
+		public LayoutAnchorableExpanderGroupBox PrimarySideBar {
+			get => _primarySideBar;
+			set {
+				if(value == _primarySideBar)
+					return;
+				RaisePropertyChanging(nameof(PrimarySideBar));
+				// Debug.WriteLine($"{_primarySideBar == null}, {value == null}", "PrimarySideBar 0");
+				_primarySideBar?.SetVisble(false);
+				_primarySideBar = value;
+
+				if(_primarySideBar != null) {
+					_primarySideBar.Parent = RootPanel;
+
+					var p = RootPanel.Children.FirstOrDefault(o=> o == _primarySideBar) as LayoutAnchorableExpanderGroupBox;
+					// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
+					Stopwatch watch = Stopwatch.StartNew();
+
+					if(p == null) {
+						RootPanel.InsertChildAt(0, PrimarySideBar);
+						watch.Stop();
+						Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
+
+					} else {
+						p.SetVisble(true);
+						watch.Stop();
+						Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 2");
+
+					}
+
+				}
+				RaisePropertyChanged(nameof(PrimarySideBar));
+			}
+		}
+
+
+		private LayoutAnchorableExpanderGroupPane _secondarySideBar;
+
+		public LayoutAnchorableExpanderGroupPane SecondarySideBar {
+			get => _secondarySideBar;
+			set {
+				if(value == _secondarySideBar)
+					return;
+				RaisePropertyChanging(nameof(SecondarySideBar));
+				_secondarySideBar = value;
+				if(_secondarySideBar != null)
+					_secondarySideBar.Parent = this;
+				RaisePropertyChanged(nameof(SecondarySideBar));
+			}
+		}
+
 
 		/// <summary>Gets or sets the bottom side of the layout root.</summary>
 		public LayoutAnchorSide BottomSide {
@@ -210,6 +304,8 @@ namespace AvalonDock.Layout {
 					yield return BottomSide;
 				if(LeftSide != null)
 					yield return LeftSide;
+				if(ActivityBar != null)
+					yield return ActivityBar;
 				if(_hiddenAnchorables != null) {
 					foreach(var hiddenAnchorable in _hiddenAnchorables)
 						yield return hiddenAnchorable;
@@ -311,6 +407,8 @@ namespace AvalonDock.Layout {
 				BottomSide = null;
 			else if(element == LeftSide)
 				LeftSide = null;
+			else if(element == ActivityBar)
+				ActivityBar = null;
 		}
 
 		public void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement) {
@@ -332,6 +430,8 @@ namespace AvalonDock.Layout {
 				BottomSide = (LayoutAnchorSide) newElement;
 			else if(oldElement == LeftSide)
 				LeftSide = (LayoutAnchorSide) newElement;
+			else if(oldElement == ActivityBar)
+				ActivityBar = (LayoutActivityBar) newElement;
 		}
 
 		/// <summary>Removes any empty container not directly referenced by other layout items.</summary>

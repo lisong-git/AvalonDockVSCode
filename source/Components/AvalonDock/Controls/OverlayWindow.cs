@@ -17,7 +17,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
-namespace AvalonDock.Controls {
+namespace AvalonDock.Controls {  
 	/// <summary>
 	/// Implements <see cref="IOverlayWindow"/> and is used to visualize floating
 	/// docking target buttons in several areas of AvalonDock.
@@ -29,6 +29,7 @@ namespace AvalonDock.Controls {
 		private Canvas _mainCanvasPanel;
 		private Grid _gridDockingManagerDropTargets;    // Showing and activating 4 outer drop taget buttons over DockingManager
 		private Grid _gridAnchorablePaneDropTargets;    // Showing and activating 5 inner drop target buttons over layout anchorable pane
+		private Grid _gridAnchorableItemDropTargets;    // Showing and activating 5 inner drop target buttons over layout anchorable Item
 		private Grid _gridDocumentPaneDropTargets;      // Showing and activating 5 inner drop target buttons over document pane
 		private Grid _gridDocumentPaneFullDropTargets;  // Showing and activating 9 inner drop target buttons over document pane
 		private Grid _gridAnchorableExpanderPaneDropTargets;
@@ -53,12 +54,19 @@ namespace AvalonDock.Controls {
 
 		#endregion AnchorablePaneDropTargets
 
-		#region AnchorablePaneGroupDropTargets
+		#region AnchorableItemDropTargets
+
+		private FrameworkElement _anchorableItemDropTargetLeft;// 5 inner drop target buttons over layout anchorable pane
+		private FrameworkElement _anchorableItemDropTargetRight;
+
+		#endregion AnchorableItemDropTargets
+
+		#region AnchorableExpanderPaneDropTargets
 
 		private FrameworkElement _anchorableExpanderPaneDropTargetTop; // 5 inner drop target buttons over layout anchorable pane
 		private FrameworkElement _anchorableExpanderPaneDropTargetBottom; // 5 inner drop target buttons over layout anchorable pane
 
-		#endregion AnchorablePaneGroupDropTargets
+		#endregion AnchorableExpanderPaneDropTargets
 
 		#region AnchorablePaneGroupDropTargets
 
@@ -133,13 +141,16 @@ namespace AvalonDock.Controls {
 			_mainCanvasPanel = GetTemplateChild("PART_DropTargetsContainer") as Canvas;
 			_gridDockingManagerDropTargets = GetTemplateChild("PART_DockingManagerDropTargets") as Grid;
 			_gridAnchorablePaneDropTargets = GetTemplateChild("PART_AnchorablePaneDropTargets") as Grid;
+			_gridAnchorableItemDropTargets = GetTemplateChild("PART_AnchorableItemDropTargets") as Grid;
 			_gridDocumentPaneDropTargets = GetTemplateChild("PART_DocumentPaneDropTargets") as Grid;
 			_gridDocumentPaneFullDropTargets = GetTemplateChild("PART_DocumentPaneFullDropTargets") as Grid;
 			//_gridAnchorableExpanderPaneDropTargets = GetTemplateChild("PART_AnchorablePaneGroupDropTargets") as Grid;
 			_gridAnchorableExpanderPaneDropTargets = GetTemplateChild("PART_AnchorableExpanderPaneDropTargets") as Grid;
 			_gridAnchorableGroupPaneDropTargets = GetTemplateChild("PART_AnchorableGroupPaneDropTargets") as Grid;
+
 			_gridDockingManagerDropTargets.Visibility = System.Windows.Visibility.Hidden;
 			_gridAnchorablePaneDropTargets.Visibility = System.Windows.Visibility.Hidden;
+			_gridAnchorableItemDropTargets.Visibility = System.Windows.Visibility.Hidden;
 			_gridDocumentPaneDropTargets.Visibility = System.Windows.Visibility.Hidden;
 			_gridAnchorableExpanderPaneDropTargets.Visibility = System.Windows.Visibility.Hidden;
 			_gridAnchorableGroupPaneDropTargets.Visibility= System.Windows.Visibility.Hidden;
@@ -156,6 +167,9 @@ namespace AvalonDock.Controls {
 			_anchorablePaneDropTargetLeft = GetTemplateChild("PART_AnchorablePaneDropTargetLeft") as FrameworkElement;
 			_anchorablePaneDropTargetRight = GetTemplateChild("PART_AnchorablePaneDropTargetRight") as FrameworkElement;
 			_anchorablePaneDropTargetInto = GetTemplateChild("PART_AnchorablePaneDropTargetInto") as FrameworkElement;
+
+			_anchorableItemDropTargetLeft = GetTemplateChild("PART_AnchorableItemDropTargetLeft") as FrameworkElement;
+			_anchorableItemDropTargetRight = GetTemplateChild("PART_AnchorableItemDropTargetRight") as FrameworkElement;
 
 			_anchorableExpanderPaneDropTargetTop = GetTemplateChild("PART_AnchorableExpanderPaneDropTargetTop") as FrameworkElement;
 			_anchorableExpanderPaneDropTargetBottom = GetTemplateChild("PART_AnchorableExpanderPaneDropTargetBottom") as FrameworkElement;
@@ -276,7 +290,37 @@ namespace AvalonDock.Controls {
 		}
 
 		private void SetDropTargetIntoVisibility2(ILayoutPositionableElement positionableElement) {
-			if(positionableElement is LayoutAnchorableExpanderControl) {
+			if(positionableElement is LayoutAnchorableItem) {
+				_anchorablePaneDropTargetInto.Visibility = Visibility.Visible;
+			}
+
+			if(positionableElement == null || _floatingWindow.Model == null || positionableElement.AllowDuplicateContent) {
+				return;
+			}
+
+			// Find all content layouts in the anchorable pane (object to drop on)
+			var contentLayoutsOnPositionableElementPane = GetAllLayoutContents(positionableElement);
+
+			// Find all content layouts in the floating window (object to drop)
+			var contentLayoutsOnFloatingWindow = GetAllLayoutContents(_floatingWindow.Model);
+
+			// If any of the content layouts is present in the drop area, then disable the DropTargetInto button.
+			foreach(var content in contentLayoutsOnFloatingWindow) {
+				if(!contentLayoutsOnPositionableElementPane.Any(item =>
+					item.Title == content.Title &&
+					item.ContentId == content.ContentId)) {
+					continue;
+				}
+
+				if(positionableElement is LayoutAnchorableExpanderControl) {
+					_anchorablePaneDropTargetInto.Visibility = Visibility.Hidden;
+				}
+				break;
+			}
+		}
+
+		private void SetDropTargetIntoVisibility3(ILayoutPositionableElement positionableElement) {
+			if(positionableElement is LayoutAnchorableItem) {
 				_anchorablePaneDropTargetInto.Visibility = Visibility.Visible;
 			}
 
@@ -411,9 +455,16 @@ namespace AvalonDock.Controls {
 						}
 						break;
 
+					case DropAreaType.AnchorableItem: {
+							var control = visibleArea as DropArea<LayoutAnchorableTabItem>;
+							yield return new AnchorableItemDropTarget(control.AreaElement, _anchorableItemDropTargetLeft.GetScreenArea(), DropTargetType.AnchorablePaneDockLeft);
+							yield return new AnchorableItemDropTarget(control.AreaElement, _anchorableItemDropTargetRight.GetScreenArea(), DropTargetType.AnchorablePaneDockRight);
+
+						}
+						break;
 					case DropAreaType.AnchorableExpanderPane: {
 							// Dragging over AnchorablePane -> Add DropTarget Area
-							Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 1");
+							//Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 1");
 							var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderControl>;
 							//var dropAreaExpanderGroup = 
 							yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetTop.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockTop);
@@ -462,8 +513,8 @@ namespace AvalonDock.Controls {
 					//		var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderGroupControl>;
 					//		//yield return new AnchorableExpanderGroupDropTarget(dropAreaAnchorablePane.AreaElement, _anchorablePaneDropTargetLeft.GetScreenArea(), DropTargetType.AnchorablePaneDockLeft);
 					//		//yield return new AnchorableExpanderGroupDropTarget(dropAreaAnchorablePane.AreaElement, _anchorablePaneDropTargetTop.GetScreenArea(), DropTargetType.AnchorablePaneDockTop);
-					//		//yield return new AnchorableExpanderGroupDropTarget(dropAreaAnchorablePane.AreaElement, _anchorablePaneDropTargetRight.GetScreenArea(), DropTargetType.AnchorablePaneDockRight);
-					//		yield return new AnchorableExpanderGroupDropTarget(dropAreaAnchorablePane.AreaElement, _anchorablePaneGroupDropTargetBottom.GetScreenArea(), DropTargetType.AnchorablePaneGroupDockBottom);
+					//	+\f'b'ld return new AnchorableExpanderGroupDropTarget(dropAreaAnchorablePane.AreaElement, _anchorablePaneDropTargetRight.GetScreenArea(), DropTargetType.AnchorablePaneDockRight);
+					//+	yield return new AnchorableExpanderGroupDropTarget(dropAreaAnchorablePane.AreaElement, _anchorablePaneGroupDropTargetBottom.GetScreenArea(), DropTargetType.AnchorablePaneGroupDockBottom);
 					//	}
 					//	break;
 					case DropAreaType.DocumentPane: {
@@ -573,7 +624,7 @@ namespace AvalonDock.Controls {
 			var floatingWindowManager = _floatingWindow.Model.Root.Manager;
 
 			_visibleAreas.Add(area);
-			Debug.WriteLine($"{area.Type}", "DragEnter");
+			Debug.WriteLine($"{area.Type}", "OverlayWindow DragEnter 1");
 			FrameworkElement areaElement;
 			switch(area.Type) {
 				case DropAreaType.DockingManager:
@@ -613,7 +664,8 @@ namespace AvalonDock.Controls {
 						_documentPaneDropTargetBottom.Visibility = Visibility.Hidden;
 					}
 					break;
-				case DropAreaType.AnchorableExpanderPane: {
+
+			case DropAreaType.AnchorableExpanderPane: {
 						areaElement = _gridAnchorableExpanderPaneDropTargets;
 						var dropAreaAnchorableExpanderGroupPane = area as DropArea<LayoutAnchorableExpanderControl>;
 
@@ -624,6 +676,20 @@ namespace AvalonDock.Controls {
 						}
 
 						SetDropTargetIntoVisibility2(layoutExpanderGroupPane);
+					}
+					break;
+				case DropAreaType.AnchorableItem: {
+						areaElement = _gridAnchorableItemDropTargets;
+						var dropAreaAnchorableItem = area as DropArea<LayoutAnchorableTabItem>;
+
+						var model = dropAreaAnchorableItem.AreaElement.Model as LayoutContent;
+						Debug.WriteLine($"{model}", "OverlayWindow DragEnter 2");
+						if(model.Root.Manager != floatingWindowManager) {
+							_visibleAreas.Remove(area);
+							return;
+						}
+
+						//SetDropTargetIntoVisibility(model);
 					}
 					break;
 				//case DropAreaType.AnchorableExpanderPaneGroup: {
@@ -795,6 +861,9 @@ namespace AvalonDock.Controls {
 
 				case DropAreaType.AnchorablePane:
 					areaElement = _gridAnchorablePaneDropTargets;
+					break;
+				case DropAreaType.AnchorableItem:
+					areaElement = _gridAnchorableItemDropTargets;
 					break;
 
 				case DropAreaType.DocumentPaneGroup:

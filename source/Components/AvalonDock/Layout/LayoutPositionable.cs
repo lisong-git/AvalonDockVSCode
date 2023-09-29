@@ -119,7 +119,7 @@ namespace AvalonDock.Layout {
 			get => _dockHeight.IsAbsolute && _resizableAbsoluteDockHeight < _dockHeight.Value && _resizableAbsoluteDockHeight.HasValue ?
 						new GridLength(_resizableAbsoluteDockHeight.Value) : _dockHeight;
 			set {
-				Debug.WriteLine($"{_dockHeight}", "LayoutPositionable DockHeight 1");
+				//Debug.WriteLine($"{_dockHeight}", "LayoutPositionable DockHeight 1");
 
 				if(_dockHeight == value || !(value.Value > 0))
 					return;
@@ -127,7 +127,7 @@ namespace AvalonDock.Layout {
 					_resizableAbsoluteDockHeight = value.Value;
 				RaisePropertyChanging(nameof(DockHeight));
 				_dockHeight = value;
-				Debug.WriteLine($"{_dockHeight}", "LayoutPositionable DockHeight 2");
+				//Debug.WriteLine($"{_dockHeight}", "LayoutPositionable DockHeight 2");
 				RaisePropertyChanged(nameof(DockHeight));
 				OnDockHeightChanged();
 			}
@@ -211,7 +211,7 @@ namespace AvalonDock.Layout {
 		}
 
 		public double CalculatedDockMinHeight() {
-			Debug.WriteLine($"{Content.GetType()}", "LayoutPositionable CalculatedDockMinHeight");
+			//Debug.WriteLine($"{Content.GetType()}", "LayoutPositionable CalculatedDockMinHeight");
 			//var dockContent =  (ILayoutPositionableElement) Content;
 			//double childrenDockMinHeight = dockContent.CalculatedDockMinHeight();
 			//return Math.Max(this._dockMinHeight, childrenDockMinHeight);

@@ -87,19 +87,19 @@ namespace AvalonDock.Layout {
 
 		private void UpdateHeight() {
 			//Debug.WriteLine($"{LayoutAnchorable?.Title}", "LayoutAnchorableExpanderPane UpdateHeight 0");
-			Debug.WriteLine($"{DockHeight}", "LayoutAnchorableExpanderPane UpdateHeight 1");
+			//Debug.WriteLine($"{DockHeight}", "LayoutAnchorableExpanderPane UpdateHeight 1");
 
 			if(IsExpanded) {
 				var t = new GridLength(1.0, GridUnitType.Star);
 				if(DockHeight == t) {
 					DockHeight = new GridLength(1.0, GridUnitType.Pixel);
 				}
-				Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 2");
+				//Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 2");
 				DockHeight = t;
 				// DockMinHeight = double.MaxValue;
 			} else {
 				var  t = new GridLength(25, GridUnitType.Pixel);
-				Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 3");
+				//Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 3");
 				DockHeight = t;
 
 				// Dock

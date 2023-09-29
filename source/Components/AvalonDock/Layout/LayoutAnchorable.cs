@@ -206,10 +206,10 @@ namespace AvalonDock.Layout {
 					return;
 				_contentVisibility = value;
 				//if(Parent is La)
-				Debug.WriteLine($"{_contentVisibility}", "ContentVisibility");
+				//Debug.WriteLine($"{_contentVisibility}", "ContentVisibility");
 				if(Parent is LayoutAnchorablePane lap) {
 					if(lap.Parent is LayoutAnchorablePaneGroup pg) {
-						Debug.WriteLine($"LayoutAnchorablePane,{lap.Parent.GetType()},  {lap.FixedDockHeight}, {lap.DockHeight}", "ContentVisibility");
+						//Debug.WriteLine($"LayoutAnchorablePane,{lap.Parent.GetType()},  {lap.FixedDockHeight}, {lap.DockHeight}", "ContentVisibility");
 						
 						//if(ContentVisibility == Visibility.Collapsed) {
 						//	lap.DockHeight = new GridLength(lap.FixedDockHeight, lap.DockHeight.GridUnitType);

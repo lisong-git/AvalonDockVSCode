@@ -69,7 +69,7 @@ namespace AvalonDock.Controls {
 		public virtual ILayoutElement Model {
 			get => _model;
 			set {
-				Debug.WriteLine($"{value.GetType()}", "LayoutGridControl2_Model");
+				//Debug.WriteLine($"{value.GetType()}", "LayoutGridControl2_Model");
 				if(_model == value)
 					return;
 				//LayoutAnchorablePaneGroup2
@@ -148,7 +148,7 @@ namespace AvalonDock.Controls {
 		}
 
 		public void UpdateChildren() {
-			Debug.WriteLine($"{_model == null}, {_model?.Children?.Count}", "ExpanderGridControl UpdateChildren 1");
+			//Debug.WriteLine($"{_model == null}, {_model?.Children?.Count}", "ExpanderGridControl UpdateChildren 1");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var alreadyContainedChildren = Children.OfType<ILayoutControl>().ToArray();
@@ -162,7 +162,7 @@ namespace AvalonDock.Controls {
 				return;
 			foreach(var child in _model.Children) {
 				var foundContainedChild = alreadyContainedChildren.FirstOrDefault(chVM => chVM.Model == child);
-				Debug.WriteLine($"{child.GetType()}", "ExpanderGridControl UpdateChildren 2");
+				//Debug.WriteLine($"{child.GetType()}", "ExpanderGridControl UpdateChildren 2");
 				if(foundContainedChild != null)
 					Children.Add(foundContainedChild as UIElement);
 				else
@@ -193,7 +193,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void OnChildModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "ExpanderGridControl OnChildModelPropertyChanged");
+			//Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "ExpanderGridControl OnChildModelPropertyChanged");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			if(AsyncRefreshCalled)
@@ -228,7 +228,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void UpdateRowColDefinitions() {
-			Debug.WriteLine($"", "ExpanderGridControl UpdateRowColDefinitions 1");
+			//Debug.WriteLine($"", "ExpanderGridControl UpdateRowColDefinitions 1");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var root = _model.Root;
@@ -282,7 +282,7 @@ namespace AvalonDock.Controls {
 				for(var iChildModel = 0; iChildModel < _model.Children.Count && iChild < InternalChildren.Count; iChildModel++, iRow++, iChild++) {
 					var childModel = _model.Children[iChildModel] as LayoutAnchorableExpander;
 					var temp = _model.Children[iChildModel];
-					Debug.WriteLine($"{temp.GetType()}, {childModel.DockHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
+					//Debug.WriteLine($"{temp.GetType()}, {childModel.DockHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
 					RowDefinitions.Add(new RowDefinition {
 						Height = childModel.IsVisible ? (childModel.IsExpanded ? childModel.DockHeight : new GridLength(25, GridUnitType.Pixel)) : new GridLength(0.0, GridUnitType.Pixel),
 						MinHeight = childModel.IsVisible ? childModel.CalculatedDockMinHeight() : 0.0
@@ -324,9 +324,9 @@ namespace AvalonDock.Controls {
 					});
 					//if (RowDefinitions.Last().Height.Value == 0.0)
 					//    System.Diagnostics.Debugger.Break();
-					Debug.WriteLine($"{InternalChildren.Count}, {iRow}", "UpdateRowColDefinitions 5");
+					//Debug.WriteLine($"{InternalChildren.Count}, {iRow}", "UpdateRowColDefinitions 5");
 					Grid.SetRow(InternalChildren[iChild], iRow);
-					Debug.WriteLine($"{InternalChildren.Count}", "UpdateRowColDefinitions 6");
+					//Debug.WriteLine($"{InternalChildren.Count}", "UpdateRowColDefinitions 6");
 				}
 			}
 
@@ -450,7 +450,7 @@ namespace AvalonDock.Controls {
 		}
 
 		public virtual void AdjustFixedChildrenPanelSizes(Size? parentSize = null) {
-			Debug.WriteLine($"", "ExpanderGridControl AdjustFixedChildrenPanelSizes");
+			//Debug.WriteLine($"", "ExpanderGridControl AdjustFixedChildrenPanelSizes");
 
 			var visibleChildren = GetVisibleChildren();
 			if(visibleChildren.Count == 0)

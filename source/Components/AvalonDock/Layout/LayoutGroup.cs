@@ -90,7 +90,7 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc cref="ILayoutGroup" />
 		public void InsertChildAt(int index, ILayoutElement element) {
-			Debug.WriteLine($"{typeof(T)}, {element is T}", $"{nameof(LayoutGroup<T>)} InsertChildAt");
+			//Debug.WriteLine($"{typeof(T)}, {element is T}", $"{nameof(LayoutGroup<T>)} InsertChildAt");
 			if(element is T t)
 				_children.Insert(index, t);
 		}
@@ -191,7 +191,7 @@ namespace AvalonDock.Layout {
 		#region Private Methods
 
 		private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-			Debug.WriteLine($"{e.Action}", "LayoutGroup_Children CollectionChanged");
+			//Debug.WriteLine($"{e.Action}", "LayoutGroup_Children CollectionChanged");
 			if(e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {
 				if(e.OldItems != null) {
 					foreach(LayoutElement element in e.OldItems)
@@ -222,7 +222,7 @@ namespace AvalonDock.Layout {
 		}
 
 		private void UpdateParentVisibility() {
-			Debug.WriteLine($"", "LayoutGroup_Children UpdateParentVisibility");
+			//Debug.WriteLine($"", "LayoutGroup_Children UpdateParentVisibility");
 
 			if(Parent is ILayoutElementWithVisibility parentPane)
 				parentPane.ComputeVisibility();

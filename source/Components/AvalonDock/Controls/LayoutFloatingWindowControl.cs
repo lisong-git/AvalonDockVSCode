@@ -24,8 +24,7 @@ using System.Windows.Media;
 using AvalonDock.Layout;
 using AvalonDock.Themes;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <inheritdoc cref="Window"/>
 	/// <inheritdoc cref="ILayoutControl"/>
 	/// <summary>
@@ -139,9 +138,11 @@ namespace AvalonDock.Controls
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="IsDragging"/> property.</summary>
 		protected virtual void OnIsDraggingChanged(DependencyPropertyChangedEventArgs e)
 		{
-			if ((bool)e.NewValue)
+			Debug.WriteLine($"{e.NewValue}", "OnIsDraggingChanged");
+
+			if((bool) e.NewValue) {
 				CaptureMouse();
-			else
+			} else
 				ReleaseMouseCapture();
 		}
 
@@ -343,6 +344,7 @@ namespace AvalonDock.Controls
 
 		internal void AttachDrag(bool onActivated = true)
 		{
+			Debug.WriteLine($"{onActivated}", "AttachDrag");
 			if (onActivated)
 			{
 				_attachDrag = true;
@@ -360,7 +362,6 @@ namespace AvalonDock.Controls
 		protected virtual IntPtr FilterMessage(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 		{
 			handled = false;
-			//Debug.WriteLine($"{msg}", "FilterMessage");
 			switch (msg)
 			{
 				case Win32Helper.WM_ACTIVATE:
@@ -382,10 +383,16 @@ namespace AvalonDock.Controls
 
 				case Win32Helper.WM_MOVING:
 					{
+						//Debug.WriteLine($"{msg}", "FilterMessage 1");
+
 						UpdateDragPosition();
 						if (IsMaximized) UpdateMaximizedState(false);
 					}
 					break;
+				//case Win32Helper.WM_MOVE:
+				//	Debug.WriteLine($"{msg}", "FilterMessage 2");
+
+				//	break;
 
 				case Win32Helper.WM_LBUTTONUP: //set as handled right button click on title area (after showing context menu)
 					if (_dragService != null && Mouse.LeftButton == MouseButtonState.Released)
@@ -510,6 +517,8 @@ namespace AvalonDock.Controls
 		#endregion Internal Methods
 
 		#region Overrides
+
+		
 
 		/// <inheritdoc />
 		protected override void OnClosed(EventArgs e)
