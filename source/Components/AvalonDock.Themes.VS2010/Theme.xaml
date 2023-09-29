@@ -1072,15 +1072,15 @@
                   Style="{StaticResource ToolBar2}">
                   <ToolBar.ItemTemplate>
                     <DataTemplate>
-                      <ToggleButton
+											<ToggleButton
                         Width="48"
                         Height="48"
-                        IsChecked="{Binding IsActive}"
-                        Style="{StaticResource ArrowToggleStyle}">
-                        <!--  IsChecked="{Binding Model, Converter={avalonDockConverters:ActivityBarActiveConverter}, ConverterParameter={Binding RelativeSource={RelativeSource TemplatedParent}, Path=Model}}"  -->
-                      </ToggleButton>
+												IsChecked="{Binding IsActive}" 
+                        Style="{StaticResource ArrowToggleStyle}" >
+												<!--IsChecked="{Binding Model, Converter={avalonDockConverters:ActivityBarActiveConverter}, ConverterParameter={Binding RelativeSource={RelativeSource TemplatedParent}, Path=Model}}"-->
+											</ToggleButton>
 
-                      <!--<ToggleButton
+											<!--<ToggleButton
                         Width="48"
                         Height="48"
                         IsChecked="{Binding IsActive}"

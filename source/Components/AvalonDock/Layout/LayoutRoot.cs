@@ -164,35 +164,35 @@ namespace AvalonDock.Layout {
 					return;
 				RaisePropertyChanging(nameof(ActivityBar));
 
-				//if(_activityBar != null)
-					//_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;
+				if(_activeContent!=null)
+				_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;			
 				_activityBar = value;
 				if(_activityBar != null) {
-					//_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
+					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
 					_activityBar.Parent = this;
-					//PrimarySideBar = _activityBar.Current;
+					PrimarySideBar = _activityBar.Current;
 					RaisePropertyChanged(nameof(ActivityBar));
 				}
 			}
 		}
 
-		//private void ActivityBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-		//	if(e.PropertyName == nameof(LayoutActivityBar.Current) && sender is LayoutActivityBar activityBar) {
-		//		//Debug.WriteLine($"{sender.GetType()}", "ActivityBar_PropertyChanged 1");
-		//		Stopwatch watch = Stopwatch.StartNew();
+		private void ActivityBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+			if(e.PropertyName == nameof(LayoutActivityBar.Current) && sender is LayoutActivityBar activityBar) {
+				//Debug.WriteLine($"{sender.GetType()}", "ActivityBar_PropertyChanged 1");
+				Stopwatch watch = Stopwatch.StartNew();
 
-		//		if(PrimarySideBar == activityBar.Current) {
-		//			//PrimarySideBar.SetVisble(false);
-		//			watch.Stop();
-		//			Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
-		//		} else {
-		//			PrimarySideBar = activityBar.Current;
-		//			watch.Stop();
-		//			Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
-		//			//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
-		//		}
-		//	}
-		//}
+				if(PrimarySideBar == activityBar.Current) {
+					//PrimarySideBar.SetVisble(false);
+					watch.Stop();
+					Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
+				} else {
+					PrimarySideBar = activityBar.Current;
+					watch.Stop();
+					Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
+					//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
+				}
+			}
+		}
 
 		private LayoutAnchorableExpanderGroupBox _primarySideBar;
 

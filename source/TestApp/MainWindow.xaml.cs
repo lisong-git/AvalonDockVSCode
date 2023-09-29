@@ -262,11 +262,5 @@ namespace TestApp
             anchorable.AddToLayout(dockManager,AnchorableShowStrategy.Most);
             anchorable.Float();
         }
-
-		//private void Button_Click(object sender, RoutedEventArgs e) {
-		//	foreach(var item in gp.Children) {
-				
-		//	}
-		//}
-	}
+    }
 }

@@ -35,7 +35,7 @@ namespace AvalonDock.Controls {
 		#region fields
 
 		private LayoutPositionableGroup<T> _model;
-		//private readonly Orientation _orientation = Orientation.Vertical;
+		private readonly Orientation _orientation = Orientation.Vertical;
 		private bool _initialized;
 		private ChildrenTreeChange? _asyncRefreshCalled;
 		private readonly ReentrantFlag _fixingChildrenDockLengths = new ReentrantFlag();
