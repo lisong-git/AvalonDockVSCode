@@ -21,9 +21,9 @@ namespace AvalonDock.Controls {
 	/// Provides a control to display multible (or just one) LayoutAnchorable(s).
 	/// See also <seealso cref="AnchorablePaneTabPanel"/>.
 	/// </summary>
-	/// <seealso cref="GroupBox"/>
+	/// <seealso cref="TabControlEx"/>
 	/// <seealso cref="ILayoutControl"/>
-	public class LayoutActivityBarControl :Control, ILayoutControl//, ILogicalChildrenContainer
+	public class LayoutActivityBarControl :TabControlEx, ILayoutControl//, ILogicalChildrenContainer
 	{
 		#region fields
 
@@ -44,9 +44,9 @@ namespace AvalonDock.Controls {
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
 		internal LayoutActivityBarControl(LayoutActivityBar model, bool IsVirtualizing = false) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
-			//SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
+			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			//SetBinding(ContentProperty, new Binding("Model") { Source = this });
-			//SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
+			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
 			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
 			// this.LayoutUpdated += new EventHandler( OnLayoutUpdated );
 			//SizeChanged += OnSizeChanged;

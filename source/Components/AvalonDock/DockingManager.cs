@@ -455,7 +455,7 @@ namespace AvalonDock {
 		public static readonly DependencyProperty AnchorableGroupBoxControlStyleProperty = DependencyProperty.Register(nameof(AnchorableGroupBoxControlStyle), typeof(Style), typeof(DockingManager),
 				new FrameworkPropertyMetadata(null, OnAnchorableGroupBoxControlStyleChanged));
 
-		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderGroupBoxControl"/>.</summary>
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderGroupHeaderedControl"/>.</summary>
 		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl2."), Category("Anchorable")]
 		public Style AnchorableGroupBoxControlStyle {
 			get => (Style) GetValue(AnchorableGroupBoxControlStyleProperty);
@@ -1684,6 +1684,17 @@ namespace AvalonDock {
 
 		#region Internal Methods
 
+		public LayoutAnchorableExpanderGroupBox LayoutAnchorableExpanderGroupBox { get; set; }
+		public LayoutAnchorableExpanderGroupBoxControl LayoutAnchorableExpanderGroupBoxControl { get; set; }
+
+		//private int index;
+		//public int IndexTest {
+		//	get=> index;
+		//	set {
+				
+		//	}
+		//}
+
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
 		///
@@ -1705,13 +1716,13 @@ namespace AvalonDock {
 				templateModelView.SetBinding(StyleProperty, new Binding(ActivityBarControlStyleProperty.Name) { Source = this });
 				return templateModelView;
 			}
-			if(model is LayoutAnchorablePaneGroup) {
-				var v = new LayoutAnchorablePaneGroupControl(model as LayoutAnchorablePaneGroup) {
-					//Background = new SolidColorBrush(Colors.Aqua),
-					//Margin = new Thickness(5, 5, 5, 5)
-				};
-				return v;
-			}
+			//if(model is LayoutAnchorablePaneGroup) {
+			//	var v = new LayoutAnchorablePaneGroupControl(model as LayoutAnchorablePaneGroup) {
+			//		//Background = new SolidColorBrush(Colors.Aqua),
+			//		//Margin = new Thickness(5, 5, 5, 5)
+			//	};
+			//	return v;
+			//}
 			if(model is LayoutDocumentPaneGroup)
 				return new LayoutDocumentPaneGroupControl(model as LayoutDocumentPaneGroup);
 
@@ -1741,10 +1752,18 @@ namespace AvalonDock {
 				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderGroupPaneControlStyleProperty.Name) { Source = this });
 				return templateModelView;
 			}
-			if(model is LayoutAnchorableExpanderGroupBox) {
-				var templateModelView = new LayoutAnchorableExpanderGroupBoxControl(model as LayoutAnchorableExpanderGroupBox, IsVirtualizingAnchorable);
+			if(model is LayoutAnchorableExpanderGroupBox layoutAnchorableExpanderGroupBox) {
+				var templateModelView = new LayoutAnchorableExpanderGroupBoxControl(layoutAnchorableExpanderGroupBox, IsVirtualizingAnchorable);
 				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableGroupBoxControlStyleProperty.Name) { Source = this });
 				//templateModelView.Background = new SolidColorBrush(Colors.BlueViolet);
+				LayoutAnchorableExpanderGroupBox = layoutAnchorableExpanderGroupBox;
+				LayoutAnchorableExpanderGroupBoxControl = templateModelView;
+				var v =  ActivityBar.Model as LayoutActivityBar;
+				v.RestChildren(layoutAnchorableExpanderGroupBox.Children);
+				//LayoutAnchorableExpanderGroupBox.Children =	Layout.ActivityBar.Children;
+				//LayoutAnchorableExpanderGroupBox.RestChildren(Layout.ActivityBar.Children);
+				Debug.WriteLine($"{LayoutAnchorableExpanderGroupBox == null}", "CreateUIElementForModel 1");
+
 				return templateModelView;
 			}
 			if (model is LayoutAnchorableExpander) {
@@ -1760,14 +1779,7 @@ namespace AvalonDock {
 				};
 				return templateModelView;
 			}
-			//if(model is LayoutAnchorablePaneGroup2) {
-			//	Debug.WriteLine($"2", "CreateUIElementForModel");
 
-			//	var templateModelView = new LayoutAnchorableExpanderGroupControl(model as LayoutAnchorablePaneGroup2);
-			//	templateModelView.SetBinding(StyleProperty, new Binding(LayoutAnchorablePaneGroupControl2StyleProperty.Name) { Source = this });
-			//	//templateModelView.Model = model as LayoutAnchorablePaneGroup2;
-			//	return templateModelView;
-			//}
 			if(model is LayoutAnchorableFloatingWindow) {
 				if(DesignerProperties.GetIsInDesignMode(this))
 					return null;
@@ -2999,5 +3011,12 @@ namespace AvalonDock {
 		}
 
 		#endregion Private Methods
+
+
+
+
+
+		
+
 	}
 }

@@ -19,7 +19,7 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroupPane :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpanderGroupHeaderedPane :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable {
 		#region fields
 
 		private int _selectedIndex = -1;
@@ -35,11 +35,11 @@ namespace AvalonDock.Layout {
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableExpanderGroupPane() {
+		public LayoutAnchorableExpanderGroupHeaderedPane() {
 		}
 
 		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
-		public LayoutAnchorableExpanderGroupPane(LayoutAnchorableExpanderGroup anchorable) {
+		public LayoutAnchorableExpanderGroupHeaderedPane(LayoutAnchorableExpanderGroup anchorable) {
 			Children.Add(anchorable);
 		}
 

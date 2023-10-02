@@ -31,7 +31,7 @@ namespace AvalonDock.Controls
 		private readonly LayoutAnchorableExpanderGroupPane _model;
 
 		#endregion fields
-
+		
 		#region Constructors
 
 		/// <summary>Static class constructor to register WPF style keys.</summary>

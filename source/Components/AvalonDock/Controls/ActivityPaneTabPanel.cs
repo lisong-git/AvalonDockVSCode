@@ -17,16 +17,16 @@ namespace AvalonDock.Controls {
 	/// <summary>
 	/// Provides a panel that contains the TabItem Headers of the <see cref="LayoutDocumentPaneControl"/>.
 	/// </summary>
-	public class DocumentPaneTabPanel :Panel {
+	public class ActivityPaneTabPanel :Panel {
 		#region Constructors
 
 		/// <summary>
 		/// Static constructor
 		/// </summary>
-		public DocumentPaneTabPanel() {
-			this.FlowDirection = System.Windows.FlowDirection.LeftToRight;
+		public ActivityPaneTabPanel() {
+			//this.FlowDirection = FlowDirection.LeftToRight;
 		}
-
+		 
 		#endregion Constructors
 
 		#region Overrides
@@ -35,20 +35,19 @@ namespace AvalonDock.Controls {
 			Size desideredSize = new Size();
 			foreach(FrameworkElement child in Children) {
 				child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-				desideredSize.Width += child.DesiredSize.Width;
-
-				desideredSize.Height = Math.Max(desideredSize.Height, child.DesiredSize.Height);
+				desideredSize.Height += child.DesiredSize.Height;
+				desideredSize.Width = Math.Max(desideredSize.Width, child.DesiredSize.Width);
 			}
 
-			return new Size(Math.Min(desideredSize.Width, availableSize.Width), desideredSize.Height);
+			return new Size(desideredSize.Width, Math.Min(desideredSize.Height, availableSize.Height));
 		}
 
 		protected override Size ArrangeOverride(Size finalSize) {
-			var visibleChildren = Children.Cast<UIElement>().Where(ch => ch.Visibility != System.Windows.Visibility.Collapsed);
+			var visibleChildren = Children.Cast<UIElement>().Where(ch => ch.Visibility != Visibility.Collapsed);
 			var offset = 0.0;
 			var skipAllOthers = false;
 			foreach(TabItem doc in visibleChildren) {
-				if(skipAllOthers || offset + doc.DesiredSize.Width > finalSize.Width) {
+				if(skipAllOthers || offset + doc.DesiredSize.Height > finalSize.Height) {
 					bool isLayoutContentSelected = false;
 					var layoutContent = doc.Content as LayoutContent;
 
@@ -67,12 +66,12 @@ namespace AvalonDock.Controls {
 							return ArrangeOverride(finalSize);
 						}
 					}
-					doc.Visibility = System.Windows.Visibility.Hidden;
+					doc.Visibility = Visibility.Hidden;
 					skipAllOthers = true;
 				} else {
-					doc.Visibility = System.Windows.Visibility.Visible;
-					doc.Arrange(new Rect(offset, 0.0, doc.DesiredSize.Width, finalSize.Height));
-					offset += doc.ActualWidth + doc.Margin.Left + doc.Margin.Right;
+					doc.Visibility = Visibility.Visible;
+					doc.Arrange(new Rect(0.0, offset, finalSize.Width, doc.DesiredSize.Height));
+					offset += doc.ActualHeight + doc.Margin.Top + doc.Margin.Bottom;
 				}
 			}
 			return finalSize;

@@ -9,6 +9,7 @@
 
 using AvalonDock.Controls;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -26,7 +27,6 @@ namespace AvalonDock.Layout {
 		#region fields
 
 		private Orientation _orientation;
-		private LayoutContent _current;
 		private int _selectedIndex;
 
 		#endregion fields
@@ -51,23 +51,31 @@ namespace AvalonDock.Layout {
 		//	//set => _current = value;
 		//}
 
+		public string Name => Children.FirstOrDefault()?.Name ?? "默认";
+
 		public int SelectedContentIndex {
 			get => _selectedIndex;
 			set {
 				if(value < 0 || value >= Children.Count)
 					value = -1;
-				if(value == _selectedIndex)
+
+				if(value == _selectedIndex) {
 					return;
+				}
+
 				RaisePropertyChanging(nameof(SelectedContentIndex));
 				RaisePropertyChanging(nameof(SelectedContent));
-				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
-					Children[_selectedIndex].IsSelected = false;
+				SetChildSelected(_selectedIndex, false);
 				_selectedIndex = value;
-				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
-					Children[_selectedIndex].IsSelected = true;
+				SetChildSelected(_selectedIndex, true);
 				RaisePropertyChanged(nameof(SelectedContentIndex));
 				RaisePropertyChanged(nameof(SelectedContent));
 			}
+		}
+
+		private void SetChildSelected(int index, bool selected) {
+			if(index >= 0 && index < Children.Count)
+				Children[index].IsSelected = selected;
 		}
 
 		/// <summary>Gets the selected content in the pane or null.</summary>
@@ -131,7 +139,7 @@ namespace AvalonDock.Layout {
 				((ILayoutPositionableElement) Children[0]).DockWidth = DockWidth;
 			if(DockHeight.IsAbsolute && ChildrenCount == 1)
 				((ILayoutPositionableElement) Children[0]).DockHeight = DockHeight;
-			base.OnChildrenCollectionChanged();
+			base.OnChildrenCollectionChanged();			
 		}
 
 		/// <inheritdoc />

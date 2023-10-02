@@ -67,8 +67,8 @@ namespace AvalonDock.Layout {
 			LeftSide = new LayoutAnchorSide();
 			TopSide = new LayoutAnchorSide();
 			BottomSide = new LayoutAnchorSide();
-			ActivityBar = new LayoutActivityBar();
 			RootPanel = new LayoutPanel(new LayoutDocumentPane());
+			ActivityBar = new LayoutActivityBar();
 		}
 
 		#endregion Constructors
@@ -156,6 +156,8 @@ namespace AvalonDock.Layout {
 				RaisePropertyChanged(nameof(LeftSide));
 			}
 		}
+
+		Stopwatch watch;
 		public LayoutActivityBar ActivityBar {
 			get => _activityBar;
 			set {
@@ -164,13 +166,18 @@ namespace AvalonDock.Layout {
 					return;
 				RaisePropertyChanging(nameof(ActivityBar));
 
-				if(_activeContent!=null)
-				_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;			
+				if(_activeContent != null)
+					_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;
 				_activityBar = value;
 				if(_activityBar != null) {
 					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
 					_activityBar.Parent = this;
-					PrimarySideBar = _activityBar.Current;
+					var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableExpanderGroupBox;
+					Debug.WriteLine($"{_activityBar.Root?.Manager == null}, {box2 == null}", "LayoutRoot_ActivityBar 1");
+
+					//PrimarySideBar = _activityBar.Current;
+					watch = Stopwatch.StartNew();
+
 					RaisePropertyChanged(nameof(ActivityBar));
 				}
 			}
@@ -178,57 +185,64 @@ namespace AvalonDock.Layout {
 
 		private void ActivityBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
 			if(e.PropertyName == nameof(LayoutActivityBar.Current) && sender is LayoutActivityBar activityBar) {
-				//Debug.WriteLine($"{sender.GetType()}", "ActivityBar_PropertyChanged 1");
-				Stopwatch watch = Stopwatch.StartNew();
+				//Debug.WriteLine($"{Root?.Manager}, {activityBar.Root?.Manager}", "ActivityBar_PropertyChanged 00");
 
-				if(PrimarySideBar == activityBar.Current) {
-					//PrimarySideBar.SetVisble(false);
-					watch.Stop();
-					Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
-				} else {
-					PrimarySideBar = activityBar.Current;
-					watch.Stop();
-					Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
-					//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
-				}
+
+				watch.Stop();
+
+				Debug.WriteLine($"{e.PropertyName}, {watch.ElapsedMilliseconds}, {watch.ElapsedTicks}", "ActivityBar_PropertyChanged 1");
+				//Stopwatch watch = Stopwatch.StartNew();
+
+				//if(PrimarySideBar == activityBar.Current) {
+				//	watch.Stop();
+				//	Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
+				//} else {
+				//	PrimarySideBar = activityBar.Current;
+				//	watch.Stop();
+				//	Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
+				//	//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
+				//}
 			}
 		}
 
-		private LayoutAnchorableExpanderGroupBox _primarySideBar;
+		//private LayoutAnchorableExpanderGroupBox _primarySideBar;
 
-		public LayoutAnchorableExpanderGroupBox PrimarySideBar {
-			get => _primarySideBar;
-			set {
-				if(value == _primarySideBar)
-					return;
-				RaisePropertyChanging(nameof(PrimarySideBar));
-				// Debug.WriteLine($"{_primarySideBar == null}, {value == null}", "PrimarySideBar 0");
-				_primarySideBar?.SetVisble(false);
-				_primarySideBar = value;
+		//public LayoutAnchorableExpanderGroupBox PrimarySideBar {
+		//	get => _primarySideBar;
+		//	set {
+		//		if(value == _primarySideBar)
+		//			return;
+		//		RaisePropertyChanging(nameof(PrimarySideBar));
+		//		Debug.WriteLine($"{_primarySideBar == null}, {value == null}", "PrimarySideBar 0");
+		//		//if(_primarySideBar != null) {
+		//		//	width = _primarySideBar.DockWidth;
+		//		//}
+		//		//_primarySideBar?.SetVisible(false);
 
-				if(_primarySideBar != null) {
-					_primarySideBar.Parent = RootPanel;
+		//		//_primarySideBar.ComputeVisibility();
+		//		_primarySideBar = value;
 
-					var p = RootPanel.Children.FirstOrDefault(o=> o == _primarySideBar) as LayoutAnchorableExpanderGroupBox;
-					// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
-					Stopwatch watch = Stopwatch.StartNew();
+		//		if(_primarySideBar != null) {
+		//			_primarySideBar.Parent = RootPanel;
 
-					if(p == null) {
-						RootPanel.InsertChildAt(0, PrimarySideBar);
-						watch.Stop();
-						Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
+		//			// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
+		//			Stopwatch watch = Stopwatch.StartNew();
 
-					} else {
-						p.SetVisble(true);
-						watch.Stop();
-						Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 2");
+		//			if((RootPanel.Children.FirstOrDefault(o => o == _primarySideBar) is LayoutAnchorableExpanderGroupBox p)) {
+		//				p.SetVisible(true);
+		//				watch.Stop();
+		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
+		//			} else {
+		//				RootPanel.InsertChildAt(0, _primarySideBar);
+		//				_primarySideBar.SetVisible(true);
+		//				watch.Stop();
+		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 2");
+		//			}
 
-					}
-
-				}
-				RaisePropertyChanged(nameof(PrimarySideBar));
-			}
-		}
+		//		}
+		//		RaisePropertyChanged(nameof(PrimarySideBar));
+		//	}
+		//}
 
 
 		private LayoutAnchorableExpanderGroupPane _secondarySideBar;

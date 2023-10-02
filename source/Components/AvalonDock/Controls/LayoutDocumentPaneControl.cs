@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -15,8 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <inheritdoc cref="TabControl"/>
 	/// <inheritdoc cref="ILayoutControl"/>
 	/// <summary>
@@ -26,7 +25,7 @@ namespace AvalonDock.Controls
 	/// </summary>
 	/// <seealso cref="TabControlEx"/>
 	/// <seealso cref="ILayoutControl"/>
-	public class LayoutDocumentPaneControl : TabControlEx, ILayoutControl//, ILogicalChildrenContainer
+	public class LayoutDocumentPaneControl :TabControlEx, ILayoutControl//, ILogicalChildrenContainer
 	{
 		#region fields
 
@@ -37,8 +36,7 @@ namespace AvalonDock.Controls
 		#region Constructors
 
 		/// <summary>Static class constructor to register WPF style keys.</summary>
-		static LayoutDocumentPaneControl()
-		{
+		static LayoutDocumentPaneControl() {
 			FocusableProperty.OverrideMetadata(typeof(LayoutDocumentPaneControl), new FrameworkPropertyMetadata(false));
 		}
 
@@ -46,8 +44,7 @@ namespace AvalonDock.Controls
 		/// <param name="model"></param>
 		/// <param name="isVirtualizing">Whether tabbed items are virtualized or not.</param>
 		internal LayoutDocumentPaneControl(LayoutDocumentPane model, bool isVirtualizing)
-			: base(isVirtualizing)
-		{
+			: base(isVirtualizing) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
@@ -74,10 +71,9 @@ namespace AvalonDock.Controls
 		/// </summary>
 		/// <param name="e">The <see cref="SelectionChangedEventArgs"/> that contains the event data.
 		/// The event reports that the selection changed.</param>
-		protected override void OnSelectionChanged(SelectionChangedEventArgs e)
-		{
+		protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
 			base.OnSelectionChanged(e);
-			if (_model.SelectedContent != null)
+			if(_model.SelectedContent != null)
 				_model.SelectedContent.IsActive = true;
 		}
 
@@ -88,10 +84,9 @@ namespace AvalonDock.Controls
 		/// </summary>
 		/// <param name="e">The <see cref="System.Windows.Input.MouseButtonEventArgs"/> that contains the event data.
 		/// The event data reports that the left mouse button was pressed.</param>
-		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
-		{
+		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
 			base.OnMouseLeftButtonDown(e);
-			if (!e.Handled && _model.SelectedContent != null && !_model.SelectedContent.IsActive)
+			if(!e.Handled && _model.SelectedContent != null && !_model.SelectedContent.IsActive)
 				_model.SelectedContent.IsActive = true;
 		}
 
@@ -102,27 +97,23 @@ namespace AvalonDock.Controls
 		/// </summary>
 		/// <param name="e">The <see cref="System.Windows.Input.MouseButtonEventArgs"/> that contains the event data. The
 		/// event data reports that the right mouse button was pressed.</param>
-		protected override void OnMouseRightButtonDown(System.Windows.Input.MouseButtonEventArgs e)
-		{
+		protected override void OnMouseRightButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
 			base.OnMouseRightButtonDown(e);
-			if (!e.Handled && _model.SelectedContent != null)
+			if(!e.Handled && _model.SelectedContent != null)
 				_model.SelectedContent.IsActive = true;
 		}
 
-		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
-		{
+		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
 			base.OnItemsChanged(e);
-			if (e.Action == NotifyCollectionChangedAction.Remove)
-			{
-				foreach (var item in e.OldItems)
-				{
-					if (item is LayoutContent layoutContent && layoutContent.TabItem != null)
-					{
+			if(e.Action == NotifyCollectionChangedAction.Remove) {
+				foreach(var item in e.OldItems) {
+					if(item is LayoutContent layoutContent && layoutContent.TabItem != null) {
 						layoutContent.TabItem.Model = null;
 						layoutContent.TabItem.ContextMenu = null;
 						layoutContent.TabItem.Content = null;
 						var panel = layoutContent.TabItem.FindVisualAncestor<Panel>();
-						if (panel != null) panel.Children.Remove(layoutContent.TabItem);
+						if(panel != null)
+							panel.Children.Remove(layoutContent.TabItem);
 						layoutContent.TabItem = null;
 					}
 				}
@@ -133,8 +124,7 @@ namespace AvalonDock.Controls
 
 		#region Private Methods
 
-		private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-		{
+		private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
 			var modelWithAtcualSize = _model as ILayoutPositionableElementWithActualSize;
 			modelWithAtcualSize.ActualWidth = ActualWidth;
 			modelWithAtcualSize.ActualHeight = ActualHeight;

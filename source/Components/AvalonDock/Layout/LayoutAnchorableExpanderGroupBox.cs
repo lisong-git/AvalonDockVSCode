@@ -10,15 +10,15 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
 namespace AvalonDock.Layout {
 
-	[ContentProperty(nameof(Content))]
+	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutPanelElement, ILayoutPositionableElement, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutPanelElement, ILayoutPositionableElement, ILayoutContentSelector, ILayoutPaneSerializable {
 		#region fields
 
 		[XmlIgnore]
@@ -57,20 +57,16 @@ namespace AvalonDock.Layout {
 		public bool IsActive {
 			get => _isActive;
 			set {
-				var watch = Stopwatch.StartNew();
+				//var watch = Stopwatch.StartNew();
 				if(value != _isActive) {
 					_isActive = value;
 
 					RaisePropertyChanged(nameof(IsActive));
-					watch.Stop();
-					Debug.WriteLine($"程序耗时: {watch.ElapsedMilliseconds}, {_isActive}", "IsActive");
+					//watch.Stop();
+					//Debug.WriteLine($"程序耗时: {watch.ElapsedMilliseconds}, {_isActive}", "IsActive");
 					//MessageBox.Show($"{watch.ElapsedMilliseconds}", "IsActive");
 				}
 			}
-		}
-
-		public void SetVisble(bool isVisble) {
-			IsVisible = isVisble;
 		}
 
 		public LayoutAnchorableExpanderGroup Content {
@@ -84,6 +80,10 @@ namespace AvalonDock.Layout {
 				Children.Add(_content);
 				RaisePropertyChanged(nameof(Content));
 			}
+		}
+
+		public void SetVisible(bool isVisible) {
+			IsVisible = isVisible;
 		}
 
 		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
@@ -190,8 +190,7 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
-		private void
-			SetLastActivatedIndex() {
+		private void SetLastActivatedIndex() {
 			//var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
 			//SelectedContentIndex = Children.IndexOf(lastActivatedDocument);
 		}
@@ -199,6 +198,19 @@ namespace AvalonDock.Layout {
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 
 		#endregion Private Methods
+
+		#region Public Methods
+
+		/// <summary>
+		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
+		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
+		/// </summary>
+		/// <param name="content"></param>
+		//public int IndexOf(LayoutAnchorableExpanderGroup content) {
+		//	return Children.IndexOf(content);
+		//}
+
+		#endregion Public Methods
 	}
 
 }

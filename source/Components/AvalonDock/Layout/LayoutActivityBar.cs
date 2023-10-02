@@ -1,6 +1,10 @@
+using AvalonDock.Commands;
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
@@ -8,11 +12,11 @@ namespace AvalonDock.Layout {
 
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableExpanderGroupBox> {
+	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableExpanderGroup> {
 		#region fields
 
 		private string _id;
-		private LayoutAnchorableExpanderGroupBox _current;
+		private LayoutAnchorableExpanderGroup _current;
 
 		#endregion fields
 
@@ -28,8 +32,9 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		//public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
+		public int Index => Children.IndexOf(Current);
 
-		public LayoutAnchorableExpanderGroupBox Current {
+		public LayoutAnchorableExpanderGroup Current {
 			get => _current;
 			set {
 				if(value != _current) {
@@ -38,9 +43,38 @@ namespace AvalonDock.Layout {
 					}
 					_current = value;
 					RaisePropertyChanged(nameof(Current));
+					RaisePropertyChanged(nameof(Index));
 				}
 			}
 		}
+
+		public ICommand TestCommand => new RelayCommand<object>((p) => {
+		 var v =	Root.Manager.LayoutAnchorableExpanderGroupBox;
+			//MessageBox.Show($"{box?.IsVisible}");
+			if(v != null) {
+				v.SetVisible(!v.IsVisible);
+			}
+		});
+
+		public ICommand TestCommand2 => new RelayCommand<object>((p) => {
+			var box =  Root.Manager.LayoutAnchorableExpanderGroupBoxControl;
+			//MessageBox.Show($"{box?.IsVisible}");
+			Debug.WriteLine($"{box!= null}, {p.GetType()}", "TestCommand 2");
+			var box2 =  Root.Manager.LayoutAnchorableExpanderGroupBox;
+			//MessageBox.Show($"{box?.IsVisible}");
+			if(box != null) {
+				//box.Se
+				var index = Index;
+				Debug.WriteLine($"{index}, {box.SelectedIndex}", "TestCommand2 1");
+				if(box.SelectedIndex == index) {
+					box2.SetVisible(!box2.IsVisible);
+				} else {
+					box.SelectedIndex = index;
+					box2.SetVisible(true);
+
+				}
+			}
+		});
 
 		#endregion Properties
 
@@ -75,15 +109,18 @@ namespace AvalonDock.Layout {
 		private void Child_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
 			switch(e.PropertyName) {
 				case nameof(LayoutAnchorableExpanderGroupBox.IsActive):
-					if(sender is LayoutAnchorableExpanderGroupBox gb && gb.IsActive) {
+					if(sender is LayoutAnchorableExpanderGroup gb && gb.IsActive) {
 						//Debug.WriteLine($"{gb.Name}", "LayoutActivityBar_Child_PropertyChanged");
+						//if(Current == null)
 						Current = gb;
+						//gb.SetVisible(!gb.IsVisible);
 					}
 					break;
 				default:
 					break;
 			}
 		}
+
 
 		/// <inheritdoc />
 		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {

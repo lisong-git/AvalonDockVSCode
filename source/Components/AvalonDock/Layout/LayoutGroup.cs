@@ -25,7 +25,8 @@ namespace AvalonDock.Layout {
 	public abstract class LayoutGroup<T> :LayoutGroupBase, ILayoutGroup, IXmlSerializable where T : class, ILayoutElement {
 		#region fields
 
-		private readonly ObservableCollection<T> _children = new ObservableCollection<T>();
+		//private readonly ObservableCollection<T> _children = new ObservableCollection<T>();
+		protected ObservableCollection<T> _children = new ObservableCollection<T>();
 		private bool _isVisible = true;
 
 		#endregion fields
@@ -40,6 +41,13 @@ namespace AvalonDock.Layout {
 		#endregion Constructors
 
 		#region Properties
+		public void RestChildren(ObservableCollection<T> children) {
+			_children.CollectionChanged -= Children_CollectionChanged;
+			_children = children;
+			_children.CollectionChanged += Children_CollectionChanged;
+			RaisePropertyChanged(nameof(Children));
+		}
+
 
 		/// <summary>Gets a collection of children objects below this object.</summary>
 		public ObservableCollection<T> Children => _children;

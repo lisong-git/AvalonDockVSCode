@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -9,6 +9,7 @@
 
 using AvalonDock.Layout;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,9 +34,13 @@ namespace AvalonDock.Controls
 
 		protected override Size MeasureOverride(Size availableSize)
 		{
+			if(!IsItemsHost) return base.MeasureOverride(availableSize);
+
 			double totWidth = 0;
 			double maxHeight = 0;
-			var visibleChildren = Children.Cast<UIElement>().Where(ch => ch.Visibility != System.Windows.Visibility.Collapsed);
+			//Debug.WriteLine($"{InternalChildren == null}", "AnchorablePaneTabPanel MeasureOverride");
+			var children = InternalChildren;
+			var visibleChildren = children.Cast<UIElement>().Where(ch => ch.Visibility != Visibility.Collapsed);
 			foreach (FrameworkElement child in visibleChildren)
 			{
 				child.Measure(new Size(double.PositiveInfinity, availableSize.Height));
@@ -86,6 +91,12 @@ namespace AvalonDock.Controls
 
 			return finalSize;
 		}
+
+		//private void PrintParents() {
+		//	foreach (var child in Parent.GetParents()) {
+		//		Debug.WriteLine($"{child.GetType()}", "PP");
+		//	}
+		//}
 
 		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e)
 		{
