@@ -202,7 +202,7 @@
 
 //			//Issue: http://avalondock.codeplex.com/workitem/15036
 //			IsVisibleChanged += LayoutAnchorableExpanderFloatingWindowControl_IsVisibleChanged;
-//			SetBinding(SingleContentLayoutItemProperty, new Binding("Model.SinglePane.SelectedContent") { Source = this, Converter = new LayoutItemFromLayoutModelConverter() });
+//			SetBinding(SingleContentLayoutItemProperty, new Binding("Model.SinglePane.SelectedItem") { Source = this, Converter = new LayoutItemFromLayoutModelConverter() });
 //			_model.PropertyChanged += _model_PropertyChanged;
 //		}
 

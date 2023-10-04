@@ -18,7 +18,7 @@ namespace AvalonDock.Layout {
 
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutPanelElement, ILayoutPositionableElement, ILayoutContentSelector, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutPanelElement, ILayoutPositionableElement, ILayoutSelector<LayoutAnchorableExpanderGroup>, ILayoutPaneSerializable {
 		#region fields
 
 		[XmlIgnore]
@@ -27,6 +27,7 @@ namespace AvalonDock.Layout {
 		private string _name = null;
 		private string _id;
 		private bool _isActive = false;
+		private int _selectedIndex = -1;
 
 		#endregion fields
 
@@ -168,6 +169,22 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+		public int SelectedIndex { 
+			get => _selectedIndex; 
+			set {
+				Debug.WriteLine($"{_selectedIndex}, {value}", $"SelectedIndex");
+
+				if(_selectedIndex != value) {
+					_selectedIndex = value;
+					RaisePropertyChanged(nameof(SelectedIndex));
+				}
+			}
+		}
+
+		public LayoutAnchorableExpanderGroup SelectedItem => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
+			
+		
+
 		#endregion Public Methods
 
 		#region Internal Methods
@@ -189,13 +206,15 @@ namespace AvalonDock.Layout {
 			SetLastActivatedIndex();
 		}
 
-		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
+		/// <summary>Sets the current <see cref="SelectedIndex"/> to the last activated child with IsEnabled == true</summary>
 		private void SetLastActivatedIndex() {
 			//var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
-			//SelectedContentIndex = Children.IndexOf(lastActivatedDocument);
+			//SelectedIndex = Children.IndexOf(lastActivatedDocument);
 		}
 
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
+
 
 		#endregion Private Methods
 
@@ -206,9 +225,9 @@ namespace AvalonDock.Layout {
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
 		/// </summary>
 		/// <param name="content"></param>
-		//public int IndexOf(LayoutAnchorableExpanderGroup content) {
-		//	return Children.IndexOf(content);
-		//}
+		public int IndexOf(LayoutAnchorableExpanderGroup content) {
+			return Children.IndexOf(content);
+		}
 
 		#endregion Public Methods
 	}

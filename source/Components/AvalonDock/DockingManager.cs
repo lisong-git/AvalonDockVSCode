@@ -2880,7 +2880,7 @@ namespace AvalonDock {
 			//};
 
 			//var savePreviousContainer = paneModel.FindParent<LayoutFloatingWindow>() == null;
-			//var currentSelectedContentIndex = paneModel.SelectedContentIndex;
+			//var currentSelectedContentIndex = paneModel.SelectedIndex;
 			//while(paneModel.Children.Count > 0) {
 			//	var contentModel = paneModel.Children[paneModel.Children.Count - 1];
 
@@ -2894,7 +2894,7 @@ namespace AvalonDock {
 			//}
 
 			//if(destPane.Children.Count > 0)
-			//	destPane.SelectedContentIndex = currentSelectedContentIndex;
+			//	destPane.SelectedIndex = currentSelectedContentIndex;
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
 			fw = new LayoutAnchorableFloatingWindow {

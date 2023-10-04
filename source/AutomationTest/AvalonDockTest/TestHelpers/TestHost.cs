@@ -55,14 +55,14 @@
 			app.Exit += (sender, args) =>
 				{
 					var message = $"Exit TestApp with Thread.CurrentThread: {Thread.CurrentThread.ManagedThreadId}" +
-								  $" and SelectedContent.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
+								  $" and SelectedItem.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
 					Debug.WriteLine(message);
 
 				};
 			app.Startup += (sender, args) =>
 				{
 					var message = $"Start TestApp with Thread.CurrentThread: {Thread.CurrentThread.ManagedThreadId}" +
-								  $" and SelectedContent.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
+								  $" and SelectedItem.Dispatcher.Thread: {Application.Current.Dispatcher.Thread.ManagedThreadId}";
 					Debug.WriteLine(message);
 					gate.Set();
 				};

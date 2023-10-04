@@ -127,17 +127,17 @@
                         // 3 You could also use something like this to change accent color
                         // If you were using your own Theming Framework or MUI, Mahapps etc
                         //
-                        ////                        Application.SelectedContent.Resources[MWindowLib.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
-                        ////                        Application.SelectedContent.Resources[MWindowLib.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
+                        ////                        Application.SelectedItem.Resources[MWindowLib.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
+                        ////                        Application.SelectedItem.Resources[MWindowLib.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
                         ////
-                        ////                        Application.SelectedContent.Resources[MLib.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
-                        ////                        Application.SelectedContent.Resources[MLib.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
+                        ////                        Application.SelectedItem.Resources[MLib.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
+                        ////                        Application.SelectedItem.Resources[MLib.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
                         ////
-                        ////                        Application.SelectedContent.Resources[AvalonDock.Themes.VS2013.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
-                        ////                        Application.SelectedContent.Resources[AvalonDock.Themes.VS2013.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
+                        ////                        Application.SelectedItem.Resources[AvalonDock.Themes.VS2013.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
+                        ////                        Application.SelectedItem.Resources[AvalonDock.Themes.VS2013.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
                         ////
-                        ////                        Application.SelectedContent.Resources[NumericUpDownLib.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
-                        ////                        Application.SelectedContent.Resources[NumericUpDownLib.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
+                        ////                        Application.SelectedItem.Resources[NumericUpDownLib.Themes.ResourceKeys.ControlAccentColorKey] = accentColor;
+                        ////                        Application.SelectedItem.Resources[NumericUpDownLib.Themes.ResourceKeys.ControlAccentBrushKey] = new SolidColorBrush(accentColor);
 
                     });
                 }

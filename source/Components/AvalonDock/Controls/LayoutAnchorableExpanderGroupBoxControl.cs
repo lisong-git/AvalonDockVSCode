@@ -10,6 +10,7 @@
 using AvalonDock.Layout;
 using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -45,7 +46,7 @@ namespace AvalonDock.Controls {
 		internal LayoutAnchorableExpanderGroupBoxControl(LayoutAnchorableExpanderGroupBox model, bool IsVirtualizing) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
-			//SetBinding(ContentProperty, new Binding("Model") { Source = this });
+			//SetBinding(SelectedIndexProperty, new Binding("Model.SelectedIndex") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
 			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
 			// this.LayoutUpdated += new EventHandler( OnLayoutUpdated );

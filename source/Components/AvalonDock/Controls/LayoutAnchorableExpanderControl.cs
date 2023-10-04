@@ -74,7 +74,7 @@ namespace AvalonDock.Controls
 		/// <param name="e">The <see cref="System.Windows.Input.KeyboardFocusChangedEventArgs"/> that contains the event data.</param>
 		protected override void OnGotKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventArgs e)
 		{
-			//if (_model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
+			//if (_model?.SelectedItem != null) _model.SelectedItem.IsActive = true;
 			base.OnGotKeyboardFocus(e);
 		}
 
@@ -88,7 +88,7 @@ namespace AvalonDock.Controls
 		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
 		{
 			base.OnMouseLeftButtonDown(e);
-			//if (!e.Handled && _model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
+			//if (!e.Handled && _model?.SelectedItem != null) _model.SelectedItem.IsActive = true;
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace AvalonDock.Controls
 		protected override void OnMouseRightButtonDown(System.Windows.Input.MouseButtonEventArgs e)
 		{
 			base.OnMouseRightButtonDown(e);
-			//if (!e.Handled && _model?.SelectedContent != null) _model.SelectedContent.IsActive = true;
+			//if (!e.Handled && _model?.SelectedItem != null) _model.SelectedItem.IsActive = true;
 		}
 
 		#endregion Overrides

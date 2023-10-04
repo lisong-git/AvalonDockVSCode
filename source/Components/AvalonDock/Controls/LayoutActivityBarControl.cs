@@ -45,6 +45,7 @@ namespace AvalonDock.Controls {
 		internal LayoutActivityBarControl(LayoutActivityBar model, bool IsVirtualizing = false) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
+			SetBinding(SelectedIndexProperty, new Binding("Model.SelectedIndex") { Source = this });
 			//SetBinding(ContentProperty, new Binding("Model") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
 			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
@@ -83,7 +84,6 @@ namespace AvalonDock.Controls {
 		/// The event data reports that the left mouse button was pressed.</param>
 		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
 			base.OnMouseLeftButtonDown(e);
-
 		}
 
 		/// <summary>

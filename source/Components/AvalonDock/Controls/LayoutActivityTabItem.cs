@@ -109,21 +109,31 @@ namespace AvalonDock.Controls
 		#region Overrides
 
 		/// <inheritdoc />
-		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
-		{
+		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
 			base.OnMouseLeftButtonDown(e);
 
 			// Start a drag & drop action for a LayoutAnchorable
 			var anchorAble = this.Model as LayoutAnchorable;
-			if (anchorAble != null)
-			{
-				if (anchorAble.CanMove == false) return;
+			if(anchorAble != null) {
+				if(anchorAble.CanMove == false)
+					return;
 			}
 
 			_isMouseDown = true;
 			_draggingItem = this;
+
+			if(Model != null) {
+				Model.IsActive = true;
+				var currentGroup = Model.Parent as LayoutAnchorableExpanderGroup;
+				if(currentGroup?.Parent is LayoutAnchorableExpanderGroupBox gb) {
+					var currentIndex = gb.IndexOf(currentGroup);
+					Debug.WriteLine($"{gb.SelectedIndex}, {currentIndex}", $"OnMouseLeftButtonUp");
+					_lastSelectedIndex = gb.SelectedIndex;
+				}
+			}
 		}
 
+		private int _lastSelectedIndex = -1;
 		/// <inheritdoc />
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
@@ -141,16 +151,23 @@ namespace AvalonDock.Controls
 		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
 		{
 			_isMouseDown = false;
-			base.OnMouseLeftButtonUp(e);
 			if(Model!=null) {
 				Model.IsActive = true;
-				Debug.WriteLine($"{Model?.Parent?.Parent.GetType()}", $"{nameof(LayoutActivityTabItem)} OnMouseLeftButtonUp");
-				var currentGroup = Model.Parent;
-				if(currentGroup.Parent is LayoutAnchorableExpanderGroupBox gb) {
-					gb.SetVisible(!gb.IsVisible);
+				var currentGroup = Model.Parent as LayoutAnchorableExpanderGroup;
+				if( currentGroup?.Parent is LayoutAnchorableExpanderGroupBox gb) {
+					var currentIndex = gb.IndexOf(currentGroup);
+					Debug.WriteLine($"{gb.SelectedIndex}, {currentIndex}", $"OnMouseLeftButtonUp");
+
+					if(_lastSelectedIndex == currentIndex) {
+						gb.SetVisible(!gb.IsVisible);
+					}
 				}
 			}
+			_lastSelectedIndex = -1;
+			base.OnMouseLeftButtonUp(e);
 		}
+
+		
 
 		/// <inheritdoc />
 		protected override void OnMouseLeave(MouseEventArgs e)

@@ -24,7 +24,7 @@ namespace AvalonDock.Controls {
 		/// Static constructor
 		/// </summary>
 		public ActivityPaneTabPanel() {
-			//this.FlowDirection = FlowDirection.LeftToRight;
+			this.FlowDirection = FlowDirection.LeftToRight;
 		}
 		 
 		#endregion Constructors

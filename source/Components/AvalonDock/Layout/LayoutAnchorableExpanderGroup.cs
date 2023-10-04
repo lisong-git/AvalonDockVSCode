@@ -46,7 +46,7 @@ namespace AvalonDock.Layout {
 
 		#region Properties
 
-		//public LayoutContent SelectedContent {
+		//public LayoutContent SelectedItem {
 		//	get => _current ?? Children.First(); 
 		//	//set => _current = value;
 		//}
@@ -194,7 +194,7 @@ namespace AvalonDock.Layout {
 				RaisePropertyChanging(nameof(IsSelected));
 				_isSelected = value;
 				//if(Parent is ILayoutContentSelector parentSelector)
-				//	parentSelector.SelectedContentIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
+				//	parentSelector.SelectedIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
 				LayoutAnchorableTabItem.CancelMouseLeave();
