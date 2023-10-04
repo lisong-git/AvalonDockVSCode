@@ -81,7 +81,7 @@
 
           <LayoutAnchorableExpanderGroupBox Name="测试组1" DockWidth="160">
             <LayoutAnchorableExpanderGroup Orientation="Vertical">
-              <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
+              <LayoutAnchorableExpander Title="E1" IsExpanded="True">
                 <TextBox Text="内容一" />
               </LayoutAnchorableExpander>
               <LayoutAnchorableExpander Title="自定义2" IsExpanded="True">

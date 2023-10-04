@@ -9,6 +9,7 @@
 
 using AvalonDock.Layout;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,12 +34,17 @@ namespace AvalonDock.Controls {
 
 		protected override Size MeasureOverride(Size availableSize) {
 			Size desideredSize = new Size();
-			foreach(FrameworkElement child in Children) {
+			foreach(FrameworkElement child in InternalChildren) {
 				child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-				desideredSize.Height += child.DesiredSize.Height;
+				var childHeight = child.DesiredSize.Height;
+				
+				if(desideredSize.Height +  childHeight> availableSize.Height) {
+			Debug.WriteLine($"{availableSize.Height}, {desideredSize.Height}", "MeasureOverride");
+					return desideredSize;
+				}
+				desideredSize.Height += childHeight;
 				desideredSize.Width = Math.Max(desideredSize.Width, child.DesiredSize.Width);
 			}
-
 			return new Size(desideredSize.Width, Math.Min(desideredSize.Height, availableSize.Height));
 		}
 
@@ -74,7 +80,10 @@ namespace AvalonDock.Controls {
 					offset += doc.ActualHeight + doc.Margin.Top + doc.Margin.Bottom;
 				}
 			}
-			return finalSize;
+
+			Debug.WriteLine($"{finalSize.Height}, {offset}, ", "ArrangeOverride");
+
+			return new Size(finalSize.Width, offset);
 		}
 
 		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e) {

@@ -1,5 +1,6 @@
 using AvalonDock.Commands;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -194,6 +195,23 @@ namespace AvalonDock.Layout {
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 
 		#endregion Private Methods
+
+
+		//public IEnumerable<LayoutAnchorableExpanderGroup> ChildrenOverflowing {
+		//	get {
+		//		//Debug.WriteLine($"{Children.OfType<LayoutDocument>().Count()}, {Children.OfType<LayoutDocument>().Where(o=> o.IsVisible).Count()}", "ChildrenOverflowing 1");
+
+		//		//foreach(var child in Children) {
+		//		//	Debug.WriteLine($"{child.GetType()}, {child.TabItem}, {child.TabItem.IsVisible}, ", "ChildrenOverflowing 2");
+		//		//}
+		//		var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !o.TabItem.IsVisible).ToList();
+		//		listSorted.Sort();
+		//		return listSorted;
+		//	}
+		//}
+
+		//public bool IsOverflowing => Children.OfType<LayoutAnchorableExpanderGroup>().Any(o => !o.TabItem.IsVisible);
+
 	}
 
 }

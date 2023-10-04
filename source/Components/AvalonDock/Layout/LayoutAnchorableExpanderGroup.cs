@@ -238,6 +238,24 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+		public bool IsActive2 {
+			get => _isActive;
+			set {
+				if(value == _isActive) return;
+				if(Parent is LayoutAnchorableExpanderGroupBox gb) {
+					var old = gb.SelectedItem;
+					if(old != null) {
+						old.IsActive = false;
+					}
+
+					gb.SelectedIndex = gb.IndexOf(this);
+					IsActive = true;
+					RaisePropertyChanged(nameof(IsActive2));
+				}
+
+			}
+		}
+
 		/// <summary>
 		/// Provides derived classes an opportunity to handle changes to the <see cref="IsActive"/> property.
 		/// </summary>
