@@ -44,7 +44,7 @@ namespace AvalonDock.Layout {
 		public void RestChildren(ObservableCollection<T> children) {
 			_children.CollectionChanged -= Children_CollectionChanged;
 			_children = children;
-			_children.CollectionChanged += Children_CollectionChanged;
+			//_children.CollectionChanged += Children_CollectionChanged;
 			RaisePropertyChanged(nameof(Children));
 		}
 
@@ -98,15 +98,21 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc cref="ILayoutGroup" />
 		public void InsertChildAt(int index, ILayoutElement element) {
-			//Debug.WriteLine($"{typeof(T)}, {element is T}", $"{nameof(LayoutGroup<T>)} InsertChildAt");
+			Debug.WriteLine($"{element.GetType().Name}, {element.Parent.GetType().Name}", $"LayoutGroup InsertChildAt");
 			if(element is T t)
 				_children.Insert(index, t);
 		}
 
 		/// <inheritdoc cref="ILayoutContainer" />
 		public void RemoveChild(ILayoutElement element) {
-			if(element is T t)
+			if(element is T t) {
+				Debug.WriteLine($"{_children.Contains(t)}, {t.GetType().Name}, {t.Parent.GetType().Name}", $"LayoutGroup RemoveChild 1");
+				if(element is LayoutAnchorableExpanderGroup g) {
+
+				Debug.WriteLine($"{g.Title}", $"LayoutGroup RemoveChild 2");
+				}
 				_children.Remove(t);
+			}
 		}
 
 		/// <inheritdoc cref="ILayoutContainer" />

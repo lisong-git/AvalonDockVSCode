@@ -183,7 +183,7 @@ namespace Microsoft.Windows.Shell
 
 			var rcWindow = NativeMethods.GetWindowRect(_messageHwnd.Handle);
 
-			// Reorient the Top/Right to be relative to the top right edge of the Window.
+			// Reorient the DockTop/DockRight to be relative to the top right edge of the Window.
 			var deviceCaptionLocation = new Rect(
 				rcAllCaptionButtons.Left - rcWindow.Width - rcWindow.Left,
 				rcAllCaptionButtons.Top - rcWindow.Top,

@@ -121,11 +121,11 @@ namespace TestApp
 		//LayoutAnchorablePane
 		private void OnLayoutRootPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			var activeContent = ((LayoutRoot)sender).ActiveContent;
-			if (e.PropertyName == "ActiveContent")
-			{
-				Debug.WriteLine(string.Format("ActiveContent-> {0}", activeContent));
-			}
+			//var activeContent = ((LayoutRoot)sender).ActiveContent;
+			//if (e.PropertyName == "ActiveContent")
+			//{
+			//	Debug.WriteLine(string.Format("ActiveContent-> {0}", activeContent));
+			//}
 		}
 
         [SuppressMessage("Style", "IDE0063:使用简单的 \"using\" 语句", Justification = "<挂起>")]

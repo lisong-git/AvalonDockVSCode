@@ -87,21 +87,21 @@ namespace AvalonDock.Layout {
 				if(value == _selectedIndex)
 					return;
 				RaisePropertyChanging(nameof(SelectedContentIndex));
-				RaisePropertyChanging(nameof(SelectedContent));
+				//RaisePropertyChanging(nameof(SelectedContent));
 				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
 					Children[_selectedIndex].IsSelected = false;
 				_selectedIndex = value;
 				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
 					Children[_selectedIndex].IsSelected = true;
 				RaisePropertyChanged(nameof(SelectedContentIndex));
-				RaisePropertyChanged(nameof(SelectedContent));
+				//RaisePropertyChanged(nameof(SelectedContent));
 			}
 		}
 
 		/// <summary>Gets the selected content in the pane or null.</summary>
 		private LayoutAnchorableExpanderGroup SelectedContent2 => _selectedIndex == -1 ? null : Children[_selectedIndex];
 
-		public LayoutContent SelectedContent => SelectedContent2?.SelectedContent;
+		//public LayoutContent SelectedContent => SelectedContent2?.SelectedContent;
 
 		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
 		string ILayoutPaneSerializable.Id {

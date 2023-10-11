@@ -9,6 +9,7 @@
 
 using AvalonDock.Layout;
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,7 +46,7 @@ namespace AvalonDock.Controls {
 		internal LayoutActivityBarControl(LayoutActivityBar model, bool IsVirtualizing = false) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
-			SetBinding(SelectedIndexProperty, new Binding("Model.SelectedIndex") { Source = this });
+			//SetBinding(SelectedIndexProperty, new Binding("Model.SelectedIndex") { Source = this });
 			//SetBinding(ContentProperty, new Binding("Model") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
 			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
@@ -55,11 +56,44 @@ namespace AvalonDock.Controls {
 
 		#endregion Constructors
 
+
+
 		#region Properties
 
 		/// <summary>Gets the layout model of this control.</summary>
 		[Bindable(false), Description("Gets the layout model of this control."), Category("Other")]
 		public ILayoutElement Model => _model;
+
+
+		#region HasOverflowItems
+
+		/// <summary><see cref="HasOverflowItems"/> dependency property.</summary>
+		public static readonly DependencyProperty HasOverflowItemsProperty = DependencyProperty.Register(nameof(HasOverflowItems), typeof(bool), typeof(LayoutActivityBarControl),
+				new FrameworkPropertyMetadata(false));
+
+		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
+		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
+		public bool HasOverflowItems {
+			get => (bool) GetValue(HasOverflowItemsProperty);
+		  private set => SetValue(HasOverflowItemsProperty, value);
+		}
+
+		#endregion HasOverflowItems
+
+		#region IsOverflowOpen
+
+		/// <summary><see cref="IsOverflowOpen"/> dependency property.</summary>
+		public static readonly DependencyProperty IsOverflowOpenProperty = DependencyProperty.Register(nameof(IsOverflowOpen), typeof(bool), typeof(LayoutActivityBarControl),
+				new FrameworkPropertyMetadata(false));
+
+		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
+		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
+		public bool IsOverflowOpen {
+			get => (bool) GetValue(IsOverflowOpenProperty);
+			set => SetValue(IsOverflowOpenProperty, value);
+		}
+
+		#endregion IsOverflowOpen
 
 		#endregion Properties
 
@@ -108,5 +142,9 @@ namespace AvalonDock.Controls {
 		}
 
 		#endregion Private Methods
+
+		//public IEnumerable GetOverflowItems() {
+
+		//}
 	}
 }

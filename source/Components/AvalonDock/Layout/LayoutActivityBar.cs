@@ -11,7 +11,6 @@ using System.Xml.Serialization;
 
 namespace AvalonDock.Layout {
 
-	[ContentProperty(nameof(Children))]
 	[Serializable]
 	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableExpanderGroup> {
 		#region fields
@@ -25,6 +24,7 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Class constructor</summary>
 		public LayoutActivityBar() {
+			
 		}
 
 		#endregion Constructors
@@ -72,7 +72,6 @@ namespace AvalonDock.Layout {
 				} else {
 					box.SelectedIndex = index;
 					box2.SetVisible(true);
-
 				}
 			}
 		});
@@ -151,8 +150,8 @@ namespace AvalonDock.Layout {
 #if TRACE
 		/// <inheritdoc />
 		public override void ConsoleDump(int tab) {
-			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-			System.Diagnostics.Trace.WriteLine("LayoutActivityBar()");
+			Trace.Write(new string(' ', tab * 4));
+			Trace.WriteLine("LayoutActivityBar()");
 
 			//foreach(ILayoutPositionableElement child in Children)
 			//	child.ConsoleDump(tab + 1);
@@ -197,20 +196,22 @@ namespace AvalonDock.Layout {
 		#endregion Private Methods
 
 
-		//public IEnumerable<LayoutAnchorableExpanderGroup> ChildrenOverflowing {
-		//	get {
-		//		//Debug.WriteLine($"{Children.OfType<LayoutDocument>().Count()}, {Children.OfType<LayoutDocument>().Where(o=> o.IsVisible).Count()}", "ChildrenOverflowing 1");
+		public IEnumerable<LayoutAnchorableExpanderGroup> ChildrenOverflowing {
+			get {
+				//Debug.WriteLine($"{Children.OfType<LayoutDocument>().Count()}, {Children.OfType<LayoutDocument>().Where(o=> o.IsVisible).Count()}", "ChildrenOverflowing 1");
 
-		//		//foreach(var child in Children) {
-		//		//	Debug.WriteLine($"{child.GetType()}, {child.TabItem}, {child.TabItem.IsVisible}, ", "ChildrenOverflowing 2");
-		//		//}
-		//		var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !o.TabItem.IsVisible).ToList();
-		//		listSorted.Sort();
-		//		return listSorted;
-		//	}
-		//}
+				//foreach(var child in Children) {
+				//	Debug.WriteLine($"{child.GetType()}, {child.TabItem}, {child.TabItem.IsVisible}, ", "ChildrenOverflowing 2");
+				//}
+				var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !o.TabItem.IsVisible).ToList();
+				listSorted.Sort();
+				return listSorted;
+			}
+		}
 
-		//public bool IsOverflowing => Children.OfType<LayoutAnchorableExpanderGroup>().Any(o => !o.TabItem.IsVisible);
+		public bool IsOverflowing => Children.OfType<LayoutAnchorableExpanderGroup>().Any(o => !o.TabItem.IsVisible);
+
+
 
 	}
 

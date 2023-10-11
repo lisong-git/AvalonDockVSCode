@@ -26,7 +26,7 @@ namespace AvalonDock.Layout {
 	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup {
 		#region fields
 
-		private Orientation _orientation;
+		///private Orientation _orientation;
 		private int _selectedIndex;
 
 		#endregion fields
@@ -51,9 +51,9 @@ namespace AvalonDock.Layout {
 		//	//set => _current = value;
 		//}
 
-		public string Name => Children.FirstOrDefault()?.Name ?? "默认";
+		public string Title => Children.FirstOrDefault()?.Title ?? "默认";
 
-		public int SelectedContentIndex {
+		public int SelectedIndex {
 			get => _selectedIndex;
 			set {
 				if(value < 0 || value >= Children.Count)
@@ -63,12 +63,12 @@ namespace AvalonDock.Layout {
 					return;
 				}
 
-				RaisePropertyChanging(nameof(SelectedContentIndex));
+				RaisePropertyChanging(nameof(SelectedIndex));
 				RaisePropertyChanging(nameof(SelectedContent));
 				SetChildSelected(_selectedIndex, false);
 				_selectedIndex = value;
 				SetChildSelected(_selectedIndex, true);
-				RaisePropertyChanged(nameof(SelectedContentIndex));
+				RaisePropertyChanged(nameof(SelectedIndex));
 				RaisePropertyChanged(nameof(SelectedContent));
 			}
 		}
@@ -80,6 +80,7 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Gets the selected content in the pane or null.</summary>
 		public LayoutContent SelectedContent => _selectedIndex == -1 ? null : Children[_selectedIndex];
+
 		/// <summary>
 		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
 		/// </summary>
@@ -238,23 +239,6 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public bool IsActive2 {
-			get => _isActive;
-			set {
-				if(value == _isActive) return;
-				if(Parent is LayoutAnchorableExpanderGroupBox gb) {
-					var old = gb.SelectedItem;
-					if(old != null) {
-						old.IsActive = false;
-					}
-
-					gb.SelectedIndex = gb.IndexOf(this);
-					IsActive = true;
-					RaisePropertyChanged(nameof(IsActive2));
-				}
-
-			}
-		}
 
 		/// <summary>
 		/// Provides derived classes an opportunity to handle changes to the <see cref="IsActive"/> property.
@@ -281,6 +265,16 @@ namespace AvalonDock.Layout {
 				_lastActivationTimeStamp = value;
 				RaisePropertyChanged(nameof(LastActivationTimeStamp));
 			}
+		}
+
+		private TabItem _tabItem;
+		public TabItem TabItem {
+			get => _tabItem;
+			set { 
+				_tabItem = value; 
+				//RaisePropertyChanged(nameof(TabItem)); 
+			}
+
 		}
 	}
 }

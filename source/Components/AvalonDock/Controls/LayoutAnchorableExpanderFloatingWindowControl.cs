@@ -321,8 +321,8 @@
 //				_overlayWindow.Owner = null;
 
 //			var rectWindow = new Rect(this.PointToScreenDPIWithoutFlowDirection(new Point()), this.TransformActualSizeToAncestor());
-//			_overlayWindow.Left = rectWindow.Left;
-//			_overlayWindow.Top = rectWindow.Top;
+//			_overlayWindow.DockLeft = rectWindow.DockLeft;
+//			_overlayWindow.DockTop = rectWindow.DockTop;
 //			_overlayWindow.Width = rectWindow.Width;
 //			_overlayWindow.Height = rectWindow.Height;
 //		}

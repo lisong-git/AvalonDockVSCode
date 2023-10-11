@@ -74,7 +74,7 @@ namespace AvalonDock.Controls {
 			//SetLayoutItem(Model?.Root?.Manager?.GetLayoutItemFromModel(Model));
 			//} else
 			//SetLayoutItem(null);
-			//Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableExpanderGroupControl OnModelChanged");
+			//Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableExpanderGroupControl OnOverflowOpenChanged");
 			if(e.NewValue is LayoutAnchorableExpanderGroup model) {
 				base.Model = model;
 			}

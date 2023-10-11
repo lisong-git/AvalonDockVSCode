@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -138,7 +139,7 @@ namespace AvalonDock.Controls {
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="IsDragging"/> property.</summary>
 		protected virtual void OnIsDraggingChanged(DependencyPropertyChangedEventArgs e)
 		{
-			Debug.WriteLine($"{e.NewValue}", "OnIsDraggingChanged");
+			//Debug.WriteLine($"{e.NewValue}", "OnIsDraggingChanged");
 
 			if((bool) e.NewValue) {
 				CaptureMouse();
@@ -359,6 +360,23 @@ namespace AvalonDock.Controls {
 			}
 		}
 
+		ResizeMode lastMode = ResizeMode.NoResize;
+
+		private void DisableSnapLayout() {
+			if(ResizeMode != ResizeMode.NoResize) {
+				lastMode = ResizeMode;
+				this.ResizeMode = ResizeMode.NoResize;
+				UpdateLayout();
+			}
+		}
+
+		private void RestoreSnapLayout() {
+			if(ResizeMode != lastMode) {
+				this.ResizeMode = ResizeMode.NoResize;
+				UpdateLayout();
+			}
+		}
+
 		protected virtual IntPtr FilterMessage(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 		{
 			handled = false;
@@ -377,7 +395,8 @@ namespace AvalonDock.Controls {
 						_dragService.Drop(mousePosition, out var dropFlag);
 						_dragService = null;
 						SetIsDragging(false);
-						if (dropFlag) InternalClose();
+						//Debug.WriteLine($"{dropFlag}", "LayoutFloatingWindowControl FilterMessage");
+						if(dropFlag) InternalClose();
 					}
 					break;
 
@@ -638,7 +657,7 @@ namespace AvalonDock.Controls {
 		private void OnActivated(object sender, EventArgs e)
 		{
 			Activated -= OnActivated;
-
+			Debug.WriteLine($"", "OnActivated");
 			if (!_attachDrag || Mouse.LeftButton != MouseButtonState.Pressed) return;
 			var windowHandle = new WindowInteropHelper(this).Handle;
 			var mousePosition = this.PointToScreenDPI(Mouse.GetPosition(this));

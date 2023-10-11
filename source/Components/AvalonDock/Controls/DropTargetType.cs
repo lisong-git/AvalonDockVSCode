@@ -99,5 +99,13 @@ namespace AvalonDock.Controls
 		DocumentPaneDockAsAnchorableBottom,
 
 		#endregion DocumentPaneDockAsAnchorable
+
+		#region Defualt
+		DockLeft,
+		DockRight,
+		DockTop,
+		DockBottom,
+		DockInside,
+		#endregion
 	}
 }

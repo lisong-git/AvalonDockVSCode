@@ -178,23 +178,23 @@ namespace AvalonDock.Controls
 			areasToRemove.ForEach(a =>
 				_currentWindowAreas.Remove(a));
 
-			foreach(var v in _currentHost.GetDropAreas(_floatingWindow)) {
-				Debug.WriteLine($"{v.Type}", "UpdateMouseLocation 01");
-			}
+			//foreach(var v in _currentHost.GetDropAreas(_floatingWindow)) {
+			//	Debug.WriteLine($"{v.Type}", "UpdateMouseLocation 01");
+			//}
 			var areasToAdd =
 				_currentHost.GetDropAreas(_floatingWindow)
 				//.Where(o=> o.)
 								.Where(cw => !_currentWindowAreas.Contains(cw) && cw.DetectionRect.Contains(cw.TransformToDeviceDPI(dragPosition)))
 								.ToList();
-			Debug.WriteLine($"=================================================================================");
+			//Debug.WriteLine($"=================================================================================");
 			_currentWindowAreas.AddRange(areasToAdd);
 
-			Debug.WriteLine( $"{areasToAdd.Count}; {string.Join(",", areasToAdd.Select(o=> o.Type))}", "UpdateMouseLocation 1");
+			//Debug.WriteLine( $"{areasToAdd.Count}; {string.Join(",", areasToAdd.Select(o=> o.Type))}", "UpdateMouseLocation 1");
 			//Debug.WriteLineIf(areasToAdd.Any(), $"{string.Join(",", areasToAdd.Select(o => o.Type))}", "UpdateMouseLocation 1");
 			//显示可插入区域小图预览
 			areasToAdd.ForEach(a =>
 				_currentWindow.DragEnter(a));
-			Debug.WriteLine($"{_currentDropTarget?.Type}, {_currentWindow.GetType().Name}", "UpdateMouseLocation 2");
+			//Debug.WriteLine($"{_currentDropTarget?.Type}, {_currentWindow.GetType().Name}", "UpdateMouseLocation 2");
 
 			if(_currentDropTarget == null) {
 				_currentWindowAreas.ForEach(wa => {

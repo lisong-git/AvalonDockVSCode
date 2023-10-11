@@ -63,7 +63,7 @@ namespace AvalonDock.Controls {
 						if(contentIndex > 0 &&
 							parentContainer.ChildrenCount > 1) {
 							parentPane.MoveChild(contentIndex, 0);
-							parentSelector.SelectedContentIndex = 0;
+							parentSelector.SelectedIndex = 0;
 							return ArrangeOverride(finalSize);
 						}
 					}

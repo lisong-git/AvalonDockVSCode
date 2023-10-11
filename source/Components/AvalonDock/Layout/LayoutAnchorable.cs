@@ -421,7 +421,7 @@ namespace AvalonDock.Layout {
 			/// <remarks>Add this content to <see cref="ILayoutRoot.Hidden"/> collection of parent root.</remarks>
 			/// <param name="cancelable"></param>
 			internal bool HideAnchorable(bool cancelable) {
-			Debug.WriteLine($"{cancelable}", "HideAnchorable 1");
+			//Debug.WriteLine($"{cancelable}", "HideAnchorable 1");
 
 			if(!IsVisible) {
 				IsSelected = true;
@@ -435,12 +435,12 @@ namespace AvalonDock.Layout {
 				if(args.Cancel)
 					return false;
 			}
-			Debug.WriteLine($"{cancelable}", "HideAnchorable 2");
+			//Debug.WriteLine($"{cancelable}", "HideAnchorable 2");
 
 			RaisePropertyChanging(nameof(IsHidden));
 			RaisePropertyChanging(nameof(IsVisible));
 			if(Parent is ILayoutGroup) {
-				Debug.WriteLine($"{cancelable}", "HideAnchorable 3");
+				//Debug.WriteLine($"{cancelable}", "HideAnchorable 3");
 
 				var parentAsGroup = Parent as ILayoutGroup;
 				PreviousContainer = parentAsGroup;
@@ -661,7 +661,7 @@ namespace AvalonDock.Layout {
 					previousContainer.Children.Add(anchorableToToggle);
 
 				if(selectedIndex != -1)
-					previousContainer.SelectedContentIndex = selectedIndex;
+					previousContainer.SelectedIndex = selectedIndex;
 
 				parentSide.Children.Remove(parentGroup);
 

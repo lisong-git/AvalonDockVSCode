@@ -130,8 +130,8 @@
 //				//	{
 //				//		var desideredHeight = layoutAnchorablePane.DockHeight.IsAbsolute ? layoutAnchorablePane.DockHeight.Value : layoutAnchorablePaneWithActualSize.ActualHeight;
 //				//		var previewBoxRect = new Rect(
-//				//			targetScreenRect.Left - overlayWindow.Left,
-//				//			targetScreenRect.Top - overlayWindow.Top,
+//				//			targetScreenRect.DockLeft - overlayWindow.DockLeft,
+//				//			targetScreenRect.DockTop - overlayWindow.DockTop,
 //				//			targetScreenRect.Width,
 //				//			Math.Min(desideredHeight, targetScreenRect.Height / 2.0));
 
@@ -143,8 +143,8 @@
 //						//var desideredHeight = layoutAnchorablePane.DockHeight.IsAbsolute ? layoutAnchorablePane.DockHeight.Value : layoutAnchorablePaneWithActualSize.ActualHeight;
 //						var desideredHeight = _targetPane.EmptyLength() - 1;
 //						var previewBoxRect = new Rect(
-//							targetScreenRect.Left - overlayWindow.Left,
-//							targetScreenRect.Bottom - overlayWindow.Top - desideredHeight,
+//							targetScreenRect.DockLeft - overlayWindow.DockLeft,
+//							targetScreenRect.DockBottom - overlayWindow.DockTop - desideredHeight,
 //							targetScreenRect.Width,
 //							desideredHeight);
 //						return new RectangleGeometry(previewBoxRect);

@@ -18,7 +18,7 @@ namespace AvalonDock.Layout {
 
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutPanelElement, ILayoutPositionableElement, ILayoutSelector<LayoutAnchorableExpanderGroup>, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpanderGroupBox :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutPanelElement, ILayoutPane, ILayoutPositionableElement, ILayoutSelector<LayoutAnchorableExpanderGroup>, ILayoutPaneSerializable {
 		#region fields
 
 		[XmlIgnore]
@@ -169,8 +169,8 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public int SelectedIndex { 
-			get => _selectedIndex; 
+		public int SelectedIndex {
+			get => _selectedIndex;
 			set {
 				Debug.WriteLine($"{_selectedIndex}, {value}", $"SelectedIndex");
 
@@ -182,8 +182,8 @@ namespace AvalonDock.Layout {
 		}
 
 		public LayoutAnchorableExpanderGroup SelectedItem => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
-			
-		
+
+
 
 		#endregion Public Methods
 

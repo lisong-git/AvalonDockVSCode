@@ -18,16 +18,16 @@ namespace AvalonDock.Controls {
 	/// <summary>
 	/// Provides a panel that contains the TabItem Headers of the <see cref="LayoutDocumentPaneControl"/>.
 	/// </summary>
-	public class ActivityPaneTabPanel :Panel {
+	public class ActivityBarTabPanel :Panel {
 		#region Constructors
 
 		/// <summary>
 		/// Static constructor
 		/// </summary>
-		public ActivityPaneTabPanel() {
+		public ActivityBarTabPanel() {
 			this.FlowDirection = FlowDirection.LeftToRight;
 		}
-		 
+
 		#endregion Constructors
 
 		#region Overrides
@@ -37,9 +37,9 @@ namespace AvalonDock.Controls {
 			foreach(FrameworkElement child in InternalChildren) {
 				child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 				var childHeight = child.DesiredSize.Height;
-				
-				if(desideredSize.Height +  childHeight> availableSize.Height) {
-			Debug.WriteLine($"{availableSize.Height}, {desideredSize.Height}", "MeasureOverride");
+
+				if(desideredSize.Height + childHeight > availableSize.Height) {
+					//Debug.WriteLine($"{availableSize.Height}, {desideredSize.Height}", "MeasureOverride");
 					return desideredSize;
 				}
 				desideredSize.Height += childHeight;
@@ -52,15 +52,18 @@ namespace AvalonDock.Controls {
 			var visibleChildren = Children.Cast<UIElement>().Where(ch => ch.Visibility != Visibility.Collapsed);
 			var offset = 0.0;
 			var skipAllOthers = false;
-			foreach(TabItem doc in visibleChildren) {
-				if(skipAllOthers || offset + doc.DesiredSize.Height > finalSize.Height) {
+
+			//var itemFullHeight = 0.0;
+
+			foreach(TabItem child in visibleChildren) {
+				if(skipAllOthers || offset + child.DesiredSize.Height > finalSize.Height) {
 					bool isLayoutContentSelected = false;
-					var layoutContent = doc.Content as LayoutContent;
+					var layoutContent = child.Content as LayoutContent;
 
 					if(layoutContent != null)
 						isLayoutContentSelected = layoutContent.IsSelected;
 
-					if(isLayoutContentSelected && !doc.IsVisible) {
+					if(isLayoutContentSelected && !child.IsVisible) {
 						var parentContainer = layoutContent.Parent as ILayoutContainer;
 						var parentSelector = layoutContent.Parent as ILayoutContentSelector;
 						var parentPane = layoutContent.Parent as ILayoutPane;
@@ -68,35 +71,37 @@ namespace AvalonDock.Controls {
 						if(contentIndex > 0 &&
 							parentContainer.ChildrenCount > 1) {
 							parentPane.MoveChild(contentIndex, 0);
-							parentSelector.SelectedContentIndex = 0;
+							parentSelector.SelectedIndex = 0;
 							return ArrangeOverride(finalSize);
 						}
 					}
-					doc.Visibility = Visibility.Hidden;
+					child.Visibility = Visibility.Hidden;
 					skipAllOthers = true;
 				} else {
-					doc.Visibility = Visibility.Visible;
-					doc.Arrange(new Rect(0.0, offset, finalSize.Width, doc.DesiredSize.Height));
-					offset += doc.ActualHeight + doc.Margin.Top + doc.Margin.Bottom;
+					child.Visibility = Visibility.Visible;
+					child.Arrange(new Rect(0.0, offset, finalSize.Width, child.DesiredSize.Height));
+					//if(itemFullHeight == 0.0) {
+					//	itemFullHeight = child.ActualHeight + child.Margin.DockTop + child.Margin.DockBottom;
+					//}
+					offset += child.ActualHeight + child.Margin.Top + child.Margin.Bottom;
+					//offset += itemFullHeight;
 				}
 			}
 
-			Debug.WriteLine($"{finalSize.Height}, {offset}, ", "ArrangeOverride");
-
+			//Debug.WriteLine($"{finalSize.Height}, {offset}, ", "ArrangeOverride");
 			return new Size(finalSize.Width, offset);
 		}
 
 		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e) {
-			//if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed &&
-			//    LayoutDocumentTabItem.IsDraggingItem())
-			//{
-			//    var contentModel = LayoutDocumentTabItem.GetDraggingItem().Model;
-			//    var manager = contentModel.Root.Manager;
-			//    LayoutDocumentTabItem.ResetDraggingItem();
-			//    System.Diagnostics.Trace.WriteLine("OnMouseLeave()");
+			if(e.LeftButton == System.Windows.Input.MouseButtonState.Pressed &&
+					LayoutActivityTabItem.IsDraggingItem()) {
+				var contentModel = LayoutActivityTabItem.GetDraggingItem().Model;
+				var manager = contentModel.Root.Manager;
+				LayoutActivityTabItem.ResetDraggingItem();
+				//Trace.WriteLine("OnMouseLeave()");
 
-			//    manager.StartDraggingFloatingWindowForContent(contentModel);
-			//}
+				manager.StartDraggingFloatingWindowForPane(contentModel);
+			}
 
 			base.OnMouseLeave(e);
 		}

@@ -48,14 +48,14 @@ namespace AvalonDock.Controls
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutContent), typeof(LayoutActivityTabItem),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpanderGroup), typeof(LayoutActivityTabItem),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
-		public LayoutContent Model
+		public LayoutAnchorableExpanderGroup Model
 		{
-			get => (LayoutContent)GetValue(ModelProperty);
+			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
 			set => SetValue(ModelProperty, value);
 		}
 
@@ -65,7 +65,8 @@ namespace AvalonDock.Controls
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e)
 		{
-			SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
+			//SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
+			//Model.TabItem2 = this;
 			//UpdateLogicalParent();
 		}
 
@@ -113,11 +114,11 @@ namespace AvalonDock.Controls
 			base.OnMouseLeftButtonDown(e);
 
 			// Start a drag & drop action for a LayoutAnchorable
-			var anchorAble = this.Model as LayoutAnchorable;
-			if(anchorAble != null) {
-				if(anchorAble.CanMove == false)
-					return;
-			}
+			//var anchorAble = this.Model as LayoutAnchorable;
+			//if(anchorAble != null) {
+			//	if(anchorAble.CanMove == false)
+			//		return;
+			//}
 
 			_isMouseDown = true;
 			_draggingItem = this;
@@ -166,8 +167,7 @@ namespace AvalonDock.Controls
 			_lastSelectedIndex = -1;
 			base.OnMouseLeftButtonUp(e);
 		}
-
-		
+				
 
 		/// <inheritdoc />
 		protected override void OnMouseLeave(MouseEventArgs e)
@@ -187,20 +187,25 @@ namespace AvalonDock.Controls
 		protected override void OnMouseEnter(MouseEventArgs e)
 		{
 			base.OnMouseEnter(e);
-			if (_draggingItem == null || _draggingItem == this || e.LeftButton != MouseButtonState.Pressed) return;
+			if(_draggingItem == null || _draggingItem == this || e.LeftButton != MouseButtonState.Pressed)
+				return;
 
-			Debug.WriteLine($"", "LayoutActivityTabItem_OnMouseEnter");
 			var model = Model;
 			var container = model.Parent;
 			var containerPane = model.Parent as ILayoutPane;
-			if (containerPane is LayoutAnchorablePane layoutAnchorablePane && !layoutAnchorablePane.CanRepositionItems) return;
-			if (containerPane.Parent is LayoutAnchorablePaneGroup layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
+			Debug.WriteLine($"{model?.GetType().Name}, {container.GetType().Name}, {containerPane?.GetType().Name}, {container is ILayoutPane}", "LayoutActivityTabItem_OnMouseEnter 1");
+			if(containerPane is LayoutAnchorableExpanderGroupBox expGroupBox && !expGroupBox.CanRepositionItems)
+				return;
+			//if (containerPane.Parent is LayoutAnchorablePaneGroup layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
 			var childrenList = container.Children.ToList();
 
 			// Hotfix to avoid crash caused by a likely threading issue Back in the containerPane.
 			var oldIndex = childrenList.IndexOf(_draggingItem.Model);
 			var newIndex = childrenList.IndexOf(model);
-			if (newIndex < containerPane.ChildrenCount && oldIndex > -1) containerPane.MoveChild(oldIndex, newIndex);
+			Debug.WriteLine($"{oldIndex}, {newIndex}, {containerPane?.ChildrenCount}, {childrenList?.Count}", "LayoutActivityTabItem_OnMouseEnter 2");
+
+			if(newIndex < containerPane.ChildrenCount && oldIndex > -1)
+				containerPane.MoveChild(oldIndex, newIndex);
 		}
 
 		#endregion Overrides

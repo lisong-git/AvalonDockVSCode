@@ -1614,6 +1614,9 @@ namespace AvalonDock {
 			//		_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorableExpanderPaneGroup));
 			//	}
 			//}
+			foreach(var areaHost in this.FindVisualChildren<LayoutActivityTabItem>()) {
+				_areas.Add(new DropArea<LayoutActivityTabItem>(areaHost, DropAreaType.ActivityBar));
+			}
 
 			return _areas;
 		}
@@ -1664,6 +1667,8 @@ namespace AvalonDock {
 		}
 
 		public LayoutFloatingWindowControl CreateFloatingWindow(LayoutContent contentModel, bool isContentImmutable) {
+			Debug.WriteLine($"{contentModel.GetType()}, {isContentImmutable}", "CreateFloatingWindow 1");
+
 			if(contentModel is LayoutAnchorableExpander anchorable) {
 				if(!(contentModel.Parent is ILayoutPane)) {
 					var pane = new LayoutAnchorableExpanderGroup(anchorable)
@@ -1762,7 +1767,7 @@ namespace AvalonDock {
 				v.RestChildren(layoutAnchorableExpanderGroupBox.Children);
 				//LayoutAnchorableExpanderGroupBox.Children =	Layout.ActivityBar.Children;
 				//LayoutAnchorableExpanderGroupBox.RestChildren(Layout.ActivityBar.Children);
-				Debug.WriteLine($"{LayoutAnchorableExpanderGroupBox == null}", "CreateUIElementForModel 1");
+				//Debug.WriteLine($"{LayoutAnchorableExpanderGroupBox == null}", "CreateUIElementForModel 1");
 
 				return templateModelView;
 			}
@@ -1876,6 +1881,7 @@ namespace AvalonDock {
 		/// <param name="contentModel"></param>
 		/// <param name="startDrag"></param>
 		internal void StartDraggingFloatingWindowForContent(LayoutContent contentModel, bool startDrag = true) {
+			Debug.WriteLine($"{startDrag}, {contentModel.Title}", "StartDraggingFloatingWindowForContent");
 			// Ensure window can float only if corresponding property is set accordingly
 			if(contentModel == null)
 				return;
@@ -1913,6 +1919,49 @@ namespace AvalonDock {
 		}
 
 		/// <summary>
+		/// Executes when the user starts to drag a <see cref="LayoutDocument"/> or
+		/// <see cref="LayoutAnchorable"/> by dragging its TabItem Header.
+		/// </summary>
+		/// <param name="contentModel"></param>
+		/// <param name="startDrag"></param>
+		//internal void StartDraggingFloatingWindowForExpanderGroup(LayoutAnchorableExpanderGroup contentModel, bool startDrag = true) {
+		//	// Ensure window can float only if corresponding property is set accordingly
+		//	if(contentModel == null)
+		//		return;
+		//	if(!contentModel.CanFloat)
+		//		return;
+		//	LayoutFloatingWindowControl fwc = null;
+
+		//	// For last document re-use floating window
+		//	if(contentModel.Parent.ChildrenCount == 1) {
+		//		foreach(var fw in _fwList) {
+		//			var found = fw.Model.Descendents().OfType<LayoutDocument>().Any(doc => doc == contentModel);
+		//			if(!found)
+		//				continue;
+		//			if(fw.Model.Descendents().OfType<LayoutDocument>().Count() + fw.Model.Descendents().OfType<LayoutAnchorable>().Count() == 1)
+		//				fwc = fw;
+		//			break;
+		//		}
+		//	}
+
+		//	var show = fwc == null; // Do not show already visible floating window
+		//	if(fwc == null) {
+		//		fwc = CreateFloatingWindow(contentModel, false);
+
+		//		LayoutFloatingWindowControlCreated?.Invoke(this, new LayoutFloatingWindowControlCreatedEventArgs(fwc));
+		//	}
+
+		//	if(fwc != null) {
+		//		Dispatcher.BeginInvoke(new Action(() => {
+		//			// Activate only inactive document
+		//			if(startDrag)
+		//				fwc.AttachDrag();
+		//			fwc.Show();
+		//		}), DispatcherPriority.Send);
+		//	}
+		//}
+
+		/// <summary>
 		/// Executes when the user starts to drag a docked <see cref="LayoutAnchorable"/> (tool window)
 		/// by dragging its title bar (top header of a tool window).
 		/// </summary>
@@ -1928,16 +1977,17 @@ namespace AvalonDock {
 			//fwc.Show();
 		}
 
-		//internal void StartDraggingFloatingWindowForPane(LayoutAnchorableExpanderGroup  paneModel) {
-		//	var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);
-		//	if(fwc == null)
-		//		return;
+		internal void StartDraggingFloatingWindowForPane(LayoutAnchorableExpanderGroup paneModel) {
+			var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);
+			if(fwc == null)
+				return;
 
-		//	LayoutFloatingWindowControlCreated?.Invoke(this, new LayoutFloatingWindowControlCreatedEventArgs(fwc));
+			LayoutFloatingWindowControlCreated?.Invoke(this, new LayoutFloatingWindowControlCreatedEventArgs(fwc));
 
-		//	fwc.AttachDrag();
-		//	fwc.Show();
-		//}
+			Debug.WriteLine($"{paneModel.Title}", "StartDraggingFloatingWindowForPane");
+			fwc.AttachDrag();
+			fwc.Show();
+		}
 
 		internal IEnumerable<LayoutFloatingWindowControl> GetFloatingWindowsByZOrder() {
 			var parentWindow = Window.GetWindow(this);
@@ -2117,7 +2167,7 @@ namespace AvalonDock {
 		//}
 
 		internal void ExecuteHideCommand(LayoutAnchorable anchorable) {
-			Debug.WriteLine($"{anchorable != null}", "ExecuteHideCommand 1");
+			//Debug.WriteLine($"{anchorable != null}", "ExecuteHideCommand 1");
 
 			if(!(anchorable is LayoutAnchorable model))
 				return;
@@ -2125,7 +2175,7 @@ namespace AvalonDock {
 			AnchorableHidingEventArgs hidingArgs = null;
 			AnchorableHiding?.Invoke(this, hidingArgs = new AnchorableHidingEventArgs(model));
 			if(hidingArgs?.CloseInsteadOfHide == true) {
-				Debug.WriteLine($"", "ExecuteHideCommand 2");
+				//Debug.WriteLine($"", "ExecuteHideCommand 2");
 
 				// ExecuteCloseCommand(model);
 				return;
@@ -2140,7 +2190,7 @@ namespace AvalonDock {
 		//internal void ExecuteAutoHideCommand(LayoutAnchorable _anchorable) => _anchorable.ToggleAutoHide();
 
 		internal void ExecuteAutoHideCommand(LayoutAnchorable _anchorable) {
-			Debug.WriteLine($"", "ExecuteAutoHideCommand");
+			//Debug.WriteLine($"", "ExecuteAutoHideCommand");
 
 			_anchorable.ToggleAutoHide();
 		}
@@ -2895,6 +2945,10 @@ namespace AvalonDock {
 
 			//if(destPane.Children.Count > 0)
 			//	destPane.SelectedIndex = currentSelectedContentIndex;
+
+		 var parent =	paneModel.Parent;
+			parent.RemoveChild(paneModel);
+
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
 			fw = new LayoutAnchorableFloatingWindow {
@@ -2911,6 +2965,7 @@ namespace AvalonDock {
 			};
 			//fwc.Owner = Window.GetWindow(this);
 			//fwc.SetParentToMainWindowOf(this);
+			fwc.Title = paneModel.Title;
 			_fwList.Add(fwc);
 			Layout.CollectGarbage();
 			InvalidateArrange();

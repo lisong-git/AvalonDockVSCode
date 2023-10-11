@@ -956,7 +956,7 @@ namespace Standard
 		APPWINDOW = 0x00040000,
 		LAYERED = 0x00080000,
 		NOINHERITLAYOUT = 0x00100000, // Disable inheritence of mirroring by children
-		LAYOUTRTL = 0x00400000, // Right to left mirroring
+		LAYOUTRTL = 0x00400000, // DockRight to left mirroring
 		COMPOSITED = 0x02000000,
 		NOACTIVATE = 0x08000000,
 		OVERLAPPEDWINDOW = (WINDOWEDGE | CLIENTEDGE),
@@ -1817,7 +1817,7 @@ namespace Standard
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 		public VarEnum VarType => (VarEnum)vt;
 
-		// Right now only using this for strings.
+		// DockRight now only using this for strings.
 		[SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		public string GetValue() => vt == (ushort)VarEnum.VT_LPWSTR ? Marshal.PtrToStringUni(pointerVal) : null;
 

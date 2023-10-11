@@ -748,8 +748,8 @@ namespace AvalonDock.Controls {
 		//		//Background = null,
 		//		Width = actualSize.Width,
 		//		Height = actualSize.Height,
-		//		Left = ptTopLeftScreen.X,
-		//		Top = ptTopLeftScreen.Y,
+		//		DockLeft = ptTopLeftScreen.X,
+		//		DockTop = ptTopLeftScreen.Y,
 		//		ShowActivated = false,
 		//		Owner = null,
 		//		Content = panelHostResizer

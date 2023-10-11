@@ -15,7 +15,7 @@ namespace AvalonDock.Layout
 		#region Properties
 
 		/// <summary>Gets or sets the index of the selected content in the pane.</summary>
-		int SelectedContentIndex { get; set; }
+		int SelectedIndex { get; set; }
 
 		/// <summary>Gets the selected content in the pane.</summary>
 		LayoutContent SelectedContent { get; }

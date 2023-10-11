@@ -69,7 +69,7 @@ namespace AvalonDock.Controls {
 		/// </summary>
 		/// <param name="floatingWindow"></param>
 		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow) {
-			Debug.WriteLine($"{Type}", $"{nameof(AnchorableExpanderDropTarget)} Drop 10");
+			Debug.WriteLine($"{Type}", $"AnchorableExpanderDropTarget Drop 1");
 
 			LayoutAnchorableExpander targetModel = _targetPane.Model as LayoutAnchorableExpander;
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
@@ -83,7 +83,7 @@ namespace AvalonDock.Controls {
 
 
 						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
-						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 2");
+						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
 						if(layoutAnchorablePaneGroup != null &&
 							(layoutAnchorablePaneGroup.Children.Count == 1 ||
 								layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
@@ -91,16 +91,16 @@ namespace AvalonDock.Controls {
 							var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
 							for(int i = 0; i < anchorablesToMove.Length; i++) {
 								//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"AnchorableExpanderDropTarget Drop 3");
 
 								var temp = anchorablesToMove[i];
 								//expanderGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
 								expanderGroup.InsertChildAt(insertToIndex + 1 + i, temp);
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 31");
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"AnchorableExpanderDropTarget Drop 31");
 
 							}
 						} else {
-							Debug.WriteLine($"", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 4");
+							Debug.WriteLine($"", $"AnchorableExpanderDropTarget Drop 4");
 							expanderGroup.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
 						}
 					}

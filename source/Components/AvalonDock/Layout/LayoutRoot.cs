@@ -173,7 +173,7 @@ namespace AvalonDock.Layout {
 					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
 					_activityBar.Parent = this;
 					var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableExpanderGroupBox;
-					Debug.WriteLine($"{_activityBar.Root?.Manager == null}, {box2 == null}", "LayoutRoot_ActivityBar 1");
+					//Debug.WriteLine($"{_activityBar.Root?.Manager == null}, {box2 == null}", "LayoutRoot_ActivityBar 1");
 
 					//PrimarySideBar = _activityBar.Current;
 					watch = Stopwatch.StartNew();

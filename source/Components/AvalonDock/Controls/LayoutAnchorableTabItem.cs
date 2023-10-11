@@ -48,14 +48,14 @@ namespace AvalonDock.Controls
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutContent), typeof(LayoutAnchorableTabItem),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpanderGroup), typeof(LayoutAnchorableTabItem),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
-		public LayoutContent Model
+		public LayoutAnchorableExpanderGroup Model
 		{
-			get => (LayoutContent)GetValue(ModelProperty);
+			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
 			set => SetValue(ModelProperty, value);
 		}
 
@@ -65,11 +65,36 @@ namespace AvalonDock.Controls
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e)
 		{
-			SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
+			//SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
 			//UpdateLogicalParent();
 		}
 
 		#endregion Model
+
+		//#region Model2
+
+		///// <summary><see cref="Model2"/> dependency property.</summary>
+		//public static readonly DependencyProperty Model2Property = DependencyProperty.Register(nameof(Model2), typeof(LayoutAnchorableExpanderGroup), typeof(LayoutAnchorableTabItem),
+		//		new FrameworkPropertyMetadata(null, OnModel2Changed));
+
+		///// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
+		//[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
+		//public LayoutAnchorableExpanderGroup Model2 {
+		//	get => (LayoutAnchorableExpanderGroup) GetValue(Model2Property);
+		//	set => SetValue(Model2Property, value);
+		//}
+
+		///// <summary>Handles changes to the <see cref="Model2"/> property.</summary>
+		//private static void OnModel2Changed(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableTabItem) d).OnModel2Changed(e);
+
+		///// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
+		//protected virtual void OnModel2Changed(DependencyPropertyChangedEventArgs e) {
+		//	SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
+		//	//UpdateLogicalParent();
+		//}
+
+		//#endregion Model2
+
 
 		#region LayoutItem
 
@@ -114,11 +139,12 @@ namespace AvalonDock.Controls
 			base.OnMouseLeftButtonDown(e);
 
 			// Start a drag & drop action for a LayoutAnchorable
-			var anchorAble = this.Model as LayoutAnchorable;
-			if (anchorAble != null)
-			{
-				if (anchorAble.CanMove == false) return;
-			}
+			//var anchorAble = this.Model as LayoutAnchorable;
+			//var anchorAble = this.Model;
+			//if(anchorAble != null)
+			//{
+			//	if (anchorAble.CanMove == false) return;
+			//}
 
 			_isMouseDown = true;
 			_draggingItem = this;

@@ -458,9 +458,10 @@
             <avalonDockControls:AnchorablePaneTabPanel
               x:Name="HeaderPanel"
               Grid.Row="2"
-              Margin="4,0,0,4"
+              Height="0"
+              Margin="0"
+              IsEnabled="False"
               IsItemsHost="true"
-              KeyboardNavigation.TabIndex="1"
               Visibility="Visible" />
 
             <!--  x:Name="HeaderPanel"  -->
@@ -472,8 +473,7 @@
               <TextBlock
                 Grid.Column="0"
                 Margin="8,4,4,0"
-                DataContext="{Binding Path=Model, RelativeSource={RelativeSource TemplatedParent}}"
-                Text="{Binding Name}" />
+                Text="{Binding Path=Model.Name, RelativeSource={RelativeSource TemplatedParent}}" />
 
               <ToolBarTray Grid.Column="1" HorizontalAlignment="Right">
                 <ToolBar Style="{DynamicResource SimpleToolBar}">
@@ -600,7 +600,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableTabItem DataContext="{Binding}" Model="{Binding SelectedContent}" />
+          <avalonDockControls:LayoutAnchorableTabItem Model="{Binding SelectedContent}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -608,7 +608,7 @@
     <Setter Property="ContentTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupControl DataContext="{Binding}" Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -935,7 +935,6 @@
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutActivityBarControl}">
           <Grid
             ClipToBounds="true"
-            DataContext="{Binding Path=Model, RelativeSource={RelativeSource TemplatedParent}}"
             KeyboardNavigation.TabNavigation="Local"
             SnapsToDevicePixels="true">
             <Grid.RowDefinitions>
@@ -952,13 +951,65 @@
               Background="Transparent"
               Orientation="Vertical">
 
-              <Grid Grid.Row="0" Background="Red">
+              <!--<Grid Grid.Row="0" Background="Red">
                 <Grid.RowDefinitions>
                   <RowDefinition Height="*" />
                   <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                </Grid.RowDefinitions>-->
+              <DockPanel>
+                <Grid
+                  x:Name="OverflowGrid"
+                  Grid.Row="1"
+                  HorizontalAlignment="Right"
+                  DockPanel.Dock="Bottom">
+                  <ToggleButton
+                    x:Name="OverflowButton"
+                    Width="48"
+                    Height="48"
+                    Background="WhiteSmoke"
+                    ClickMode="Press"
+                    Content="Overflow"
+                    FocusVisualStyle="{x:Null}"
+                    IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                    Style="{StaticResource ArrowToggleStyle}"
+                    Visibility="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                  <!--  IsEnabled="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"  -->
 
-                <ActivityPaneTabPanel
+                  <Popup
+                    x:Name="OverflowPopup"
+                    AllowsTransparency="true"
+                    Focusable="false"
+                    IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                    Placement="Right"
+                    PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
+                    StaysOpen="false">
+                    <!--<theme:SystemDropShadowChrome Name="Shdw"
+                                          Color="Transparent">-->
+                    <!--<Border
+                      x:Name="ToolBarSubMenuBorder"
+                      BorderThickness="1"
+                      RenderOptions.ClearTypeHint="Enabled">
+											<ToolBarOverflowPanel
+                        x:Name="PART_ToolBarOverflowPanel"
+                        Margin="0"
+                        FocusVisualStyle="{x:Null}"
+                        Focusable="true"
+                        KeyboardNavigation.DirectionalNavigation="Cycle"
+                        KeyboardNavigation.TabNavigation="Cycle"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                        WrapWidth="48" />
+										</Border>-->
+                    <!--</theme:SystemDropShadowChrome>-->
+                    <ListBox ItemsSource="{Binding Model.ChildrenOverflowing, RelativeSource={RelativeSource TemplatedParent}}">
+                      <!--<ListBoxItem Content="ListBox1"/>
+											<ListBoxItem Content="ListBox2"/>
+											<ListBoxItem Content="ListBox3"/>
+											<ListBoxItem Content="ListBox4"/>
+											<ListBoxItem Content="ListBox5"/>-->
+                    </ListBox>
+                  </Popup>
+                </Grid>
+                <ActivityBarTabPanel
                   x:Name="HeaderPanel"
                   Grid.Row="0"
                   Panel.ZIndex="1"
@@ -966,8 +1017,10 @@
                   KeyboardNavigation.TabIndex="1"
                   Visibility="Visible" />
 
-                <ToggleButton Grid.Row="1" Content="Overflow" />
-              </Grid>
+                <!--<ToggleButton Grid.Row="1" Content="Overflow" />-->
+
+              </DockPanel>
+              <!--</Grid>-->
             </WrapPanel>
 
             <StackPanel Grid.Row="2">
@@ -1033,7 +1086,7 @@
           <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}" />
           <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
 
-          <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+          <!--<Setter Property="ToolTip" Value="{Binding ToolTip}" />-->
 
           <Setter Property="Template">
             <Setter.Value>
@@ -1094,7 +1147,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutActivityTabItem DataContext="{Binding}" Model="{Binding SelectedContent}" />
+          <avalonDockControls:LayoutActivityTabItem Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1350,11 +1403,11 @@
               </ControlTemplate>
             </Setter.Value>
           </Setter>
-          <Style.Triggers>
+          <!--<Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
               <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
-          </Style.Triggers>
+          </Style.Triggers>-->
         </Style>
       </Setter.Value>
     </Setter>
@@ -1362,7 +1415,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableTabItem Model="{Binding SelectedContent}" />
+          <avalonDockControls:LayoutAnchorableTabItem Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1379,7 +1432,6 @@
   <!--  ActivityPaneControlStyle  -->
   <Style x:Key="ActivityPaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
     <Setter Property="TabStripPlacement" Value="Left" />
-    <Setter Property="IsSynchronizedWithCurrentItem" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
@@ -1546,44 +1598,12 @@
             <Border
               x:Name="ExpandSite"
               HorizontalAlignment="Stretch"
-              Background="GreenYellow"
-              DockPanel.Dock="Bottom">
+              Background="GreenYellow">
               <LayoutAnchorableControl Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource LayoutAnchorableStyle}" />
               <!--  Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"  -->
               <!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
 
-              <!--<ContentPresenter
-								x:Name="Part_Content"
-								Grid.Row="1"
-                                Content="{Binding Model.Children[0].LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
-                                ContentTemplate="{Binding Model.Children[0].LayoutItem.View.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                                ContentTemplateSelector="{Binding Model.Children[0].LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
-                                FlowDirection="{TemplateBinding FlowDirection}" />-->
 
-
-              <!--<ContentPresenter
-                                x:Name="Part_Content"
-                                Grid.Row="1"
-                                Margin="{TemplateBinding Padding}"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
-                                ContentTemplate="{Binding Model.Root.Manager.AnchorableTitleTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                                ContentTemplateSelector="{Binding Model.Root.Manager.AnchorableTitleTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
-                                Focusable="false" />-->
-
-              <!--<ContentPresenter
-                                x:Name="Part_Content"
-                                Margin="{TemplateBinding Padding}"
-                                ContentSource="{Binding Content}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
-
-              <!--  ContentSource="SelectedContent"  -->
-              <!--
-                Content="{Binding Model.LayoutAnchorable, RelativeSource={RelativeSource TemplatedParent}}"
-                ContentTemplate="{Binding Model.Root.Manager.AnchorablePaneTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-              -->
             </Border>
 
 
@@ -1904,11 +1924,12 @@
       <Setter.Value>
         <ControlTemplate>
           <Border
-            Padding="0,2,0,1"
-            Background="{TemplateBinding Background}"
+            Padding="0,0,0,0"
+            Background="Red"
             BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="{TemplateBinding BorderThickness}"
-            CornerRadius="2,2,0,0">
+            BorderThickness="0"
+            CornerRadius="0,0,0,0">
+            <!--  Background="{TemplateBinding Background}"  -->
 
             <Grid>
               <Grid.ColumnDefinitions>
@@ -2482,8 +2503,6 @@
                                     Source="Images/DockPaneEmpty.png"
                                     Stretch="None"
                                     Visibility="Collapsed" />-->
-
-
                 <Border
                   Name="PART_AnchorableExpanderPaneDropTargetTop"
                   Grid.Row="0"
@@ -2494,6 +2513,38 @@
                 </Border>
                 <Border
                   Name="PART_AnchorableExpanderPaneDropTargetBottom"
+                  Grid.Row="1"
+                  Margin="0"
+                  VerticalAlignment="Stretch"
+                  Background="Transparent">
+                  <!--<Image Source="Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />-->
+                </Border>
+
+              </Grid>
+            </Grid>
+            <Grid x:Name="PART_AnchorableActivityBarDropTargets">
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="1*" />
+                  <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <!--<Image
+                                    Grid.RowSpan="3"
+                                    Grid.ColumnSpan="3"
+                                    Margin="0,0.5,0,-0.5"
+                                    Source="Images/DockPaneEmpty.png"
+                                    Stretch="None"
+                                    Visibility="Collapsed" />-->
+                <Border
+                  Name="PART_AnchorableActivityBarDropTargetTop"
+                  Grid.Row="0"
+                  Margin="0"
+                  VerticalAlignment="Stretch"
+                  Background="Transparent">
+                  <!--<Image Source="Images/DockDocumentAsAnchorableTop.png" Stretch="None" />-->
+                </Border>
+                <Border
+                  Name="PART_AnchorableActivityBarDropTargetBottom"
                   Grid.Row="1"
                   Margin="0"
                   VerticalAlignment="Stretch"
@@ -2781,6 +2832,33 @@
         <Setter TargetName="title" Property="Margin" Value="0" />
       </DataTrigger>
     </DataTemplate.Triggers>
+  </DataTemplate>
+
+  <!--  Activity Tab 内的Items样式  -->
+  <DataTemplate x:Key="AvalonDock_ThemeVS2010_ActiviyItemTemplate">
+    <Grid>
+      <Grid Margin="4,2">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <!--<Image
+          x:Name="icon"
+          Source="{Binding IconSource, Converter={avalonDockConverters:NullToDoNothingConverter}}"
+          Stretch="Uniform" />-->
+        <TextBlock
+          x:Name="title"
+          Grid.Column="1"
+          Margin="4,0,0,0"
+          Text="{Binding Title}"
+          TextTrimming="CharacterEllipsis" />
+      </Grid>
+    </Grid>
+    <!--<DataTemplate.Triggers>
+      <DataTrigger Binding="{Binding IconSource}" Value="{x:Null}">
+        <Setter TargetName="title" Property="Margin" Value="0" />
+      </DataTrigger>
+    </DataTemplate.Triggers>-->
   </DataTemplate>
 
   <DataTemplate x:Key="AvalonDock_ThemeVS2010_DocumentTitleTemplate">
@@ -3103,15 +3181,21 @@
               BorderThickness="{TemplateBinding BorderThickness}">
 
               <Grid Width="48" Height="48">
-                <ContentPresenter
+                <!--<ContentPresenter
                   Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
-                  ContentTemplate="{Binding AnchorableHeaderTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
-                  ContentTemplateSelector="{Binding AnchorableHeaderTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}" />
+                  ContentTemplate="{StaticResource AvalonDock_ThemeVS2010_ActiviyItemTemplate}"
+                  ContentTemplateSelector="{Binding AnchorableHeaderTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}" />-->
+                <ContentPresenter Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" ContentTemplate="{StaticResource AvalonDock_ThemeVS2010_ActiviyItemTemplate}" />
                 <avalonDockControls:DropDownControlArea
                   Grid.Column="0"
                   DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
                   DropDownContextMenuDataContext="{Binding Path=Model, RelativeSource={RelativeSource TemplatedParent}}" />
               </Grid>
+              <!--<Viewbox>
+								<Canvas>
+									<Path Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" Fill="{TemplateBinding Foreground}"/>
+								</Canvas>
+							</Viewbox>-->
             </Border>
           </avalonDockControls:DropDownControlArea>
         </ControlTemplate>
@@ -3197,8 +3281,8 @@
           <Border
             x:Name="Bd"
             Background="Green"
-            BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="{TemplateBinding BorderThickness}">
+            BorderBrush="Red"
+            BorderThickness="0">
 
             <ContentPresenter
               Grid.Row="1"
@@ -3239,15 +3323,15 @@
   <Style x:Key="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}" TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
     <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
     <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}" />
-    <Setter Property="BorderThickness" Value="1" />
+    <!--<Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}" />-->
+    <Setter Property="BorderThickness" Value="0" />
     <Setter Property="shell:WindowChrome.WindowChrome">
       <Setter.Value>
         <shell:WindowChrome
-          CaptionHeight="18"
-          CornerRadius="3"
+          CaptionHeight="3"
+          CornerRadius="0"
           GlassFrameThickness="0"
-          ResizeBorderThickness="10"
+          ResizeBorderThickness="0"
           ShowSystemMenu="False" />
       </Setter.Value>
     </Setter>
