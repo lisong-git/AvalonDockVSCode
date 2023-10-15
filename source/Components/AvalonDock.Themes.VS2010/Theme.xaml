@@ -293,328 +293,6 @@
     </Setter>
   </Style>
 
-
-
-  <!--  AnchorablePaneControlStyle  -->
-  <Style x:Key="AvalonDock_ThemeVS2010_AnchorablePaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorablePaneControl}">
-    <Setter Property="TabStripPlacement" Value="Bottom" />
-    <Setter Property="Padding" Value="0" />
-    <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
-    <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorablePaneControl}">
-          <Grid
-            ClipToBounds="true"
-            KeyboardNavigation.TabNavigation="Local"
-            SnapsToDevicePixels="true">
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <!--  Following border is required to catch mouse events  -->
-            <Border Grid.RowSpan="2" Background="Transparent" />
-            <Border
-              x:Name="ContentPanel"
-              Grid.Row="1"
-              Grid.Column="0"
-              Background="{TemplateBinding Background}"
-              BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="{TemplateBinding BorderThickness}"
-              KeyboardNavigation.DirectionalNavigation="Contained"
-              KeyboardNavigation.TabIndex="2"
-              KeyboardNavigation.TabNavigation="Cycle"
-              Visibility="Visible">
-              <ContentPresenter
-                x:Name="PART_SelectedContentHost"
-                Margin="{TemplateBinding Padding}"
-                ContentSource="SelectedContent"
-                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-            </Border>
-            <avalonDockControls:AnchorablePaneTabPanel
-              x:Name="HeaderPanel"
-              Grid.Row="0"
-              Margin="0,0,2,2"
-              Panel.ZIndex="1"
-              IsItemsHost="true"
-              KeyboardNavigation.TabIndex="1"
-              Visibility="Visible" />
-          </Grid>
-          <ControlTemplate.Triggers>
-            <Trigger Property="IsEnabled" Value="false">
-              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-            </Trigger>
-            <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
-              <Setter TargetName="HeaderPanel" Property="Margin" Value="0" />
-            </DataTrigger>
-          </ControlTemplate.Triggers>
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
-
-    <Setter Property="ItemContainerStyle">
-      <Setter.Value>
-        <Style TargetType="{x:Type TabItem}">
-          <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
-          <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
-          <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}" />
-          <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-          <Setter Property="ToolTip" Value="{Binding ToolTip}" />
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="{x:Type TabItem}">
-                <Grid SnapsToDevicePixels="true">
-                  <Border
-                    x:Name="Bd"
-                    Padding="{TemplateBinding Padding}"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="1,0,1,1"
-                    CornerRadius="0,0,2,2">
-                    <ContentPresenter
-                      x:Name="Content"
-                      HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                      VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                      ContentSource="Header"
-                      RecognizesAccessKey="True"
-                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                  </Border>
-                </Grid>
-                <ControlTemplate.Triggers>
-                  <Trigger Property="Selector.IsSelected" Value="true">
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor8}" />
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
-                    <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}" />
-                    <Setter Property="Panel.ZIndex" Value="1" />
-                    <Setter Property="Margin" Value="0,-2,-1,0" />
-                    <Setter TargetName="Content" Property="Margin" Value="0,1,0,0" />
-                  </Trigger>
-                  <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                      <Condition Property="IsMouseOver" Value="true" />
-                      <Condition Property="Selector.IsSelected" Value="false" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor14}" />
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}" />
-                    <Setter Property="Panel.ZIndex" Value="0" />
-                  </MultiTrigger>
-                  <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor13}" />
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor9}" />
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                  </Trigger>
-                </ControlTemplate.Triggers>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-          <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
-              <Setter Property="Visibility" Value="Collapsed" />
-            </DataTrigger>
-          </Style.Triggers>
-        </Style>
-      </Setter.Value>
-    </Setter>
-
-    <Setter Property="ItemTemplate">
-      <Setter.Value>
-        <DataTemplate>
-          <avalonDockControls:LayoutAnchorableTabItem Model="{Binding}" />
-        </DataTemplate>
-      </Setter.Value>
-    </Setter>
-
-    <Setter Property="ContentTemplate">
-      <Setter.Value>
-        <DataTemplate>
-          <avalonDockControls:LayoutAnchorableControl Model="{Binding}" />
-        </DataTemplate>
-      </Setter.Value>
-    </Setter>
-  </Style>
-
-
-  <!--  AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle  -->
-  <Style x:Key="AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
-    <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
-    <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
-          <Grid
-            ClipToBounds="true"
-            KeyboardNavigation.TabNavigation="Local"
-            SnapsToDevicePixels="true">
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="*" />
-              <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <!--  Following border is required to catch mouse events  -->
-            <Border Grid.RowSpan="2" Background="Transparent" />
-
-            <!--  x:Name="HeaderPanel"  -->
-            <avalonDockControls:AnchorablePaneTabPanel
-              x:Name="HeaderPanel"
-              Grid.Row="2"
-              Height="0"
-              Margin="0"
-              IsEnabled="False"
-              IsItemsHost="true"
-              Visibility="Visible" />
-
-            <!--  x:Name="HeaderPanel"  -->
-            <Grid Grid.Row="0">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" MinWidth="48" />
-              </Grid.ColumnDefinitions>
-              <TextBlock
-                Grid.Column="0"
-                Margin="8,4,4,0"
-                Text="{Binding Path=Model.Name, RelativeSource={RelativeSource TemplatedParent}}" />
-
-              <ToolBarTray Grid.Column="1" HorizontalAlignment="Right">
-                <ToolBar Style="{DynamicResource SimpleToolBar}">
-                  <ToggleButton
-                    Width="28"
-                    Height="28"
-                    Content="1" />
-                  <ToggleButton
-                    Width="28"
-                    Height="28"
-                    Content="2" />
-                  <ToggleButton
-                    Width="28"
-                    Height="28"
-                    Content="3"
-                    ToolBar.OverflowMode="Always" />
-                </ToolBar>
-              </ToolBarTray>
-            </Grid>
-
-            <Border
-              x:Name="ContentPanel"
-              Grid.Row="1"
-              Grid.Column="0"
-              Background="{TemplateBinding Background}"
-              BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="{TemplateBinding BorderThickness}"
-              KeyboardNavigation.DirectionalNavigation="Contained"
-              KeyboardNavigation.TabIndex="2"
-              KeyboardNavigation.TabNavigation="Cycle"
-              Visibility="Visible">
-              <ContentPresenter
-                x:Name="PART_SelectedContentHost"
-                Margin="{TemplateBinding Padding}"
-                ContentSource="SelectedContent"
-                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-            </Border>
-
-          </Grid>
-          <!--<ControlTemplate.Triggers>
-            <Trigger Property="IsEnabled" Value="false">
-              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-            </Trigger>
-            <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
-              <Setter TargetName="HeaderPanel" Property="Margin" Value="0" />
-            </DataTrigger>
-          </ControlTemplate.Triggers>-->
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
-
-    <Setter Property="ItemContainerStyle">
-      <Setter.Value>
-        <Style TargetType="{x:Type TabItem}">
-          <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
-          <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
-          <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}" />
-          <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-          <!--<Setter Property="ToolTip" Value="{Binding ToolTip}" />-->
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="{x:Type TabItem}">
-                <!--<Grid SnapsToDevicePixels="true">
-                  <Border
-                    x:Name="Bd"
-                    Padding="0,0"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="0"
-                    CornerRadius="0,0,0,0">
-                -->
-                <!--  Padding="{TemplateBinding Padding}"  -->
-                <!--
-
-                    <ContentPresenter
-                      x:Name="Content"
-                      HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                      VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                      ContentSource="Header"
-                      RecognizesAccessKey="True"
-                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                -->
-                <!--  Margin="2,2,2,2"  -->
-                <!--
-
-                  </Border>
-                </Grid>-->
-                <!--<ControlTemplate.Triggers>
-                  <Trigger Property="Selector.IsSelected" Value="true">
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor8}" />
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
-                    <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}" />
-                    <Setter Property="Panel.ZIndex" Value="1" />
-                    <Setter Property="Margin" Value="0,-2,-1,0" />
-                    <Setter TargetName="Content" Property="Margin" Value="0,1,0,0" />
-                  </Trigger>
-                  <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                      <Condition Property="IsMouseOver" Value="true" />
-                      <Condition Property="Selector.IsSelected" Value="false" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor14}" />
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}" />
-                    <Setter Property="Panel.ZIndex" Value="0" />
-                  </MultiTrigger>
-                  <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor13}" />
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor9}" />
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                  </Trigger>
-                </ControlTemplate.Triggers>-->
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-          <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
-              <Setter Property="Visibility" Value="Collapsed" />
-            </DataTrigger>
-          </Style.Triggers>
-        </Style>
-      </Setter.Value>
-    </Setter>
-
-    <Setter Property="ItemTemplate">
-      <Setter.Value>
-        <DataTemplate>
-          <avalonDockControls:LayoutAnchorableTabItem Model="{Binding SelectedContent}" />
-        </DataTemplate>
-      </Setter.Value>
-    </Setter>
-
-    <Setter Property="ContentTemplate">
-      <Setter.Value>
-        <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
-        </DataTemplate>
-      </Setter.Value>
-    </Setter>
-
-  </Style>
-
   <!--  ArrowToggleStyle  -->
   <Style
     x:Key="ArrowToggleStyle"
@@ -655,131 +333,35 @@
     </Setter>
   </Style>
 
-  <Style x:Key="ToolBar2" TargetType="{x:Type ToolBar}">
-    <Style.Triggers>
-      <DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="true">
-        <!--  This trigger on a SystemParameter works because switching into high contrast mode requires a re-evaluation of theme  -->
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-      </DataTrigger>
-    </Style.Triggers>
+  <Style
+    x:Key="OverflowToggleStyle"
+    BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+    TargetType="ToggleButton">
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type ToolBar}">
-          <Grid
-            Name="Grid"
-            Margin="0"
-            SnapsToDevicePixels="true">
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*" />
-              <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Border
-              x:Name="MainPanelBorder"
-              Grid.Row="0"
-              Padding="{TemplateBinding Padding}"
-              Background="{TemplateBinding Background}"
-              BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="{TemplateBinding BorderThickness}">
-              <DockPanel KeyboardNavigation.TabIndex="1" KeyboardNavigation.TabNavigation="Local">
-                <!--<Thumb
-                                        x:Name="ToolBarThumb"
-                                        Width="10"
-                                        Margin="-3,-1,0,0"
-                                        Padding="6,5,1,6"
-                                        Visibility="Collapsed"
-                                        />-->
-                <ContentPresenter
-                  x:Name="ToolBarHeader"
-                  Margin="0,0,0,0"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  ContentSource="Header"
-                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                <ToolBarPanel
-                  x:Name="PART_ToolBarPanel"
-                  Margin="0"
-                  IsItemsHost="true"
-                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-              </DockPanel>
-            </Border>
-            <Grid
-              x:Name="OverflowGrid"
-              Grid.Row="1"
-              HorizontalAlignment="Right">
-              <ToggleButton
-                x:Name="OverflowButton"
-                Width="48"
-                Height="48"
-                Background="RosyBrown"
-                ClickMode="Press"
-                FocusVisualStyle="{x:Null}"
-                IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                IsEnabled="{TemplateBinding HasOverflowItems}"
-                Style="{StaticResource ArrowToggleStyle}"
-                Visibility="{Binding HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}}" />
-              <Popup
-                x:Name="OverflowPopup"
-                AllowsTransparency="true"
-                Focusable="false"
-                IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                Placement="Bottom"
-                PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
-                StaysOpen="false">
-                <!--<theme:SystemDropShadowChrome Name="Shdw"
-                                                      Color="Transparent">-->
-                <Border
-                  x:Name="ToolBarSubMenuBorder"
-                  BorderThickness="1"
-                  RenderOptions.ClearTypeHint="Enabled">
-                  <ToolBarOverflowPanel
-                    x:Name="PART_ToolBarOverflowPanel"
-                    Margin="0"
-                    FocusVisualStyle="{x:Null}"
-                    Focusable="true"
-                    KeyboardNavigation.DirectionalNavigation="Cycle"
-                    KeyboardNavigation.TabNavigation="Cycle"
-                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                    WrapWidth="48" />
-                </Border>
-                <!--</theme:SystemDropShadowChrome>-->
-              </Popup>
+        <ControlTemplate TargetType="ToggleButton">
+          <Border Background="{TemplateBinding Background}">
+            <Grid>
+              <ContentPresenter />
             </Grid>
-          </Grid>
+          </Border>
           <ControlTemplate.Triggers>
-            <!--<Trigger Property="IsOverflowOpen" Value="true">
-                                <Setter TargetName="ToolBarThumb" Property="IsEnabled" Value="false" />
-                            </Trigger>-->
-            <Trigger Property="Header" Value="{x:Null}">
-              <Setter TargetName="ToolBarHeader" Property="Visibility" Value="Collapsed" />
+            <Trigger Property="IsChecked" Value="True">
+              <Setter Property="Background" Value="Blue" />
+              <!--<Setter TargetName="content1" Property="Visibility" Value="Hidden" />-->
             </Trigger>
-            <!--<Trigger Property="ToolBarTray.IsLocked" Value="true">
-                                <Setter TargetName="ToolBarThumb" Property="Visibility" Value="Collapsed" />
-                            </Trigger>-->
-            <!--<Trigger SourceName="OverflowPopup" Property="Popup.HasDropShadow" Value="true">
-                                <Setter TargetName="Shdw" Property="Margin" Value="0,0,5,5" />
-                                <Setter TargetName="Shdw" Property="SnapsToDevicePixels" Value="true" />
-                                <Setter TargetName="Shdw" Property="Color" Value="#71000000" />
-                            </Trigger>-->
-            <Trigger Property="Orientation" Value="Vertical">
-              <Setter TargetName="Grid" Property="Margin" Value="0" />
-              <!--<Setter TargetName="OverflowButton" Property="Style" Value="{StaticResource &#384;}" />-->
-              <!--<Setter TargetName="ToolBarThumb" Property="Height" Value="10" />
-                                <Setter TargetName="ToolBarThumb" Property="Width" Value="Auto" />
-                                <Setter TargetName="ToolBarThumb" Property="Margin" Value="-1,-3,0,0" />
-                                <Setter TargetName="ToolBarThumb" Property="Padding" Value="5,6,6,1" />-->
-              <Setter TargetName="ToolBarHeader" Property="Margin" Value="0,0,0,0" />
-              <Setter TargetName="PART_ToolBarPanel" Property="Margin" Value="0" />
-              <!--<Setter TargetName="ToolBarThumb" Property="DockPanel.Dock" Value="Top" />-->
-              <Setter TargetName="ToolBarHeader" Property="DockPanel.Dock" Value="Top" />
-              <Setter TargetName="OverflowGrid" Property="HorizontalAlignment" Value="Stretch" />
-              <Setter TargetName="OverflowGrid" Property="VerticalAlignment" Value="Bottom" />
-              <Setter TargetName="OverflowPopup" Property="Placement" Value="Right" />
-              <!--<Setter TargetName="MainPanelBorder" Property="Margin" Value="0,0,0,0" />-->
-              <!--<Setter Property="Background" Value="Blue" />-->
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-            </Trigger>
+            <!--<Trigger Property="IsChecked" Value="False">
+          <Setter TargetName="content1" Property="Visibility" Value="Visible" />
+        </Trigger>-->
+            <!--<Trigger Property="local:ToolBarHelper.IsInOverflowPanel" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Red" />
+                            <Setter TargetName="border" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="local:ToolBarHelper.IsInOverflowPanel" Value="False">
+                            <Setter TargetName="border" Property="Background" Value="Green" />
+                            <Setter TargetName="border" Property="Visibility" Value="Hidden" />
+
+                        </Trigger>-->
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
@@ -921,9 +503,8 @@
       </Setter.Value>
     </Setter>
   </Style>
-
-
-  <Style x:Key="AvalonDock_ThemeVS2010_ActivityBarControlStyle" TargetType="{x:Type avalonDockControls:LayoutActivityBarControl}">
+  <!--#region AvalonDock_ThemeVS2010_ActivityBarControlStyle-->
+  <!--<Style x:Key="AvalonDock_ThemeVS2010_ActivityBarControlStyle" TargetType="{x:Type avalonDockControls:LayoutActivityBarControl}">
     <Setter Property="TabStripPlacement" Value="Left" />
     <Setter Property="IsSynchronizedWithCurrentItem" Value="False" />
     <Setter Property="Padding" Value="0" />
@@ -942,7 +523,9 @@
               <RowDefinition Height="64" />
               <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <!--  Following border is required to catch mouse events  -->
+  -->
+  <!--  Following border is required to catch mouse events  -->
+  <!--
             <Border Grid.RowSpan="2" Background="Transparent" />
 
             <WrapPanel
@@ -951,29 +534,21 @@
               Background="Transparent"
               Orientation="Vertical">
 
-              <!--<Grid Grid.Row="0" Background="Red">
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="*" />
-                  <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>-->
-              <DockPanel>
+              <DockPanel LastChildFill="True">
                 <Grid
                   x:Name="OverflowGrid"
-                  Grid.Row="1"
                   HorizontalAlignment="Right"
                   DockPanel.Dock="Bottom">
                   <ToggleButton
                     x:Name="OverflowButton"
                     Width="48"
                     Height="48"
-                    Background="WhiteSmoke"
+                    Background="Red"
                     ClickMode="Press"
                     Content="Overflow"
                     FocusVisualStyle="{x:Null}"
                     IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                    Style="{StaticResource ArrowToggleStyle}"
-                    Visibility="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
-                  <!--  IsEnabled="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                    Style="{StaticResource OverflowToggleStyle}" />
 
                   <Popup
                     x:Name="OverflowPopup"
@@ -982,45 +557,58 @@
                     IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}"
                     Placement="Right"
                     PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
-                    StaysOpen="false">
-                    <!--<theme:SystemDropShadowChrome Name="Shdw"
-                                          Color="Transparent">-->
-                    <!--<Border
-                      x:Name="ToolBarSubMenuBorder"
-                      BorderThickness="1"
-                      RenderOptions.ClearTypeHint="Enabled">
-											<ToolBarOverflowPanel
-                        x:Name="PART_ToolBarOverflowPanel"
-                        Margin="0"
-                        FocusVisualStyle="{x:Null}"
-                        Focusable="true"
-                        KeyboardNavigation.DirectionalNavigation="Cycle"
-                        KeyboardNavigation.TabNavigation="Cycle"
-                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                        WrapWidth="48" />
-										</Border>-->
-                    <!--</theme:SystemDropShadowChrome>-->
-                    <ListBox ItemsSource="{Binding Model.ChildrenOverflowing, RelativeSource={RelativeSource TemplatedParent}}">
-                      <!--<ListBoxItem Content="ListBox1"/>
+                    StaysOpen="True"
+                    Tag="{Binding Model.Children, RelativeSource={RelativeSource TemplatedParent}}">
+
+                    <StackPanel>
+  -->
+  <!--<ListBox
+                      MinWidth="64"
+                      MinHeight="28"
+                      ItemsSource="{Binding Model.ChildrenOverflowing, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                      Tag="{Binding Model.ChildrenOverflowing,Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+											DockPanel.Dock="Bottom">
+
+											<ListBoxItem Content="ListBox1"/>
 											<ListBoxItem Content="ListBox2"/>
 											<ListBoxItem Content="ListBox3"/>
 											<ListBoxItem Content="ListBox4"/>
-											<ListBoxItem Content="ListBox5"/>-->
-                    </ListBox>
+											<ListBoxItem Content="ListBox5"/>
+                    </ListBox>-->
+  <!--
+                      <TextBlock
+                        Padding="4"
+                        Background="Green"
+                        Text="{Binding Model.BindingTest, RelativeSource={RelativeSource TemplatedParent}}" />
+                      <ListView
+                        MinWidth="64"
+                        MinHeight="28"
+                        DataContext="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        DockPanel.Dock="Bottom"
+                        ItemsSource="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        Tag="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}">
+  -->
+  <!--<ListViewItem Content="ListBox1"/>
+												<ListViewItem Content="ListBox2"/>
+												<ListViewItem Content="ListBox3"/>
+												<ListViewItem Content="ListBox4"/>
+												<ListViewItem Content="ListBox5"/>-->
+  <!--
+                      </ListView>
+                    </StackPanel>
                   </Popup>
                 </Grid>
                 <ActivityBarTabPanel
                   x:Name="HeaderPanel"
-                  Grid.Row="0"
                   Panel.ZIndex="1"
                   IsItemsHost="true"
                   KeyboardNavigation.TabIndex="1"
                   Visibility="Visible" />
 
-                <!--<ToggleButton Grid.Row="1" Content="Overflow" />-->
-
               </DockPanel>
-              <!--</Grid>-->
+  -->
+  <!--</Grid>-->
+  <!--
             </WrapPanel>
 
             <StackPanel Grid.Row="2">
@@ -1086,7 +674,9 @@
           <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}" />
           <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
 
-          <!--<Setter Property="ToolTip" Value="{Binding ToolTip}" />-->
+  -->
+  <!--<Setter Property="ToolTip" Value="{Binding ToolTip}" />-->
+  <!--
 
           <Setter Property="Template">
             <Setter.Value>
@@ -1159,134 +749,452 @@
         </DataTemplate>
       </Setter.Value>
     </Setter>
-  </Style>
+  </Style>-->
+  <!--#endregion-->
 
-
-
-
-
-  <!--<Style x:Key="AvalonDock_ThemeVS2010_ActivityBarControlStyle" TargetType="{x:Type avalonDockControls:LayoutActivityBarControl}">
+  <Style x:Key="AvalonDock_ThemeVS2010_ActivityBarControlStyle" TargetType="{x:Type avalonDockControls:LayoutActivityBarControl}">
+    <Setter Property="TabStripPlacement" Value="Left" />
+    <Setter Property="IsSynchronizedWithCurrentItem" Value="False" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutActivityBarControl}">
-          <Border
-            Width="48"
-            BorderBrush="AntiqueWhite"
-            BorderThickness="0,0,1,0">
-            <Grid ClipToBounds="true" SnapsToDevicePixels="true">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="64" />
-                <RowDefinition Height="Auto" />
-              </Grid.RowDefinitions>
-  	
-              <Border Grid.Row="0" />
+          <Grid
+            ClipToBounds="true"
+            KeyboardNavigation.TabNavigation="Local"
+            SnapsToDevicePixels="true">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="64" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--  Following border is required to catch mouse events  -->
+            <Border Grid.RowSpan="2" Background="Transparent" />
 
-              <ToolBarTray
-                Grid.Row="0"
-                Grid.Column="0"
-                Background="Transparent"
-                Orientation="Vertical">
-                <ToolBar
-                  Band="1"
-                  BandIndex="1"
-                  IsOverflowOpen="{Binding IsOverflowOpen}"
-                  ItemsSource="{Binding Path=Model.Children, RelativeSource={RelativeSource TemplatedParent}}"
-									
-                  Style="{StaticResource ToolBar2}">
-                  <ToolBar.ItemTemplate>
-                    <DataTemplate>
-											-->
-  <!--<avalonDockControls:LayoutActivityTabItem  Model="{Binding SelectedContent}" />-->
-  <!--
+            <WrapPanel
+              Grid.Row="0"
+              Grid.Column="0"
+              Background="Transparent"
+              Orientation="Vertical">
 
-											<RadioButton
-                        Width="48"
-                        Height="48"
-                        Command="{Binding Parent.TestCommand2}"
-												GroupName="activitybar"
-                        CommandParameter="{Binding}"
-                        IsChecked="{Binding IsActive}">
-											</RadioButton>
+              <!--<Grid Grid.Row="0" Background="Red">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>-->
+              <DockPanel LastChildFill="True">
+                <Grid
+                  x:Name="OverflowGrid"
+                  HorizontalAlignment="Right"
+                  DockPanel.Dock="Bottom">
+                  <ToggleButton
+                    x:Name="OverflowButton"
+                    Width="480"
+                    Height="48"
+                    Background="Red"
+                    ClickMode="Press"
+                    Content="Overflow"
+                    FocusVisualStyle="{x:Null}"
+                    IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                    Style="{StaticResource OverflowToggleStyle}" />
+                  <!--  Visibility="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                  <!--  IsEnabled="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"  -->
 
-										</DataTemplate>
-                  </ToolBar.ItemTemplate>
-                </ToolBar>
-              </ToolBarTray>
+                  <Popup
+                    x:Name="OverflowPopup"
+                    AllowsTransparency="true"
+                    Focusable="false"
+                    IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                    Placement="Right"
+                    PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
+                    StaysOpen="True"
+                    Tag="{Binding Model.Children, RelativeSource={RelativeSource TemplatedParent}}">
+                    <!--<theme:SystemDropShadowChrome Name="Shdw"
+                                          Color="Transparent">-->
+                    <!--<Border
+                      x:Name="ToolBarSubMenuBorder"
+                      BorderThickness="1"
+                      RenderOptions.ClearTypeHint="Enabled">
+											<ToolBarOverflowPanel
+                        x:Name="PART_ToolBarOverflowPanel"
+                        Margin="0"
+                        FocusVisualStyle="{x:Null}"
+                        Focusable="true"
+                        KeyboardNavigation.DirectionalNavigation="Cycle"
+                        KeyboardNavigation.TabNavigation="Cycle"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                        WrapWidth="48" />
+										</Border>-->
+                    <!--</theme:SystemDropShadowChrome>-->
+                    <StackPanel>
+                      <!--<ListBox
+                      MinWidth="64"
+                      MinHeight="28"
+                      ItemsSource="{Binding Model.ChildrenOverflowing, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                      Tag="{Binding Model.ChildrenOverflowing,Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+											DockPanel.Dock="Bottom">
 
-              <StackPanel Grid.Row="2">
-                <Button
-                  HorizontalAlignment="Center"
+											<ListBoxItem Content="ListBox1"/>
+											<ListBoxItem Content="ListBox2"/>
+											<ListBoxItem Content="ListBox3"/>
+											<ListBoxItem Content="ListBox4"/>
+											<ListBoxItem Content="ListBox5"/>
+                    </ListBox>-->
+                      <TextBlock
+                        Padding="4"
+                        Background="Green"
+                        Text="{Binding Model.BindingTest, RelativeSource={RelativeSource TemplatedParent}}" />
+                      <ListView
+                        MinWidth="64"
+                        MinHeight="28"
+                        DataContext="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        DockPanel.Dock="Bottom"
+                        ItemsSource="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        Tag="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}">
+                        <!--<ListViewItem Content="ListBox1"/>
+												<ListViewItem Content="ListBox2"/>
+												<ListViewItem Content="ListBox3"/>
+												<ListViewItem Content="ListBox4"/>
+												<ListViewItem Content="ListBox5"/>-->
+                      </ListView>
+                    </StackPanel>
+                  </Popup>
+                </Grid>
+                <ActivityBarTabPanel
+                  x:Name="HeaderPanel"
+                  Panel.ZIndex="1"
+                  IsItemsHost="true"
+                  KeyboardNavigation.TabIndex="1"
+                  Visibility="Visible" />
+
+
+								
+              </DockPanel>
+              <!--</Grid>-->
+            </WrapPanel>
+
+            <StackPanel Grid.Row="2">
+              <Button
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Command="{Binding Model.TestCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                Focusable="False"
+                Style="{StaticResource AvalonDock_ThemeVS2010_ButtonStyle}"
+                ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnAutoHide_Hint}">
+                <Image
+                  HorizontalAlignment="Left"
                   VerticalAlignment="Center"
-                  Command="{Binding Model.TestCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                  Focusable="False"
-                  Style="{StaticResource AvalonDock_ThemeVS2010_ButtonStyle}"
-                  ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnAutoHide_Hint}">
-                  <Image
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Source="Images/DockAnchorableRight.PNG"
-                    Stretch="None" />
-                </Button>
+                  Source="Images/DockAnchorableRight.PNG"
+                  Stretch="None" />
+              </Button>
 
-                <Button
-                  HorizontalAlignment="Center"
+              <Button
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Focusable="False"
+                Style="{StaticResource AvalonDock_ThemeVS2010_ButtonStyle}"
+                ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnAutoHide_Hint}">
+                <Image
+                  HorizontalAlignment="Left"
                   VerticalAlignment="Center"
-                  Focusable="False"
-                  Style="{StaticResource AvalonDock_ThemeVS2010_ButtonStyle}"
-                  ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnAutoHide_Hint}">
-                  <Image
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Source="Images/DockAnchorableLeft.PNG"
-                    Stretch="None" />
-                </Button>
-                <Button
-                  HorizontalAlignment="Center"
+                  Source="Images/DockAnchorableLeft.PNG"
+                  Stretch="None" />
+              </Button>
+              <Button
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Focusable="False"
+                Style="{StaticResource AvalonDock_ThemeVS2010_ButtonStyle}"
+                ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnAutoHide_Hint}">
+                <Image
+                  HorizontalAlignment="Left"
                   VerticalAlignment="Center"
-                  Focusable="False"
-                  Style="{StaticResource AvalonDock_ThemeVS2010_ButtonStyle}"
-                  ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnAutoHide_Hint}">
-                  <Image Source="Images/DockAnchorableRight.PNG" />
-                </Button>
-              </StackPanel>
-            </Grid>
-          </Border>
+                  Source="Images/DockAnchorableRight.PNG"
+                  Stretch="None" />
+              </Button>
+            </StackPanel>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="false">
+              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </Trigger>
+
+            <!--<DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
+							<Setter TargetName="HeaderPanel" Property="Margin" Value="0" />
+						</DataTrigger>-->
+
+          </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
 
+    <!--<Setter Property="ItemContainerStyle">
+      <Setter.Value>
+        <Style TargetType="{x:Type TabItem}">
+          <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
+          <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}" />
+          <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
 
-	<Setter Property="ItemTemplate">
-		<Setter.Value>
-			<DataTemplate>
-				<avalonDockControls:LayoutAnchorableTabItem Model="{Binding}" />
-			</DataTemplate>
-		</Setter.Value>
-	</Setter>
+    -->
+    <!--<Setter Property="ToolTip" Value="{Binding ToolTip}" />-->
+    <!--
 
-	<Setter Property="ContentTemplate">
-        <Setter.Value>
-            <DataTemplate>
-                <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
-            </DataTemplate>
-        </Setter.Value>
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type TabItem}">
+                <Grid SnapsToDevicePixels="true">
+                  <Border
+                    x:Name="Bd"
+                    Padding="0,0"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="0"
+                    CornerRadius="0,0,0,0">
+                    <ContentPresenter
+                      x:Name="Content"
+                      ContentSource="Header"
+                      RecognizesAccessKey="True"
+                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                  </Border>
+                </Grid>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="Selector.IsSelected" Value="true">
+                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor8}" />
+                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
+                    <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}" />
+                    <Setter Property="Panel.ZIndex" Value="1" />
+                    <Setter Property="Margin" Value="0,-2,-1,0" />
+                    <Setter TargetName="Content" Property="Margin" Value="0,1,0,0" />
+                  </Trigger>
+                  <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                      <Condition Property="IsMouseOver" Value="true" />
+                      <Condition Property="Selector.IsSelected" Value="false" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor14}" />
+                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}" />
+                    <Setter Property="Panel.ZIndex" Value="0" />
+                  </MultiTrigger>
+                  <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor13}" />
+                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor9}" />
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                  </Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
+              <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+          </Style.Triggers>
+
+        </Style>
+      </Setter.Value>
     </Setter>
-	
-  </Style>-->
+
+    <Setter Property="ItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <avalonDockControls:LayoutActivityTabItem Model="{Binding}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>-->
+
+    <Setter Property="ContentTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
 
 
+  <!--  region  AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle  -->
+  <Style x:Key="AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
+    <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
+    <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupBoxControl}">
+          <Grid
+            ClipToBounds="true"
+            KeyboardNavigation.TabNavigation="Local"
+            SnapsToDevicePixels="true">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--  Following border is required to catch mouse events  -->
+            <Border Grid.RowSpan="2" Background="Transparent" />
 
+            <!--  x:Name="HeaderPanel"  -->
+            <avalonDockControls:AnchorablePaneTabPanel
+              x:Name="HeaderPanel"
+              Grid.Row="2"
+              Height="28"
+              Margin="0"
+              Background="Yellow"
+              IsEnabled="True"
+              IsItemsHost="true"
+              Visibility="Visible" />
 
+            <!--  x:Name="HeaderPanel"  -->
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="48" />
+              </Grid.ColumnDefinitions>
+              <TextBlock
+                Grid.Column="0"
+                Margin="8,4,4,0"
+                Text="{Binding Path=Model.Name, RelativeSource={RelativeSource TemplatedParent}}" />
 
+              <ToolBarTray Grid.Column="1" HorizontalAlignment="Right">
+                <ToolBar Style="{DynamicResource SimpleToolBar}">
+                  <ToggleButton
+                    Width="28"
+                    Height="28"
+                    Content="1" />
+                  <ToggleButton
+                    Width="28"
+                    Height="28"
+                    Content="2" />
+                  <ToggleButton
+                    Width="28"
+                    Height="28"
+                    Content="3"
+                    ToolBar.OverflowMode="Always" />
+                </ToolBar>
+              </ToolBarTray>
+            </Grid>
 
+            <Border
+              x:Name="ContentPanel"
+              Grid.Row="1"
+              Grid.Column="0"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              KeyboardNavigation.DirectionalNavigation="Contained"
+              KeyboardNavigation.TabIndex="2"
+              KeyboardNavigation.TabNavigation="Cycle"
+              Visibility="Visible">
+              <ContentPresenter
+                x:Name="PART_SelectedContentHost"
+                Margin="{TemplateBinding Padding}"
+                ContentSource="SelectedContent"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            </Border>
 
+          </Grid>
+          <!--<ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="false">
+              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </Trigger>
+            <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
+              <Setter TargetName="HeaderPanel" Property="Margin" Value="0" />
+            </DataTrigger>
+          </ControlTemplate.Triggers>-->
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
 
+    <Setter Property="ItemContainerStyle">
+      <Setter.Value>
+        <Style TargetType="{x:Type TabItem}">
+          <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}" />
+          <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}" />
+          <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+          <!--<Setter Property="ToolTip" Value="{Binding ToolTip}" />-->
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type TabItem}">
+                <Grid SnapsToDevicePixels="true">
+                  <Border
+                    x:Name="Bd"
+                    Padding="1,0"
+                    Background="Green"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="0"
+                    CornerRadius="0,0,0,0">
 
-  <!--  AvalonDock_ThemeVS2010_LayoutAnchorableGroupTabControlStyle  -->
+                    <ContentPresenter
+                      x:Name="Content"
+                      HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                      VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                      ContentSource="Header"
+                      RecognizesAccessKey="True"
+                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+                  </Border>
+                </Grid>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="Selector.IsSelected" Value="true">
+                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor8}" />
+                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
+                    <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}" />
+                    <Setter Property="Panel.ZIndex" Value="1" />
+                    <Setter Property="Margin" Value="0,-2,-1,0" />
+                    <Setter TargetName="Content" Property="Margin" Value="0,1,0,0" />
+                  </Trigger>
+                  <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                      <Condition Property="IsMouseOver" Value="true" />
+                      <Condition Property="Selector.IsSelected" Value="false" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor14}" />
+                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}" />
+                    <Setter Property="Panel.ZIndex" Value="0" />
+                  </MultiTrigger>
+                  <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor13}" />
+                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor9}" />
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                  </Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
+              <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="ItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <avalonDockControls:LayoutAnchorableTabItem Model="{Binding}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="ContentTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+
+  </Style>
+  <!--#endregion-->
+
+  <!--#region AvalonDock_ThemeVS2010_AnchorableExpanderGroupPaneControlStyle-->
   <Style x:Key="AvalonDock_ThemeVS2010_AnchorableExpanderGroupPaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
     <Setter Property="TabStripPlacement" Value="Bottom" />
     <Setter Property="Padding" Value="0" />
@@ -1428,6 +1336,8 @@
       </Setter.Value>
     </Setter>
   </Style>
+
+  <!--#endregion-->
 
   <!--  ActivityPaneControlStyle  -->
   <Style x:Key="ActivityPaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
@@ -1578,17 +1488,16 @@
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
-    <Setter Property="IsExpanded" Value="True" />
+    <Setter Property="ExpandDirection" Value="{Binding ExpandDirection, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderControl}">
-          <DockPanel>
+          <DockPanel x:Name="RootVisual">
             <!--  Following border is required to catch mouse events  -->
             <!--<Border Grid.RowSpan="2" Background="Transparent" />-->
 
             <AnchorablePaneTitle
               x:Name="HeaderSite"
-              Grid.Column="2"
               Height="28"
               Cursor="Hand"
               DockPanel.Dock="Top"
@@ -1596,35 +1505,48 @@
               Style="{DynamicResource AnchorablePaneTitleStyle}" />
 
             <Border
-              x:Name="ExpandSite"
-              HorizontalAlignment="Stretch"
-              Background="GreenYellow">
-              <LayoutAnchorableControl Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource LayoutAnchorableStyle}" />
-              <!--  Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"  -->
-              <!--  DataContext="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"  -->
+              x:Name="ExpandSiteBorder"
+              Padding="{TemplateBinding Padding}"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              DockPanel.Dock="Bottom"
+              Visibility="Visible">
 
-
+              <LayoutAnchorableControl
+                x:Name="ExpandSite"
+                Focusable="false"
+                Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
+                Style="{DynamicResource LayoutAnchorableStyle}" />
             </Border>
-
-
-            <!--<Border
-                            x:Name="ContentPanel"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            KeyboardNavigation.DirectionalNavigation="Contained"
-                            KeyboardNavigation.TabIndex="2"
-                            KeyboardNavigation.TabNavigation="Cycle"
-                            Visibility="Visible">
-							<ContentPresenter
-                                x:Name="PART_SelectedContentHost"
-                                Margin="{TemplateBinding Padding}"
-                                ContentSource="SelectedContent"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-						</Border>-->
           </DockPanel>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="true">
+              <Setter TargetName="ExpandSiteBorder" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+              <Setter TargetName="RootVisual" Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </Trigger>
+            <Trigger Property="ExpandDirection" Value="Right">
+              <Setter TargetName="ExpandSiteBorder" Property="DockPanel.Dock" Value="Right" />
+              <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" />
+              <Setter TargetName="HeaderSite" Property="LayoutTransform">
+                <Setter.Value>
+                  <RotateTransform Angle="90" />
+                </Setter.Value>
+              </Setter>
+              <Setter Property="Padding" Value="2,0" />
+            </Trigger>
+            <Trigger Property="ExpandDirection" Value="Up">
+              <Setter TargetName="ExpandSiteBorder" Property="DockPanel.Dock" Value="Top" />
+              <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Bottom" />
+            </Trigger>
+            <Trigger Property="ExpandDirection" Value="Left">
+              <Setter TargetName="ExpandSiteBorder" Property="DockPanel.Dock" Value="Left" />
+              <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Right" />
+              <Setter Property="Padding" Value="2,0" />
+            </Trigger>
+          </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
@@ -2214,10 +2136,8 @@
         ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
-            <StackPanel
-              MinWidth="0"
-              MinHeight="0"
-              Orientation="{Binding Path=Model.Side, RelativeSource={RelativeSource AncestorType={x:Type avalonDockControls:LayoutAnchorSideControl}, Mode=FindAncestor}, Converter={avalonDockConverters:AnchorSideToOrientationConverter}}" />
+            <StackPanel MinWidth="0" MinHeight="0" />
+            <!--  Orientation="{Binding Path=Model.Side, RelativeSource={RelativeSource AncestorType={x:Type avalonDockControls:LayoutAnchorSideControl}, Mode=FindAncestor}, Converter={avalonDockConverters:AnchorSideToOrientationConverter}}"  -->
           </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
       </ItemsControl>
@@ -2239,7 +2159,7 @@
   </ControlTemplate>
 
   <!--  侧停靠栏整体  -->
-  <ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorSideTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorSideControl}">
+  <!--<ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorSideTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorSideControl}">
 
     <Grid>
       <Grid.RowDefinitions>
@@ -2291,10 +2211,10 @@
           Stretch="None" />
       </StackPanel>
     </Grid>
-  </ControlTemplate>
+  </ControlTemplate>-->
 
   <!--  侧停靠栏内Button组  -->
-  <ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorGroupTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorGroupControl}">
+  <!--<ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorGroupTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorGroupControl}">
 
     <Grid Background="Red">
       <Grid.RowDefinitions>
@@ -2328,7 +2248,8 @@
         </ItemsControl.Style>
       </ItemsControl>
 
-      <!--<StackPanel Grid.Row="1" >
+  -->
+  <!--<StackPanel Grid.Row="1" >
 				<Image
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
@@ -2345,11 +2266,12 @@
                     Source="Images/DockAnchorableTop.PNG"
                     Stretch="None" />
 			</StackPanel>-->
+  <!--
     </Grid>
-  </ControlTemplate>
+  </ControlTemplate>-->
   <!--  Background="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}"  -->
 
-  <ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorControl}">
+  <!--<ControlTemplate x:Key="AvalonDock_ThemeVS2010_AnchorTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorControl}">
     <Border
       x:Name="Bd"
       Margin="0,4,0,0"
@@ -2385,7 +2307,7 @@
         <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}" />
       </MultiTrigger>
     </ControlTemplate.Triggers>
-  </ControlTemplate>
+  </ControlTemplate>-->
 
   <Style x:Key="{x:Type avalonDockControls:OverlayWindow}" TargetType="{x:Type avalonDockControls:OverlayWindow}">
     <Setter Property="Background" Value="GreenYellow" />
@@ -2815,10 +2737,10 @@
           <ColumnDefinition Width="Auto" />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Image
+        <!--<Image
           x:Name="icon"
           Source="{Binding IconSource, Converter={avalonDockConverters:NullToDoNothingConverter}}"
-          Stretch="Uniform" />
+          Stretch="Uniform" />-->
         <TextBlock
           x:Name="title"
           Grid.Column="1"
@@ -2827,11 +2749,11 @@
           TextTrimming="CharacterEllipsis" />
       </Grid>
     </Grid>
-    <DataTemplate.Triggers>
+    <!--<DataTemplate.Triggers>
       <DataTrigger Binding="{Binding IconSource}" Value="{x:Null}">
         <Setter TargetName="title" Property="Margin" Value="0" />
       </DataTrigger>
-    </DataTemplate.Triggers>
+    </DataTemplate.Triggers>-->
   </DataTemplate>
 
   <!--  Activity Tab 内的Items样式  -->
@@ -2948,15 +2870,15 @@
   <Style x:Key="{x:Type avalonDock:DockingManager}" TargetType="{x:Type avalonDock:DockingManager}">
     <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor1}" />
     <Setter Property="DocumentPaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_DocumentPaneControlStyle}" />
-    <Setter Property="AnchorablePaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorablePaneControlStyle}" />
+    <!--<Setter Property="AnchorablePaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorablePaneControlStyle}" />-->
     <Setter Property="AnchorableExpanderPaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableExpanderControlStyle}" />
     <Setter Property="AnchorableExpanderGroupPaneControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableExpanderGroupPaneControlStyle}" />
     <Setter Property="AnchorableGroupBoxControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableGroupBoxControlStyle}" />
     <Setter Property="ActivityBarControlStyle" Value="{StaticResource AvalonDock_ThemeVS2010_ActivityBarControlStyle}" />
     <!--<Setter Property="ActivityBarTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_ActivityBarTemplate}" />-->
-    <Setter Property="AnchorSideTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorSideTemplate}" />
+    <!--<Setter Property="AnchorSideTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorSideTemplate}" />
     <Setter Property="AnchorGroupTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorGroupTemplate}" />
-    <Setter Property="AnchorTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorTemplate}" />
+    <Setter Property="AnchorTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorTemplate}" />-->
     <Setter Property="DocumentHeaderTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_DocumentHeaderTemplate}" />
     <Setter Property="AnchorableHeaderTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_AnchorableHeaderTemplate}" />
     <Setter Property="DocumentTitleTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_DocumentTitleTemplate}" />
@@ -3009,13 +2931,13 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Content="{TemplateBinding BottomSidePanel}" />-->
-              <ContentPresenter
+              <!--<ContentPresenter
                 x:Name="PART_AutoHideArea"
                 Grid.Row="1"
                 Grid.Column="1"
                 HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                 VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                Content="{TemplateBinding AutoHideWindow}" />
+                Content="{TemplateBinding AutoHideWindow}" />-->
             </Grid>
           </Border>
         </ControlTemplate>
@@ -3615,9 +3537,9 @@
     </Style.Triggers>
   </Style>
 
-  <Style x:Key="{x:Type avalonDockControls:LayoutAutoHideWindowControl}" TargetType="{x:Type avalonDockControls:LayoutAutoHideWindowControl}">
+  <!--<Style x:Key="{x:Type avalonDockControls:LayoutAutoHideWindowControl}" TargetType="{x:Type avalonDockControls:LayoutAutoHideWindowControl}">
     <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor5}" />
-  </Style>
+  </Style>-->
 
   <Style x:Key="AvalonDock_ThemeVS2010_NavigatorWindowListBoxItemFocusVisual">
     <Setter Property="Control.Template">

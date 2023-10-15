@@ -79,7 +79,7 @@ namespace AvalonDock.Controls
 
 		#region Internal Methods
 
-		static int debugCount = 0;
+		//static int debugCount = 0;
 		/// <summary>
 		/// Method is invoked by the <see cref="LayoutFloatingWindowControl"/> to update the
 		/// current mouse position as the user drags the floating window with the mouse cursor.
@@ -181,6 +181,7 @@ namespace AvalonDock.Controls
 			//foreach(var v in _currentHost.GetDropAreas(_floatingWindow)) {
 			//	Debug.WriteLine($"{v.Type}", "UpdateMouseLocation 01");
 			//}
+			//获取当前所处区域下的控件
 			var areasToAdd =
 				_currentHost.GetDropAreas(_floatingWindow)
 				//.Where(o=> o.)
@@ -192,8 +193,7 @@ namespace AvalonDock.Controls
 			//Debug.WriteLine( $"{areasToAdd.Count}; {string.Join(",", areasToAdd.Select(o=> o.Type))}", "UpdateMouseLocation 1");
 			//Debug.WriteLineIf(areasToAdd.Any(), $"{string.Join(",", areasToAdd.Select(o => o.Type))}", "UpdateMouseLocation 1");
 			//显示可插入区域小图预览
-			areasToAdd.ForEach(a =>
-				_currentWindow.DragEnter(a));
+			areasToAdd.ForEach(a => _currentWindow.DragEnter(a));
 			//Debug.WriteLine($"{_currentDropTarget?.Type}, {_currentWindow.GetType().Name}", "UpdateMouseLocation 2");
 
 			if(_currentDropTarget == null) {

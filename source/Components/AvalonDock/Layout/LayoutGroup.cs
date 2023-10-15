@@ -26,7 +26,7 @@ namespace AvalonDock.Layout {
 		#region fields
 
 		//private readonly ObservableCollection<T> _children = new ObservableCollection<T>();
-		protected ObservableCollection<T> _children = new ObservableCollection<T>();
+		private ObservableCollection<T> _children = new ObservableCollection<T>();
 		private bool _isVisible = true;
 
 		#endregion fields
@@ -41,10 +41,10 @@ namespace AvalonDock.Layout {
 		#endregion Constructors
 
 		#region Properties
-		public void RestChildren(ObservableCollection<T> children) {
+
+		internal void ReplaceChildrenNoCollectionChangedSubscribe(ObservableCollection<T> children) {
 			_children.CollectionChanged -= Children_CollectionChanged;
 			_children = children;
-			//_children.CollectionChanged += Children_CollectionChanged;
 			RaisePropertyChanged(nameof(Children));
 		}
 

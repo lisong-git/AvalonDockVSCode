@@ -646,7 +646,7 @@ namespace AvalonDock.Controls {
 			var floatingWindowManager = _floatingWindow.Model.Root.Manager;
 
 			_visibleAreas.Add(area);
-			//Debug.WriteLine($"{area.Type}, {area.GetType()}", "OverlayWindow DragEnter 1");
+			Debug.WriteLine($"{area.Type}, {area.GetType()}", "OverlayWindow DragEnter 1");
 			FrameworkElement areaElement;
 			switch(area.Type) {
 				case DropAreaType.DockingManager:
@@ -689,15 +689,15 @@ namespace AvalonDock.Controls {
 
 			case DropAreaType.AnchorableExpanderPane: {
 						areaElement = _gridAnchorableExpanderPaneDropTargets;
-						var dropAreaAnchorableExpanderGroupPane = area as DropArea<LayoutAnchorableExpanderControl>;
+						//var dropAreaAnchorableExpanderGroupPane = area as DropArea<LayoutAnchorableExpanderControl>;
 
-						var layoutExpanderGroupPane = dropAreaAnchorableExpanderGroupPane.AreaElement.Model as LayoutAnchorableExpander;
-						if(layoutExpanderGroupPane.Root.Manager != floatingWindowManager) {
-							_visibleAreas.Remove(area);
-							return;
-						}
+						//var layoutExpanderGroupPane = dropAreaAnchorableExpanderGroupPane.AreaElement.Model as LayoutAnchorableExpander;
+						//if(layoutExpanderGroupPane.Root.Manager != floatingWindowManager) {
+						//	_visibleAreas.Remove(area);
+						//	return;
+						//}
 
-						SetDropTargetIntoVisibility2(layoutExpanderGroupPane);
+						//SetDropTargetIntoVisibility2(layoutExpanderGroupPane);
 					}
 					break;
 				case DropAreaType.ActivityBar: {
@@ -878,6 +878,7 @@ namespace AvalonDock.Controls {
 					}
 					break;
 			}
+			Debug.WriteLine($"{areaElement.Name}, {area.GetType()}", "OverlayWindow DragEnter 9");
 
 			Canvas.SetLeft(areaElement, area.DetectionRect.Left - Left);
 			Canvas.SetTop(areaElement, area.DetectionRect.Top - Top);

@@ -8,7 +8,6 @@
  ************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Markup;
 using System.Xml.Serialization;
@@ -22,13 +21,12 @@ namespace AvalonDock.Layout {
 	public class LayoutAnchorableExpanderGroupPane :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable {
 		#region fields
 
-		private int _selectedIndex = -1;
-
 		[XmlIgnore]
 		private bool _autoFixSelectedContent = true;
 
 		private string _name = null;
 		private string _id;
+		private int _selectedIndex = -1;
 
 		#endregion fields
 
@@ -38,30 +36,9 @@ namespace AvalonDock.Layout {
 		public LayoutAnchorableExpanderGroupPane() {
 		}
 
-		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
-		public LayoutAnchorableExpanderGroupPane(LayoutAnchorableExpanderGroup anchorable) {
-			Children.Add(anchorable);
-		}
-
 		#endregion Constructors
 
 		#region Properties
-
-		//public List<LayoutAnchorable> LayoutAnchorables => Children.Select(o => o.Children.First().Children.First())
-		public List<LayoutAnchorable> LayoutAnchorables => Children.Select(o => o.Children.First().Content)
-			.OfType<LayoutAnchorable>()
-			.ToList();
-
-		public LayoutAnchorableExpanderGroup Selected => Children[SelectedContentIndex];
-
-		/// <summary>Gets whether the pane can be hidden.</summary>
-		public bool CanHide => Children.All(a => a.CanHide);
-
-		/// <summary>Gets whether the pane can be closed.</summary>
-		public bool CanClose => Children.All(a => a.CanClose);
-
-		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
-		public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		public string Name {
@@ -74,9 +51,9 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public void SetVisible(bool v) {
-			IsVisible = v;
-		}
+		//public void SetVisible(bool v) {
+		//	IsVisible = v;
+		//}
 
 		/// <summary>Gets or sets the index of the selected content in the pane.</summary>
 		public int SelectedContentIndex {
@@ -97,11 +74,6 @@ namespace AvalonDock.Layout {
 				//RaisePropertyChanged(nameof(SelectedContent));
 			}
 		}
-
-		/// <summary>Gets the selected content in the pane or null.</summary>
-		private LayoutAnchorableExpanderGroup SelectedContent2 => _selectedIndex == -1 ? null : Children[_selectedIndex];
-
-		//public LayoutContent SelectedContent => SelectedContent2?.SelectedContent;
 
 		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
 		string ILayoutPaneSerializable.Id {
@@ -135,8 +107,7 @@ namespace AvalonDock.Layout {
 				SelectedContentIndex = i;
 				break;
 			}
-			RaisePropertyChanged(nameof(CanClose));
-			RaisePropertyChanged(nameof(CanHide));
+
 			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 			base.OnChildrenCollectionChanged();
 		}
@@ -188,17 +159,6 @@ namespace AvalonDock.Layout {
 		#region Public Methods
 
 		/// <summary>
-		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
-		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
-		/// </summary>
-		/// <param name="content"></param>
-		public int IndexOf(LayoutAnchorableExpanderGroup content) {
-			if(!(content is LayoutAnchorableExpanderGroup anchorableChild))
-				return -1;
-			return Children.IndexOf(anchorableChild);
-		}
-
-		/// <summary>
 		/// Gets whether the model hosts only 1 <see cref="LayoutAnchorable"/> (True)
 		/// or whether there are more than one <see cref="LayoutAnchorable"/>s below
 		/// this model pane.
@@ -215,27 +175,11 @@ namespace AvalonDock.Layout {
 
 		#region Internal Methods
 
-		/// <summary>Invalidates the current <see cref="SelectedContentIndex"/> and sets the index for the next avialable child with IsEnabled == true.</summary>
-		internal void SetNextSelectedIndex() {
-			SelectedContentIndex = -1;
-			for(var i = 0; i < Children.Count; ++i) {
-				if(!Children[i].IsEnabled)
-					continue;
-				SelectedContentIndex = i;
-				return;
-			}
-		}
-
-		/// <summary>
-		/// Updates whether this object is hosted at the root level of a floating window control or not.
-		/// </summary>
-		internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-
 		#endregion Internal Methods
 
 		#region Private Methods
 
-		private void AutoFixSelectedContent() {
+		protected void AutoFixSelectedContent() {
 			if(!_autoFixSelectedContent)
 				return;
 			if(SelectedContentIndex >= ChildrenCount)

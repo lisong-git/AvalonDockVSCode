@@ -10,7 +10,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Controls.Primitives;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
@@ -40,9 +39,6 @@ namespace AvalonDock.Layout {
 		#endregion Constructors
 
 		#region Properties
-
-		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
-		//public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		public string Name {
@@ -181,9 +177,14 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public LayoutAnchorableExpanderGroup SelectedItem => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
-
-
+		public LayoutAnchorableExpanderGroup SelectedItem {
+			get => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
+			set {
+				//if(value != SelectedItem) { 
+					
+				//}
+			}
+		}
 
 		#endregion Public Methods
 

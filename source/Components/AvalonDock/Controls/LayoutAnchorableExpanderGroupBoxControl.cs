@@ -28,7 +28,7 @@ namespace AvalonDock.Controls {
 	{
 		#region fields
 
-		private readonly LayoutAnchorableExpanderGroupBox _model;
+		private readonly LayoutAnchorableExpanderGroupBox _model = new LayoutAnchorableExpanderGroupBox();
 
 		#endregion fields
 
@@ -52,6 +52,8 @@ namespace AvalonDock.Controls {
 			// this.LayoutUpdated += new EventHandler( OnLayoutUpdated );
 			SizeChanged += OnSizeChanged;
 		}
+
+
 
 		#endregion Constructors
 

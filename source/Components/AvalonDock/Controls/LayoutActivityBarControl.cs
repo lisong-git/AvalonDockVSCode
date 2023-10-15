@@ -10,7 +10,10 @@
 using AvalonDock.Layout;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -143,8 +146,24 @@ namespace AvalonDock.Controls {
 
 		#endregion Private Methods
 
-		//public IEnumerable GetOverflowItems() {
+		//public IEnumerable<LayoutAnchorableExpanderGroup> ChildrenOverflowing {
+		//	get {
+		//		//Debug.WriteLine($"{Children.OfType<LayoutDocument>().Count()}, {Children.OfType<LayoutDocument>().Where(o=> o.IsVisible).Count()}", "ChildrenOverflowing 1");
 
+		//		//foreach(var child in Items) {
+		//		//	Debug.WriteLine($"{child.GetType()}, {child?.TabItem}, {child?.TabItem?.IsVisible}, ", "ChildrenOverflowing 2");
+		//		//}
+
+		//		foreach(var child in Items) {
+		//			Debug.WriteLine($"{child.GetType()}, ", "ChildrenOverflowing 2");
+		//		}
+		//		//var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true)).ToList();
+		//		var listSorted = ItemsSource.Cast<LayoutAnchorableExpanderGroup>()
+		//			//.Where(o=> !(o.TabItem?.IsVisible == true))
+		//			.ToList();
+		//		//listSorted.Sort();
+		//		return listSorted;
+		//	}
 		//}
 	}
 }

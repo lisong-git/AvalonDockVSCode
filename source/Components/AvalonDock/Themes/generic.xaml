@@ -378,7 +378,7 @@
 
 	<Style TargetType="{x:Type avalonDockControls:AnchorablePaneTitle}" BasedOn="{StaticResource AnchorablePaneTitleStyle}"/>
 	
-	<ControlTemplate x:Key="AnchorSideTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorSideControl}">
+	<!--<ControlTemplate x:Key="AnchorSideTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorSideControl}">
 		<ItemsControl Background="{TemplateBinding Background}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children1}">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -387,10 +387,10 @@
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</ItemsControl>
-	</ControlTemplate>
+	</ControlTemplate>-->
 
 	<!--这里是边框停靠栏組-->
-	<ControlTemplate x:Key="AnchorGroupTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorGroupControl}">
+	<!--<ControlTemplate x:Key="AnchorGroupTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorGroupControl}">
 		<ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children}" Background="Green">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -413,9 +413,9 @@
 				</Style>
 			</ItemsControl.Style>
 		</ItemsControl>
-	</ControlTemplate>
+	</ControlTemplate>-->
 
-	<ControlTemplate x:Key="AnchorTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorControl}">
+	<!--<ControlTemplate x:Key="AnchorTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorControl}">
 		<Border
 			Margin="2"
 			Padding="2"
@@ -426,7 +426,7 @@
 				ContentTemplate="{Binding AnchorableHeaderTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
 				ContentTemplateSelector="{Binding AnchorableHeaderTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}" />
 		</Border>
-	</ControlTemplate>
+	</ControlTemplate>-->
 
 	<Style x:Key="{x:Type avalonDockControls:OverlayWindow}" TargetType="{x:Type avalonDockControls:OverlayWindow}">
 		<Setter Property="Background" Value="Transparent" />
@@ -671,9 +671,9 @@
 	<Style x:Key="{x:Type avalonDock:DockingManager}" TargetType="{x:Type avalonDock:DockingManager}">
 		<Setter Property="DocumentPaneControlStyle" Value="{StaticResource DocumentPaneControlStyle}" />
 		<Setter Property="AnchorablePaneControlStyle" Value="{StaticResource AnchorablePaneControlStyle}" />
-		<Setter Property="AnchorSideTemplate" Value="{StaticResource AnchorSideTemplate}" />
+		<!--<Setter Property="AnchorSideTemplate" Value="{StaticResource AnchorSideTemplate}" />
 		<Setter Property="AnchorGroupTemplate" Value="{StaticResource AnchorGroupTemplate}" />
-		<Setter Property="AnchorTemplate" Value="{StaticResource AnchorTemplate}" />
+		<Setter Property="AnchorTemplate" Value="{StaticResource AnchorTemplate}" />-->
 		<Setter Property="DocumentHeaderTemplate" Value="{StaticResource DocumentHeaderTemplate}" />
 		<Setter Property="AnchorableHeaderTemplate" Value="{StaticResource AnchorableHeaderTemplate}" />
 		<Setter Property="DocumentTitleTemplate" Value="{StaticResource DocumentTitleTemplate}" />
@@ -704,7 +704,7 @@
 								Grid.Row="1"
 								Grid.Column="1"
 								Content="{TemplateBinding LayoutRootPanel}" />
-							<ContentPresenter
+							<!--<ContentPresenter
 								Grid.Row="0"
 								Grid.RowSpan="3"
 								Grid.Column="2"
@@ -723,14 +723,14 @@
 								Grid.Row="2"
 								Grid.Column="0"
 								Grid.ColumnSpan="3"
-								Content="{TemplateBinding BottomSidePanel}" />
-							<ContentPresenter
+								Content="{TemplateBinding BottomSidePanel}" />-->
+							<!--<ContentPresenter
 								x:Name="PART_AutoHideArea"
 								Grid.Row="1"
 								Grid.Column="1"
 								HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
 								VerticalAlignment="{TemplateBinding VerticalAlignment}"
-								Content="{TemplateBinding AutoHideWindow}" />
+								Content="{TemplateBinding AutoHideWindow}" />-->
 							<!--    -->
 						</Grid>
 					</Border>
@@ -1142,9 +1142,9 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="{x:Type avalonDockControls:LayoutAutoHideWindowControl}" TargetType="{x:Type avalonDockControls:LayoutAutoHideWindowControl}">
+	<!--<Style x:Key="{x:Type avalonDockControls:LayoutAutoHideWindowControl}" TargetType="{x:Type avalonDockControls:LayoutAutoHideWindowControl}">
 		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-	</Style>
+	</Style>-->
 
 	<Style x:Key="{x:Type avalonDockControls:NavigatorWindow}" TargetType="{x:Type avalonDockControls:NavigatorWindow}">
 		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />

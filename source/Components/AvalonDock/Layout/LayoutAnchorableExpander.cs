@@ -10,6 +10,7 @@
 using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Xml.Serialization;
 
 namespace AvalonDock.Layout {
@@ -17,19 +18,19 @@ namespace AvalonDock.Layout {
 	/// A layout anchorable pane control can have multiple LayoutAnchorable controls  as its children.
 	/// </summary>
 	[Serializable]
-	public class LayoutAnchorableExpander :LayoutPositionable,  ILayoutPositionableElement, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpander :LayoutPositionable,  ILayoutPositionableElement, IExpander, ILayoutPaneSerializable {
 		#region fields
 		private string _name = null;
 		private string _id;
 		private bool _isExpanded;
-
+		private ExpandDirection _expandDirection = ExpandDirection.Down;
 		#endregion fields
 
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
 		public LayoutAnchorableExpander() {
-			UpdateHeight();
+			UpdateSize();
 		}
 
 		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
@@ -38,36 +39,24 @@ namespace AvalonDock.Layout {
 		//	Content = anchorable;
 		//	Title = anchorable.Title;
 		//	_isExpanded = true;
-			
 		//}
 
 		#endregion Constructors
 
-		//#region Title
-
-		///// <summary><see cref="Title"/> dependency property.</summary>
-		//public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(LayoutItem),
-		//		new FrameworkPropertyMetadata(null, OnTitleChanged));
-
-		///// <summary>Gets/sets the the title of the element.</summary>
-		//[Bindable(true), Description("Gets/sets the the title of the element."), Category("Other")]
-		//public string Title {
-		//	get => (string) GetValue(TitleProperty);
-		//	set => SetValue(TitleProperty, value);
-		//}
-
-		///// <summary>Handles changes to the <see cref="Title"/> property.</summary>
-		//private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnTitleChanged(e);
-
-		///// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Title"/> property.</summary>
-		//protected virtual void OnTitleChanged(DependencyPropertyChangedEventArgs e) {
-		//	if(LayoutElement != null)
-		//		LayoutElement.Title = (string) e.NewValue;
-		//}
-
-		//#endregion Title
-
 		#region Properties
+
+		public ExpandDirection ExpandDirection {
+			get => _expandDirection;
+			set {
+				if(_expandDirection == value)
+					return;
+
+				RaisePropertyChanging(nameof(ExpandDirection));
+				_expandDirection = value;
+				UpdateSize();
+				RaisePropertyChanged(nameof(ExpandDirection));
+			}
+		}
 
 		public bool IsExpanded {
 			get => _isExpanded;
@@ -79,30 +68,26 @@ namespace AvalonDock.Layout {
 				_isExpanded = value;
 				//Debug.WriteLine($"==========================================", "LayoutAnchorableExpanderPane IsExpanded");
 				//Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 1");
-				UpdateHeight();
+				UpdateSize();
 				//Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 2");
 				RaisePropertyChanged(nameof(IsExpanded));
 			}
 		}
 
-		private void UpdateHeight() {
-			//Debug.WriteLine($"{LayoutAnchorable?.Title}", "LayoutAnchorableExpanderPane UpdateHeight 0");
-			//Debug.WriteLine($"{DockHeight}", "LayoutAnchorableExpanderPane UpdateHeight 1");
-
+		private void UpdateSize() {
+			//Debug.WriteLine($"{LayoutAnchorable?.Title}", "LayoutAnchorableExpanderPane UpdateSize 0");
 			if(IsExpanded) {
-				var t = new GridLength(1.0, GridUnitType.Star);
-				if(DockHeight == t) {
-					DockHeight = new GridLength(1.0, GridUnitType.Pixel);
+				if(ExpandDirection == ExpandDirection.Right) {
+					ForceWidth(new GridLength(1.0, GridUnitType.Star));
+				} else {
+					ForceHeight(new GridLength(1.0, GridUnitType.Star));
 				}
-				//Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 2");
-				DockHeight = t;
-				// DockMinHeight = double.MaxValue;
 			} else {
-				var  t = new GridLength(25, GridUnitType.Pixel);
-				//Debug.WriteLine($"{DockHeight}, {t}", "LayoutAnchorableExpanderPane UpdateHeight 3");
-				DockHeight = t;
-
-				// Dock
+				if(ExpandDirection == ExpandDirection.Right) {
+					DockWidth = new GridLength(25, GridUnitType.Pixel);
+				} else {
+					DockHeight = new GridLength(25, GridUnitType.Pixel);
+				}
 			}
 		}
 

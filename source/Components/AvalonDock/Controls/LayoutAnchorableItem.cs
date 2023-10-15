@@ -147,7 +147,7 @@ namespace AvalonDock.Controls
 			return _anchorable.CanAutoHide;
 		}
 
-		private void ExecuteAutoHideCommand(object parameter) => _anchorable?.Root?.Manager?.ExecuteAutoHideCommand(_anchorable);
+		//private void ExecuteAutoHideCommand(object parameter) => _anchorable?.Root?.Manager?.ExecuteAutoHideCommand(_anchorable);
 
 		#endregion AutoHideCommand
 
@@ -272,7 +272,7 @@ namespace AvalonDock.Controls
 		{
 			_defaultHideCommand = new RelayCommand<object>(ExecuteHideCommand, CanExecuteHideCommand);
 			//_expandCommand = new RelayCommand<object>(ExecuteExpandCommand, CanExecuteExpandCommand);
-			_defaultAutoHideCommand = new RelayCommand<object>(ExecuteAutoHideCommand, CanExecuteAutoHideCommand);
+			//_defaultAutoHideCommand = new RelayCommand<object>(ExecuteAutoHideCommand, CanExecuteAutoHideCommand);
 			_defaultDockCommand = new RelayCommand<object>(ExecuteDockCommand, CanExecuteDockCommand);
 			base.InitDefaultCommands();
 		}
@@ -282,7 +282,7 @@ namespace AvalonDock.Controls
 		{
 			if (HideCommand == _defaultHideCommand) BindingOperations.ClearBinding(this, HideCommandProperty);
 			//if(ExpandCommand == _expandCommand) BindingOperations.ClearBinding(this, ExpandCommandProperty);
-			if(AutoHideCommand == _defaultAutoHideCommand) BindingOperations.ClearBinding(this, AutoHideCommandProperty);
+			//if(AutoHideCommand == _defaultAutoHideCommand) BindingOperations.ClearBinding(this, AutoHideCommandProperty);
 			if (DockCommand == _defaultDockCommand) BindingOperations.ClearBinding(this, DockCommandProperty);
 			base.ClearDefaultBindings();
 		}
@@ -292,7 +292,7 @@ namespace AvalonDock.Controls
 		{
 			if(HideCommand == null) HideCommand = _defaultHideCommand;
 			if (ExpandCommand == null) ExpandCommand = _expandCommand;
-			if(AutoHideCommand == null) AutoHideCommand = _defaultAutoHideCommand;
+			//if(AutoHideCommand == null) AutoHideCommand = _defaultAutoHideCommand;
 			if (DockCommand == null) DockCommand = _defaultDockCommand;
 			Visibility = _anchorable.IsVisible ? Visibility.Visible : Visibility.Hidden;
 			base.SetDefaultBindings();

@@ -21,7 +21,7 @@ namespace AvalonDock.Controls {
 	/// This Grid based control can host multiple other controls in its Children collection
 	/// (<see cref="LayoutAnchorableControl"/>).
 	/// </summary>
-	public class LayoutAnchorableExpanderGroupControl :ExpanderGridControl<LayoutAnchorableExpander>, ILayoutControl {
+	public class LayoutAnchorableExpanderGroupControl :ExpanderGridControl<LayoutAnchorableExpander> {
 		#region fields
 
 
@@ -29,14 +29,6 @@ namespace AvalonDock.Controls {
 
 		#region Constructors
 
-		/// <summary>
-		/// Class constructor from layout model.
-		/// </summary>
-		/// <param name="model"></param>
-		//internal LayoutAnchorableExpanderGroupControl(LayoutAnchorablePaneGroup2 model):base(model) {
-		//	Model = model;
-		//	Debug.WriteLine($"2", "LayoutAnchorableExpanderGroupControl");
-		//}
 
 		public LayoutAnchorableExpanderGroupControl() {
 			//Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");

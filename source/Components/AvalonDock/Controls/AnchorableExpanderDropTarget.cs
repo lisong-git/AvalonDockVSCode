@@ -75,6 +75,9 @@ namespace AvalonDock.Controls {
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
 			switch(Type) {
 				case DropTargetType.AnchorableExpanderPaneDockBottom:
+
+
+
 					#region DropTargetType.AnchorableExpanderPaneDockBottom
 
 					{

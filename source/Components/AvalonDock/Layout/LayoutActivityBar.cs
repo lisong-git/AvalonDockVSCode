@@ -17,6 +17,7 @@ namespace AvalonDock.Layout {
 
 		private string _id;
 		private LayoutAnchorableExpanderGroup _current;
+		private LayoutAnchorableExpanderGroupBox _layoutAnchorableExpanderGroupBox;
 
 		#endregion fields
 
@@ -24,12 +25,31 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Class constructor</summary>
 		public LayoutActivityBar() {
-			
 		}
+
 
 		#endregion Constructors
 
 		#region Properties
+
+		public LayoutAnchorableExpanderGroupBox LayoutAnchorableExpanderGroupBox {
+			get => _layoutAnchorableExpanderGroupBox;
+			set {
+				if(value != _layoutAnchorableExpanderGroupBox) {
+					//var old = _layoutAnchorableExpanderGroupBox;
+					//if(old != null) {
+					//	Root.RootPanel.RemoveChild(old);
+					//}
+					_layoutAnchorableExpanderGroupBox = value;
+
+					//if(_layoutAnchorableExpanderGroupBox != null) {
+					//	Debug.WriteLine($"{Root.RootPanel == null}", "LayoutAnchorableExpanderGroupBox");
+					//	Parent.Root.RootPanel.InsertChildAt(0, _layoutAnchorableExpanderGroupBox);
+					//}
+					RaisePropertyChanged(nameof(LayoutAnchorableExpanderGroupBox));
+				}
+			}
+		}
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		//public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
@@ -49,32 +69,32 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public ICommand TestCommand => new RelayCommand<object>((p) => {
-		 var v =	Root.Manager.LayoutAnchorableExpanderGroupBox;
-			//MessageBox.Show($"{box?.IsVisible}");
-			if(v != null) {
-				v.SetVisible(!v.IsVisible);
-			}
-		});
+		//public ICommand TestCommand => new RelayCommand<object>((p) => {
+		// var v =	Root.Manager.LayoutAnchorableExpanderGroupBox;
+		//	//MessageBox.Show($"{box?.IsVisible}");
+		//	if(v != null) {
+		//		v.SetVisible(!v.IsVisible);
+		//	}
+		//});
 
-		public ICommand TestCommand2 => new RelayCommand<object>((p) => {
-			var box =  Root.Manager.LayoutAnchorableExpanderGroupBoxControl;
-			//MessageBox.Show($"{box?.IsVisible}");
-			Debug.WriteLine($"{box!= null}, {p.GetType()}", "TestCommand 2");
-			var box2 =  Root.Manager.LayoutAnchorableExpanderGroupBox;
-			//MessageBox.Show($"{box?.IsVisible}");
-			if(box != null) {
-				//box.Se
-				var index = Index;
-				Debug.WriteLine($"{index}, {box.SelectedIndex}", "TestCommand2 1");
-				if(box.SelectedIndex == index) {
-					box2.SetVisible(!box2.IsVisible);
-				} else {
-					box.SelectedIndex = index;
-					box2.SetVisible(true);
-				}
-			}
-		});
+		//public ICommand TestCommand2 => new RelayCommand<object>((p) => {
+		//	var box =  Root.Manager.LayoutAnchorableExpanderGroupBoxControl;
+		//	//MessageBox.Show($"{box?.IsVisible}");
+		//	Debug.WriteLine($"{box!= null}, {p.GetType()}", "TestCommand 2");
+		//	var box2 =  Root.Manager.LayoutAnchorableExpanderGroupBox;
+		//	//MessageBox.Show($"{box?.IsVisible}");
+		//	if(box != null) {
+		//		//box.Se
+		//		var index = Index;
+		//		Debug.WriteLine($"{index}, {box.SelectedIndex}", "TestCommand2 1");
+		//		if(box.SelectedIndex == index) {
+		//			box2.SetVisible(!box2.IsVisible);
+		//		} else {
+		//			box.SelectedIndex = index;
+		//			box2.SetVisible(true);
+		//		}
+		//	}
+		//});
 
 		#endregion Properties
 
@@ -195,19 +215,50 @@ namespace AvalonDock.Layout {
 
 		#endregion Private Methods
 
-
-		public IEnumerable<LayoutAnchorableExpanderGroup> ChildrenOverflowing {
+		public ObservableCollection<LayoutAnchorableExpanderGroup> OverflowItems {
 			get {
-				//Debug.WriteLine($"{Children.OfType<LayoutDocument>().Count()}, {Children.OfType<LayoutDocument>().Where(o=> o.IsVisible).Count()}", "ChildrenOverflowing 1");
+				Debug.WriteLine($"{Parent.GetType().Name}, {Root == null}, {Root?.Manager == null}, {Root?.Manager?.LayoutAnchorableExpanderGroupBox == null}", "OverflowItems 1");
+				//Debug.WriteLine($"{Parent.Root.Manager.LayoutAnchorableExpanderGroupBox == null}, {Parent.Root.Manager.LayoutAnchorableExpanderGroupBoxControl?.Model == null}", "OverflowItems 1");
+				//Debug.WriteLine($"{Parent.Root.Manager.LayoutAnchorableExpanderGroupBox == null}, {Parent.Root.Manager.LayoutAnchorableExpanderGroupBoxControl?.Model == null}", "OverflowItems 1");
+				var children = Root.Manager.LayoutAnchorableExpanderGroupBox?.Children;
 
-				//foreach(var child in Children) {
-				//	Debug.WriteLine($"{child.GetType()}, {child.TabItem}, {child.TabItem.IsVisible}, ", "ChildrenOverflowing 2");
-				//}
-				var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !o.TabItem.IsVisible).ToList();
-				listSorted.Sort();
-				return listSorted;
+				if(children != null)
+					foreach(var child in children) {
+						Debug.WriteLine($"{child.GetType()}, {child?.TabItem}, {child?.TabItem?.IsVisible}, ", "OverflowItems 2");
+					}
+				////var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true)).ToList();
+				//var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>()
+				//	//.Where(o=> !(o.TabItem?.IsVisible == true))
+				//	;
+				////listSorted.Sort();
+				//return listSorted.ToList();
+				return children;
+			}
+			set {
+				Debug.WriteLine($"", "OverflowItems 1");
 			}
 		}
+
+
+
+		int count = 0;
+
+		public string BindingTest {
+			get {
+
+				Debug.WriteLine($"{OverflowItems?.Count}", "BindingTest 1");
+
+				//return "BindingTest";
+				return count++.ToString();
+			}
+			//set {
+			//	_bindingTest = value;
+			//	RaisePropertyChanged(nameof(BindingTest));
+			//}
+		}
+
+
+
 
 		public bool IsOverflowing => Children.OfType<LayoutAnchorableExpanderGroup>().Any(o => !o.TabItem.IsVisible);
 

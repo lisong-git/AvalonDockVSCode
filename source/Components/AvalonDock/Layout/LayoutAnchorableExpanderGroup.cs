@@ -26,7 +26,7 @@ namespace AvalonDock.Layout {
 	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup {
 		#region fields
 
-		///private Orientation _orientation;
+		private Orientation _orientation;
 		private int _selectedIndex;
 
 		#endregion fields
@@ -38,8 +38,9 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Class constructor <paramref name="firstChild"/> to be inserted into collection of children models.</summary>
-		public LayoutAnchorableExpanderGroup(LayoutAnchorableExpander firstChild) {
+		public LayoutAnchorableExpanderGroup(LayoutAnchorableExpander firstChild, Orientation orientation = Orientation.Vertical) {
 			Children.Add(firstChild);
+			_orientation = orientation;
 		}
 
 		#endregion Constructors
@@ -85,13 +86,13 @@ namespace AvalonDock.Layout {
 		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
 		/// </summary>
 		public Orientation Orientation {
-			get => Orientation.Vertical;
+			get => _orientation;
 			set {
-				//if(value == _orientation)
-				//	return;
-				//RaisePropertyChanging(nameof(Orientation));
-				//_orientation = value;
-				//RaisePropertyChanged(nameof(Orientation));
+				if(value == _orientation)
+					return;
+				RaisePropertyChanging(nameof(Orientation));
+				_orientation = value;
+				RaisePropertyChanged(nameof(Orientation));
 			}
 		}
 
@@ -274,7 +275,11 @@ namespace AvalonDock.Layout {
 				_tabItem = value; 
 				//RaisePropertyChanged(nameof(TabItem)); 
 			}
-
 		}
+
+		public override string ToString() {
+			return Title;
+		}
+
 	}
 }

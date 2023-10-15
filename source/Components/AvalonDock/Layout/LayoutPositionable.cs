@@ -32,6 +32,7 @@ namespace AvalonDock.Layout {
 		private double? _resizableAbsoluteDockWidth;
 
 		// DockHeight fields
+		//private GridLength _dockHeight = new GridLength(1.0, GridUnitType.Star);
 		private GridLength _dockHeight = new GridLength(1.0, GridUnitType.Star);
 
 		private double? _resizableAbsoluteDockHeight;
@@ -131,6 +132,29 @@ namespace AvalonDock.Layout {
 				RaisePropertyChanged(nameof(DockHeight));
 				OnDockHeightChanged();
 			}
+		}
+
+		//Todo 寻找更好的解决方法
+		/// <summary>
+		/// 强制更新高度
+		/// </summary>
+		/// <param name="value"></param>
+		public void ForceHeight(GridLength value) {
+			if(value.IsAbsolute)
+				_resizableAbsoluteDockHeight = value.Value;
+			RaisePropertyChanging(nameof(DockHeight));
+			_dockHeight = value;
+			RaisePropertyChanged(nameof(DockHeight));
+			OnDockHeightChanged();
+		}
+
+		public void ForceWidth(GridLength value) {
+			if(value.IsAbsolute)
+				_resizableAbsoluteDockWidth = value.Value;
+			RaisePropertyChanging(nameof(DockWidth));
+			_dockWidth = value;
+			RaisePropertyChanged(nameof(DockWidth));
+			OnDockWidthChanged();
 		}
 
 		public double FixedDockHeight => _dockHeight.IsAbsolute && _dockHeight.Value >= _dockMinHeight ? _dockHeight.Value : _dockMinHeight;

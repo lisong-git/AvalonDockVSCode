@@ -31,11 +31,11 @@ namespace AvalonDock.Controls {
 	/// <seealso cref="Grid"/>
 	/// <seealso cref="ILayoutControl"/>
 	/// <seealso cref="IAdjustableSizeLayout"/>
-	public abstract class ExpanderGridControl<T> :Grid, ILayoutControl, IAdjustableSizeLayout where T : class, ILayoutElement {
+	public abstract class ExpanderGridControl<T> :Grid,  IAdjustableSizeLayout where T : class, ILayoutElement {
 		#region fields
 
 		private LayoutPositionableGroup<T> _model;
-		private readonly Orientation _orientation = Orientation.Vertical;
+		//private readonly Orientation _orientation = Orientation.Vertical;
 		private bool _initialized;
 		private ChildrenTreeChange? _asyncRefreshCalled;
 		private readonly ReentrantFlag _fixingChildrenDockLengths = new ReentrantFlag();
@@ -53,14 +53,9 @@ namespace AvalonDock.Controls {
 		/// <param name="model"></param>
 		/// <param name="orientation"></param>
 		internal ExpanderGridControl() {
-			FlowDirection = System.Windows.FlowDirection.LeftToRight;
+			//FlowDirection = System.Windows.FlowDirection.LeftToRight;
 			Unloaded += OnUnloaded;
-
 		}
-
-		//internal LayoutGridControl2(LayoutPositionableGroup<T> model):base() {
-		//	_model = model ?? throw new ArgumentNullException(nameof(model));
-		//}
 
 		#endregion Constructors
 
@@ -69,10 +64,8 @@ namespace AvalonDock.Controls {
 		public virtual ILayoutElement Model {
 			get => _model;
 			set {
-				//Debug.WriteLine($"{value.GetType()}", "LayoutGridControl2_Model");
 				if(_model == value)
 					return;
-				//LayoutAnchorablePaneGroup2
 				if(value is LayoutPositionableGroup<T> model) {
 					_model = model;
 					UpdateChildren();
@@ -80,7 +73,7 @@ namespace AvalonDock.Controls {
 			}
 		}
 
-		public Orientation Orientation => (_model as ILayoutOrientableGroup).Orientation;
+		private Orientation Orientation => (_model as ILayoutOrientableGroup).Orientation;
 
 		private bool AsyncRefreshCalled => _asyncRefreshCalled != null;
 
@@ -174,9 +167,8 @@ namespace AvalonDock.Controls {
 			AttachPropertyChangeHandler();
 		}
 
-		public void UpdateItem() {
-			
-		}
+		//public void UpdateItem() {			
+		//}
 
 		private void AttachPropertyChangeHandler() {
 			if(_model == null || _model.ChildrenCount == 0) { return; }
@@ -193,11 +185,12 @@ namespace AvalonDock.Controls {
 		}
 
 		private void OnChildModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			//Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "ExpanderGridControl OnChildModelPropertyChanged");
+			Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "ExpanderGridControl OnChildModelPropertyChanged");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			if(AsyncRefreshCalled)
 				return;
+
 			if(_fixingChildrenDockLengths.CanEnter && e.PropertyName == nameof(ILayoutPositionableElement.DockWidth) && Orientation == System.Windows.Controls.Orientation.Horizontal) {
 				if(ColumnDefinitions.Count != InternalChildren.Count)
 					return;
@@ -205,6 +198,11 @@ namespace AvalonDock.Controls {
 				var childFromModel = InternalChildren.OfType<ILayoutControl>().First(ch => ch.Model == changedElement) as UIElement;
 				var indexOfChild = InternalChildren.IndexOf(childFromModel);
 				ColumnDefinitions[indexOfChild].Width = changedElement.DockWidth;
+				if(sender is LayoutAnchorableExpander pane) {
+					if(indexOfChild > 0 && InternalChildren[indexOfChild - 1] is LayoutGridResizerControl sp) {
+						sp.IsEnabled = pane.IsExpanded;
+					}
+				}
 			} else if(_fixingChildrenDockLengths.CanEnter && e.PropertyName == nameof(ILayoutPositionableElement.DockHeight) && Orientation == System.Windows.Controls.Orientation.Vertical) {
 				if(RowDefinitions.Count != InternalChildren.Count)
 					return;
@@ -217,18 +215,13 @@ namespace AvalonDock.Controls {
 						sp.IsEnabled = pane.IsExpanded;
 					}
 				}
-			}
-			//else if(sender is LayoutAnchorableExpanderPaneControl changedElement && _fixingChildrenDockLengths.CanEnter && e.PropertyName == nameof(LayoutAnchorableExpanderPaneControl.IsExpanded) && Orientation == Orientation.Vertical) {
-
-
-			//}
-			
-			else if(e.PropertyName == nameof(ILayoutPositionableElement.IsVisible))
+			} else if(e.PropertyName == nameof(ILayoutPositionableElement.IsVisible)) {
 				UpdateRowColDefinitions();
+			}
 		}
 
 		private void UpdateRowColDefinitions() {
-			//Debug.WriteLine($"", "ExpanderGridControl UpdateRowColDefinitions 1");
+			Debug.WriteLine($"{Orientation}", "ExpanderGridControl UpdateRowColDefinitions 1");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var root = _model.Root;
@@ -247,9 +240,11 @@ namespace AvalonDock.Controls {
 				var iChild = 0;
 				// BD: 24.08.2020 added check for iChild against InternalChildren.Count
 				for(var iChildModel = 0; iChildModel < _model.Children.Count && iChild < InternalChildren.Count; iChildModel++, iColumn++, iChild++) {
-					var childModel = _model.Children[iChildModel] as ILayoutPositionableElement;
+					var childModel = _model.Children[iChildModel] as LayoutAnchorableExpander;
 					ColumnDefinitions.Add(new ColumnDefinition {
-						Width = childModel.IsVisible ? childModel.DockWidth : new GridLength(0.0, GridUnitType.Pixel),
+						//Width = childModel.IsVisible ? childModel.DockWidth : new GridLength(0.0, GridUnitType.Pixel),
+						Width = childModel.IsVisible ? (childModel.IsExpanded ? childModel.DockWidth : new GridLength(25, GridUnitType.Pixel)) : new GridLength(0.0, GridUnitType.Pixel),
+
 						MinWidth = childModel.IsVisible ? childModel.CalculatedDockMinWidth() : 0.0
 					});
 					Grid.SetColumn(InternalChildren[iChild], iColumn);
@@ -288,7 +283,7 @@ namespace AvalonDock.Controls {
 						MinHeight = childModel.IsVisible ? childModel.CalculatedDockMinHeight() : 0.0
 					});
 					Grid.SetRow(InternalChildren[iChild], iRow);
-
+					
 					//if (RowDefinitions.Last().Height.Value == 0.0)
 					//    System.Diagnostics.Debugger.Break();
 
