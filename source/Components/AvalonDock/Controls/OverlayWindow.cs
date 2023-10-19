@@ -506,7 +506,7 @@ namespace AvalonDock.Controls {
 
 					//		//Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 2");
 
-					//		var parentPaneModel = dropAreaAnchorablePane.AreaElement.Model as LayoutAnchorableExpanderGroupBox;
+					//		var parentPaneModel = dropAreaAnchorablePane.AreaElement.Model as LayoutAnchorableExpanderGroupPane;
 					//		LayoutAnchorableTabItem lastAreaTabItem = null;
 					//		foreach(var dropAreaTabItem in dropAreaAnchorablePane.AreaElement.FindVisualChildren<LayoutAnchorableTabItem>()) {
 					//			var tabItemModel = dropAreaTabItem.Model as LayoutAnchorable;

@@ -29,6 +29,9 @@ namespace AvalonDock.Layout {
 		private Orientation _orientation;
 		private int _selectedIndex;
 
+		[XmlIgnore]
+		private bool _autoFixSelectedContent = true;
+
 		#endregion fields
 
 		#region Constructors
@@ -46,11 +49,6 @@ namespace AvalonDock.Layout {
 		#endregion Constructors
 
 		#region Properties
-
-		//public LayoutContent SelectedItem {
-		//	get => _current ?? Children.First(); 
-		//	//set => _current = value;
-		//}
 
 		public string Title => Children.FirstOrDefault()?.Title ?? "默认";
 
@@ -180,8 +178,8 @@ namespace AvalonDock.Layout {
 		#endregion Private Methods
 
 
-		public bool CanHide => true;
-		public bool CanClose => true;
+		//public bool CanHide => true;
+		//public bool CanClose => true;
 
 		#region IsSelected
 
@@ -195,8 +193,12 @@ namespace AvalonDock.Layout {
 				var oldValue = _isSelected;
 				RaisePropertyChanging(nameof(IsSelected));
 				_isSelected = value;
-				//if(Parent is ILayoutContentSelector parentSelector)
-				//	parentSelector.SelectedIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
+				if(_isSelected && Parent is ILayoutSelector<LayoutAnchorableExpanderGroup> parentSelector) {
+					parentSelector.SelectedIndex = parentSelector.IndexOf(this);
+				}
+				if(!_isSelected) {
+					IsActive = false;
+				}
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
 				LayoutAnchorableTabItem.CancelMouseLeave();
@@ -221,6 +223,8 @@ namespace AvalonDock.Layout {
 		public bool IsActive {
 			get => _isActive;
 			set {
+				//Debug.WriteLine($"{_isActive}, {value}", $"LayoutAnchorableExpanderGroup IsActive 1");
+
 				if(value == _isActive)
 					return;
 				RaisePropertyChanging(nameof(IsActive));
@@ -233,8 +237,10 @@ namespace AvalonDock.Layout {
 					if(_isActive && root.ActiveContent != SelectedContent)
 						root.ActiveContent = SelectedContent;
 				}
-				if(_isActive)
+				if(_isActive) {
 					IsSelected = true;
+					IsVisible = true;
+				}
 				OnIsActiveChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsActive));
 			}
@@ -281,5 +287,21 @@ namespace AvalonDock.Layout {
 			return Title;
 		}
 
+		#region Private Metho
+		private void AutoFixSelectedContent() {
+			if(!_autoFixSelectedContent)
+				return;
+			if(SelectedIndex >= ChildrenCount)
+				SelectedIndex = Children.Count - 1;
+			if(SelectedIndex == -1 && ChildrenCount > 0)
+				SetLastActivatedIndex();
+		}
+
+		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
+		private void SetLastActivatedIndex() {
+			var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
+			SelectedIndex = Children.IndexOf(lastActivatedDocument);
+		}
+		#endregion
 	}
 }

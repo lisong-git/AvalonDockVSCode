@@ -428,7 +428,7 @@ namespace AvalonDock.Controls {
 					break;
 			}
 			return IntPtr.Zero;
-		}
+}
 
 		/// <summary>
 		/// Set the margins of the window control (including the borders of the floating window and the title bar).

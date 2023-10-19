@@ -15,8 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <inheritdoc />
 	/// <summary>
 	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorablePaneControl"/>
@@ -24,8 +23,7 @@ namespace AvalonDock.Controls
 	/// of a <see cref="LayoutAnchorablePaneControl"/>.
 	/// </summary>
 	/// <seealso cref="Control"/>
-	public class LayoutActivityTabItem : Control
-	{
+	public class LayoutActivityTabItem :Control {
 		#region fields
 
 		private bool _isMouseDown = false;
@@ -36,8 +34,7 @@ namespace AvalonDock.Controls
 
 		#region Constructors
 
-		static LayoutActivityTabItem()
-		{
+		static LayoutActivityTabItem() {
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(LayoutActivityTabItem), new FrameworkPropertyMetadata(typeof(LayoutActivityTabItem)));
 		}
 
@@ -53,8 +50,7 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
-		public LayoutAnchorableExpanderGroup Model
-		{
+		public LayoutAnchorableExpanderGroup Model {
 			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
 			set => SetValue(ModelProperty, value);
 		}
@@ -63,8 +59,7 @@ namespace AvalonDock.Controls
 		private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutActivityTabItem) d).OnModelChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
-		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e) {
 			//SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
 			//Model.TabItem2 = this;
 			//UpdateLogicalParent();
@@ -82,7 +77,7 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets the the LayoutItem attached to this tag item.</summary>
 		[Bindable(true), Description("Gets the the LayoutItem attached to this tag item."), Category("Other")]
-		public LayoutItem LayoutItem => (LayoutItem)GetValue(LayoutItemProperty);
+		public LayoutItem LayoutItem => (LayoutItem) GetValue(LayoutItemProperty);
 
 		/// <summary>
 		/// Provides a secure method for setting the <see cref="LayoutItem"/> property.
@@ -124,57 +119,45 @@ namespace AvalonDock.Controls
 			_draggingItem = this;
 
 			if(Model != null) {
+				var activityBar = Model.Parent as LayoutActivityBar;
+				_lastSelectedIndex = activityBar.SelectedIndex;				
 				Model.IsActive = true;
-				var currentGroup = Model.Parent as LayoutAnchorableExpanderGroup;
-				if(currentGroup?.Parent is LayoutAnchorableExpanderGroupBox gb) {
-					var currentIndex = gb.IndexOf(currentGroup);
-					Debug.WriteLine($"{gb.SelectedIndex}, {currentIndex}", $"OnMouseLeftButtonUp");
-					_lastSelectedIndex = gb.SelectedIndex;
-				}
 			}
 		}
 
 		private int _lastSelectedIndex = -1;
 		/// <inheritdoc />
-		protected override void OnMouseMove(MouseEventArgs e)
-		{
+		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
-			if (e.LeftButton != MouseButtonState.Pressed)
-			{
+			if(e.LeftButton != MouseButtonState.Pressed) {
 				_isMouseDown = false;
 				_draggingItem = null;
-			}
-			else
+			} else
 				_cancelMouseLeave = false;
 		}
 
 		/// <inheritdoc />
-		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-		{
+		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
 			_isMouseDown = false;
-			if(Model!=null) {
-				Model.IsActive = true;
-				var currentGroup = Model.Parent as LayoutAnchorableExpanderGroup;
-				if( currentGroup?.Parent is LayoutAnchorableExpanderGroupBox gb) {
-					var currentIndex = gb.IndexOf(currentGroup);
-					Debug.WriteLine($"{gb.SelectedIndex}, {currentIndex}", $"OnMouseLeftButtonUp");
+			var model = Model;
+			if(model != null) {
+				var activityBar = model.Parent as LayoutActivityBar;
+				var paneModel = activityBar.LayoutAnchorableExpanderGroupPane;
+				//Debug.WriteLine($"{_lastSelectedIndex}, {activityBar.SelectedIndex}", $"OnMouseLeftButtonUp 1");
 
-					if(_lastSelectedIndex == currentIndex) {
-						gb.SetVisible(!gb.IsVisible);
-					}
+				if(_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
+					paneModel.SetVisible(!paneModel.IsVisible);
 				}
 			}
 			_lastSelectedIndex = -1;
 			base.OnMouseLeftButtonUp(e);
 		}
-				
+
 
 		/// <inheritdoc />
-		protected override void OnMouseLeave(MouseEventArgs e)
-		{
+		protected override void OnMouseLeave(MouseEventArgs e) {
 			base.OnMouseLeave(e);
-			if (_isMouseDown && e.LeftButton == MouseButtonState.Pressed)
-			{
+			if(_isMouseDown && e.LeftButton == MouseButtonState.Pressed) {
 				// drag the item if the mouse leave is not canceled.
 				// Mouse leave should be canceled when selecting a new tab to prevent automatic undock when Panel size is Auto.
 				_draggingItem = !_cancelMouseLeave ? this : null;
@@ -184,8 +167,7 @@ namespace AvalonDock.Controls
 		}
 
 		/// <inheritdoc />
-		protected override void OnMouseEnter(MouseEventArgs e)
-		{
+		protected override void OnMouseEnter(MouseEventArgs e) {
 			base.OnMouseEnter(e);
 			if(_draggingItem == null || _draggingItem == this || e.LeftButton != MouseButtonState.Pressed)
 				return;
@@ -194,7 +176,7 @@ namespace AvalonDock.Controls
 			var container = model.Parent;
 			var containerPane = model.Parent as ILayoutPane;
 			Debug.WriteLine($"{model?.GetType().Name}, {container.GetType().Name}, {containerPane?.GetType().Name}, {container is ILayoutPane}", "LayoutActivityTabItem_OnMouseEnter 1");
-			if(containerPane is LayoutAnchorableExpanderGroupBox expGroupBox && !expGroupBox.CanRepositionItems)
+			if(containerPane is LayoutAnchorableExpanderGroupPane expGroupBox && !expGroupBox.CanRepositionItems)
 				return;
 			//if (containerPane.Parent is LayoutAnchorablePaneGroup layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
 			var childrenList = container.Children.ToList();

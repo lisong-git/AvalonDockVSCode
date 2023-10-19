@@ -28,7 +28,7 @@ namespace AvalonDock.Controls {
 	{
 		#region fields
 
-		private readonly LayoutAnchorableExpanderGroupBox _model = new LayoutAnchorableExpanderGroupBox();
+		private readonly LayoutAnchorableExpanderGroupPane _model = new LayoutAnchorableExpanderGroupPane();
 
 		#endregion fields
 
@@ -43,7 +43,7 @@ namespace AvalonDock.Controls {
 		/// <summary>Class constructor from model and virtualization parameter.</summary>
 		/// <param name="model"></param>
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
-		internal LayoutAnchorableExpanderGroupBoxControl(LayoutAnchorableExpanderGroupBox model, bool IsVirtualizing) {
+		internal LayoutAnchorableExpanderGroupBoxControl(LayoutAnchorableExpanderGroupPane model, bool IsVirtualizing) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			//SetBinding(SelectedIndexProperty, new Binding("Model.SelectedIndex") { Source = this });

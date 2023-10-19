@@ -185,7 +185,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void OnChildModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "ExpanderGridControl OnChildModelPropertyChanged");
+			//Debug.WriteLine($"{sender.GetType().Name}, {e.PropertyName}, {Orientation}", "ExpanderGridControl OnChildModelPropertyChanged");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			if(AsyncRefreshCalled)
@@ -221,7 +221,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void UpdateRowColDefinitions() {
-			Debug.WriteLine($"{Orientation}", "ExpanderGridControl UpdateRowColDefinitions 1");
+			//Debug.WriteLine($"{Orientation}", "ExpanderGridControl UpdateRowColDefinitions 1");
 			if(_model == null || _model.ChildrenCount == 0) { return; }
 
 			var root = _model.Root;

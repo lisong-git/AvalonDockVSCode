@@ -171,7 +171,7 @@ namespace AvalonDock.Layout {
 		//	}
 		//}
 
-		private Stopwatch watch;
+		//private Stopwatch watch;
 		public LayoutActivityBar ActivityBar {
 			get => _activityBar;
 			set {
@@ -186,11 +186,11 @@ namespace AvalonDock.Layout {
 				if(_activityBar != null) {
 					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
 					_activityBar.Parent = this;
-					//var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableExpanderGroupBox;
+					//var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableExpanderGroupPane;
 					//Debug.WriteLine($"{_activityBar.Root?.Manager == null}, {box2 == null}", "LayoutRoot_ActivityBar 1");
 
 					//PrimarySideBar = _activityBar.Current;
-					watch = Stopwatch.StartNew();
+					//watch = Stopwatch.StartNew();
 
 					RaisePropertyChanged(nameof(ActivityBar));
 				}
@@ -198,12 +198,12 @@ namespace AvalonDock.Layout {
 		}
 
 		private void ActivityBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			if(e.PropertyName == nameof(LayoutActivityBar.Current) && sender is LayoutActivityBar activityBar) {
+			if(e.PropertyName == nameof(LayoutActivityBar.SelectedItem) && sender is LayoutActivityBar activityBar) {
 				//Debug.WriteLine($"{Root?.Manager}, {activityBar.Root?.Manager}", "ActivityBar_PropertyChanged 00");
 
-				watch.Stop();
+				//watch.Stop();
 
-				Debug.WriteLine($"{e.PropertyName}, {watch.ElapsedMilliseconds}, {watch.ElapsedTicks}", "ActivityBar_PropertyChanged 1");
+				//Debug.WriteLine($"{e.PropertyName}, {watch.ElapsedMilliseconds}, {watch.ElapsedTicks}", "ActivityBar_PropertyChanged 1");
 				//Stopwatch watch = Stopwatch.StartNew();
 
 				//if(PrimarySideBar == activityBar.Current) {
@@ -218,9 +218,9 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		//private LayoutAnchorableExpanderGroupBox _primarySideBar;
+		//private LayoutAnchorableExpanderGroupPane _primarySideBar;
 
-		//public LayoutAnchorableExpanderGroupBox PrimarySideBar {
+		//public LayoutAnchorableExpanderGroupPane PrimarySideBar {
 		//	get => _primarySideBar;
 		//	set {
 		//		if(value == _primarySideBar)
@@ -241,7 +241,7 @@ namespace AvalonDock.Layout {
 		//			// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
 		//			Stopwatch watch = Stopwatch.StartNew();
 
-		//			if((RootPanel.Children.FirstOrDefault(o => o == _primarySideBar) is LayoutAnchorableExpanderGroupBox p)) {
+		//			if((RootPanel.Children.FirstOrDefault(o => o == _primarySideBar) is LayoutAnchorableExpanderGroupPane p)) {
 		//				p.SetVisible(true);
 		//				watch.Stop();
 		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
@@ -695,6 +695,10 @@ namespace AvalonDock.Layout {
 			//writer.WriteStartElement(nameof(BottomSide));
 			//BottomSide?.WriteXml(writer);
 			//writer.WriteEndElement();
+
+			writer.WriteStartElement(nameof(ActivityBar));
+			ActivityBar?.WriteXml(writer);
+			writer.WriteEndElement();
 
 			// Write all floating windows (can be LayoutDocumentFloatingWindow or LayoutAnchorableFloatingWindow).
 			// To prevent "can not create instance of abstract type", the type is retrieved with GetType().Name

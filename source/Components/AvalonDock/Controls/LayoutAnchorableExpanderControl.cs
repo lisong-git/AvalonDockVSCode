@@ -49,7 +49,7 @@ namespace AvalonDock.Controls
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			//SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
-			SetBinding(ExpandDirectionProperty, new Binding("Model.ExpandDirection") { Source = this });
+			SetBinding(ExpandDirectionProperty, new Binding("Model.ExpandDirection") { Source = this, Mode = BindingMode.OneWay });
 			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
 			// this.LayoutUpdated += new EventHandler( OnLayoutUpdated );
 			SizeChanged += OnSizeChanged;

@@ -16,7 +16,7 @@ namespace AvalonDock.Converters {
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 			Debug.WriteLine($"{value?.GetType()}, {targetType.Name}, {parameter?.GetType()}", "ActivityBarActiveConverter 1");
 			if(parameter is LayoutAnchorableExpanderGroup model) {
-			 var p =	model.Parent as LayoutAnchorableExpanderGroupBox; 
+			 var p =	model.Parent as LayoutAnchorableExpanderGroupPane; 
 				if(p.SelectedItem == model) {
 					p.SetVisible(!p.IsVisible);
 				} else {

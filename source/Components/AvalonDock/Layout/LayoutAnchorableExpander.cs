@@ -23,7 +23,7 @@ namespace AvalonDock.Layout {
 		private string _name = null;
 		private string _id;
 		private bool _isExpanded;
-		private ExpandDirection _expandDirection = ExpandDirection.Down;
+		//private ExpandDirection _expandDirection = ExpandDirection.Down;
 		#endregion fields
 
 		#region Constructors
@@ -33,29 +33,29 @@ namespace AvalonDock.Layout {
 			UpdateSize();
 		}
 
-		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
-		//public LayoutAnchorableExpander(LayoutAnchorable anchorable) : this() {
-		//	//Children.Add(anchorable);
-		//	Content = anchorable;
-		//	Title = anchorable.Title;
-		//	_isExpanded = true;
-		//}
-
 		#endregion Constructors
 
 		#region Properties
 
 		public ExpandDirection ExpandDirection {
-			get => _expandDirection;
-			set {
-				if(_expandDirection == value)
-					return;
-
-				RaisePropertyChanging(nameof(ExpandDirection));
-				_expandDirection = value;
-				UpdateSize();
-				RaisePropertyChanged(nameof(ExpandDirection));
+			get {
+				if(Parent is ILayoutOrientableGroup orientableGroup && Orientation.Horizontal == orientableGroup.Orientation) {
+					return ExpandDirection.Right;
+				} else {
+					return ExpandDirection.Down;
+				}
 			}
+
+
+			//set {
+			//	if(_expandDirection == value)
+			//		return;
+
+			//	RaisePropertyChanging(nameof(ExpandDirection));
+			//	_expandDirection = value;
+			//	UpdateSize();
+			//	RaisePropertyChanged(nameof(ExpandDirection));
+			//}
 		}
 
 		public bool IsExpanded {
@@ -120,6 +120,8 @@ namespace AvalonDock.Layout {
 			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 			if(newValue is ILayoutGroup newGroup)
 				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
+
+			RaisePropertyChanged(nameof(ExpandDirection));
 			base.OnParentChanged(oldValue, newValue);
 		}
 

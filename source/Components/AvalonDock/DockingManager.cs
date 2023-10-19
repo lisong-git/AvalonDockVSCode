@@ -216,7 +216,7 @@ namespace AvalonDock {
 				//TopSidePanel = CreateUIElementForModel(Layout.TopSide) as LayoutAnchorSideControl;
 				//RightSidePanel = CreateUIElementForModel(Layout.RightSide) as LayoutAnchorSideControl;
 				//BottomSidePanel = CreateUIElementForModel(Layout.BottomSide) as LayoutAnchorSideControl;
-				ActivityBar = CreateUIElementForModel(Layout.ActivityBar) as LayoutActivityBarControl;
+				//ActivityBar = CreateUIElementForModel(Layout.ActivityBar) as LayoutActivityBarControl;
 
 				foreach(var fw in Layout.FloatingWindows.ToArray())
 					if(fw.IsValid)
@@ -352,35 +352,35 @@ namespace AvalonDock {
 
 		#endregion ActivityBarTemplate
 
-		#region AnchorGroupTemplate
+		//#region AnchorGroupTemplate
 
-		/// <summary><see cref="AnchorGroupTemplate"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorGroupTemplateProperty = DependencyProperty.Register(nameof(AnchorGroupTemplate), typeof(ControlTemplate), typeof(DockingManager),
-				new FrameworkPropertyMetadata((ControlTemplate)null));
+		///// <summary><see cref="AnchorGroupTemplate"/> dependency property.</summary>
+		//public static readonly DependencyProperty AnchorGroupTemplateProperty = DependencyProperty.Register(nameof(AnchorGroupTemplate), typeof(ControlTemplate), typeof(DockingManager),
+		//		new FrameworkPropertyMetadata((ControlTemplate)null));
 
-		/// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render the <see cref="LayoutAnchorGroupControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the ControlTemplate used to render LayoutAnchorGroupControl."), Category("Anchor")]
-		public ControlTemplate AnchorGroupTemplate {
-			get => (ControlTemplate) GetValue(AnchorGroupTemplateProperty);
-			set => SetValue(AnchorGroupTemplateProperty, value);
-		}
+		///// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render the <see cref="LayoutAnchorGroupControl"/>.</summary>
+		//[Bindable(true), Description("Gets/sets the ControlTemplate used to render LayoutAnchorGroupControl."), Category("Anchor")]
+		//public ControlTemplate AnchorGroupTemplate {
+		//	get => (ControlTemplate) GetValue(AnchorGroupTemplateProperty);
+		//	set => SetValue(AnchorGroupTemplateProperty, value);
+		//}
 
-		#endregion AnchorGroupTemplate
+		//#endregion AnchorGroupTemplate
 
-		#region AnchorTemplate
+		//#region AnchorTemplate
 
-		/// <summary><see cref="AnchorTemplate"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorTemplateProperty = DependencyProperty.Register(nameof(AnchorTemplate), typeof(ControlTemplate), typeof(DockingManager),
-				new FrameworkPropertyMetadata((ControlTemplate)null));
+		///// <summary><see cref="AnchorTemplate"/> dependency property.</summary>
+		//public static readonly DependencyProperty AnchorTemplateProperty = DependencyProperty.Register(nameof(AnchorTemplate), typeof(ControlTemplate), typeof(DockingManager),
+		//		new FrameworkPropertyMetadata((ControlTemplate)null));
 
-		/// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render a <see cref="LayoutAnchorControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the ControlTemplate used to render a LayoutAnchorControl."), Category("Anchor")]
-		public ControlTemplate AnchorTemplate {
-			get => (ControlTemplate) GetValue(AnchorTemplateProperty);
-			set => SetValue(AnchorTemplateProperty, value);
-		}
+		///// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render a <see cref="LayoutAnchorControl"/>.</summary>
+		//[Bindable(true), Description("Gets/sets the ControlTemplate used to render a LayoutAnchorControl."), Category("Anchor")]
+		//public ControlTemplate AnchorTemplate {
+		//	get => (ControlTemplate) GetValue(AnchorTemplateProperty);
+		//	set => SetValue(AnchorTemplateProperty, value);
+		//}
 
-		#endregion AnchorTemplate
+		//#endregion AnchorTemplate
 
 		#region DocumentPaneControlStyle
 
@@ -426,50 +426,72 @@ namespace AvalonDock {
 
 		#endregion AnchorablePaneControlStyle
 
-		#region AnchorableGroupTabControlStyle
+		#region PrimarySideBarStyle
 
-		/// <summary><see cref="AnchorableExpanderGroupPaneControlStyle"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorableExpanderGroupPaneControlStyleProperty = DependencyProperty.Register(nameof(AnchorableExpanderGroupPaneControlStyle), typeof(Style), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnAnchorableGroupTabControlChanged));
+		/// <summary><see cref="PrimarySideBarStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty PrimarySideBarStyleProperty = DependencyProperty.Register(nameof(PrimarySideBarStyle), typeof(Style), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnPrimarySideBarStyleChanged));
+
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderGroupPaneControl"/>.</summary>
+		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableExpanderGroupPaneControl."), Category("Anchorable")]
+		public Style PrimarySideBarStyle {
+			get => (Style) GetValue(PrimarySideBarStyleProperty);
+			set => SetValue(PrimarySideBarStyleProperty, value);
+		}
+
+		/// <summary>Handles changes to the <see cref="PrimarySideBarStyle"/> property.</summary>
+		private static void OnPrimarySideBarStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnPrimarySideBarStyleChanged(e);
+
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="PrimarySideBarStyle"/> property.</summary>
+		protected virtual void OnPrimarySideBarStyleChanged(DependencyPropertyChangedEventArgs e) {
+		}
+
+		#endregion PrimarySideBarStyle
+
+		#region SecondarySideBarStyle
+
+		/// <summary><see cref="SecondarySideBarStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty SecondarySideBarStyleProperty = DependencyProperty.Register(nameof(SecondarySideBarStyle), typeof(Style), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnSecondarySideBarStyleChanged));
 
 		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorablePaneControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl."), Category("Anchorable")]
-		public Style AnchorableExpanderGroupPaneControlStyle {
-			get => (Style) GetValue(AnchorableExpanderGroupPaneControlStyleProperty);
-			set => SetValue(AnchorableExpanderGroupPaneControlStyleProperty, value);
+		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableExpanderGroupPaneControl."), Category("Anchorable")]
+		public Style SecondarySideBarStyle {
+			get => (Style) GetValue(SecondarySideBarStyleProperty);
+			set => SetValue(SecondarySideBarStyleProperty, value);
 		}
 
-		/// <summary>Handles changes to the <see cref="AnchorablePaneControlStyle"/> property.</summary>
-		private static void OnAnchorableGroupTabControlChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnAnchorableGroupTabControlChanged(e);
+		/// <summary>Handles changes to the <see cref="SecondarySideBarStyle"/> property.</summary>
+		private static void OnSecondarySideBarStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnSecondarySideBarStyleChanged(e);
 
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="AnchorablePaneControlStyle"/> property.</summary>
-		protected virtual void OnAnchorableGroupTabControlChanged(DependencyPropertyChangedEventArgs e) {
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="SecondarySideBarStyle"/> property.</summary>
+		protected virtual void OnSecondarySideBarStyleChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		#endregion AnchorablePaneControlStyle
+		#endregion SecondarySideBarStyle
 
+		#region PanelStyle
 
-		#region AnchorableGroupBoxControlStyle
+		/// <summary><see cref="PanelStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty PanelStyleProperty = DependencyProperty.Register(nameof(PanelStyle), typeof(Style), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnPanelStyleChanged));
 
-		/// <summary><see cref="AnchorableGroupBoxControlStyle"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorableGroupBoxControlStyleProperty = DependencyProperty.Register(nameof(AnchorableGroupBoxControlStyle), typeof(Style), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnAnchorableGroupBoxControlStyleChanged));
-
-		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderGroupHeaderedControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl2."), Category("Anchorable")]
-		public Style AnchorableGroupBoxControlStyle {
-			get => (Style) GetValue(AnchorableGroupBoxControlStyleProperty);
-			set => SetValue(AnchorableGroupBoxControlStyleProperty, value);
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorablePaneControl"/>.</summary>
+		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableExpanderGroupPaneControl."), Category("Anchorable")]
+		public Style PanelStyle {
+			get => (Style) GetValue(PanelStyleProperty);
+			set => SetValue(PanelStyleProperty, value);
 		}
 
-		/// <summary>Handles changes to the <see cref="AnchorableGroupBoxControlStyle"/> property.</summary>
-		private static void OnAnchorableGroupBoxControlStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnAnchorableGroupBoxControlStyleChanged(e);
+		/// <summary>Handles changes to the <see cref="PanelStyle"/> property.</summary>
+		private static void OnPanelStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnPanelStyleChanged(e);
 
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="AnchorableGroupBoxControlStyle"/> property.</summary>
-		protected virtual void OnAnchorableGroupBoxControlStyleChanged(DependencyPropertyChangedEventArgs e) {
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="PanelStyle"/> property.</summary>
+		protected virtual void OnPanelStyleChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		#endregion AnchorableGroupBoxControlStyle
+		#endregion PanelStyle
+
 
 		#region ActivityBarControlStyle
 
@@ -1689,9 +1711,13 @@ namespace AvalonDock {
 
 		#region Internal Methods
 
-		public LayoutAnchorableExpanderGroupBox LayoutAnchorableExpanderGroupBox { get; set; }
-		public LayoutAnchorableExpanderGroupBoxControl LayoutAnchorableExpanderGroupBoxControl { get; set; }
+		public LayoutAnchorableExpanderGroupPane PrimarySideBar { get; set; }
+		public LayoutAnchorableExpanderGroupPane SecondarySideBar { get; set; }
+		public LayoutAnchorableExpanderGroupPane Panel { get; set; }
+		public LayoutAnchorableExpanderGroupPaneControl PrimarySideBarControl { get; set; }
 
+		public LayoutAnchorableExpanderGroupPaneControl SecondarySideBarControl { get; set; }
+		public LayoutAnchorableExpanderGroupPaneControl PanelControl { get; set; }
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
 		///
@@ -1711,78 +1737,62 @@ namespace AvalonDock {
 			if(model is LayoutActivityBar layoutActivityBar) {
 				var templateModelView = new LayoutActivityBarControl(layoutActivityBar);
 				templateModelView.SetBinding(StyleProperty, new Binding(ActivityBarControlStyleProperty.Name) { Source = this });
-
-
-
-				//LayoutAnchorableExpanderGroupBox.ReplaceChildrenNoCollectionChangedSubscribe(layoutActivityBar.Children);
-
 				return templateModelView;
 			}
-			if(model is LayoutAnchorableExpanderGroupBox layoutAnchorableExpanderGroupBox) {
-				var templateModelView = new LayoutAnchorableExpanderGroupBoxControl(layoutAnchorableExpanderGroupBox, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableGroupBoxControlStyleProperty.Name) { Source = this });
-				//templateModelView.Background = new SolidColorBrush(Colors.BlueViolet);
-				LayoutAnchorableExpanderGroupBox = layoutAnchorableExpanderGroupBox;
-				LayoutAnchorableExpanderGroupBoxControl = templateModelView;
 
-				var activityBarModel =  ActivityBar.Model as LayoutActivityBar;
-				activityBarModel.ReplaceChildrenNoCollectionChangedSubscribe(layoutAnchorableExpanderGroupBox.Children);
-				activityBarModel.LayoutAnchorableExpanderGroupBox = layoutAnchorableExpanderGroupBox;
-				//LayoutAnchorableExpanderGroupBox.Children =	Layout.ActivityBar.Children;
-				//LayoutAnchorableExpanderGroupBox.ReplaceChildrenNoCollectionChangedSubscribe(Layout.ActivityBar.Children);
-				Debug.WriteLine($"{LayoutAnchorableExpanderGroupBox == null}", "CreateUIElementForModel 1");
+			//if(model is LayoutAnchorableExpanderGroupPane layoutAnchorableExpanderGroupPane) {
+			//	var templateModelView = new LayoutAnchorableExpanderGroupBoxControl(layoutAnchorableExpanderGroupPane, IsVirtualizingAnchorable);
+			//	templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
 
-				return templateModelView;
-			}
-			//if(model is LayoutAnchorablePaneGroup) {
-			//	var activityBarModel = new LayoutAnchorablePaneGroupControl(model as LayoutAnchorablePaneGroup) {
-			//		//Background = new SolidColorBrush(Colors.Aqua),
-			//		//Margin = new Thickness(5, 5, 5, 5)
-			//	};
-			//	return activityBarModel;
+			//	if("primarySideBar".Equals(layoutAnchorableExpanderGroupPane.Name)) {
+			//		LayoutAnchorableExpanderGroupBox = layoutAnchorableExpanderGroupPane;
+			//		LayoutAnchorableExpanderGroupBoxControl = templateModelView;
+
+			//		var activityBarModel =  ActivityBar.Model as LayoutActivityBar;
+			//		activityBarModel.LayoutAnchorableExpanderGroupPane = layoutAnchorableExpanderGroupPane;
+			//		layoutAnchorableExpanderGroupPane.ReplaceChildrenNoCollectionChangedSubscribe(activityBarModel.Children);
+			//	}
+			//	//Debug.WriteLine($"{layoutAnchorableExpanderGroupPane.Name}", "CreateUIElementForModel 1");
+
+			//	return templateModelView;
 			//}
+
+			if(model is LayoutAnchorableExpanderGroupPane layoutAnchorableExpanderGroupPane) {
+				var templateModelView = new LayoutAnchorableExpanderGroupPaneControl(layoutAnchorableExpanderGroupPane, IsVirtualizingAnchorable);
+
+				if(LayoutActivityBar.PrimarySideBarKey == layoutAnchorableExpanderGroupPane.Name) {
+					templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
+					PrimarySideBar = layoutAnchorableExpanderGroupPane;
+				} else if(LayoutActivityBar.SecondarySideBarKey == layoutAnchorableExpanderGroupPane.Name) {
+					templateModelView.SetBinding(StyleProperty, new Binding(SecondarySideBarStyleProperty.Name) { Source = this });
+					SecondarySideBar = layoutAnchorableExpanderGroupPane;
+				} else if(LayoutActivityBar.PanelKey == layoutAnchorableExpanderGroupPane.Name) {
+					templateModelView.SetBinding(StyleProperty, new Binding(PanelStyleProperty.Name) { Source = this });
+					Panel = layoutAnchorableExpanderGroupPane;
+				}
+				return templateModelView;
+			}
+
+			if(model is LayoutAnchorableExpander) {
+				var templateModelView = new LayoutAnchorableExpanderControl(model as LayoutAnchorableExpander, IsVirtualizingAnchorable);
+				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderPaneControlStyleProperty.Name) { Source = this });
+
+				return templateModelView;
+			}
 			if(model is LayoutDocumentPaneGroup)
 				return new LayoutDocumentPaneGroupControl(model as LayoutDocumentPaneGroup);
-
-			//if(model is LayoutAnchorSide) {
-			//	var templateModelView = new LayoutAnchorSideControl(model as LayoutAnchorSide);
-			//	templateModelView.SetBinding(TemplateProperty, new Binding(AnchorSideTemplateProperty.Name) { Source = this });
-			//	return templateModelView;
-			//}
-			//if(model is LayoutAnchorGroup) {
-			//	var templateModelView = new LayoutAnchorGroupControl(model as LayoutAnchorGroup);
-			//	templateModelView.SetBinding(TemplateProperty, new Binding(AnchorGroupTemplateProperty.Name) { Source = this });
-			//	return templateModelView;
-			//}
 
 			if(model is LayoutDocumentPane) {
 				var templateModelView = new LayoutDocumentPaneControl(model as LayoutDocumentPane, IsVirtualizingDocument);
 				templateModelView.SetBinding(StyleProperty, new Binding(DocumentPaneControlStyleProperty.Name) { Source = this });
 				return templateModelView;
 			}
-			if(model is LayoutAnchorablePane) {
-				var templateModelView = new LayoutAnchorablePaneControl(model as LayoutAnchorablePane, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorablePaneControlStyleProperty.Name) { Source = this });
-				return templateModelView;
-			}
-			if(model is LayoutAnchorableExpanderGroupPane layoutAnchorableGroupTabModel) {
-				var templateModelView = new LayoutAnchorableExpanderGroupPaneControl(layoutAnchorableGroupTabModel, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderGroupPaneControlStyleProperty.Name) { Source = this });
-				return templateModelView;
-			}
-			if (model is LayoutAnchorableExpander) {
-				var templateModelView = new LayoutAnchorableExpanderControl(model as LayoutAnchorableExpander, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderPaneControlStyleProperty.Name) { Source = this });
-				//templateModelView.Background = new SolidColorBrush(Colors.BlueViolet);
-				//templateModelView.M
-				return templateModelView;
-			}
-			//if (model is LayoutAnchorable) {
-			//	var templateModelView = new LayoutAnchorableControl {
-			//		Model = model as LayoutAnchorable
-			//	};
+			//if(model is LayoutAnchorablePane) {
+			//	var templateModelView = new LayoutAnchorablePaneControl(model as LayoutAnchorablePane, IsVirtualizingAnchorable);
+			//	templateModelView.SetBinding(StyleProperty, new Binding(AnchorablePaneControlStyleProperty.Name) { Source = this });
 			//	return templateModelView;
 			//}
+
 
 			if(model is LayoutAnchorableFloatingWindow) {
 				if(DesignerProperties.GetIsInDesignMode(this))
@@ -2297,6 +2307,7 @@ namespace AvalonDock {
 				// In order to prevent resource leaks, unsubscribe from SizeChanged event for case when we have no stored Layout settings.
 				SizeChanged -= OnSizeChanged;
 				SizeChanged += OnSizeChanged;
+
 			}
 
 			//SetupAutoHideWindow();

@@ -98,7 +98,7 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc cref="ILayoutGroup" />
 		public void InsertChildAt(int index, ILayoutElement element) {
-			Debug.WriteLine($"{element.GetType().Name}, {element.Parent.GetType().Name}", $"LayoutGroup InsertChildAt");
+			//Debug.WriteLine($"{element.GetType().Name}, {element.Parent.GetType().Name}", $"LayoutGroup InsertChildAt");
 			if(element is T t)
 				_children.Insert(index, t);
 		}
