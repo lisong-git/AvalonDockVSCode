@@ -66,7 +66,8 @@ namespace AvalonDock.Controls {
 
 		private FrameworkElement _anchorableExpanderPaneDropTargetTop; // 5 inner drop target buttons over layout anchorable pane
 		private FrameworkElement _anchorableExpanderPaneDropTargetBottom; // 5 inner drop target buttons over layout anchorable pane
-
+		private FrameworkElement _anchorableExpanderPaneDropTargetLeft; // 5 inner drop target buttons over layout anchorable pane
+		private FrameworkElement _anchorableExpanderPaneDropTargetRight; // 5 inner drop target buttons over layout anchorable pane
 		#endregion AnchorableExpanderPaneDropTargets
 
 		#region AnchorableExpanderPaneDropTargets
@@ -183,6 +184,8 @@ namespace AvalonDock.Controls {
 
 			_anchorableExpanderPaneDropTargetTop = GetTemplateChild("PART_AnchorableExpanderPaneDropTargetTop") as FrameworkElement;
 			_anchorableExpanderPaneDropTargetBottom = GetTemplateChild("PART_AnchorableExpanderPaneDropTargetBottom") as FrameworkElement;
+			_anchorableExpanderPaneDropTargetLeft = GetTemplateChild("PART_AnchorableExpanderPaneDropTargetLeft") as FrameworkElement;
+			_anchorableExpanderPaneDropTargetRight = GetTemplateChild("PART_AnchorableExpanderPaneDropTargetRight") as FrameworkElement;
 
 			_anchorableActivityBarDropTargetTop = GetTemplateChild("PART_AnchorableActivityBarDropTargetTop") as FrameworkElement;
 			_anchorableActivityBarDropTargetBottom = GetTemplateChild("PART_AnchorableActivityBarDropTargetBottom") as FrameworkElement;
@@ -478,11 +481,17 @@ namespace AvalonDock.Controls {
 						break;
 					case DropAreaType.AnchorableExpanderPane: {
 							// Dragging over AnchorablePane -> Add DropTarget Area
-							//Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 1");
 							var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderControl>;
-							yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetTop.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockTop);
-							yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetBottom.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockBottom);
-
+							var model = dropAreaAnchorablePane.AreaElement.Model;
+							var orientable =  (model.Parent as ILayoutOrientableGroup)?.Orientation ?? Orientation.Vertical;
+							Debug.WriteLine($"{orientable}, {model.Parent.GetType()}", "GetTargets 1");
+							if(orientable == Orientation.Vertical) {
+								yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetTop.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockTop);
+								yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetBottom.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockBottom);
+							} else {
+								yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetLeft.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockLeft);
+								yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderPaneDropTargetRight.GetScreenArea(), DropTargetType.AnchorableExpanderPaneDockRight);
+							}
 							//Debug.WriteLine($"{visibleArea?.Type}, {visibleArea.GetType()}", "GetTargets 2");
 						}
 						break;

@@ -434,7 +434,7 @@
                 Visibility="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}">
                 <Viewbox>
                   <Canvas Width="24" Height="24">
-                    <Path Data="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" Fill="Red" />
+                    <Path Data="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" Fill="{TemplateBinding Foreground}" />
                   </Canvas>
                 </Viewbox>
               </ToggleButton>
@@ -1061,7 +1061,7 @@
               <TextBlock
                 Grid.Column="0"
                 Margin="8,4,4,0"
-								VerticalAlignment="Center"
+                VerticalAlignment="Center"
                 Text="{Binding Path=Model.Title, RelativeSource={RelativeSource TemplatedParent}}" />
 
               <ToolBarTray Grid.Column="1" HorizontalAlignment="Right">
@@ -2568,6 +2568,10 @@
                   <RowDefinition Height="1*" />
                   <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="1*" />
+                  <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
                 <!--<Image
                                     Grid.RowSpan="3"
                                     Grid.ColumnSpan="3"
@@ -2578,6 +2582,7 @@
                 <Border
                   Name="PART_AnchorableExpanderPaneDropTargetTop"
                   Grid.Row="0"
+                  Grid.ColumnSpan="2"
                   Margin="0"
                   VerticalAlignment="Stretch"
                   Background="Transparent">
@@ -2586,6 +2591,26 @@
                 <Border
                   Name="PART_AnchorableExpanderPaneDropTargetBottom"
                   Grid.Row="1"
+                  Grid.ColumnSpan="2"
+                  Margin="0"
+                  VerticalAlignment="Stretch"
+                  Background="Transparent">
+                  <!--<Image Source="Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />-->
+                </Border>
+
+                <Border
+                  Name="PART_AnchorableExpanderPaneDropTargetLeft"
+                  Grid.RowSpan="2"
+                  Grid.Column="0"
+                  Margin="0"
+                  VerticalAlignment="Stretch"
+                  Background="Transparent">
+                  <!--<Image Source="Images/DockDocumentAsAnchorableTop.png" Stretch="None" />-->
+                </Border>
+                <Border
+                  Name="PART_AnchorableExpanderPaneDropTargetRight"
+                  Grid.RowSpan="2"
+                  Grid.Column="1"
                   Margin="0"
                   VerticalAlignment="Stretch"
                   Background="Transparent">
