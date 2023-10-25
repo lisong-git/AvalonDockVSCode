@@ -81,12 +81,12 @@
 //		/// </summary>
 //		/// <param name="sender"></param>
 //		/// <param name="e"></param>
-//		private void LayoutAnchorableControl_Unloaded(object sender, RoutedEventArgs e) {
+//		private void LayoutAnchorableExplandControl_Unloaded(object sender, RoutedEventArgs e) {
 //			// prevent memory leak via event handler
 //			if(Model != null)
 //				Model.PropertyChanged -= Model_PropertyChanged;
 
-//			Unloaded -= LayoutAnchorableControl_Unloaded;
+//			Unloaded -= LayoutAnchorableExplandControl_Unloaded;
 //		}
 
 //		#endregion Methods

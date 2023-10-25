@@ -12,6 +12,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -99,10 +100,12 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeave(MouseEventArgs e) {
+			Debug.WriteLine($"", $"AnchorablePaneTitle OnMouseLeave 1");
+
 			base.OnMouseLeave(e);
 			if(_isMouseDown && e.LeftButton == MouseButtonState.Pressed) {
 				var pane = this.FindVisualAncestor<LayoutAnchorablePaneControl>();
-				Debug.WriteLine($"{pane == null}, {Model?.GetType()}", $"AnchorablePaneTitle Drop 1");
+				//Debug.WriteLine($"{pane == null}, {Model?.GetType()}", $"AnchorablePaneTitle Drop 1");
 
 				if(pane != null) {
 					var paneModel = pane.Model as LayoutAnchorablePane;
@@ -120,6 +123,8 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
+			Debug.WriteLine($"{e.LeftButton}", $"AnchorablePaneTitle OnMouseLeftButtonDown 1");
+
 			base.OnMouseLeftButtonDown(e);
 
 			// Start a drag & drop action for a LayoutAnchorable

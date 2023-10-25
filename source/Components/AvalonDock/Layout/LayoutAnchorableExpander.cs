@@ -78,15 +78,19 @@ namespace AvalonDock.Layout {
 			//Debug.WriteLine($"{LayoutAnchorable?.Title}", "LayoutAnchorableExpanderPane UpdateSize 0");
 			if(IsExpanded) {
 				if(ExpandDirection == ExpandDirection.Right) {
-					ForceWidth(new GridLength(1.0, GridUnitType.Star));
+					//ForceWidth(new GridLength(1.0, GridUnitType.Star));
+					ForceWidth(new GridLength(0, GridUnitType.Auto));
 				} else {
-					ForceHeight(new GridLength(1.0, GridUnitType.Star));
+					//ForceHeight(new GridLength(1.0, GridUnitType.Star));
+					ForceHeight(new GridLength(0, GridUnitType.Auto));
 				}
 			} else {
 				if(ExpandDirection == ExpandDirection.Right) {
-					DockWidth = new GridLength(25, GridUnitType.Pixel);
+					//DockWidth = new GridLength(25, GridUnitType.Pixel);
+					DockWidth = new GridLength(0, GridUnitType.Auto);
 				} else {
-					DockHeight = new GridLength(25, GridUnitType.Pixel);
+					//DockHeight = new GridLength(25, GridUnitType.Pixel);
+					DockHeight = new GridLength(0, GridUnitType.Auto);
 				}
 			}
 		}
@@ -122,6 +126,7 @@ namespace AvalonDock.Layout {
 				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
 
 			RaisePropertyChanged(nameof(ExpandDirection));
+			UpdateSize();
 			base.OnParentChanged(oldValue, newValue);
 		}
 

@@ -23,11 +23,12 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup {
+	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup, ILayoutPaneSerializable {
 		#region fields
 
 		private Orientation _orientation;
 		private int _selectedIndex;
+		private string _id;
 
 		[XmlIgnore]
 		private bool _autoFixSelectedContent = true;
@@ -79,6 +80,12 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Gets the selected content in the pane or null.</summary>
 		public LayoutContent SelectedContent => _selectedIndex == -1 ? null : Children[_selectedIndex];
+
+		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
+		string ILayoutPaneSerializable.Id {
+			get => _id;
+			set => _id = value;
+		}
 
 		/// <summary>
 		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
@@ -135,11 +142,26 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		protected override void OnChildrenCollectionChanged() {
-			if(DockWidth.IsAbsolute && ChildrenCount == 1)
-				((ILayoutPositionableElement) Children[0]).DockWidth = DockWidth;
-			if(DockHeight.IsAbsolute && ChildrenCount == 1)
-				((ILayoutPositionableElement) Children[0]).DockHeight = DockHeight;
-			base.OnChildrenCollectionChanged();			
+			AutoFixSelectedContent();
+			for(var i = 0; i < Children.Count; i++) {
+				if(!Children[i].IsSelected)
+					continue;
+				SelectedIndex = i;
+				break;
+			}
+
+			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+			base.OnChildrenCollectionChanged();
+		}
+
+		/// <inheritdoc />
+		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
+			if(oldValue is ILayoutGroup oldGroup)
+				oldGroup.ChildrenCollectionChanged -= OnParentChildrenCollectionChanged;
+			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+			if(newValue is ILayoutGroup newGroup)
+				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
+			base.OnParentChanged(oldValue, newValue);
 		}
 
 		/// <inheritdoc />
@@ -224,7 +246,6 @@ namespace AvalonDock.Layout {
 			get => _isActive;
 			set {
 				//Debug.WriteLine($"{_isActive}, {value}", $"LayoutAnchorableExpanderGroup IsActive 1");
-
 				if(value == _isActive)
 					return;
 				RaisePropertyChanging(nameof(IsActive));
@@ -245,7 +266,6 @@ namespace AvalonDock.Layout {
 				RaisePropertyChanged(nameof(IsActive));
 			}
 		}
-
 
 		/// <summary>
 		/// Provides derived classes an opportunity to handle changes to the <see cref="IsActive"/> property.
@@ -287,6 +307,45 @@ namespace AvalonDock.Layout {
 			return Title;
 		}
 
+		#region Public Methods
+
+
+
+		/// <summary>
+		/// Gets whether the model hosts only 1 <see cref="LayoutAnchorable"/> (True)
+		/// or whether there are more than one <see cref="LayoutAnchorable"/>s below
+		/// this model pane.
+		/// </summary>
+		public bool IsDirectlyHostedInFloatingWindow {
+			get {
+				var parentFloatingWindow = this.FindParent<LayoutAnchorableFloatingWindow>();
+				return parentFloatingWindow != null && parentFloatingWindow.IsSinglePane;
+				//return Parent != null && Parent.ChildrenCount == 1 && Parent.Parent is LayoutFloatingWindow;
+			}
+		}
+
+		#endregion Public Methods
+
+		#region Internal Methods
+
+		/// <summary>Invalidates the current <see cref="SelectedContentIndex"/> and sets the index for the next avialable child with IsEnabled == true.</summary>
+		internal void SetNextSelectedIndex() {
+			SelectedIndex = -1;
+			for(var i = 0; i < Children.Count; ++i) {
+				if(!Children[i].IsEnabled)
+					continue;
+				SelectedIndex = i;
+				return;
+			}
+		}
+
+		/// <summary>
+		/// Updates whether this object is hosted at the root level of a floating window control or not.
+		/// </summary>
+		internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
+		#endregion Internal Methods
+
 		#region Private Metho
 		private void AutoFixSelectedContent() {
 			if(!_autoFixSelectedContent)
@@ -302,6 +361,9 @@ namespace AvalonDock.Layout {
 			var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
 			SelectedIndex = Children.IndexOf(lastActivatedDocument);
 		}
+
+		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
 		#endregion
 	}
 }

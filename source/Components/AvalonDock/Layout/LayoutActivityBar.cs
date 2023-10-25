@@ -265,15 +265,15 @@ namespace AvalonDock.Layout {
 
 		public ObservableCollection<LayoutAnchorableExpanderGroup> OverflowItems {
 			get {
-				Debug.WriteLine($"{Parent.GetType().Name}, {Root == null}, {Root?.Manager == null}, {Root?.Manager?.PrimarySideBar == null}", "OverflowItems 1");
+				//Debug.WriteLine($"{Parent.GetType().Name}, {Root == null}, {Root?.Manager == null}, {Root?.Manager?.PrimarySideBar == null}", "OverflowItems 1");
 				//Debug.WriteLine($"{Parent.Root.Manager.LayoutAnchorableExpanderGroupPane == null}, {Parent.Root.Manager.LayoutAnchorableExpanderGroupBoxControl?.Model == null}", "OverflowItems 1");
 				//Debug.WriteLine($"{Parent.Root.Manager.LayoutAnchorableExpanderGroupPane == null}, {Parent.Root.Manager.LayoutAnchorableExpanderGroupBoxControl?.Model == null}", "OverflowItems 1");
 				var children = Children;
 
-				if(children != null)
-					foreach(var child in children) {
-						Debug.WriteLine($"{child.GetType()}, {child?.TabItem}, {child?.TabItem?.IsVisible}, ", "OverflowItems 2");
-					}
+				//if(children != null)
+				//	foreach(var child in children) {
+				//		Debug.WriteLine($"{child.GetType()}, {child?.TabItem}, {child?.TabItem?.IsVisible}, ", "OverflowItems 2");
+				//	}
 				////var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true)).ToList();
 				//var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>()
 				//	//.Where(o=> !(o.TabItem?.IsVisible == true))
