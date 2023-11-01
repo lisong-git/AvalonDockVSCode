@@ -419,13 +419,13 @@
             <Grid
               x:Name="OverflowGrid"
               Grid.Column="1"
-              MinWidth="24"
+              MinWidth="21"
               HorizontalAlignment="Right"
               DockPanel.Dock="Right">
               <ToggleButton
                 x:Name="OverflowButton"
-                Width="24"
-                Height="24"
+                Width="21"
+                Height="21"
                 Background="{TemplateBinding Background}"
                 ClickMode="Press"
                 FocusVisualStyle="{x:Null}"
@@ -434,12 +434,19 @@
                 Style="{StaticResource AvalonDock_ThemeVS2010_ToolButtonStyle}"
                 Visibility="{Binding Path=HasOverflowItems, Converter={avalonDockConverters:BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}">
                 <!--  ic_fluent_more_horizontal_24_filled  -->
-                <Path
-                  Width="24"
-                  Height="24"
-                  Data="M8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10C7.10457 10 8 10.8954 8 12ZM14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12ZM18 14C19.1046 14 20 13.1046 20 12C20 10.8954 19.1046 10 18 10C16.8954 10 16 10.8954 16 12C16 13.1046 16.8954 14 18 14Z"
-                  Fill="{TemplateBinding Foreground}"
-                  Visibility="Visible" />
+                <!--<Viewbox Width="21" Height="21">
+                  <Path
+                    Data="M8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10C7.10457 10 8 10.8954 8 12ZM14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12ZM18 14C19.1046 14 20 13.1046 20 12C20 10.8954 19.1046 10 18 10C16.8954 10 16 10.8954 16 12C16 13.1046 16.8954 14 18 14Z"
+                    Fill="{TemplateBinding Foreground}"
+                    Visibility="Visible" />
+                </Viewbox>-->
+
+                <Viewbox FlowDirection="{TemplateBinding FlowDirection}">
+                  <Canvas Width="21" Height="21">
+                    <Path Data="M8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10C7.10457 10 8 10.8954 8 12ZM14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12ZM18 14C19.1046 14 20 13.1046 20 12C20 10.8954 19.1046 10 18 10C16.8954 10 16 10.8954 16 12C16 13.1046 16.8954 14 18 14Z" Fill="{TemplateBinding Foreground}" />
+                  </Canvas>
+                </Viewbox>
+
               </ToggleButton>
               <Popup
                 x:Name="OverflowPopup"
@@ -574,7 +581,7 @@
 
                     <ListBox
                       MinWidth="64"
-                      MinHeight="24"
+                      MinHeight="21"
                       DockPanel.Dock="Bottom"
                       ItemsSource="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                       Tag="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}">
@@ -1106,16 +1113,16 @@
               <ToolBarTray Grid.Column="1" HorizontalAlignment="Right">
                 <ToolBar Style="{DynamicResource SimpleToolBar}">
                   <ToggleButton
-                    Width="24"
-                    Height="24"
+                    Width="21"
+                    Height="21"
                     Content="1" />
                   <ToggleButton
-                    Width="24"
-                    Height="24"
+                    Width="21"
+                    Height="21"
                     Content="2" />
                   <ToggleButton
-                    Width="24"
-                    Height="24"
+                    Width="21"
+                    Height="21"
                     Content="3"
                     ToolBar.OverflowMode="Always" />
                 </ToolBar>
@@ -2040,14 +2047,15 @@
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <!--<Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />-->
-    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="VerticalAlignment" Value="Top" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="IsExpanded" Value="{Binding Model.IsExpanded, RelativeSource={RelativeSource Self}}" />
-    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="SnapsToDevicePixels" Value="False" />
     <!--<Setter Property="VerticalAlignment" Value="Top" />-->
     <Setter Property="OverridesDefaultStyle" Value="True" />
     <Setter Property="ExpandDirection" Value="{Binding ExpandDirection, RelativeSource={RelativeSource Self}}" />
@@ -2056,9 +2064,12 @@
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderControl}">
           <Border
             x:Name="Border"
-            Background="{TemplateBinding Background}"
+            Margin="0"
+            Padding="0"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="0">
+            <!--  Background="{TemplateBinding Background}"  -->
+
             <DockPanel LastChildFill="True">
 
               <AnchorablePaneTitle
@@ -2070,12 +2081,11 @@
 
               <Border
                 x:Name="ExpandSiteBorder"
-                Background="Transparent"
-                BorderBrush="{x:Null}"
                 BorderThickness="0"
                 DockPanel.Dock="Bottom"
                 Opacity="0">
                 <!--  Visibility="Collapsed"  -->
+                <!--  BorderBrush="{x:Null}"  -->
 
                 <!--<LayoutAnchorableControl
                   x:Name="ExpandSite"
@@ -2682,56 +2692,89 @@
   </ControlTemplate>
 
   <Style x:Key="AnchorablePaneTitleStyle2" TargetType="{x:Type avalonDockControls:AnchorablePaneTitle}">
+    <Setter Property="Background" Value="WhiteSmoke" />
+    <Setter Property="Height" Value="21" />
+    <Setter Property="Model" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+    <Setter Property="Tag" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+    <Setter Property="IsChecked" Value="{Binding Path=Model.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:AnchorablePaneTitle}">
-          <Border>
-            <ToggleButton
-              x:Name="PART_Root"
-              Height="24"
-              Margin="0"
-              Padding="0"
-              HorizontalContentAlignment="Stretch"
-              VerticalContentAlignment="Center"
-              Background="WhiteSmoke"
-              BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="{TemplateBinding BorderThickness}"
-              IsChecked="{Binding Path=Model.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-              Template="{StaticResource DefaultExpanderToggleButtonStyle}">
-              <DockPanel FlowDirection="LeftToRight" LastChildFill="False">
-                <TextBlock
-                  VerticalAlignment="Center"
-                  DockPanel.Dock="Left"
-                  Foreground="{TemplateBinding Foreground}"
-                  Text="{Binding Path=Model.Title, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
 
-                <!--  ItemsSource="{Binding Path=Model.ToolBars, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"  -->
-                <ToolBar
-                  x:Name="PART_ToolBar"
-                  Background="Transparent"
-                  DockPanel.Dock="Right"
-                  Style="{DynamicResource SimpleToolBar}"
-                  Visibility="Collapsed">
-                  <!--  Visibility="{Binding Visibility, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}"  -->
-                  <!--  DataContext="{Binding Path=., RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}"  -->
-                  <ToggleButton
-                    Width="24"
-                    Height="24"
-                    Content="1" />
-                  <ToggleButton
-                    Width="24"
-                    Height="24"
-                    Content="2" />
-                  <ToggleButton
-                    Width="24"
-                    Height="24"
-                    Content="3"
-                    ToolBar.OverflowMode="Always" />
-                </ToolBar>
+          <Grid Margin="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-              </DockPanel>
-            </ToggleButton>
-          </Border>
+            <Grid
+              x:Name="ChevronGrid"
+              Grid.Column="0"
+              Margin="6,0,0,0"
+              VerticalAlignment="Center"
+              Background="Transparent"
+              RenderTransformOrigin="0.5, 0.5">
+              <Grid.RenderTransform>
+                <RotateTransform Angle="-90" />
+              </Grid.RenderTransform>
+
+              <Path
+                x:Name="ControlChevronIcon"
+                Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                Fill="{TemplateBinding Foreground}"
+                Stretch="Uniform" />
+            </Grid>
+
+            <!--<ContentPresenter
+              x:Name="ContentPresenter"
+              Grid.Column="1"
+              Margin="8,0,0,0"
+              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+              Content="{TemplateBinding Content}" />-->
+
+            <DockPanel
+              Grid.Column="1"
+              Margin="8,0,8,0"
+              FlowDirection="LeftToRight"
+              LastChildFill="False">
+              <TextBlock
+                VerticalAlignment="Center"
+                DockPanel.Dock="Left"
+                Foreground="{TemplateBinding Foreground}"
+                Text="{Binding Path=Model.Title, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+
+              <!--  ItemsSource="{Binding Path=Model.ToolBars, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"  -->
+              <ToolBar
+                x:Name="PART_ToolBar"
+                Background="Transparent"
+                DockPanel.Dock="Right"
+                Style="{DynamicResource SimpleToolBar}"
+                Visibility="Visible">
+                <!--  Visibility="{Binding Visibility, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}"  -->
+                <!--  DataContext="{Binding Path=., RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}"  -->
+                <Button
+                  Width="21"
+                  Height="21"
+                  Content="1" />
+                <Button
+                  Width="21"
+                  Height="21"
+                  Content="2" />
+                <Button
+                  Width="21"
+                  Height="21"
+                  Content="3"
+                  ToolBar.OverflowMode="Always" />
+              </ToolBar>
+            </DockPanel>
+
+
+          </Grid>
+
+
+          <!--</ToggleButton>
+          </Border>-->
           <ControlTemplate.Triggers>
             <!--<Trigger Property="IsMouseOver"  Value="True">
 							<Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
@@ -2747,7 +2790,30 @@
             <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True">
               <Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />
             </DataTrigger>
-
+            <Trigger Property="IsChecked" Value="True">
+              <Trigger.EnterActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation
+                      Storyboard.TargetName="ChevronGrid"
+                      Storyboard.TargetProperty="(Grid.RenderTransform).(RotateTransform.Angle)"
+                      To="0"
+                      Duration="00:00:00.050" />
+                  </Storyboard>
+                </BeginStoryboard>
+              </Trigger.EnterActions>
+              <Trigger.ExitActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation
+                      Storyboard.TargetName="ChevronGrid"
+                      Storyboard.TargetProperty="(Grid.RenderTransform).(RotateTransform.Angle)"
+                      To="-90"
+                      Duration="00:00:00.050" />
+                  </Storyboard>
+                </BeginStoryboard>
+              </Trigger.ExitActions>
+            </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
@@ -3547,8 +3613,8 @@
     <Setter Property="DocumentContextMenu" Value="{StaticResource AvalonDock_ThemeVS2010_DocumentContextMenu}" />
     <Setter Property="DocumentPaneMenuItemHeaderTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_DocumentHeaderTemplate}" />
     <Setter Property="IconContentTemplate" Value="{StaticResource AvalonDock_ThemeVS2010_IconContentTemplate}" />
-    <Setter Property="GridSplitterWidth" Value="4" />
-    <Setter Property="GridSplitterHeight" Value="4" />
+    <Setter Property="GridSplitterWidth" Value="1" />
+    <Setter Property="GridSplitterHeight" Value="1" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDock:DockingManager}">

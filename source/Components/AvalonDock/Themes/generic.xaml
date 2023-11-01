@@ -742,11 +742,19 @@
   <!--  LayoutGridResizerControl  -->
   <Style x:Key="{x:Type avalonDockControls:LayoutGridResizerControl}" TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="Template">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="Padding" Value="0" />
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-          <Border Background="{TemplateBinding Background}" />
-          <!--<Border Background="Red" />-->
+          <!--<Border Background="{TemplateBinding Background}" />-->
+          <Border
+            Margin="0"
+            Padding="0"
+            Background="Green"
+						Height="1"
+            BorderThickness="0" />
         </ControlTemplate>
       </Setter.Value>
     </Setter>

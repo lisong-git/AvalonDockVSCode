@@ -207,8 +207,8 @@
               </LayoutAnchorableExpander>
               <LayoutAnchorableExpander Title="E2" IsExpanded="True">
                 <StackPanel>
-                  <TextBox Text="内容一" />
-                  <TextBox Text="内容二" />
+                  <TextBox Text="内容一" BorderThickness="0"/>
+                  <TextBox Text="内容二" BorderThickness="0"/>
                 </StackPanel>
               </LayoutAnchorableExpander>
               <LayoutAnchorableExpander Title="E3" IsExpanded="False">

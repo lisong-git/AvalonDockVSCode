@@ -36,7 +36,7 @@ namespace AvalonDock.Controls
 		}
 
 		public LayoutGridResizerControl() {
-			MaxHeight = 4;
+			MaxHeight = 2;
 			//this.SizeChanged += LayoutGridResizerControl_SizeChanged;
 		}
 
