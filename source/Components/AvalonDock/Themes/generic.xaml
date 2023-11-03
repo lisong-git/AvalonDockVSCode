@@ -682,7 +682,8 @@
     <Setter Property="DocumentContextMenu" Value="{DynamicResource DocumentContextMenu}" />
     <Setter Property="DocumentPaneMenuItemHeaderTemplate" Value="{StaticResource DocumentHeaderTemplate}" />
     <Setter Property="IconContentTemplate" Value="{StaticResource IconContentTemplate}" />
-    <Setter Property="Template">
+		<Setter Property="GridSplitterHeight" Value="1"/>
+		<Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDock:DockingManager}">
           <Border
@@ -740,21 +741,13 @@
   </Style>
 
   <!--  LayoutGridResizerControl  -->
-  <Style x:Key="{x:Type avalonDockControls:LayoutGridResizerControl}" TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-    <Setter Property="Background" Value="Transparent" />
-    <Setter Property="Margin" Value="0" />
-    <Setter Property="Padding" Value="0" />
-		<Setter Property="BorderThickness" Value="0"/>
-		<Setter Property="Template">
+  <Style TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+    <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-          <!--<Border Background="{TemplateBinding Background}" />-->
-          <Border
-            Margin="0"
-            Padding="0"
-            Background="Green"
-						Height="1"
-            BorderThickness="0" />
+					<!--<Border Background="#3F3F46" />-->
+					<Rectangle Fill="#3F3F46" />
+					<!--<Border Background="Red" />-->					
         </ControlTemplate>
       </Setter.Value>
     </Setter>

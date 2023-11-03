@@ -1729,10 +1729,7 @@ namespace AvalonDock {
 		/// <returns></returns>
 		internal UIElement CreateUIElementForModel(ILayoutElement model) {
 			if(model is LayoutPanel) {
-				var v = new LayoutPanelControl(model as LayoutPanel) {
-					Background = new SolidColorBrush(Colors.Orange)
-				};
-				return v;			
+				return new LayoutPanelControl(model as LayoutPanel);
 			}
 			if(model is LayoutActivityBar layoutActivityBar) {
 				var templateModelView = new LayoutActivityBarControl(layoutActivityBar);
