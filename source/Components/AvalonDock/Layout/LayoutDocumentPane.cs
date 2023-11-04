@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -68,19 +68,19 @@ namespace AvalonDock.Layout
 		}
 
 		/// <summary>Gets/sets the index of the selected content in the pane.</summary>
-		public int SelectedContentIndex
+		public int SelectedIndex
 		{
 			get => _selectedIndex;
 			set
 			{
 				if (value < 0 || value >= Children.Count) value = -1;
 				if (value == _selectedIndex) return;
-				RaisePropertyChanging(nameof(SelectedContentIndex));
+				RaisePropertyChanging(nameof(SelectedIndex));
 				RaisePropertyChanging(nameof(SelectedContent));
 				if (_selectedIndex >= 0 && _selectedIndex < Children.Count) Children[_selectedIndex].IsSelected = false;
 				_selectedIndex = value;
 				if (_selectedIndex >= 0 && _selectedIndex < Children.Count) Children[_selectedIndex].IsSelected = true;
-				RaisePropertyChanged(nameof(SelectedContentIndex));
+				RaisePropertyChanged(nameof(SelectedIndex));
 				RaisePropertyChanged(nameof(SelectedContent));
 			}
 		}
@@ -126,9 +126,9 @@ namespace AvalonDock.Layout
 		{
 			if (_selectedIndex == oldIndex)
 			{
-				RaisePropertyChanging(nameof(SelectedContentIndex));
+				RaisePropertyChanging(nameof(SelectedIndex));
 				_selectedIndex = newIndex;
-				RaisePropertyChanged(nameof(SelectedContentIndex));
+				RaisePropertyChanged(nameof(SelectedIndex));
 			}
 			base.ChildMoved(oldIndex, newIndex);
 		}
@@ -140,7 +140,7 @@ namespace AvalonDock.Layout
 			for (var i = 0; i < Children.Count; i++)
 			{
 				if (!Children[i].IsSelected) continue;
-				SelectedContentIndex = i;
+				SelectedIndex = i;
 				break;
 			}
 			// TODO: MK who's properties are these??
@@ -154,8 +154,8 @@ namespace AvalonDock.Layout
 		private void AutoFixSelectedContent()
 		{
 			if (!_autoFixSelectedContent) return;
-			if (SelectedContentIndex >= ChildrenCount) SelectedContentIndex = Children.Count - 1;
-			if (SelectedContentIndex == -1 && ChildrenCount > 0) SetLastActivatedIndex();
+			if (SelectedIndex >= ChildrenCount) SelectedIndex = Children.Count - 1;
+			if (SelectedIndex == -1 && ChildrenCount > 0) SetLastActivatedIndex();
 		}
 
 		/// <summary>
@@ -199,7 +199,7 @@ namespace AvalonDock.Layout
 		}
 #endif
 
-		#endregion Overrides
+		#endregion Overrides 
 
 		#region methods
 
@@ -211,23 +211,23 @@ namespace AvalonDock.Layout
 			return !(content is LayoutDocument documentChild) ? -1 : Children.IndexOf(documentChild);
 		}
 
-		/// <summary>Invalidates the current <see cref="SelectedContentIndex"/> and sets the index for the next avialable child with IsEnabled == true.</summary>
+		/// <summary>Invalidates the current <see cref="SelectedIndex"/> and sets the index for the next avialable child with IsEnabled == true.</summary>
 		internal void SetNextSelectedIndex()
 		{
-			SelectedContentIndex = -1;
+			SelectedIndex = -1;
 			for (var i = 0; i < Children.Count; ++i)
 			{
 				if (!Children[i].IsEnabled) continue;
-				SelectedContentIndex = i;
+				SelectedIndex = i;
 				return;
 			}
 		}
 
-		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
+		/// <summary>Sets the current <see cref="SelectedIndex"/> to the last activated child with IsEnabled == true</summary>
 		private void SetLastActivatedIndex()
 		{
 			var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
-			SelectedContentIndex = Children.IndexOf(lastActivatedDocument);
+			SelectedIndex = Children.IndexOf(lastActivatedDocument);
 		}
 
 		/// <summary>Updates the <see cref="IsDirectlyHostedInFloatingWindow"/> property of this object.</summary>

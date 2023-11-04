@@ -69,64 +69,95 @@ namespace AvalonDock.Controls {
 		/// </summary>
 		/// <param name="floatingWindow"></param>
 		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow) {
-			Debug.WriteLine($"{Type}", $"{nameof(AnchorableItemDropTarget)} Drop 10");
+			Debug.WriteLine($"{Type}", $"AnchorableItemDropTarget Drop 1");
 
-			//LayoutAnchorableExpanderGroup targetModel = _targetPane.Model as LayoutAnchorableExpanderGroup;
+			LayoutAnchorableExpanderGroup targetModel = _targetPane.Model as LayoutAnchorableExpanderGroup;
 			//LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
-			//switch(Type) {
-			//	case DropTargetType.AnchorablePaneDockLeft:
-			//		#region DropTargetType.AnchorableExpanderPaneDockBottom
+			switch(Type) {
+				case DropTargetType.AnchorablePaneDockLeft:
+					#region DropTargetType.AnchorablePaneDockLeft
 
-			//		{
-			//			var expanderGroup = targetModel.Parent as ILayoutGroup;
-			//			int insertToIndex = expanderGroup.IndexOfChild(targetModel);
+					{
+						var targetGroup = targetModel.Parent as ILayoutGroup;
+						int insertToIndex = targetGroup.IndexOfChild(targetModel);
+
+						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
+						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"AnchorableItemDropTarget Drop 2");
+						//if(layoutAnchorablePaneGroup != null &&
+						//	(layoutAnchorablePaneGroup.Children.Count == 1 ||
+						//		layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
+
+						//	var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
+						//	//for(int i = 0; i < anchorablesToMove.Length; i++) {
+						//	//	//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"AnchorableItemDropTarget Drop 3");
+						//	//	Debug.WriteLine($"{targetGroup.ChildrenCount}, {targetGroup.GetType().Name}", $"AnchorableItemDropTarget Drop 3");
+
+						//	//	var temp = anchorablesToMove[i];
+						//	//	//targetGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
+						//	//	targetGroup.InsertChildAt(insertToIndex + 1 + i, temp);
+						//	//	Debug.WriteLine($"{targetGroup.ChildrenCount}", $"AnchorableItemDropTarget Drop 31");
+						//	//}
+							
+						//} else {
+							Debug.WriteLine($"", $"AnchorableItemDropTarget Drop 4");
+							targetGroup.InsertChildAt(insertToIndex, floatingWindow.RootPanel);
+						//}
+					}
+					break;
+
+				#endregion DropTargetType.AnchorablePaneDockLeft
+
+				case DropTargetType.AnchorablePaneDockRight:
+					#region DropTargetType.AnchorablePaneDockRight
+{
+						var targetGroup = targetModel.Parent as ILayoutGroup;
+						int insertToIndex = targetGroup.IndexOfChild(targetModel);
 
 
-			//			LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
-			//			Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 2");
-			//			if(layoutAnchorablePaneGroup != null &&
-			//				(layoutAnchorablePaneGroup.Children.Count == 1 ||
-			//					layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
+						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
+						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"AnchorableItemDropTarget Drop 2");
+						//if(layoutAnchorablePaneGroup != null &&
+						//	(layoutAnchorablePaneGroup.Children.Count == 1 ||
+						//		layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
 
-			//				var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
-			//				for(int i = 0; i < anchorablesToMove.Length; i++) {
-			//					//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
-			//					Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"{nameof(AnchorableItemDropTarget)} Drop 3");
+						//	var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
+						//	//for(int i = 0; i < anchorablesToMove.Length; i++) {
+						//	//	//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"AnchorableItemDropTarget Drop 3");
+						//	//	Debug.WriteLine($"{targetGroup.ChildrenCount}, {targetGroup.GetType().Name}", $"AnchorableItemDropTarget Drop 3");
 
-			//					var temp = anchorablesToMove[i];
-			//					//expanderGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
-			//					expanderGroup.InsertChildAt(insertToIndex + 1 + i, temp);
-			//					Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"{nameof(AnchorableItemDropTarget)} Drop 31");
+						//	//	var temp = anchorablesToMove[i];
+						//	//	//targetGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
+						//	//	targetGroup.InsertChildAt(insertToIndex + 1 + i, temp);
+						//	//	Debug.WriteLine($"{targetGroup.ChildrenCount}", $"AnchorableItemDropTarget Drop 31");
+						//	//}
 
-			//				}
-			//			} else {
-			//				Debug.WriteLine($"", $"{nameof(AnchorableItemDropTarget)} Drop 4");
-			//				expanderGroup.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
-			//			}
-			//		}
-			//		break;
+						//} else {
+						Debug.WriteLine($"", $"AnchorableItemDropTarget Drop 4");
+						targetGroup.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
+						//}
+					}
+					break;
+				#endregion DropTargetType.AnchorablePaneDockRight
 
-			//		#endregion DropTargetType.AnchorableExpanderPaneDockBottom
+				case DropTargetType.AnchorablePaneDockInside:
 
-			//		//case DropTargetType.AnchorablePaneDockInside:
+					#region DropTargetType.AnchorablePaneDockInside
 
-			//		//	#region DropTargetType.AnchorablePaneDockInside
+					//{
+					//	var paneModel = targetModel as LayoutAnchorableExpanderGroup;
+					//	var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorableExpanderGroup;
 
-			//		//	//{
-			//		//	//	var paneModel = targetModel as LayoutAnchorablePane;
-			//		//	//	var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
+					//	//int i = _index == -1 ? 0 : _index;
+					//	//foreach(var anchorableToImport in
+					//	//	layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
+					//	//	paneModel.Children.Insert(i, anchorableToImport);
+					//	//	i++;
+					//	//}
+					//}
+					break;
 
-			//		//	//	int i = _index == -1 ? 0 : _index;
-			//		//	//	foreach(var anchorableToImport in
-			//		//	//		layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
-			//		//	//		paneModel.Children.Insert(i, anchorableToImport);
-			//		//	//		i++;
-			//		//	//	}
-			//		//	//}
-			//		//	break;
-
-			//		//	#endregion DropTargetType.AnchorablePaneDockInside
-			//}
+					#endregion DropTargetType.AnchorablePaneDockInside
+			}
 
 			//anchorableActive.IsActive = true;
 

@@ -107,7 +107,7 @@ namespace AvalonDock.Controls
 			var manager = _model.Root.Manager;
 			Content = manager.CreateUIElementForModel(_model.RootPanel);
 			// TODO IsVisibleChanged
-			//SetBinding(SingleContentLayoutItemProperty, new Binding("Model.SinglePane.SelectedContent") { Source = this, Converter = new LayoutItemFromLayoutModelConverter() });
+			//SetBinding(SingleContentLayoutItemProperty, new Binding("Model.SinglePane.SelectedItem") { Source = this, Converter = new LayoutItemFromLayoutModelConverter() });
 			_model.RootPanel.ChildrenCollectionChanged += RootPanelOnChildrenCollectionChanged;
 		}
 

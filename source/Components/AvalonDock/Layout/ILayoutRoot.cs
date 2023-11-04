@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -25,19 +25,19 @@ namespace AvalonDock.Layout
 
 		/// <summary>Gets the top side <see cref="LayoutAnchorSide"/> where a layout Anchorable
 		/// can be/or has been anchored in this layout root.</summary>
-		LayoutAnchorSide TopSide { get; }
+		//LayoutAnchorSide TopSide { get; }
 
-		/// <summary>Gets the left side <see cref="LayoutAnchorSide"/> where a layout Anchorable
-		/// can be/or has been anchored in this layout root.</summary>
-		LayoutAnchorSide LeftSide { get; }
+		///// <summary>Gets the left side <see cref="LayoutAnchorSide"/> where a layout Anchorable
+		///// can be/or has been anchored in this layout root.</summary>
+		//LayoutAnchorSide LeftSide { get; }
 
-		/// <summary>Gets the right side <see cref="LayoutAnchorSide"/> where a layout Anchorable
-		/// can be/or has been anchored in this layout root.</summary>
-		LayoutAnchorSide RightSide { get; }
+		///// <summary>Gets the right side <see cref="LayoutAnchorSide"/> where a layout Anchorable
+		///// can be/or has been anchored in this layout root.</summary>
+		//LayoutAnchorSide RightSide { get; }
 
-		/// <summary>Gets the bottom side <see cref="LayoutAnchorSide"/> where a layout Anchorable
-		/// can be/or has been anchored in this layout root.</summary>
-		LayoutAnchorSide BottomSide { get; }
+		///// <summary>Gets the bottom side <see cref="LayoutAnchorSide"/> where a layout Anchorable
+		///// can be/or has been anchored in this layout root.</summary>
+		//LayoutAnchorSide BottomSide { get; }
 
 		/// <summary>Gets the currently active <see cref="LayoutContent"/>.</summary>
 		LayoutContent ActiveContent { get; set; }

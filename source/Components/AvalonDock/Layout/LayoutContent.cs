@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml.Serialization;
@@ -146,7 +147,7 @@ namespace AvalonDock.Layout {
 				RaisePropertyChanging(nameof(IsSelected));
 				_isSelected = value;
 				if(Parent is ILayoutContentSelector parentSelector)
-					parentSelector.SelectedContentIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
+					parentSelector.SelectedIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
 				LayoutAnchorableTabItem.CancelMouseLeave();
@@ -697,7 +698,7 @@ namespace AvalonDock.Layout {
 		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
 			if(IsSelected && Parent is ILayoutContentSelector) {
 				var parentSelector = Parent as ILayoutContentSelector;
-				parentSelector.SelectedContentIndex = parentSelector.IndexOf(this);
+				parentSelector.SelectedIndex = parentSelector.IndexOf(this);
 			}
 
 			base.OnParentChanged(oldValue, newValue);

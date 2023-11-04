@@ -17,7 +17,24 @@
   Title="MainWindow"
   Width="800"
   Height="480"
+  Background="{DynamicResource HeaderBackground}"
+  Foreground="{DynamicResource WindowForeground}"
   UseLayoutRounding="True">
+  <!--<WindowChrome.WindowChrome>
+		<WindowChrome x:Name="chrome" ResizeBorderThickness="8" CornerRadius="0" GlassFrameThickness="0" NonClientFrameEdges="None" />
+	</WindowChrome.WindowChrome>-->
+  <!--<Window.Style>
+		<Style TargetType="{x:Type Window}">
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="BorderBrush" Value="{DynamicResource WindowBorderBrush}" />
+			<Style.Triggers>
+				<Trigger Property="IsActive" Value="False">
+					<Setter Property="BorderBrush" Value="{DynamicResource WindowInactiveBorderBrush}"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Style>-->
+
   <Grid x:Name="layoutRoot">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
@@ -66,7 +83,7 @@
       IsVirtualizingAnchorable="True"
       IsVirtualizingDocument="True">
       <DockingManager.Theme>
-        <VS2010Theme />
+        <Vs2013DarkTheme />
       </DockingManager.Theme>
       <DockingManager.DocumentHeaderTemplate>
         <DataTemplate>
@@ -78,55 +95,77 @@
       </DockingManager.DocumentHeaderTemplate>
       <LayoutRoot PropertyChanged="OnLayoutRootPropertyChanged">
         <LayoutPanel Orientation="Horizontal">
+          <LayoutPanel Orientation="Vertical">
+            <LayoutDocumentPaneGroup>
+              <LayoutDocumentPane x:Name="LayoutDocumentPane">
+                <LayoutDocument
+                  Title="Document 1"
+                  ContentId="document1"
+                  IconSource="/TestApp;component/Images/alarm-clock-blue.png">
+                  <Grid>
+                    <Grid.RowDefinitions>
+                      <RowDefinition />
+                      <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Button
+                      Height="25"
+                      VerticalAlignment="Top"
+                      Click="AddTwoDocuments_click"
+                      Content="Click to add 2 documents" />
+                    <TextBox Grid.Row="1" Text="Document 1 Content" />
+                  </Grid>
+                </LayoutDocument>
+                <LayoutDocument Title="Document 2" ContentId="document2">
+                  <TextBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="White"
+                    Text="{Binding TestTimer, Mode=OneWay, StringFormat='Document 2 Attached to Timer ->\{0\}'}" />
+                </LayoutDocument>
+              </LayoutDocumentPane>
+            </LayoutDocumentPaneGroup>
 
-          <!--<LayoutAnchorableExpanderGroupBox DockWidth="160" Name="Test GroupBox">
-            <LayoutAnchorableExpanderGroup Orientation="Vertical">
-              <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                <TextBox Text="内容一" />
-              </LayoutAnchorableExpander>
-              <LayoutAnchorableExpander Title="自定义2" IsExpanded="True">
-                <StackPanel>
-                  <TextBox Text="内容一" />
-                  <TextBox Text="内容二" />
-                </StackPanel>
-              </LayoutAnchorableExpander>
-              <LayoutAnchorableExpander Title="自定义3" IsExpanded="False">
-                <TextBox Text="内容二" />
-              </LayoutAnchorableExpander>
-            </LayoutAnchorableExpanderGroup>
-          </LayoutAnchorableExpanderGroupBox>-->
+            <LayoutAnchorableExpanderGroupPane
+              Name="PART_Panel"
+              DockHeight="120"
+              DockMinWidth="20"
+              DockWidth="120"
+              Orientation="Horizontal">
+              <LayoutAnchorableExpanderGroup Orientation="Horizontal">
+                <LayoutAnchorableExpander Title="自定义4" IsExpanded="True">
+                  <StackPanel Orientation="Vertical">
+                    <TextBox Text="内容1" />
+                    <TextBox Text="内容2" />
+                  </StackPanel>
+                </LayoutAnchorableExpander>
+                <LayoutAnchorableExpander Title="自定义5" IsExpanded="True">
+                  <TextBox Text="内容5" />
+                </LayoutAnchorableExpander>
+                <LayoutAnchorableExpander Title="自定义6" IsExpanded="False">
+                  <StackPanel Orientation="Vertical">
+                    <TextBox Text="内容31" />
+                    <TextBox Text="内容32" />
+                  </StackPanel>
+                </LayoutAnchorableExpander>
+              </LayoutAnchorableExpanderGroup>
+              <LayoutAnchorableExpanderGroup Orientation="Vertical">
+                <LayoutAnchorableExpander Title="自定义7" IsExpanded="True">
+                  <StackPanel Orientation="Vertical">
+                    <TextBox Text="内容1" />
+                    <TextBox Text="内容2" />
+                  </StackPanel>
+                </LayoutAnchorableExpander>
+                <LayoutAnchorableExpander Title="自定义8" IsExpanded="True">
+                  <TextBox Text="内容5" />
+                </LayoutAnchorableExpander>
+              </LayoutAnchorableExpanderGroup>
+            </LayoutAnchorableExpanderGroupPane>
+          </LayoutPanel>
 
-          <LayoutDocumentPaneGroup>
-            <LayoutDocumentPane x:Name="LayoutDocumentPane">
-              <LayoutDocument
-                Title="Document 1"
-                ContentId="document1"
-                IconSource="/TestApp;component/Images/alarm-clock-blue.png">
-                <Grid>
-                  <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                  </Grid.RowDefinitions>
-                  <Button
-                    Height="28"
-                    VerticalAlignment="Top"
-                    Click="AddTwoDocuments_click"
-                    Content="Click to add 2 documents" />
-                  <TextBox Grid.Row="1" Text="Document 1 Content" />
-                </Grid>
-              </LayoutDocument>
-              <LayoutDocument Title="Document 2" ContentId="document2">
-                <TextBox
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Foreground="White"
-                  Text="{Binding TestTimer, Mode=OneWay, StringFormat='Document 2 Attached to Timer ->\{0\}'}" />
-              </LayoutDocument>
-            </LayoutDocumentPane>
-          </LayoutDocumentPaneGroup>
-
-
-          <LayoutAnchorableExpanderGroupPane DockMinWidth="20" DockWidth="120">
+          <LayoutAnchorableExpanderGroupPane
+            Name="PART_SecondarySideBar"
+            DockMinWidth="20"
+            DockWidth="120">
             <LayoutAnchorableExpanderGroup Orientation="Vertical">
               <LayoutAnchorableExpander Title="自定义4" IsExpanded="True">
                 <StackPanel Orientation="Vertical">
@@ -144,7 +183,6 @@
                 </StackPanel>
               </LayoutAnchorableExpander>
             </LayoutAnchorableExpanderGroup>
-
             <LayoutAnchorableExpanderGroup Orientation="Vertical">
               <LayoutAnchorableExpander Title="自定义7" IsExpanded="True">
                 <StackPanel Orientation="Vertical">
@@ -155,88 +193,75 @@
               <LayoutAnchorableExpander Title="自定义8" IsExpanded="True">
                 <TextBox Text="内容5" />
               </LayoutAnchorableExpander>
-
             </LayoutAnchorableExpanderGroup>
-
           </LayoutAnchorableExpanderGroupPane>
 
         </LayoutPanel>
 
         <LayoutRoot.ActivityBar>
           <LayoutActivityBar>
-            <LayoutAnchorableExpanderGroupBox Name="测试1" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                  <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-                <LayoutAnchorableExpander Title="自定义2" IsExpanded="True">
-                  <StackPanel>
-                    <TextBox Text="内容一" />
-                    <TextBox Text="内容二" />
-                  </StackPanel>
-                </LayoutAnchorableExpander>
-                <LayoutAnchorableExpander Title="自定义3" IsExpanded="False">
-                  <TextBox Text="内容二" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
 
-            <LayoutAnchorableExpanderGroupBox Name="测试2" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
+            <LayoutAnchorableExpanderGroup Orientation="Vertical">
+              <LayoutAnchorableExpander Title="E1" IsExpanded="True">
+                <TextBox
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Foreground="{DynamicResource WindowForeground}"
+                  Text="内容一" />
+              </LayoutAnchorableExpander>
+              <LayoutAnchorableExpander Title="E2" IsExpanded="True">
+                <StackPanel Background="Transparent">
+                  <TextBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource WindowForeground}"
+                    Text="内容一" />
+                  <TextBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource WindowForeground}"
+                    Text="内容二" />
+                </StackPanel>
+              </LayoutAnchorableExpander>
+              <LayoutAnchorableExpander Title="E3" IsExpanded="False">
+                <TextBox
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Foreground="{DynamicResource WindowForeground}"
+                  Text="内容二" />
+              </LayoutAnchorableExpander>
+            </LayoutAnchorableExpanderGroup>
+
+            <LayoutAnchorableExpanderGroup Orientation="Vertical">
+              <LayoutAnchorableExpander Title="R4" IsExpanded="True">
+                <TextBox Text="内容一" />
+              </LayoutAnchorableExpander>
+              <LayoutAnchorableExpander Title="R5" IsExpanded="True">
+                <StackPanel>
                   <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="测试4" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
+                  <TextBox Text="内容二" />
+                </StackPanel>
+              </LayoutAnchorableExpander>
+              <LayoutAnchorableExpander Title="自定义6" IsExpanded="False">
+                <TextBox Text="内容二" />
+              </LayoutAnchorableExpander>
+            </LayoutAnchorableExpanderGroup>
+
+            <LayoutAnchorableExpanderGroup Orientation="Vertical">
+              <LayoutAnchorableExpander Title="K1" IsExpanded="True">
+                <TextBox Text="内容一" />
+              </LayoutAnchorableExpander>
+              <LayoutAnchorableExpander Title="K2" IsExpanded="True">
+                <StackPanel>
                   <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox4" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                  <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox5" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                  <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox6" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                  <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox7" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                  <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox8" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                  <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
-            <LayoutAnchorableExpanderGroupBox Name="Test GroupBox9" DockWidth="160">
-              <LayoutAnchorableExpanderGroup Orientation="Vertical">
-                <LayoutAnchorableExpander Title="自定义1" IsExpanded="True">
-                  <TextBox Text="内容一" />
-                </LayoutAnchorableExpander>
-              </LayoutAnchorableExpanderGroup>
-            </LayoutAnchorableExpanderGroupBox>
+                  <TextBox Text="内容二" />
+                </StackPanel>
+              </LayoutAnchorableExpander>
+              <LayoutAnchorableExpander Title="K3" IsExpanded="False">
+                <TextBox Text="内容二" />
+              </LayoutAnchorableExpander>
+            </LayoutAnchorableExpanderGroup>
+
           </LayoutActivityBar>
         </LayoutRoot.ActivityBar>
 

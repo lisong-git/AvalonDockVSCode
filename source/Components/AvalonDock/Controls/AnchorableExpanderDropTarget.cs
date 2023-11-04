@@ -69,12 +69,15 @@ namespace AvalonDock.Controls {
 		/// </summary>
 		/// <param name="floatingWindow"></param>
 		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow) {
-			Debug.WriteLine($"{Type}", $"{nameof(AnchorableExpanderDropTarget)} Drop 10");
+			Debug.WriteLine($"{Type}", $"AnchorableExpanderDropTarget Drop 1");
 
 			LayoutAnchorableExpander targetModel = _targetPane.Model as LayoutAnchorableExpander;
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
 			switch(Type) {
 				case DropTargetType.AnchorableExpanderPaneDockBottom:
+
+
+
 					#region DropTargetType.AnchorableExpanderPaneDockBottom
 
 					{
@@ -83,7 +86,7 @@ namespace AvalonDock.Controls {
 
 
 						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
-						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 2");
+						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
 						if(layoutAnchorablePaneGroup != null &&
 							(layoutAnchorablePaneGroup.Children.Count == 1 ||
 								layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
@@ -91,41 +94,41 @@ namespace AvalonDock.Controls {
 							var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
 							for(int i = 0; i < anchorablesToMove.Length; i++) {
 								//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"AnchorableExpanderDropTarget Drop 3");
 
 								var temp = anchorablesToMove[i];
 								//expanderGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
 								expanderGroup.InsertChildAt(insertToIndex + 1 + i, temp);
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 31");
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"AnchorableExpanderDropTarget Drop 31");
 
 							}
 						} else {
-							Debug.WriteLine($"", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 4");
+							Debug.WriteLine($"", $"AnchorableExpanderDropTarget Drop 4");
 							expanderGroup.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
 						}
 					}
 					break;
 
-				#endregion DropTargetType.AnchorableExpanderPaneDockBottom
+					#endregion DropTargetType.AnchorableExpanderPaneDockBottom
 
-				//case DropTargetType.AnchorablePaneDockInside:
+					//case DropTargetType.AnchorablePaneDockInside:
 
-				//	#region DropTargetType.AnchorablePaneDockInside
+					//	#region DropTargetType.AnchorablePaneDockInside
 
-				//	//{
-				//	//	var paneModel = targetModel as LayoutAnchorablePane;
-				//	//	var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
+					//	//{
+					//	//	var paneModel = targetModel as LayoutAnchorablePane;
+					//	//	var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
 
-				//	//	int i = _index == -1 ? 0 : _index;
-				//	//	foreach(var anchorableToImport in
-				//	//		layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
-				//	//		paneModel.Children.Insert(i, anchorableToImport);
-				//	//		i++;
-				//	//	}
-				//	//}
-				//	break;
+					//	//	int i = _index == -1 ? 0 : _index;
+					//	//	foreach(var anchorableToImport in
+					//	//		layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
+					//	//		paneModel.Children.Insert(i, anchorableToImport);
+					//	//		i++;
+					//	//	}
+					//	//}
+					//	break;
 
-				//	#endregion DropTargetType.AnchorablePaneDockInside
+					//	#endregion DropTargetType.AnchorablePaneDockInside
 			}
 
 			anchorableActive.IsActive = true;
@@ -144,38 +147,73 @@ namespace AvalonDock.Controls {
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
 												LayoutFloatingWindow floatingWindowModel) {
 			Debug.WriteLine($"{Type}", $"{nameof(AnchorableExpanderDropTarget)} GetPreviewPath");
-						var targetModel = _targetPane.Model as LayoutAnchorableExpander;
+			var targetModel = _targetPane.Model as LayoutAnchorableExpander;
+			var orientableGroup = targetModel.Parent  as ILayoutOrientableGroup;
+			var orientable = orientableGroup.Orientation;
+			if(orientable == System.Windows.Controls.Orientation.Vertical) {
+				switch(Type) {
+					case DropTargetType.AnchorableExpanderPaneDockTop: {
+							var targetScreenRect = TargetElement.GetScreenArea();
+							if(targetModel.IsExpanded) {
+								targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+								targetScreenRect.Height /= 2.0;
 
-			switch(Type) {
-				case DropTargetType.AnchorableExpanderPaneDockTop: {
-						var targetScreenRect = TargetElement.GetScreenArea();
-						if(targetModel.IsExpanded) {
-							targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-							targetScreenRect.Height /= 2.0;
-
-						} else {
-							targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-							targetScreenRect.Height = 4.0;
+							} else {
+								targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+								targetScreenRect.Height = 4.0;
+							}
+							return new RectangleGeometry(targetScreenRect);
 						}
-						return new RectangleGeometry(targetScreenRect);
-					}
-				case DropTargetType.AnchorableExpanderPaneDockBottom: {
-						//var expanderGroup = targetModel.Parent as ILayoutGroup;
-						var targetScreenRect = TargetElement.GetScreenArea();
-						if(targetModel.IsExpanded) {
-							targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+					case DropTargetType.AnchorableExpanderPaneDockBottom: {
+							//var expanderGroup = targetModel.Parent as ILayoutGroup;
+							var targetScreenRect = TargetElement.GetScreenArea();
+							if(targetModel.IsExpanded) {
+								targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height / 2.0);
 
-							targetScreenRect.Offset(0.0, targetScreenRect.Height / 2.0);
-							targetScreenRect.Height /= 2.0;
+								//targetScreenRect.Offset(0.0, targetScreenRect.Height / 2.0);
+								targetScreenRect.Height /= 2.0;
 
-						} else {
-							targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height -2);
-							targetScreenRect.Height = 4.0;
+							} else {
+								targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height - 2);
+								targetScreenRect.Height = 4.0;
+							}
+							Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableExpanderDropTarget)} GetPreviewPath 2");
+							return new RectangleGeometry(targetScreenRect);
 						}
-						Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableExpanderDropTarget)} GetPreviewPath 2");
-						return new RectangleGeometry(targetScreenRect);
-					}
+				}
+			} else {
+				switch(Type) {
+					case DropTargetType.AnchorableExpanderPaneDockLeft: {
+							var targetScreenRect = TargetElement.GetScreenArea();
+							if(targetModel.IsExpanded) {
+								targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+								targetScreenRect.Width /= 2.0;
+
+							} else {
+								targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+								targetScreenRect.Width = 4.0;
+							}
+							return new RectangleGeometry(targetScreenRect);
+						}
+					case DropTargetType.AnchorableExpanderPaneDockRight: {
+							//var expanderGroup = targetModel.Parent as ILayoutGroup;
+							var targetScreenRect = TargetElement.GetScreenArea();
+							if(targetModel.IsExpanded) {
+								targetScreenRect.Offset(-overlayWindow.Left + targetScreenRect.Width / 2.0, -overlayWindow.Top);
+
+								//targetScreenRect.Offset(targetScreenRect.Width / 2.0, 0.0);
+								targetScreenRect.Width /= 2.0;
+
+							} else {
+								targetScreenRect.Offset(-overlayWindow.Left + targetScreenRect.Width , -overlayWindow.Top);
+								targetScreenRect.Width = 4.0;
+							}
+							//Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableExpanderDropTarget)} GetPreviewPath 2");
+							return new RectangleGeometry(targetScreenRect);
+						}
+				}
 			}
+
 
 			return null;
 		}

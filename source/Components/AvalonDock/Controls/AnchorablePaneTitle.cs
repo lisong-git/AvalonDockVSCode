@@ -8,25 +8,29 @@
  ************************************************************************/
 
 using AvalonDock.Layout;
+using Microsoft.Windows.Input;
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <summary>
-	/// This control defines the Title area of a <see cref="LayoutAnchorableControl"/>.
+	/// This control defines the Title area of a <see cref="LayoutAnchorableExpanderControl"/>.
 	/// It is used to show a title bar with docking window buttons to let users interact
-	/// with a <see cref="LayoutAnchorable"/> via drop down menu click or drag & drop.
+	/// with a <see cref="LayoutAnchorableExpander"/> via drop down menu click or drag & drop.
 	/// </summary>
-	public class AnchorablePaneTitle : Control
-	{
+	public class AnchorablePaneTitle :ToggleButton {
 		#region fields
 
 		private bool _isMouseDown = false;
 
+		private bool _isDragging = false;
 		#endregion fields
 
 		#region Constructors
@@ -34,35 +38,36 @@ namespace AvalonDock.Controls
 		/// <summary>
 		/// Static class constructor
 		/// </summary>
-		static AnchorablePaneTitle()
-		{
+		static AnchorablePaneTitle() {
 			IsHitTestVisibleProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(true));
 			FocusableProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(false));
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(typeof(AnchorablePaneTitle)));
 		}
+
+		//protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e) {
+		//	Debug.WriteLine($"{e.ButtonState}, {e.ClickCount}, {e.ButtonState}", $"AnchorablePaneTitle_OnPreviewMouseLeftButtonDown 1");
+		//}
 
 		#endregion Constructors
 
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorable), typeof(AnchorablePaneTitle),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpander), typeof(AnchorablePaneTitle),
 				new FrameworkPropertyMetadata(null, _OnModelChanged));
 
-		/// <summary>Gets/sets the <see cref="LayoutAnchorable"/> model attached of this view.</summary>
-		[Bindable(true), Description("Gets/sets the LayoutAnchorable model attached of this view."), Category("Anchorable")]
-		public LayoutAnchorable Model
-		{
-			get => (LayoutAnchorable)GetValue(ModelProperty);
+		/// <summary>Gets/sets the <see cref="LayoutAnchorableExpander"/> model attached of this view.</summary>
+		[Bindable(true), Description("Gets/sets the LayoutAnchorableExpander model attached of this view."), Category("Anchorable")]
+		public LayoutAnchorableExpander Model {
+			get => (LayoutAnchorableExpander) GetValue(ModelProperty);
 			set => SetValue(ModelProperty, value);
 		}
 
-		private static void _OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) => ((AnchorablePaneTitle)sender).OnModelChanged(e);
+		private static void _OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) => ((AnchorablePaneTitle) sender).OnModelChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
-		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (Model != null)
+		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e) {
+			if(Model != null)
 				SetLayoutItem(Model?.Root?.Manager?.GetLayoutItemFromModel(Model));
 			else
 				SetLayoutItem(null);
@@ -80,7 +85,7 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets the <see cref="LayoutItem"/> (<see cref="LayoutAnchorableItem"/> or <see cref="LayoutDocumentItem"/>) attached to this view.</summary>
 		[Bindable(true), Description("Gets the LayoutItem (LayoutAnchorableItem or LayoutDocumentItem) attached to this object."), Category("Layout")]
-		public LayoutItem LayoutItem => (LayoutItem)GetValue(LayoutItemProperty);
+		public LayoutItem LayoutItem => (LayoutItem) GetValue(LayoutItemProperty);
 
 		/// <summary>
 		/// Provides a secure method for setting the <see cref="LayoutItem"/> property.
@@ -94,42 +99,44 @@ namespace AvalonDock.Controls
 		#region Overrides
 
 		/// <inheritdoc />
-		protected override void OnMouseMove(MouseEventArgs e)
-		{
-			if (e.LeftButton != MouseButtonState.Pressed) _isMouseDown = false;
+		protected override void OnMouseMove(MouseEventArgs e) {
+			if(e.LeftButton != MouseButtonState.Pressed)
+				_isMouseDown = false;
 			base.OnMouseMove(e);
 		}
 
 		/// <inheritdoc />
-		protected override void OnMouseLeave(MouseEventArgs e)
-		{
+		protected override void OnMouseLeave(MouseEventArgs e) {
+			//Debug.WriteLine($"", $"AnchorablePaneTitle OnMouseLeave 1");
+
 			base.OnMouseLeave(e);
-			if (_isMouseDown && e.LeftButton == MouseButtonState.Pressed)
-			{
+			if(_isMouseDown && e.LeftButton == MouseButtonState.Pressed) {
+					Debug.WriteLine($"{Model?.GetType()}", $"AnchorablePaneTitle OnMouseLeave 2");
 				var pane = this.FindVisualAncestor<LayoutAnchorablePaneControl>();
-				if (pane != null)
-				{
+
+				if(pane != null) {
+
 					var paneModel = pane.Model as LayoutAnchorablePane;
 					var manager = paneModel.Root.Manager;
 					manager.StartDraggingFloatingWindowForPane(paneModel);
-				}
-				else
-				{
-					// Start dragging a LayoutAnchorable control that docked/reduced into a SidePanel and
+				} else {
+					// Start dragging a LayoutAnchorableExpander control that docked/reduced into a SidePanel and
 					// 1) made visible by clicking on to its name in AutoHide mode
-					// 2) user drags the top title bar of the LayoutAnchorable control to drag it out of its current docking position
+					// 2) user drags the top title bar of the LayoutAnchorableExpander control to drag it out of its current docking position
 					Model?.Root?.Manager?.StartDraggingFloatingWindowForContent(Model);
 				}
+				_isDragging = true;
 			}
 			_isMouseDown = false;
 		}
 
-		/// <inheritdoc />
-		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-		{
-			base.OnMouseLeftButtonDown(e);
+		//private MouseButtonEventArgs _mouseLeftButtonDownEventArgs;
 
-			// Start a drag & drop action for a LayoutAnchorable
+		/// <inheritdoc />
+		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
+			//Debug.WriteLine($"{e.LeftButton}, {e.Handled}", $"AnchorablePaneTitle OnMouseLeftButtonDown 1");
+
+			// Start a drag & drop action for a LayoutAnchorableExpander
 			if(e.Handled || Model.CanMove == false)
 				return;
 			var attachFloatingWindow = false;
@@ -141,17 +148,54 @@ namespace AvalonDock.Controls
 				//the pane is hosted inside a floating window that contains only an anchorable pane so drag the floating window itself
 				var floatingWndControl = Model.Root.Manager.FloatingWindows.Single(fwc => fwc.Model == parentFloatingWindow);
 				floatingWndControl.AttachDrag(false);
-			} else
+			} else {
 				_isMouseDown = true;//normal drag
+				//_mouseLeftButtonDownEventArgs = e;
+				_isDragging = false;
+			}
+				//e.Handled = true;
+
+			//base.OnMouseLeftButtonDown(e);
 		}
 
+
+
 		/// <inheritdoc />
-		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-		{
-			_isMouseDown = false;
-			base.OnMouseLeftButtonUp(e);
-			if (Model != null) Model.IsActive = true;//FocusElementManager.SetFocusOnLastElement(Model);
+		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
+			//Debug.WriteLine($"{_isMouseDown}, {_isDragging}", $"AnchorablePaneTitle OnMouseLeftButtonUp 1");
+			if(!_isDragging) {
+				_isMouseDown = false;
+				//base.OnMouseLeftButtonDown(_mouseLeftButtonDownEventArgs);
+				//base.OnMouseLeftButtonUp(e);
+				base.OnToggle();
+				if(Model != null)
+					Model.IsActive = true;//FocusElementManager.SetFocusOnLastElement(Model);
+			}
 		}
+
+		//protected override void OnMouseUp(MouseButtonEventArgs e) {
+		//	Debug.WriteLine($"{e.LeftButton}", $"AnchorablePaneTitle OnMouseUp 1");
+		//}
+
+		//protected override void OnMouseDown(MouseButtonEventArgs e) {
+		//	Debug.WriteLine($"{e.LeftButton}", $"AnchorablePaneTitle OnMouseDown 1");
+		//	base.OnMouseDown(e);
+		//}
+
+		//protected override void OnDrop(System.Windows.DragEventArgs e) {
+		//	Debug.WriteLine($"{e}", $"AnchorablePaneTitle OnDrop 1");
+		//}
+
+		//protected override void OnDragEnter(System.Windows.DragEventArgs e) {
+		//	Debug.WriteLine($"{e}", $"AnchorablePaneTitle OnDragEnter 1");
+		//}
+		//protected override void OnDragLeave(System.Windows.DragEventArgs e) {
+		//	Debug.WriteLine($"{e}", $"AnchorablePaneTitle OnDragLeave 1");
+		//}
+		//protected override void OnDragOver(System.Windows.DragEventArgs e) {
+		//	Debug.WriteLine($"{e}", $"AnchorablePaneTitle OnDragOver 1");
+		//}
+
 
 		#endregion Overrides
 	}

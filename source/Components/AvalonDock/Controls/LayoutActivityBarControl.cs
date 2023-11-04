@@ -9,7 +9,11 @@
 
 using AvalonDock.Layout;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,9 +25,9 @@ namespace AvalonDock.Controls {
 	/// Provides a control to display multible (or just one) LayoutAnchorable(s).
 	/// See also <seealso cref="AnchorablePaneTabPanel"/>.
 	/// </summary>
-	/// <seealso cref="GroupBox"/>
+	/// <seealso cref="TabControlEx"/>
 	/// <seealso cref="ILayoutControl"/>
-	public class LayoutActivityBarControl :Control, ILayoutControl//, ILogicalChildrenContainer
+	public class LayoutActivityBarControl :TabControlEx, ILayoutControl//, ILogicalChildrenContainer
 	{
 		#region fields
 
@@ -44,9 +48,10 @@ namespace AvalonDock.Controls {
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
 		internal LayoutActivityBarControl(LayoutActivityBar model, bool IsVirtualizing = false) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
-			//SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
+			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
+			//SetBinding(SelectedIndexProperty, new Binding("Model.SelectedIndex") { Source = this });
 			//SetBinding(ContentProperty, new Binding("Model") { Source = this });
-			//SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
+			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
 			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
 			// this.LayoutUpdated += new EventHandler( OnLayoutUpdated );
 			//SizeChanged += OnSizeChanged;
@@ -54,11 +59,44 @@ namespace AvalonDock.Controls {
 
 		#endregion Constructors
 
+
+
 		#region Properties
 
 		/// <summary>Gets the layout model of this control.</summary>
 		[Bindable(false), Description("Gets the layout model of this control."), Category("Other")]
 		public ILayoutElement Model => _model;
+
+
+		#region HasOverflowItems
+
+		/// <summary><see cref="HasOverflowItems"/> dependency property.</summary>
+		public static readonly DependencyProperty HasOverflowItemsProperty = DependencyProperty.Register(nameof(HasOverflowItems), typeof(bool), typeof(LayoutActivityBarControl),
+				new FrameworkPropertyMetadata(false));
+
+		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
+		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
+		public bool HasOverflowItems {
+			get => (bool) GetValue(HasOverflowItemsProperty);
+		  private set => SetValue(HasOverflowItemsProperty, value);
+		}
+
+		#endregion HasOverflowItems
+
+		#region IsOverflowOpen
+
+		/// <summary><see cref="IsOverflowOpen"/> dependency property.</summary>
+		public static readonly DependencyProperty IsOverflowOpenProperty = DependencyProperty.Register(nameof(IsOverflowOpen), typeof(bool), typeof(LayoutActivityBarControl),
+				new FrameworkPropertyMetadata(false));
+
+		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
+		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
+		public bool IsOverflowOpen {
+			get => (bool) GetValue(IsOverflowOpenProperty);
+			set => SetValue(IsOverflowOpenProperty, value);
+		}
+
+		#endregion IsOverflowOpen
 
 		#endregion Properties
 
@@ -83,7 +121,6 @@ namespace AvalonDock.Controls {
 		/// The event data reports that the left mouse button was pressed.</param>
 		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
 			base.OnMouseLeftButtonDown(e);
-
 		}
 
 		/// <summary>
@@ -108,5 +145,25 @@ namespace AvalonDock.Controls {
 		}
 
 		#endregion Private Methods
+
+		//public IEnumerable<LayoutAnchorableExpanderGroup> ChildrenOverflowing {
+		//	get {
+		//		//Debug.WriteLine($"{Children.OfType<LayoutDocument>().Count()}, {Children.OfType<LayoutDocument>().Where(o=> o.IsVisible).Count()}", "ChildrenOverflowing 1");
+
+		//		//foreach(var child in Items) {
+		//		//	Debug.WriteLine($"{child.GetType()}, {child?.TabItem}, {child?.TabItem?.IsVisible}, ", "ChildrenOverflowing 2");
+		//		//}
+
+		//		foreach(var child in Items) {
+		//			Debug.WriteLine($"{child.GetType()}, ", "ChildrenOverflowing 2");
+		//		}
+		//		//var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true)).ToList();
+		//		var listSorted = ItemsSource.Cast<LayoutAnchorableExpanderGroup>()
+		//			//.Where(o=> !(o.TabItem?.IsVisible == true))
+		//			.ToList();
+		//		//listSorted.Sort();
+		//		return listSorted;
+		//	}
+		//}
 	}
 }

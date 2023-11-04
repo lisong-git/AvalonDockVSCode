@@ -37,11 +37,11 @@ namespace AvalonDock.Layout {
 		#region fields
 
 		private LayoutPanel _rootPanel;
-		private LayoutAnchorSide _topSide = null;
-		private LayoutAnchorSide _rightSide;
-		private LayoutAnchorSide _leftSide = null;
+		//private LayoutAnchorSide _topSide = null;
+		//private LayoutAnchorSide _rightSide;
+		//private LayoutAnchorSide _leftSide = null;
+		//private LayoutAnchorSide _bottomSide = null;
 		private LayoutActivityBar _activityBar = null;
-		private LayoutAnchorSide _bottomSide = null;
 
 		private ObservableCollection<LayoutFloatingWindow> _floatingWindows = null;
 		private ObservableCollection<LayoutAnchorable> _hiddenAnchorables = null;
@@ -63,12 +63,12 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Standard class constructor</summary>
 		public LayoutRoot() {
-			RightSide = new LayoutAnchorSide();
-			LeftSide = new LayoutAnchorSide();
-			TopSide = new LayoutAnchorSide();
-			BottomSide = new LayoutAnchorSide();
-			ActivityBar = new LayoutActivityBar();
+			//RightSide = new LayoutAnchorSide();
+			//LeftSide = new LayoutAnchorSide();
+			//TopSide = new LayoutAnchorSide();
+			//BottomSide = new LayoutAnchorSide();
 			RootPanel = new LayoutPanel(new LayoutDocumentPane());
+			ActivityBar = new LayoutActivityBar();
 		}
 
 		#endregion Constructors
@@ -116,46 +116,62 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Gets or sets the top side of the layout root.</summary>
-		public LayoutAnchorSide TopSide {
-			get => _topSide;
-			set {
-				if(_topSide == value)
-					return;
-				RaisePropertyChanging(nameof(TopSide));
-				_topSide = value;
-				if(_topSide != null)
-					_topSide.Parent = this;
-				RaisePropertyChanged(nameof(TopSide));
-			}
-		}
+		//public LayoutAnchorSide TopSide {
+		//	get => _topSide;
+		//	set {
+		//		if(_topSide == value)
+		//			return;
+		//		RaisePropertyChanging(nameof(TopSide));
+		//		_topSide = value;
+		//		if(_topSide != null)
+		//			_topSide.Parent = this;
+		//		RaisePropertyChanged(nameof(TopSide));
+		//	}
+		//}
 
-		/// <summary>Gets or sets the right side of the layout root.</summary>
-		public LayoutAnchorSide RightSide {
-			get => _rightSide;
-			set {
-				if(_rightSide == value)
-					return;
-				RaisePropertyChanging(nameof(RightSide));
-				_rightSide = value;
-				if(_rightSide != null)
-					_rightSide.Parent = this;
-				RaisePropertyChanged(nameof(RightSide));
-			}
-		}
+		///// <summary>Gets or sets the right side of the layout root.</summary>
+		//public LayoutAnchorSide RightSide {
+		//	get => _rightSide;
+		//	set {
+		//		if(_rightSide == value)
+		//			return;
+		//		RaisePropertyChanging(nameof(RightSide));
+		//		_rightSide = value;
+		//		if(_rightSide != null)
+		//			_rightSide.Parent = this;
+		//		RaisePropertyChanged(nameof(RightSide));
+		//	}
+		//}
 
-		/// <summary>Gets or sets the left side of the layout root.</summary>
-		public LayoutAnchorSide LeftSide {
-			get => _leftSide;
-			set {
-				if(value == _leftSide)
-					return;
-				RaisePropertyChanging(nameof(LeftSide));
-				_leftSide = value;
-				if(_leftSide != null)
-					_leftSide.Parent = this;
-				RaisePropertyChanged(nameof(LeftSide));
-			}
-		}
+		///// <summary>Gets or sets the left side of the layout root.</summary>
+		//public LayoutAnchorSide LeftSide {
+		//	get => _leftSide;
+		//	set {
+		//		if(value == _leftSide)
+		//			return;
+		//		RaisePropertyChanging(nameof(LeftSide));
+		//		_leftSide = value;
+		//		if(_leftSide != null)
+		//			_leftSide.Parent = this;
+		//		RaisePropertyChanged(nameof(LeftSide));
+		//	}
+		//}
+
+		/// <summary>Gets or sets the bottom side of the layout root.</summary>
+		//public LayoutAnchorSide BottomSide {
+		//	get => _bottomSide;
+		//	set {
+		//		if(value == _bottomSide)
+		//			return;
+		//		RaisePropertyChanging(nameof(BottomSide));
+		//		_bottomSide = value;
+		//		if(_bottomSide != null)
+		//			_bottomSide.Parent = this;
+		//		RaisePropertyChanged(nameof(BottomSide));
+		//	}
+		//}
+
+		//private Stopwatch watch;
 		public LayoutActivityBar ActivityBar {
 			get => _activityBar;
 			set {
@@ -164,71 +180,82 @@ namespace AvalonDock.Layout {
 					return;
 				RaisePropertyChanging(nameof(ActivityBar));
 
-				if(_activeContent!=null)
-				_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;			
+				if(_activeContent != null)
+					_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;
 				_activityBar = value;
 				if(_activityBar != null) {
 					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
 					_activityBar.Parent = this;
-					PrimarySideBar = _activityBar.Current;
+					//var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableExpanderGroupPane;
+					//Debug.WriteLine($"{_activityBar.Root?.Manager == null}, {box2 == null}", "LayoutRoot_ActivityBar 1");
+
+					//PrimarySideBar = _activityBar.Current;
+					//watch = Stopwatch.StartNew();
+
 					RaisePropertyChanged(nameof(ActivityBar));
 				}
 			}
 		}
 
 		private void ActivityBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			if(e.PropertyName == nameof(LayoutActivityBar.Current) && sender is LayoutActivityBar activityBar) {
-				//Debug.WriteLine($"{sender.GetType()}", "ActivityBar_PropertyChanged 1");
-				Stopwatch watch = Stopwatch.StartNew();
+			if(e.PropertyName == nameof(LayoutActivityBar.SelectedItem) && sender is LayoutActivityBar activityBar) {
+				//Debug.WriteLine($"{Root?.Manager}, {activityBar.Root?.Manager}", "ActivityBar_PropertyChanged 00");
 
-				if(PrimarySideBar == activityBar.Current) {
-					//PrimarySideBar.SetVisble(false);
-					watch.Stop();
-					Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
-				} else {
-					PrimarySideBar = activityBar.Current;
-					watch.Stop();
-					Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.IsVisible}, {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
-					//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
-				}
+				//watch.Stop();
+
+				//Debug.WriteLine($"{e.PropertyName}, {watch.ElapsedMilliseconds}, {watch.ElapsedTicks}", "ActivityBar_PropertyChanged 1");
+				//Stopwatch watch = Stopwatch.StartNew();
+
+				//if(PrimarySideBar == activityBar.Current) {
+				//	watch.Stop();
+				//	Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
+				//} else {
+				//	PrimarySideBar = activityBar.Current;
+				//	watch.Stop();
+				//	Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
+				//	//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
+				//}
 			}
 		}
 
-		private LayoutAnchorableExpanderGroupBox _primarySideBar;
+		//private LayoutAnchorableExpanderGroupPane _primarySideBar;
 
-		public LayoutAnchorableExpanderGroupBox PrimarySideBar {
-			get => _primarySideBar;
-			set {
-				if(value == _primarySideBar)
-					return;
-				RaisePropertyChanging(nameof(PrimarySideBar));
-				// Debug.WriteLine($"{_primarySideBar == null}, {value == null}", "PrimarySideBar 0");
-				_primarySideBar?.SetVisble(false);
-				_primarySideBar = value;
+		//public LayoutAnchorableExpanderGroupPane PrimarySideBar {
+		//	get => _primarySideBar;
+		//	set {
+		//		if(value == _primarySideBar)
+		//			return;
+		//		RaisePropertyChanging(nameof(PrimarySideBar));
+		//		Debug.WriteLine($"{_primarySideBar == null}, {value == null}", "PrimarySideBar 0");
+		//		//if(_primarySideBar != null) {
+		//		//	width = _primarySideBar.DockWidth;
+		//		//}
+		//		//_primarySideBar?.SetVisible(false);
 
-				if(_primarySideBar != null) {
-					_primarySideBar.Parent = RootPanel;
+		//		//_primarySideBar.ComputeVisibility();
+		//		_primarySideBar = value;
 
-					var p = RootPanel.Children.FirstOrDefault(o=> o == _primarySideBar) as LayoutAnchorableExpanderGroupBox;
-					// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
-					Stopwatch watch = Stopwatch.StartNew();
+		//		if(_primarySideBar != null) {
+		//			_primarySideBar.Parent = RootPanel;
 
-					if(p == null) {
-						RootPanel.InsertChildAt(0, PrimarySideBar);
-						watch.Stop();
-						Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
+		//			// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
+		//			Stopwatch watch = Stopwatch.StartNew();
 
-					} else {
-						p.SetVisble(true);
-						watch.Stop();
-						Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 2");
+		//			if((RootPanel.Children.FirstOrDefault(o => o == _primarySideBar) is LayoutAnchorableExpanderGroupPane p)) {
+		//				p.SetVisible(true);
+		//				watch.Stop();
+		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
+		//			} else {
+		//				RootPanel.InsertChildAt(0, _primarySideBar);
+		//				_primarySideBar.SetVisible(true);
+		//				watch.Stop();
+		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 2");
+		//			}
 
-					}
-
-				}
-				RaisePropertyChanged(nameof(PrimarySideBar));
-			}
-		}
+		//		}
+		//		RaisePropertyChanged(nameof(PrimarySideBar));
+		//	}
+		//}
 
 
 		private LayoutAnchorableExpanderGroupPane _secondarySideBar;
@@ -247,19 +274,7 @@ namespace AvalonDock.Layout {
 		}
 
 
-		/// <summary>Gets or sets the bottom side of the layout root.</summary>
-		public LayoutAnchorSide BottomSide {
-			get => _bottomSide;
-			set {
-				if(value == _bottomSide)
-					return;
-				RaisePropertyChanging(nameof(BottomSide));
-				_bottomSide = value;
-				if(_bottomSide != null)
-					_bottomSide.Parent = this;
-				RaisePropertyChanged(nameof(BottomSide));
-			}
-		}
+
 
 		/// <summary>Gets the floating windows that are part of this layout.</summary>
 		public ObservableCollection<LayoutFloatingWindow> FloatingWindows {
@@ -296,14 +311,14 @@ namespace AvalonDock.Layout {
 					foreach(var floatingWindow in _floatingWindows)
 						yield return floatingWindow;
 				}
-				if(TopSide != null)
-					yield return TopSide;
-				if(RightSide != null)
-					yield return RightSide;
-				if(BottomSide != null)
-					yield return BottomSide;
-				if(LeftSide != null)
-					yield return LeftSide;
+				//if(TopSide != null)
+				//	yield return TopSide;
+				//if(RightSide != null)
+				//	yield return RightSide;
+				//if(BottomSide != null)
+				//	yield return BottomSide;
+				//if(LeftSide != null)
+				//	yield return LeftSide;
 				if(ActivityBar != null)
 					yield return ActivityBar;
 				if(_hiddenAnchorables != null) {
@@ -399,14 +414,14 @@ namespace AvalonDock.Layout {
 				_floatingWindows.Remove(element as LayoutFloatingWindow);
 			else if(_hiddenAnchorables != null && _hiddenAnchorables.Contains(element))
 				_hiddenAnchorables.Remove(element as LayoutAnchorable);
-			else if(element == TopSide)
-				TopSide = null;
-			else if(element == RightSide)
-				RightSide = null;
-			else if(element == BottomSide)
-				BottomSide = null;
-			else if(element == LeftSide)
-				LeftSide = null;
+			//else if(element == TopSide)
+			//	TopSide = null;
+			//else if(element == RightSide)
+			//	RightSide = null;
+			//else if(element == BottomSide)
+			//	BottomSide = null;
+			//else if(element == LeftSide)
+			//	LeftSide = null;
 			else if(element == ActivityBar)
 				ActivityBar = null;
 		}
@@ -422,14 +437,15 @@ namespace AvalonDock.Layout {
 				var index = _hiddenAnchorables.IndexOf(oldElement as LayoutAnchorable);
 				_hiddenAnchorables.Remove(oldElement as LayoutAnchorable);
 				_hiddenAnchorables.Insert(index, newElement as LayoutAnchorable);
-			} else if(oldElement == TopSide)
-				TopSide = (LayoutAnchorSide) newElement;
-			else if(oldElement == RightSide)
-				RightSide = (LayoutAnchorSide) newElement;
-			else if(oldElement == BottomSide)
-				BottomSide = (LayoutAnchorSide) newElement;
-			else if(oldElement == LeftSide)
-				LeftSide = (LayoutAnchorSide) newElement;
+			}
+			//else if(oldElement == TopSide)
+			//	TopSide = (LayoutAnchorSide) newElement;
+			//else if(oldElement == RightSide)
+			//	RightSide = (LayoutAnchorSide) newElement;
+			//else if(oldElement == BottomSide)
+			//	BottomSide = (LayoutAnchorSide) newElement;
+			//else if(oldElement == LeftSide)
+			//	LeftSide = (LayoutAnchorSide) newElement;
 			else if(oldElement == ActivityBar)
 				ActivityBar = (LayoutActivityBar) newElement;
 		}
@@ -631,18 +647,18 @@ namespace AvalonDock.Layout {
 					RootPanel.Children.Add(panel);
 			}
 
-			TopSide = new LayoutAnchorSide();
-			if(ReadElement(reader) != null)
-				FillLayoutAnchorSide(reader, TopSide);
-			RightSide = new LayoutAnchorSide();
-			if(ReadElement(reader) != null)
-				FillLayoutAnchorSide(reader, RightSide);
-			LeftSide = new LayoutAnchorSide();
-			if(ReadElement(reader) != null)
-				FillLayoutAnchorSide(reader, LeftSide);
-			BottomSide = new LayoutAnchorSide();
-			if(ReadElement(reader) != null)
-				FillLayoutAnchorSide(reader, BottomSide);
+			//TopSide = new LayoutAnchorSide();
+			//if(ReadElement(reader) != null)
+			//	FillLayoutAnchorSide(reader, TopSide);
+			//RightSide = new LayoutAnchorSide();
+			//if(ReadElement(reader) != null)
+			//	FillLayoutAnchorSide(reader, RightSide);
+			//LeftSide = new LayoutAnchorSide();
+			//if(ReadElement(reader) != null)
+			//	FillLayoutAnchorSide(reader, LeftSide);
+			//BottomSide = new LayoutAnchorSide();
+			//if(ReadElement(reader) != null)
+			//	FillLayoutAnchorSide(reader, BottomSide);
 
 			FloatingWindows.Clear();
 			var floatingWindows = ReadElementList(reader, true);
@@ -664,20 +680,24 @@ namespace AvalonDock.Layout {
 			RootPanel?.WriteXml(writer);
 			writer.WriteEndElement();
 
-			writer.WriteStartElement(nameof(TopSide));
-			TopSide?.WriteXml(writer);
-			writer.WriteEndElement();
+			//writer.WriteStartElement(nameof(TopSide));
+			//TopSide?.WriteXml(writer);
+			//writer.WriteEndElement();
 
-			writer.WriteStartElement(nameof(RightSide));
-			RightSide?.WriteXml(writer);
-			writer.WriteEndElement();
+			//writer.WriteStartElement(nameof(RightSide));
+			//RightSide?.WriteXml(writer);
+			//writer.WriteEndElement();
 
-			writer.WriteStartElement(nameof(LeftSide));
-			LeftSide?.WriteXml(writer);
-			writer.WriteEndElement();
+			//writer.WriteStartElement(nameof(LeftSide));
+			//LeftSide?.WriteXml(writer);
+			//writer.WriteEndElement();
 
-			writer.WriteStartElement(nameof(BottomSide));
-			BottomSide?.WriteXml(writer);
+			//writer.WriteStartElement(nameof(BottomSide));
+			//BottomSide?.WriteXml(writer);
+			//writer.WriteEndElement();
+
+			writer.WriteStartElement(nameof(ActivityBar));
+			ActivityBar?.WriteXml(writer);
 			writer.WriteEndElement();
 
 			// Write all floating windows (can be LayoutDocumentFloatingWindow or LayoutAnchorableFloatingWindow).
@@ -841,22 +861,22 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		private void FillLayoutAnchorSide(XmlReader reader, LayoutAnchorSide layoutAnchorSide) {
-			var result = new List<LayoutAnchorGroup>();
+		//private void FillLayoutAnchorSide(XmlReader reader, LayoutAnchorSide layoutAnchorSide) {
+		//	var result = new List<LayoutAnchorGroup>();
 
-			while(true) {
-				//Read all layoutAnchorSide children
-				if(ReadElement(reader) is LayoutAnchorGroup element)
-					result.Add(element);
-				else if(reader.NodeType == XmlNodeType.EndElement)
-					break;
-			}
+		//	while(true) {
+		//		//Read all layoutAnchorSide children
+		//		if(ReadElement(reader) is LayoutAnchorGroup element)
+		//			result.Add(element);
+		//		else if(reader.NodeType == XmlNodeType.EndElement)
+		//			break;
+		//	}
 
-			reader.ReadEndElement();
-			foreach(var las in result) {
-				layoutAnchorSide.Children.Add(las);
-			}
-		}
+		//	reader.ReadEndElement();
+		//	foreach(var las in result) {
+		//		layoutAnchorSide.Children.Add(las);
+		//	}
+		//}
 
 		/// <summary>
 		/// Reads all properties of the <see cref="LayoutPanel"/> and returns them.
@@ -985,15 +1005,15 @@ namespace AvalonDock.Layout {
 					typeToSerialize = typeof(LayoutAnchorableFloatingWindow);
 					break;
 
-				case nameof(LeftSide):
-				case nameof(RightSide):
-				case nameof(TopSide):
-				case nameof(BottomSide):
-					if(reader.IsEmptyElement) {
-						reader.Read();
-						return null;
-					}
-					return reader.Read();
+				//case nameof(LeftSide):
+				//case nameof(RightSide):
+				//case nameof(TopSide):
+				//case nameof(BottomSide):
+				//	if(reader.IsEmptyElement) {
+				//		reader.Read();
+				//		return null;
+				//	}
+				//	return reader.Read();
 
 				default:
 					typeToSerialize = FindType(reader.LocalName);

@@ -25,8 +25,13 @@ namespace AvalonDock.Themes.VS2013.Themes
 		#region Brush Keys
 		// General
 		public static readonly ComponentResourceKey Background = new ComponentResourceKey(typeof(ResourceKeys), "Background");
+		public static readonly ComponentResourceKey Foreground = new ComponentResourceKey(typeof(ResourceKeys), "Foreground");
 		public static readonly ComponentResourceKey PanelBorderBrush = new ComponentResourceKey(typeof(ResourceKeys), "PanelBorderBrush");
 		public static readonly ComponentResourceKey TabBackground = new ComponentResourceKey(typeof(ResourceKeys), "TabBackground");
+
+		#region GridResizerKeys
+		public static readonly ComponentResourceKey GridResizerBackground = new ComponentResourceKey(typeof(ResourceKeys), "GridResizerBackground");
+		#endregion
 
 		// Auto Hide : Tab
 		public static readonly ComponentResourceKey AutoHideTabDefaultBackground = new ComponentResourceKey(typeof(ResourceKeys), "AutoHideTabDefaultBackground");
@@ -174,6 +179,7 @@ namespace AvalonDock.Themes.VS2013.Themes
 		// Preview Box is the highlighted rectangle that shows when a drop area in a window is indicated
 		public static readonly ComponentResourceKey PreviewBoxBorderBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "PreviewBoxBorderBrushKey");
 		public static readonly ComponentResourceKey PreviewBoxBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "PreviewBoxBackgroundBrushKey");
+
 		#endregion DockingBrushKeys
 		#endregion Brush Keys
 	}

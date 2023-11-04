@@ -8,8 +8,9 @@
  ************************************************************************/
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
@@ -19,16 +20,23 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroupPane :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>, ILayoutAnchorablePane, ILayoutPositionableElement, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpanderGroupPane :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>
+		, ILayoutAnchorablePane
+		, ILayoutPositionableElement
+		, ILayoutSelector<LayoutAnchorableExpanderGroup>
+		, ILayoutPaneSerializable {
 		#region fields
-
-		private int _selectedIndex = -1;
 
 		[XmlIgnore]
 		private bool _autoFixSelectedContent = true;
 
 		private string _name = null;
+		private string _title = null;
 		private string _id;
+		private int _selectedIndex = -1;
+
+		private bool _isActive = false;
+		private Orientation _orientation = Orientation.Vertical;
 
 		#endregion fields
 
@@ -38,30 +46,34 @@ namespace AvalonDock.Layout {
 		public LayoutAnchorableExpanderGroupPane() {
 		}
 
-		/// <summary>Class constructor from <see cref="LayoutAnchorable"/> which will be added into its children collection.</summary>
-		public LayoutAnchorableExpanderGroupPane(LayoutAnchorableExpanderGroup anchorable) {
-			Children.Add(anchorable);
-		}
-
 		#endregion Constructors
 
 		#region Properties
 
-		//public List<LayoutAnchorable> LayoutAnchorables => Children.Select(o => o.Children.First().Children.First())
-		public List<LayoutAnchorable> LayoutAnchorables => Children.Select(o => o.Children.First().Content)
-			.OfType<LayoutAnchorable>()
-			.ToList();
+		/// <summary>
+		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
+		/// </summary>
+		public Orientation Orientation {
+			get => _orientation;
+			set {
+				if(value == _orientation)
+					return;
+				RaisePropertyChanging(nameof(Orientation));
+				_orientation = value;
+				UpdateChildrenOrientation();
+				RaisePropertyChanged(nameof(Orientation));
+			}
+		}
 
-		public LayoutAnchorableExpanderGroup Selected => Children[SelectedContentIndex];
-
-		/// <summary>Gets whether the pane can be hidden.</summary>
-		public bool CanHide => Children.All(a => a.CanHide);
-
-		/// <summary>Gets whether the pane can be closed.</summary>
-		public bool CanClose => Children.All(a => a.CanClose);
-
-		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
-		public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
+		public string Title {
+			get => _title ?? Children.FirstOrDefault().Title;
+			set {
+				if(value == _title)
+					return;
+				_title = value;
+				RaisePropertyChanged(nameof(Title));
+			}
+		}
 
 		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
 		public string Name {
@@ -74,6 +86,26 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+		public bool IsActive {
+			get => _isActive;
+			set {
+				if(value == _isActive)
+					return;
+
+				RaisePropertyChanging(nameof(IsActive));
+				_isActive = value;
+
+				if(_isActive) {
+					IsVisible = true;
+				}
+				RaisePropertyChanged(nameof(IsActive));
+			}
+		}
+
+		public void SetVisible(bool isVisible) {
+			IsVisible = isVisible;
+		}
+
 		/// <summary>Gets or sets the index of the selected content in the pane.</summary>
 		public int SelectedContentIndex {
 			get => _selectedIndex;
@@ -83,21 +115,18 @@ namespace AvalonDock.Layout {
 				if(value == _selectedIndex)
 					return;
 				RaisePropertyChanging(nameof(SelectedContentIndex));
-				RaisePropertyChanging(nameof(SelectedContent));
+				//RaisePropertyChanging(nameof(SelectedContent));
 				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
 					Children[_selectedIndex].IsSelected = false;
+
+
 				_selectedIndex = value;
 				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
 					Children[_selectedIndex].IsSelected = true;
 				RaisePropertyChanged(nameof(SelectedContentIndex));
-				RaisePropertyChanged(nameof(SelectedContent));
+				//RaisePropertyChanged(nameof(SelectedContent));
 			}
 		}
-
-		/// <summary>Gets the selected content in the pane or null.</summary>
-		private LayoutAnchorableExpanderGroup SelectedContent2 => _selectedIndex == -1 ? null : Children[_selectedIndex];
-
-		public LayoutContent SelectedContent => SelectedContent2?.SelectedContent;
 
 		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
 		string ILayoutPaneSerializable.Id {
@@ -131,8 +160,9 @@ namespace AvalonDock.Layout {
 				SelectedContentIndex = i;
 				break;
 			}
-			RaisePropertyChanged(nameof(CanClose));
-			RaisePropertyChanged(nameof(CanHide));
+
+			UpdateChildrenOrientation();
+
 			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 			base.OnChildrenCollectionChanged();
 		}
@@ -184,17 +214,6 @@ namespace AvalonDock.Layout {
 		#region Public Methods
 
 		/// <summary>
-		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
-		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
-		/// </summary>
-		/// <param name="content"></param>
-		public int IndexOf(LayoutAnchorableExpanderGroup content) {
-			if(!(content is LayoutAnchorableExpanderGroup anchorableChild))
-				return -1;
-			return Children.IndexOf(anchorableChild);
-		}
-
-		/// <summary>
 		/// Gets whether the model hosts only 1 <see cref="LayoutAnchorable"/> (True)
 		/// or whether there are more than one <see cref="LayoutAnchorable"/>s below
 		/// this model pane.
@@ -207,31 +226,46 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		#endregion Public Methods
 
-		#region Internal Methods
 
-		/// <summary>Invalidates the current <see cref="SelectedContentIndex"/> and sets the index for the next avialable child with IsEnabled == true.</summary>
-		internal void SetNextSelectedIndex() {
-			SelectedContentIndex = -1;
-			for(var i = 0; i < Children.Count; ++i) {
-				if(!Children[i].IsEnabled)
-					continue;
-				SelectedContentIndex = i;
-				return;
+		public int SelectedIndex {
+			get => _selectedIndex;
+			set {
+				Debug.WriteLine($"{_selectedIndex}, {value}", $"SelectedIndex");
+
+				if(_selectedIndex != value) {
+					_selectedIndex = value;
+					RaisePropertyChanged(nameof(SelectedIndex));
+				}
+			}
+		}
+
+		public LayoutAnchorableExpanderGroup SelectedItem {
+			get => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
+			set {
+				//if(value != SelectedItem) { 
+
+				//}
 			}
 		}
 
 		/// <summary>
-		/// Updates whether this object is hosted at the root level of a floating window control or not.
+		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
+		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
 		/// </summary>
-		internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+		/// <param name="content"></param>
+		public int IndexOf(LayoutAnchorableExpanderGroup content) {
+			return Children.IndexOf(content);
+		}
+		#endregion Public Methods
+
+		#region Internal Methods
 
 		#endregion Internal Methods
 
 		#region Private Methods
 
-		private void AutoFixSelectedContent() {
+		protected void AutoFixSelectedContent() {
 			if(!_autoFixSelectedContent)
 				return;
 			if(SelectedContentIndex >= ChildrenCount)
@@ -247,6 +281,12 @@ namespace AvalonDock.Layout {
 		}
 
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
+		private void UpdateChildrenOrientation() {
+			foreach(var child in Children) {
+				child.Orientation = _orientation;
+			}
+		}
 
 		#endregion Private Methods
 	}

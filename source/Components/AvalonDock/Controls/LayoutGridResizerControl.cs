@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -8,6 +8,8 @@
  ************************************************************************/
 
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
@@ -31,6 +33,11 @@ namespace AvalonDock.Controls
 			VerticalAlignmentProperty.OverrideMetadata(typeof(LayoutGridResizerControl), new FrameworkPropertyMetadata(VerticalAlignment.Stretch, FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 			BackgroundProperty.OverrideMetadata(typeof(LayoutGridResizerControl), new FrameworkPropertyMetadata(Brushes.Transparent));
 			IsHitTestVisibleProperty.OverrideMetadata(typeof(LayoutGridResizerControl), new FrameworkPropertyMetadata(true, null));
+		}
+
+		public LayoutGridResizerControl() {
+			//MaxHeight = 2;
+			//this.SizeChanged += LayoutGridResizerControl_SizeChanged;
 		}
 
 		#endregion Constructors
@@ -70,5 +77,9 @@ namespace AvalonDock.Controls
 		#endregion OpacityWhileDragging
 
 		#endregion Properties
+
+		#region ov
+		
+		#endregion
 	}
 }
