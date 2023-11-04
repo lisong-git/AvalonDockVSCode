@@ -19,12 +19,11 @@
   Height="480"
   Background="{DynamicResource HeaderBackground}"
   Foreground="{DynamicResource WindowForeground}"
-  UseLayoutRounding="True"
-  >
-	<!--<WindowChrome.WindowChrome>
+  UseLayoutRounding="True">
+  <!--<WindowChrome.WindowChrome>
 		<WindowChrome x:Name="chrome" ResizeBorderThickness="8" CornerRadius="0" GlassFrameThickness="0" NonClientFrameEdges="None" />
 	</WindowChrome.WindowChrome>-->
-	<Window.Style>
+  <!--<Window.Style>
 		<Style TargetType="{x:Type Window}">
 			<Setter Property="BorderThickness" Value="1" />
 			<Setter Property="BorderBrush" Value="{DynamicResource WindowBorderBrush}" />
@@ -34,8 +33,9 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
-	</Window.Style>
-	<Grid x:Name="layoutRoot">
+	</Window.Style>-->
+
+  <Grid x:Name="layoutRoot">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
@@ -203,16 +203,32 @@
 
             <LayoutAnchorableExpanderGroup Orientation="Vertical">
               <LayoutAnchorableExpander Title="E1" IsExpanded="True">
-                <TextBox Background="Transparent" Text="内容一" />
+                <TextBox
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Foreground="{DynamicResource WindowForeground}"
+                  Text="内容一" />
               </LayoutAnchorableExpander>
               <LayoutAnchorableExpander Title="E2" IsExpanded="True">
-                <StackPanel>
-                  <TextBox BorderThickness="0" Text="内容一" />
-                  <TextBox BorderThickness="0" Text="内容二" />
+                <StackPanel Background="Transparent">
+                  <TextBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource WindowForeground}"
+                    Text="内容一" />
+                  <TextBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource WindowForeground}"
+                    Text="内容二" />
                 </StackPanel>
               </LayoutAnchorableExpander>
               <LayoutAnchorableExpander Title="E3" IsExpanded="False">
-                <TextBox Text="内容二" />
+                <TextBox
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Foreground="{DynamicResource WindowForeground}"
+                  Text="内容二" />
               </LayoutAnchorableExpander>
             </LayoutAnchorableExpanderGroup>
 

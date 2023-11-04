@@ -26,10 +26,9 @@ namespace TestApp {
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow :Window {
-
+		
 		public MainWindow() {
 			InitializeComponent();
-
 
 			DispatcherTimer timer = new DispatcherTimer();
 			Random rnd = new Random();

@@ -61,6 +61,7 @@
     options:Freeze="true"
     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
 
+	<!--#region  DocumentSolidColorBrushs-->
   <!--  Document Well : Overflow Button  -->
   <SolidColorBrush
     x:Key="{x:Static reskeys:ResourceKeys.DocumentWellOverflowButtonDefaultGlyph}"
@@ -224,7 +225,9 @@
     x:Key="{x:Static reskeys:ResourceKeys.DocumentWellTabButtonUnselectedTabHoveredButtonPressedGlyph}"
     options:Freeze="true"
     Color="#FFFFFF" />
-
+	<!--#endregion DocumentSolidColorBrushs-->
+	
+	<!--#region ToolWindow-->
   <!--  Tool Window : Caption  -->
   <!--  Background of selected toolwindow (AccentColor)  -->
   <SolidColorBrush

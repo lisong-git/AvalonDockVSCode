@@ -265,9 +265,6 @@ namespace AvalonDock.Layout {
 
 		public ObservableCollection<LayoutAnchorableExpanderGroup> OverflowItems {
 			get {
-				//Debug.WriteLine($"{Parent.GetType().Name}, {Root == null}, {Root?.Manager == null}, {Root?.Manager?.PrimarySideBar == null}", "OverflowItems 1");
-				//Debug.WriteLine($"{Parent.Root.Manager.LayoutAnchorableExpanderGroupPane == null}, {Parent.Root.Manager.LayoutAnchorableExpanderGroupBoxControl?.Model == null}", "OverflowItems 1");
-				//Debug.WriteLine($"{Parent.Root.Manager.LayoutAnchorableExpanderGroupPane == null}, {Parent.Root.Manager.LayoutAnchorableExpanderGroupBoxControl?.Model == null}", "OverflowItems 1");
 				var children = Children;
 
 				//if(children != null)

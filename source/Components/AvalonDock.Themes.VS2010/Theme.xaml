@@ -470,7 +470,7 @@
                     KeyboardNavigation.DirectionalNavigation="Cycle"
                     KeyboardNavigation.TabNavigation="Cycle"
                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                    WrapWidth="48" />
+                    WrapWidth="42" />
                 </Border>
                 <!--</theme:SystemDropShadowChrome>-->
               </Popup>
@@ -559,8 +559,8 @@
                   DockPanel.Dock="Bottom">
                   <ToggleButton
                     x:Name="OverflowButton"
-                    Width="48"
-                    Height="48"
+                    Width="42"
+                    Height="42"
                     Background="Red"
                     ClickMode="Press"
                     Content="Overflow"
@@ -608,7 +608,7 @@
 
             </WrapPanel>
 
-            <StackPanel Grid.Row="2" Width="48">
+            <StackPanel Grid.Row="2" Width="42">
               <StackPanel.Resources>
                 <Thickness x:Key="btnMargin">0,8,0,0</Thickness>
                 <Brush x:Key="bgColor">WhiteSmoke</Brush>

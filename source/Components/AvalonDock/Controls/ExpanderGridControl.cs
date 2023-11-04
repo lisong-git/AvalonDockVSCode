@@ -359,9 +359,11 @@ namespace AvalonDock.Controls {
 				if(Orientation == Orientation.Horizontal) {
 					splitter.Cursor = Cursors.SizeWE;
 					splitter.Style = _model.Root?.Manager?.GridSplitterVerticalStyle;
+					splitter.Width = _model.Root?.Manager?.GridSplitterWidth ?? 1;
 				} else {
 					splitter.Cursor = Cursors.SizeNS;
 					splitter.Style = _model.Root?.Manager?.GridSplitterHorizontalStyle;
+					splitter.Height = _model.Root?.Manager?.GridSplitterHeight ?? 1;
 				}
 
 				Children.Insert(iChild, splitter);
