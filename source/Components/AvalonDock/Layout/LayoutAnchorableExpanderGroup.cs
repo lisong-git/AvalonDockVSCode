@@ -223,7 +223,7 @@ namespace AvalonDock.Layout {
 				}
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
-				LayoutAnchorableTabItem.CancelMouseLeave();
+				LayoutAnchorableExpanderGroupTabItem.CancelMouseLeave();
 			}
 		}
 
@@ -235,6 +235,10 @@ namespace AvalonDock.Layout {
 		public event EventHandler IsSelectedChanged;
 
 		#endregion IsSelected
+
+		#region ToolTip
+		public string ToolTip => Title ?? string.Empty;
+		#endregion ToolTip
 
 		#region IsActive
 
@@ -294,12 +298,15 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		private TabItem _tabItem;
-		public TabItem TabItem {
+		private LayoutActivityTabItem _tabItem;
+		public LayoutActivityTabItem TabItem {
 			get => _tabItem;
 			set { 
 				_tabItem = value; 
-				//RaisePropertyChanged(nameof(TabItem)); 
+				RaisePropertyChanged(nameof(TabItem)); 
+				if(Parent is LayoutActivityBar activityBar) {
+					activityBar.OverflowItems = null;
+				}
 			}
 		}
 

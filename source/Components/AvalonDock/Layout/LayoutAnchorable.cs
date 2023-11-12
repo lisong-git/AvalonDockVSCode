@@ -165,7 +165,7 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <summary>Get a value indicating if the anchorable is anchored to an achor side in an AutoHide status or not.</summary>
-		public bool IsAutoHidden => Parent is LayoutAnchorGroup;
+		//public bool IsAutoHidden => Parent is LayoutAnchorGroup;
 
 		/// <summary>Gets whether this object is in a state where it is not visible in the UI or not.</summary>
 		[XmlIgnore]
@@ -186,8 +186,8 @@ namespace AvalonDock.Layout {
 				_contentVisibility = value;
 				//if(Parent is La)
 				//Debug.WriteLine($"{_contentVisibility}", "ContentVisibility");
-				if(Parent is LayoutAnchorablePane lap) {
-					if(lap.Parent is LayoutAnchorablePaneGroup pg) {
+				if(Parent is LayoutAnchorableExpanderGroup lap) {
+					if(lap.Parent is LayoutAnchorableExpanderGroupPane pg) {
 						//Debug.WriteLine($"LayoutAnchorablePane,{lap.Parent.GetType()},  {lap.FixedDockHeight}, {lap.DockHeight}", "ContentVisibility");
 						
 						//if(ContentVisibility == Visibility.Collapsed) {
@@ -212,24 +212,24 @@ namespace AvalonDock.Layout {
 			RaisePropertyChanged(nameof(IsVisible));
 			NotifyIsVisibleChanged();
 			RaisePropertyChanged(nameof(IsHidden));
-			RaisePropertyChanged(nameof(IsAutoHidden));
+			//RaisePropertyChanged(nameof(IsAutoHidden));
 			base.OnParentChanged(oldValue, newValue);
 		}
 
 		/// <inheritdoc />
 		protected override void InternalDock() {
 			var root = Root as LayoutRoot;
-			LayoutAnchorablePane anchorablePane = null;
+			LayoutAnchorableExpanderGroup anchorablePane = null;
 
 			//look for active content parent pane
 			if(root.ActiveContent != null && root.ActiveContent != this)
-				anchorablePane = root.ActiveContent.Parent as LayoutAnchorablePane;
+				anchorablePane = root.ActiveContent.Parent as LayoutAnchorableExpanderGroup;
 			//look for a pane on the right side
 			//if(anchorablePane == null)
 			//	anchorablePane = root.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
 			//look for an available pane
 			if(anchorablePane == null)
-				anchorablePane = root.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault();
+				anchorablePane = root.Descendents().OfType<LayoutAnchorableExpanderGroup>().FirstOrDefault();
 			var added = false;
 			if(root.Manager.LayoutUpdateStrategy != null)
 				added = root.Manager.LayoutUpdateStrategy.BeforeInsertAnchorable(root, this, anchorablePane);
@@ -241,10 +241,11 @@ namespace AvalonDock.Layout {
 						mainLayoutPanel.Children.Add(root.RootPanel);
 
 					root.RootPanel = mainLayoutPanel;
-					anchorablePane = new LayoutAnchorablePane { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+					anchorablePane = new LayoutAnchorableExpanderGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
 					mainLayoutPanel.Children.Add(anchorablePane);
 				}
-				anchorablePane.Children.Add(this);
+				if(this is LayoutAnchorableExpander anchorableExpander)
+					anchorablePane.Children.Add(anchorableExpander);
 			}
 			root.Manager.LayoutUpdateStrategy?.AfterInsertAnchorable(root, this);
 			base.InternalDock();

@@ -45,8 +45,6 @@ namespace AvalonDock.Layout {
 					return ExpandDirection.Down;
 				}
 			}
-
-
 			//set {
 			//	if(_expandDirection == value)
 			//		return;

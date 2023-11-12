@@ -94,10 +94,10 @@ namespace AvalonDock.Controls
 					{
 						var paneGroupModel = targetModel as LayoutDocumentPaneGroup;
 						var paneModel = paneGroupModel.Children[0] as LayoutDocumentPane;
-						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
+						LayoutAnchorableExpanderGroup layoutAnchorableGroupPane = floatingWindow.RootPanel;
 
 						int i = 0;
-						foreach (var anchorableToImport in layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray())
+						foreach (var anchorableToImport in layoutAnchorableGroupPane.Descendents().OfType<LayoutAnchorable>().ToArray())
 						{
 							// BD: 18.07.2020 Remove that bodge and handle CanClose=false && CanHide=true in XAML
 							//anchorableToImport.SetCanCloseInternal(true);

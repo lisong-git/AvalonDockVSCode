@@ -118,7 +118,7 @@
                 <LayoutDocument Title="Document 2" ContentId="document2">
                   <TextBox
                     Background="Transparent"
-                    BorderThickness="0"
+                    BorderThickness="1"
                     Foreground="White"
                     Text="{Binding TestTimer, Mode=OneWay, StringFormat='Document 2 Attached to Timer ->\{0\}'}" />
                 </LayoutDocument>
@@ -200,7 +200,6 @@
 
         <LayoutRoot.ActivityBar>
           <LayoutActivityBar>
-
             <LayoutAnchorableExpanderGroup Orientation="Vertical">
               <LayoutAnchorableExpander Title="E1" IsExpanded="True">
                 <TextBox

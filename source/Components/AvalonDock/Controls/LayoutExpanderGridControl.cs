@@ -31,7 +31,7 @@ namespace AvalonDock.Controls {
 	/// <seealso cref="Grid"/>
 	/// <seealso cref="ILayoutControl"/>
 	/// <seealso cref="IAdjustableSizeLayout"/>
-	public abstract class ExpanderGridControl<T> :Grid,  IAdjustableSizeLayout where T : class, ILayoutElement {
+	public abstract class LayoutExpanderGridControl<T> :Grid,  IAdjustableSizeLayout where T : class, ILayoutElement {
 		#region fields
 
 		private LayoutPositionableGroup<T> _model;
@@ -52,7 +52,7 @@ namespace AvalonDock.Controls {
 		/// </summary>
 		/// <param name="model"></param>
 		/// <param name="orientation"></param>
-		internal ExpanderGridControl() {
+		internal LayoutExpanderGridControl() {
 			//FlowDirection = System.Windows.FlowDirection.LeftToRight;
 			Unloaded += OnUnloaded;
 		}
@@ -117,7 +117,6 @@ namespace AvalonDock.Controls {
 
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
 			if(_model == null || _model.ChildrenCount == 0) { return; }
-
 
 			var modelWithAtcualSize = _model as ILayoutPositionableElementWithActualSize;
 			modelWithAtcualSize.ActualWidth = ActualWidth;
@@ -359,12 +358,13 @@ namespace AvalonDock.Controls {
 				if(Orientation == Orientation.Horizontal) {
 					splitter.Cursor = Cursors.SizeWE;
 					splitter.Style = _model.Root?.Manager?.GridSplitterVerticalStyle;
-					splitter.Width = _model.Root?.Manager?.GridSplitterWidth ?? 1;
+					splitter.Width = _model.Root?.Manager?.GridSplitterWidth ?? 3;
 				} else {
 					splitter.Cursor = Cursors.SizeNS;
 					splitter.Style = _model.Root?.Manager?.GridSplitterHorizontalStyle;
-					splitter.Height = _model.Root?.Manager?.GridSplitterHeight ?? 1;
+					splitter.Height = _model.Root?.Manager?.GridSplitterHeight ?? 3;
 				}
+				//Debug.WriteLine($"{splitter.ActualWidth}, {splitter.ActualHeight}", "CreateSplitters 1");
 
 				Children.Insert(iChild, splitter);
 				// TODO: MK Is this a bug????

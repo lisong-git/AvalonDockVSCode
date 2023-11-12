@@ -321,7 +321,7 @@
     options:Freeze="true"
     Color="#FFFFFF" />
 
-  <!--  Tool Window : Tab  -->
+  <!--#region  Tool Window : Tab  -->
   <SolidColorBrush
     x:Key="{x:Static reskeys:ResourceKeys.ToolWindowTabSelectedActiveBackground}"
     options:Freeze="true"

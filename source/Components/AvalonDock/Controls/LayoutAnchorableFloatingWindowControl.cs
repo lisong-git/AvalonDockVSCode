@@ -48,7 +48,7 @@ namespace AvalonDock.Controls {
 
 		internal LayoutAnchorableFloatingWindowControl(LayoutAnchorableFloatingWindow model, bool isContentImmutable)
 			 : base(model, isContentImmutable) {
-			_model = model;
+			_model = model ?? throw new ArgumentNullException(nameof(model));
 			HideWindowCommand = new RelayCommand<object>((p) => OnExecuteHideWindowCommand(p), (p) => CanExecuteHideWindowCommand(p));
 			CloseWindowCommand = new RelayCommand<object>((p) => OnExecuteCloseWindowCommand(p), (p) => CanExecuteCloseWindowCommand(p));
 			Activated += LayoutAnchorableFloatingWindowControl_Activated;
@@ -142,9 +142,7 @@ namespace AvalonDock.Controls {
 		}
 
 		bool HitTest(Point dragPoint) {
-			//var detectionRect = new Rect(this.PointToScreenDPIWithoutFlowDirection(new Point()), this.TransformActualSizeToAncestor());
-			//return detectionRect.Contains(dragPoint);
-			if(dragPoint == default(Point))
+			if(dragPoint == default)
 				return false;
 			var detectionRect = new Rect(this.PointToScreenDPIWithoutFlowDirection(new Point()), this.TransformActualSizeToAncestor());
 			return detectionRect.Contains(dragPoint);
@@ -174,8 +172,8 @@ namespace AvalonDock.Controls {
 			if(draggingWindow.Model is LayoutDocumentFloatingWindow)
 				return _dropAreas;
 			var rootVisual = (Content as FloatingWindowContentHost).RootVisual;
-			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutAnchorablePaneControl>())
-				_dropAreas.Add(new DropArea<LayoutAnchorablePaneControl>(areaHost, DropAreaType.AnchorablePane));
+			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutAnchorableExpanderGroupControl>())
+				_dropAreas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorablePane));
 			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutDocumentPaneControl>())
 				_dropAreas.Add(new DropArea<LayoutDocumentPaneControl>(areaHost, DropAreaType.DocumentPane));
 			return _dropAreas;
@@ -192,6 +190,7 @@ namespace AvalonDock.Controls {
 		/// <inheritdoc />
 		protected override void OnInitialized(EventArgs e) {
 			base.OnInitialized(e);
+			Debug.WriteLine($"{_model.GetType().Name}, {_model.Root == null}", "OnInitialized");
 			var manager = _model.Root.Manager;
 			Content = manager.CreateUIElementForModel(_model.RootPanel);
 			//SetBinding(VisibilityProperty, new Binding("IsVisible") { Source = _model, Converter = new BoolToVisibilityConverter(), Mode = BindingMode.OneWay, ConverterParameter = Visibility.Hidden });

@@ -30,54 +30,57 @@ namespace AvalonDock.Controls {
 		#region Overrides
 
 		protected override Size MeasureOverride(Size availableSize) {
-			if(!IsItemsHost)
-				return base.MeasureOverride(availableSize);
+			Size desideredSize = new Size();
+			foreach(FrameworkElement child in InternalChildren) {
+				child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				var childWidth = child.DesiredSize.Width;
 
-			double totWidth = 0;
-			double maxHeight = 0;
-			//Debug.WriteLine($"{InternalChildren == null}", "AnchorablePaneTabPanel MeasureOverride");
-			var children = InternalChildren;
-			var visibleChildren = children.Cast<UIElement>().Where(ch => ch.Visibility != Visibility.Collapsed);
-			foreach(FrameworkElement child in visibleChildren) {
-				child.Measure(new Size(double.PositiveInfinity, availableSize.Height));
-				totWidth += child.DesiredSize.Width;
-				maxHeight = Math.Max(maxHeight, child.DesiredSize.Height);
-			}
-
-			if(totWidth > availableSize.Width) {
-				double childFinalDesideredWidth = availableSize.Width / visibleChildren.Count();
-				foreach(FrameworkElement child in visibleChildren) {
-					child.Measure(new Size(childFinalDesideredWidth, availableSize.Height));
+				if(desideredSize.Width + childWidth > availableSize.Width) {
+					//Debug.WriteLine($"{availableSize.Height}, {desideredSize.Height}", "MeasureOverride");
+					return desideredSize;
 				}
+				desideredSize.Width += childWidth;
+				desideredSize.Height = Math.Max(desideredSize.Height, child.DesiredSize.Height);
 			}
-
-			return new Size(Math.Min(availableSize.Width, totWidth), maxHeight);
+			return new Size(Math.Min( desideredSize.Width, availableSize.Width), desideredSize.Height);
 		}
 
 		protected override Size ArrangeOverride(Size finalSize) {
-			var visibleChildren = Children.Cast<UIElement>().Where(ch => ch.Visibility != System.Windows.Visibility.Collapsed);
+			var visibleChildren = Children.Cast<UIElement>().Where(ch => ch.Visibility != Visibility.Collapsed);
+			var offset = 0.0;
+			var skipAllOthers = false;
 
-			double finalWidth = finalSize.Width;
-			double desideredWidth = visibleChildren.Sum(ch => ch.DesiredSize.Width);
-			double offsetX = 0.0;
+			foreach(TabItem child in visibleChildren) {
+				if(skipAllOthers || offset + child.DesiredSize.Width > finalSize.Width) {
+					bool isLayoutContentSelected = false;
+					var layoutContent = child.Content as LayoutAnchorableExpanderGroup;
 
-			if(finalWidth > desideredWidth) {
-				foreach(FrameworkElement child in visibleChildren) {
-					double childFinalWidth = child.DesiredSize.Width;
-					child.Arrange(new Rect(offsetX, 0, childFinalWidth, finalSize.Height));
+					if(layoutContent != null)
+						isLayoutContentSelected = layoutContent.IsSelected;
 
-					offsetX += childFinalWidth;
-				}
-			} else {
-				double childFinalWidth = finalWidth / visibleChildren.Count();
-				foreach(FrameworkElement child in visibleChildren) {
-					child.Arrange(new Rect(offsetX, 0, childFinalWidth, finalSize.Height));
-
-					offsetX += childFinalWidth;
+					if(isLayoutContentSelected && !child.IsVisible) {
+						var parentContainer = layoutContent.Parent as ILayoutContainer;
+						var parentSelector = layoutContent.Parent as ILayoutSelector<LayoutAnchorableExpanderGroup>;
+						var parentPane = layoutContent.Parent as ILayoutPane;
+						int contentIndex = parentSelector.IndexOf(layoutContent);
+						if(contentIndex > 0 &&
+							parentContainer.ChildrenCount > 1) {
+							parentPane.MoveChild(contentIndex, 0);
+							parentSelector.SelectedIndex = 0;
+							return ArrangeOverride(finalSize);
+						}
+					}
+					child.Visibility = Visibility.Hidden;
+					skipAllOthers = true;
+				} else {
+					child.Visibility = Visibility.Visible;
+					child.Arrange(new Rect(offset, 0.0, child.DesiredSize.Width, finalSize.Height));
+					offset += child.ActualWidth + child.Margin.Left + child.Margin.Right;
 				}
 			}
 
-			return finalSize;
+			//Debug.WriteLine($"{finalSize.Height}, {offset}, ", "ArrangeOverride");
+			return new Size(offset, finalSize.Height);
 		}
 
 		//private void PrintParents() {
@@ -88,11 +91,11 @@ namespace AvalonDock.Controls {
 
 		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e) {
 			if(e.LeftButton == System.Windows.Input.MouseButtonState.Pressed &&
-				LayoutAnchorableTabItem.IsDraggingItem()) {
-				var contentModel = LayoutAnchorableTabItem.GetDraggingItem().Model as LayoutAnchorableExpanderGroup;
+				LayoutAnchorableExpanderGroupTabItem.IsDraggingItem()) {
+				var contentModel = LayoutAnchorableExpanderGroupTabItem.GetDraggingItem().Model as LayoutAnchorableExpanderGroup;
 				Debug.WriteLine($"{contentModel.Title}", "AnchorablePaneTabPanel");
 				var manager = contentModel.Root.Manager;
-				LayoutAnchorableTabItem.ResetDraggingItem();
+				LayoutAnchorableExpanderGroupTabItem.ResetDraggingItem();
 
 				//manager.StartDraggingFloatingWindowForContent(contentModel);
 				manager.StartDraggingFloatingWindowForPane(contentModel);

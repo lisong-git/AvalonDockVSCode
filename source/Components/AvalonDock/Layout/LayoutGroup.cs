@@ -98,7 +98,7 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc cref="ILayoutGroup" />
 		public void InsertChildAt(int index, ILayoutElement element) {
-			//Debug.WriteLine($"{element.GetType().Name}, {element.Parent.GetType().Name}", $"LayoutGroup InsertChildAt");
+			//Debug.WriteLine($"{element.GetType().Name}, {element is T}, {typeof(T).Name}", $"LayoutGroup InsertChildAt");
 			if(element is T t)
 				_children.Insert(index, t);
 		}
@@ -106,11 +106,6 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc cref="ILayoutContainer" />
 		public void RemoveChild(ILayoutElement element) {
 			if(element is T t) {
-				Debug.WriteLine($"{_children.Contains(t)}, {t.GetType().Name}, {t.Parent.GetType().Name}", $"LayoutGroup RemoveChild 1");
-				if(element is LayoutAnchorableExpanderGroup g) {
-
-				Debug.WriteLine($"{g.Title}", $"LayoutGroup RemoveChild 2");
-				}
 				_children.Remove(t);
 			}
 		}
@@ -205,7 +200,6 @@ namespace AvalonDock.Layout {
 		#region Private Methods
 
 		private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-			//Debug.WriteLine($"{e.Action}", "LayoutGroup_Children CollectionChanged");
 			if(e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {
 				if(e.OldItems != null) {
 					foreach(LayoutElement element in e.OldItems)

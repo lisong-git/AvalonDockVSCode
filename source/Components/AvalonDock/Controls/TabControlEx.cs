@@ -70,7 +70,10 @@ namespace AvalonDock.Controls {
 
 			ItemsHolderPanel = CreateGrid();
 			// exchange ContentPresenter for Grid
-			var topGrid = (Grid)GetVisualChild(0);
+			//Debug.WriteLine($"{((Border)GetVisualChild(0)).Child.GetType().Name}, {VisualChildrenCount}", "OnApplyTemplate");
+					
+
+			var topGrid = GetVisualChild(0) as Grid;
 
 			if(topGrid != null) {
 				if(topGrid.Children != null && topGrid.Children.Count > 2) {
@@ -137,7 +140,7 @@ namespace AvalonDock.Controls {
 			// Code below is required only if virtualization is turned ON
 			if(_IsVirtualizing)
 				return;
-			Debug.WriteLine($"", "TabControlEx_OnSelectionChanged");
+			//Debug.WriteLine($"", "TabControlEx_OnSelectionChanged");
 			UpdateSelectedItem();
 		}
 

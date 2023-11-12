@@ -170,8 +170,8 @@
     </Setter>
   </Style>
 
-  <!--  AnchorablePaneControlStyle  -->
-  <Style x:Key="AnchorablePaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorablePaneControl}">
+  <!--#region  AnchorablePaneControlStyle-->
+  <!--<Style x:Key="AnchorablePaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorablePaneControl}">
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="TabStripPlacement" Value="Bottom" />
@@ -186,7 +186,9 @@
               <RowDefinition Height="*" />
               <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <!--  Following border is required to catch mouse events  -->
+  -->
+  <!--  Following border is required to catch mouse events  -->
+  <!--
             <Border Grid.RowSpan="2" Background="Transparent" />
             <Border
               x:Name="ContentPanel"
@@ -204,7 +206,8 @@
                 ContentSource="SelectedContent"
                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
             </Border>
-            <!--<avalonDockControls:AnchorablePaneTabPanel
+  -->
+  <!--<avalonDockControls:AnchorablePaneTabPanel
 							x:Name="HeaderPanel"
 							Grid.Row="1"
 							Margin="2,0,2,2"
@@ -212,6 +215,7 @@
 							IsItemsHost="true"
 							Visibility="Collapsed"
 							KeyboardNavigation.TabIndex="1" />-->
+  <!--
           </Grid>
           <ControlTemplate.Triggers>
             <Trigger Property="IsEnabled" Value="false">
@@ -293,9 +297,10 @@
         </DataTemplate>
       </Setter.Value>
     </Setter>
-  </Style>
+  </Style>-->
+  <!--#endregion-->
 
-  <Style x:Key="AnchorablePaneTitleStyle" TargetType="{x:Type avalonDockControls:AnchorablePaneTitle}">
+  <Style x:Key="AnchorablePaneTitleStyle" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate>
@@ -376,7 +381,7 @@
     </Setter>
   </Style>
 
-  <Style BasedOn="{StaticResource AnchorablePaneTitleStyle}" TargetType="{x:Type avalonDockControls:AnchorablePaneTitle}" />
+  <Style BasedOn="{StaticResource AnchorablePaneTitleStyle}" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}" />
 
   <!--<ControlTemplate x:Key="AnchorSideTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorSideControl}">
 		<ItemsControl Background="{TemplateBinding Background}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children1}">
@@ -682,7 +687,8 @@
     <Setter Property="DocumentContextMenu" Value="{DynamicResource DocumentContextMenu}" />
     <Setter Property="DocumentPaneMenuItemHeaderTemplate" Value="{StaticResource DocumentHeaderTemplate}" />
     <Setter Property="IconContentTemplate" Value="{StaticResource IconContentTemplate}" />
-    <Setter Property="GridSplitterHeight" Value="1" />
+    <Setter Property="GridSplitterHeight" Value="5" />
+    <Setter Property="GridSplitterWidth" Value="5" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDock:DockingManager}">
@@ -741,20 +747,22 @@
   </Style>
 
   <!--  LayoutGridResizerControl  -->
-  <Style TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-          <!--<Border Background="#3F3F46" />-->
-          <!--<Rectangle Fill="#3F3F46" />-->
-          <Border Background="#3F3F46" />
-          <!--<Border Background="Red" />-->
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
-  </Style>
+	<Style TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+					<Border Background="#3F3F46" />
+					<!--<Border Background="Transparent" SnapsToDevicePixels="True">
+						<Border
+              Background="Red"
+              SnapsToDevicePixels="True" />
+					</Border>-->
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
-  <Style TargetType="{x:Type avalonDockControls:LayoutDocumentControl}">
+	<Style TargetType="{x:Type avalonDockControls:LayoutDocumentControl}">
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentControl}">
@@ -838,7 +846,8 @@
     </Setter>
   </Style>
 
-  <Style TargetType="{x:Type avalonDockControls:LayoutAnchorableTabItem}">
+  <!--#region LayoutAnchorableTabItem-->
+  <!--<Style TargetType="{x:Type avalonDockControls:LayoutAnchorableTabItem}">
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableTabItem}">
@@ -882,10 +891,12 @@
                 <avalonDockControls:AnchorablePaneTitle Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" />
               </Border>
 
-              <!--
-                Added ContentTemplate and ContentTemplateSelector
-                https://github.com/xceedsoftware/wpftoolkit/issues/1525
-              -->
+  -->
+  <!--
+    Added ContentTemplate and ContentTemplateSelector
+    https://github.com/xceedsoftware/wpftoolkit/issues/1525
+  -->
+  <!--
               <ContentPresenter
                 Grid.Row="1"
                 Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
@@ -893,21 +904,25 @@
                 ContentTemplateSelector="{Binding LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
                 FlowDirection="{TemplateBinding FlowDirection}" />
 
-              <!--<ContentPresenter
+  -->
+  <!--<ContentPresenter
                                 FlowDirection="{TemplateBinding FlowDirection}"
                                 Content="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}"
                                 ContentTemplate="{Binding LayoutItemTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
                                 ContentTemplateSelector="{Binding LayoutItemTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
                                 Grid.Row="1"/>-->
+  <!--
             </Grid>
           </Border>
           <ControlTemplate.Triggers>
             <MultiDataTrigger>
-              <!--
-                Hide the title if the control is directly hosted in floating window
-                The floating window control will show the title if there is only one control to host
-                without any other LayoutAnchorableControl
-              -->
+  -->
+  <!--
+    Hide the title if the control is directly hosted in floating window
+    The floating window control will show the title if there is only one control to host
+    without any other LayoutAnchorableControl
+  -->
+  <!--
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.IsFloating}" Value="True" />
                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.Parent.IsDirectlyHostedInFloatingWindow}" Value="True" />
@@ -915,10 +930,12 @@
               <Setter TargetName="Header" Property="Visibility" Value="Collapsed" />
             </MultiDataTrigger>
             <MultiDataTrigger>
-              <!--
-                Also hide the title, if model cannot be bound which can happen when using virtualization
-                See Issue #148 Drop Down Menu for LayoutAnchorables is not correct with Virtualization
-              -->
+  -->
+  <!--
+    Also hide the title, if model cannot be bound which can happen when using virtualization
+    See Issue #148 Drop Down Menu for LayoutAnchorables is not correct with Virtualization
+  -->
+  <!--
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model}" Value="{x:Null}" />
               </MultiDataTrigger.Conditions>
@@ -928,7 +945,8 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
-  </Style>
+  </Style>-->
+  <!--#endregion-->
 
   <Style x:Key="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}" TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
     <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />

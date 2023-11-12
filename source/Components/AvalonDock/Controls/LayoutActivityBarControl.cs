@@ -46,7 +46,7 @@ namespace AvalonDock.Controls {
 		/// <summary>Class constructor from model and virtualization parameter.</summary>
 		/// <param name="model"></param>
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
-		internal LayoutActivityBarControl(LayoutActivityBar model, bool IsVirtualizing = false) {
+		internal LayoutActivityBarControl(LayoutActivityBar model, bool IsVirtualizing = false):base(IsVirtualizing) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			//SetBinding(SelectedIndexProperty, new Binding("Model.SelectedIndex") { Source = this });
@@ -58,8 +58,6 @@ namespace AvalonDock.Controls {
 		}
 
 		#endregion Constructors
-
-
 
 		#region Properties
 

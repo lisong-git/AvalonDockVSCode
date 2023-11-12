@@ -83,9 +83,9 @@ namespace AvalonDock.Layout {
 		public GridLength DockWidth {
 			//get => _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
 			//			new GridLength(_resizableAbsoluteDockWidth.Value) : _dockWidth;
-			get  {
+			get {
 
-			var h =	_dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
+				var h = _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
 			new GridLength(_resizableAbsoluteDockWidth.Value) : _dockWidth;
 				return h;
 			}
@@ -354,10 +354,10 @@ namespace AvalonDock.Layout {
 		//	UpdateParentVisibility();
 		//}
 
-		private void UpdateParentVisibility() {
-			if(Parent is ILayoutElementWithVisibility parentPane)
-				parentPane.ComputeVisibility();
-		}
+		//private void UpdateParentVisibility() {
+		//	if(Parent is ILayoutElementWithVisibility parentPane)
+		//		parentPane.ComputeVisibility();
+		//}
 		#endregion Properties
 
 		#region Internal Methods

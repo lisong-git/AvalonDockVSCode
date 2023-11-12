@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
@@ -18,14 +18,14 @@ namespace AvalonDockTest
 		[STATestMethod]
 		public void ClearBindingOfHiddenWindowTest()
 		{
-			LayoutAnchorable layoutAnchorable = new LayoutAnchorable
+			LayoutAnchorableExpander layoutAnchorable = new LayoutAnchorableExpander
 			{
 				FloatingWidth = 50,
 				FloatingHeight = 100,
 				ContentId = "Test"
 			};
 
-			LayoutAnchorablePane layoutAnchorablePane = new LayoutAnchorablePane(layoutAnchorable);
+			var layoutAnchorablePane = new LayoutAnchorableExpanderGroup(layoutAnchorable);
 			LayoutAnchorablePaneGroup layoutAnchorablePaneGroup = new LayoutAnchorablePaneGroup(layoutAnchorablePane);
 			LayoutAnchorableFloatingWindow layoutFloatingWindow = new LayoutAnchorableFloatingWindow
 			{

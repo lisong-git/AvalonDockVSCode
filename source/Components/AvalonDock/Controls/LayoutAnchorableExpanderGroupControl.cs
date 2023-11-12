@@ -21,7 +21,7 @@ namespace AvalonDock.Controls {
 	/// This Grid based control can host multiple other controls in its Children collection
 	/// (<see cref="LayoutAnchorableControl"/>).
 	/// </summary>
-	public class LayoutAnchorableExpanderGroupControl :ExpanderGridControl<LayoutAnchorableExpander> {
+	public class LayoutAnchorableExpanderGroupControl :LayoutExpanderGridControl<LayoutAnchorableExpander> {
 		#region fields
 
 
@@ -80,7 +80,7 @@ namespace AvalonDock.Controls {
 			//IsEnabled = Model.IsEnabled;
 			//iIsEnabled || !Model.IsActive)
 			//	return;f(
-			if(Model.Parent != null && Model.Parent is LayoutAnchorablePane layoutAnchorablePane)
+			if(Model.Parent != null && Model.Parent is LayoutAnchorableExpanderGroup layoutAnchorablePane)
 				layoutAnchorablePane.SetNextSelectedIndex();
 		}
 

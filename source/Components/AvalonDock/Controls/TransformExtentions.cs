@@ -57,15 +57,11 @@ namespace AvalonDock.Controls
 				element.TransformActualSizeToAncestor());
 		}
 
-		public static Point TransformToDeviceDPI(this Visual visual, Point pt)
-		{
-			//Matrix m = PresentationSource.FromVisual(visual).CompositionTarget.TransformToDevice;
-			//return new Point(pt.X / m.M11, pt.Y / m.M22);
-			Matrix m = PresentationSource.FromVisual(visual).CompositionTarget.TransformToDevice;
+		public static Point TransformToDeviceDPI(this Visual visual, Point pt) {
 			var compositionTarget = PresentationSource.FromVisual(visual).CompositionTarget;
 			if(compositionTarget == null)
-				return default;
-			m = compositionTarget.TransformToDevice;
+				return default(Point);
+			Matrix m = compositionTarget.TransformToDevice;
 			return new Point(pt.X / m.M11, pt.Y / m.M22);
 		}
 

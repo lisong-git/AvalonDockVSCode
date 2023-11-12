@@ -85,13 +85,13 @@ namespace AvalonDock.Controls {
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
 
-						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
-						Debug.WriteLine($"{layoutAnchorablePaneGroup?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
-						if(layoutAnchorablePaneGroup != null &&
-							(layoutAnchorablePaneGroup.Children.Count == 1 ||
-								layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)) {
+						LayoutAnchorableExpanderGroup paneModel = floatingWindow.RootPanel;
+						Debug.WriteLine($"{paneModel?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
+						if(paneModel != null &&
+							(paneModel.Children.Count == 1 ||
+								paneModel.Orientation == System.Windows.Controls.Orientation.Vertical)) {
 
-							var anchorablesToMove = layoutAnchorablePaneGroup.Children.ToArray();
+							var anchorablesToMove = paneModel.Children.ToArray();
 							for(int i = 0; i < anchorablesToMove.Length; i++) {
 								//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
 								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"AnchorableExpanderDropTarget Drop 3");
@@ -117,11 +117,11 @@ namespace AvalonDock.Controls {
 
 					//	//{
 					//	//	var paneModel = targetModel as LayoutAnchorablePane;
-					//	//	var layoutAnchorablePaneGroup = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
+					//	//	var paneModel = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
 
 					//	//	int i = _index == -1 ? 0 : _index;
 					//	//	foreach(var anchorableToImport in
-					//	//		layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
+					//	//		paneModel.Descendents().OfType<LayoutAnchorable>().ToArray()) {
 					//	//		paneModel.Children.Insert(i, anchorableToImport);
 					//	//		i++;
 					//	//	}

@@ -39,22 +39,23 @@ namespace AvalonDock.Controls {
 			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorableExpanderControl), new FrameworkPropertyMetadata(false));
 		}
 
+		public LayoutAnchorableExpanderControl() {
+			Unloaded += LayoutAnchorableExplandControl_Unloaded;
+			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
+			SizeChanged += OnSizeChanged;
+		}
+
 		/// <summary>Class constructor from model and virtualization parameter.</summary>
 		/// <param name="model"></param>
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
 		internal LayoutAnchorableExpanderControl(LayoutAnchorableExpander model, bool IsVirtualizing)
-		//: base(IsVirtualizing)
-		{
+		: this() {
 			//_model = model ?? throw new ArgumentNullException(nameof(model));
 			Model = model;
 			//SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
 			SetBinding(FlowDirectionProperty, new Binding("Model.Root.Manager.FlowDirection") { Source = this });
 			SetBinding(ExpandDirectionProperty, new Binding("Model.ExpandDirection") { Source = this, Mode = BindingMode.OneWay });
-			// Handle SizeChanged event instead of LayoutUpdated. It will exclude fluctuations of Actual size values.
 			// this.LayoutUpdated += new EventHandler( OnLayoutUpdated );
-			Unloaded += LayoutAnchorableExplandControl_Unloaded;
-
-			SizeChanged += OnSizeChanged;
 		}
 
 		#endregion Constructors
@@ -64,7 +65,7 @@ namespace AvalonDock.Controls {
 		///// <summary>Gets the layout model of this control.</summary>
 		//[Bindable(true), Description("Gets the layout model of this control."), Category("Other")]
 		//public ILayoutElement Model => _model;
-	  ILayoutElement ILayoutControl.Model => Model;
+		ILayoutElement ILayoutControl.Model => Model;
 
 		#region Model
 

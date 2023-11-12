@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -8,6 +8,7 @@
  ************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;

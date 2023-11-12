@@ -72,8 +72,22 @@ namespace AvalonDock.Controls {
 			Debug.WriteLine($"{Type}", $"AnchorableActivityBarDropTarget Drop 1");
 
 			LayoutAnchorableExpanderGroup targetModel = _targetPane.Model;
-			//LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
 			switch(Type) {
+				case DropTargetType.AnchorableExpanderPaneDockTop:
+					#region DropTargetType.Bottom
+	{
+						var expanderGroup = targetModel.Parent as ILayoutGroup;
+						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
+
+						LayoutAnchorableExpanderGroup layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
+						layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
+						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
+						//layoutAnchorableExpanderGroup.Parent = null;
+						expanderGroup.InsertChildAt(insertToIndex, layoutAnchorableExpanderGroup);
+					}
+					break;
+
+				#endregion DropTargetType.Bottom
 				case DropTargetType.AnchorableExpanderPaneDockBottom:
 					#region DropTargetType.Bottom
 					{
@@ -81,6 +95,7 @@ namespace AvalonDock.Controls {
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
 						LayoutAnchorableExpanderGroup layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
+						layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
 						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
 						//layoutAnchorableExpanderGroup.Parent = null;
 						expanderGroup.InsertChildAt(insertToIndex + 1, layoutAnchorableExpanderGroup);

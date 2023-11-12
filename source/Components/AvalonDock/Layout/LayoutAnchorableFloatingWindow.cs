@@ -81,7 +81,7 @@ namespace AvalonDock.Layout {
 			get {
 				if(!IsSinglePane)
 					return null;
-				var singlePane = RootPanel.Descendents().OfType<LayoutAnchorablePane>().Single(p => p.IsVisible);
+				var singlePane = RootPanel.Descendents().OfType<LayoutAnchorableExpanderGroupPane>().Single(p => p.IsVisible);
 				singlePane.UpdateIsDirectlyHostedInFloatingWindow();
 				return singlePane;
 			}
@@ -143,8 +143,8 @@ namespace AvalonDock.Layout {
 				}
 
 				XmlSerializer serializer;
-				if(reader.LocalName.Equals(nameof(LayoutAnchorablePaneGroup)))
-					serializer = XmlSerializersCache.GetSerializer<LayoutAnchorablePaneGroup>();
+				if(reader.LocalName.Equals(nameof(LayoutAnchorableExpanderGroup)))
+					serializer = XmlSerializersCache.GetSerializer<LayoutAnchorableExpanderGroup>();
 				else {
 					var type = LayoutRoot.FindType(reader.LocalName);
 					if(type == null)

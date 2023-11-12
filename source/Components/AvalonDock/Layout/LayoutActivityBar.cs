@@ -14,7 +14,7 @@ namespace AvalonDock.Layout {
 
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableExpanderGroup>, ILayoutSelector<LayoutAnchorableExpanderGroup> {
+	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableExpanderGroup>, ILayoutPane, ILayoutSelector<LayoutAnchorableExpanderGroup> {
 		#region fields
 
 		private string _id;
@@ -55,10 +55,6 @@ namespace AvalonDock.Layout {
 
 			set {
 				if(value != _layoutAnchorableExpanderGroupBox) {
-					//var old = _layoutAnchorableExpanderGroupBox;
-					//if(old != null) {
-					//	Root.RootPanel.RemoveChild(old);
-					//}
 					RaisePropertyChanging(nameof(LayoutAnchorableExpanderGroupPane));
 
 					_layoutAnchorableExpanderGroupBox = value;
@@ -88,25 +84,6 @@ namespace AvalonDock.Layout {
 				v.SetVisible(!v.IsVisible);
 			}
 		});
-
-		//public ICommand TestCommand2 => new RelayCommand<object>((p) => {
-		//	var box =  Root.Manager.LayoutAnchorableExpanderGroupBoxControl;
-		//	//MessageBox.Show($"{box?.IsVisible}");
-		//	Debug.WriteLine($"{box != null}, {p.GetType()}", "TestCommand 2");
-		//	var box2 =  Root.Manager.LayoutAnchorableExpanderGroupPane;
-		//	//MessageBox.Show($"{box?.IsVisible}");
-		//	if(box != null) {
-		//		//box.Se
-		//		var index = Index;
-		//		Debug.WriteLine($"{index}, {box.SelectedIndex}", "TestCommand2 1");
-		//		if(box.SelectedIndex == index) {
-		//			box2.SetVisible(!box2.IsVisible);
-		//		} else {
-		//			box.SelectedIndex = index;
-		//			box2.SetVisible(true);
-		//		}
-		//	}
-		//});
 
 		#endregion Properties
 
@@ -171,17 +148,17 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		public override void WriteXml(System.Xml.XmlWriter writer) {
-			if(_id != null)
-				writer.WriteAttributeString(nameof(ILayoutPaneSerializable.Id), _id);
+			//if(_id != null)
+			//	writer.WriteAttributeString(nameof(ILayoutPaneSerializable.Id), _id);
 
-			base.WriteXml(writer);
+			//base.WriteXml(writer);
 		}
 
 		/// <inheritdoc />
 		public override void ReadXml(System.Xml.XmlReader reader) {
-			if(reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id)))
-				_id = reader.Value;
-			base.ReadXml(reader);
+			//if(reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id)))
+			//	_id = reader.Value;
+			//base.ReadXml(reader);
 		}
 
 #if TRACE
@@ -216,7 +193,7 @@ namespace AvalonDock.Layout {
 		public int SelectedIndex {
 			get => _selectedIndex;
 			set {
-				Debug.WriteLine($"{_selectedIndex}, {value}", $"LayoutActivityBar SelectedIndex");
+				//Debug.WriteLine($"{_selectedIndex}, {value}", $"LayoutActivityBar SelectedIndex");
 
 				if(_selectedIndex != value) {
 					_selectedIndex = value;
@@ -228,7 +205,7 @@ namespace AvalonDock.Layout {
 		public LayoutAnchorableExpanderGroup SelectedItem {
 			get => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
 			set {
-				if(value != SelectedItem) {
+				if(value != null && value != SelectedItem) {
 					value.IsSelected = true;
 				}
 			}
@@ -263,28 +240,39 @@ namespace AvalonDock.Layout {
 
 		#endregion Private Methods
 
-		public ObservableCollection<LayoutAnchorableExpanderGroup> OverflowItems {
+		public IEnumerable<LayoutAnchorableExpanderGroup> OverflowItems {
 			get {
 				var children = Children;
 
 				//if(children != null)
 				//	foreach(var child in children) {
-				//		Debug.WriteLine($"{child.GetType()}, {child?.TabItem}, {child?.TabItem?.IsVisible}, ", "OverflowItems 2");
+				//		Debug.WriteLine($"{child?.TabItem?.IsVisible}, ", "OverflowItems 1");
 				//	}
-				////var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true)).ToList();
+				var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true));
 				//var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>()
 				//	//.Where(o=> !(o.TabItem?.IsVisible == true))
 				//	;
 				////listSorted.Sort();
-				//return listSorted.ToList();
-				return children;
+				//Debug.WriteLine($"{listSorted.Count()}, ", "OverflowItems 2");
+
+				return listSorted.ToList();
+
+				//return children;
 			}
 			set {
-				Debug.WriteLine($"", "OverflowItems 1");
+				//Debug.WriteLine($"", "OverflowItems 1");
+				RaisePropertyChanged(nameof(OverflowItems));
+				RaisePropertyChanged(nameof(HasOverflowItem));
+
+				//var children = Children;
+				//if(children != null)
+				//	foreach(var child in children) {
+				//		Debug.WriteLine($"{child?.TabItem?.IsVisible}, {HasOverflowItem}", "OverflowItems 3");
+				//	}
 			}
 		}
 
-		public bool IsOverflowing => Children.OfType<LayoutAnchorableExpanderGroup>().Any(o => !o.TabItem.IsVisible);
+		public bool HasOverflowItem => Children.OfType<LayoutAnchorableExpanderGroup>().Any(o => !(o.TabItem?.IsVisible == true));
 
 		#region Private Metho
 		private void AutoFixSelectedContent() {

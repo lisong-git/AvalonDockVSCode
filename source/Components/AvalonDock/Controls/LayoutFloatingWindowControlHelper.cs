@@ -20,7 +20,7 @@ namespace AvalonDock.Controls
 			{
 				selector = fwc.Model
 					.Descendents()
-						.OfType<LayoutAnchorablePane>()
+						.OfType<LayoutAnchorableExpanderGroup>()
 							.FirstOrDefault(p => p.ChildrenCount > 0 && p.SelectedContent != null);
 			}
 			else if (fwc is LayoutDocumentFloatingWindowControl)
@@ -58,8 +58,8 @@ namespace AvalonDock.Controls
 			{
 				if (fwc is LayoutAnchorableFloatingWindowControl)
 				{
-					var paneControl = GetLayoutControlByMousePosition<LayoutAnchorablePaneControl>(fwc);
-					if (paneControl != null && paneControl.Model is LayoutAnchorablePane pane)
+					var paneControl = GetLayoutControlByMousePosition<LayoutAnchorableExpanderGroupPaneControl>(fwc);
+					if (paneControl != null && paneControl.Model is LayoutAnchorableExpanderGroup pane)
 					{
 						if (pane.SelectedContent != null)
 							pane.SelectedContent.IsActive = true;
@@ -101,7 +101,7 @@ namespace AvalonDock.Controls
 			}
 		}
 
-		public static void ActiveTheLastActivedContentOfPane(LayoutAnchorablePane anchorablePane)
+		public static void ActiveTheLastActivedContentOfPane(LayoutAnchorableExpanderGroup anchorablePane)
 		{
 			var index = IndexOfLastActivedContent(anchorablePane.Children);
 			if (index != -1)

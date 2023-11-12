@@ -19,8 +19,8 @@ namespace AvalonDock.Controls
 {
 	/// <inheritdoc />
 	/// <summary>
-	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorablePaneControl"/>
-	/// shows more than 1 <see cref="LayoutAnchorableControl"/>. This TabItem is displayed at the bottom
+	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorableExpanderGroupPaneControl"/>
+	/// shows more than 1 <see cref="LayoutAnchorableExpanderControl"/>. This TabItem is displayed at the bottom
 	/// of a <see cref="LayoutAnchorablePaneControl"/>.
 	/// </summary>
 	/// <seealso cref="Control"/>
@@ -48,14 +48,14 @@ namespace AvalonDock.Controls
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutContent), typeof(LayoutAnchorableExpanderGroupTabItem),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpanderGroup), typeof(LayoutAnchorableExpanderGroupTabItem),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
-		public LayoutContent Model
+		public LayoutAnchorableExpanderGroup Model
 		{
-			get => (LayoutContent)GetValue(ModelProperty);
+			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
 			set => SetValue(ModelProperty, value);
 		}
 
@@ -65,7 +65,7 @@ namespace AvalonDock.Controls
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e)
 		{
-			SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
+			//SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
 			//UpdateLogicalParent();
 		}
 
@@ -74,7 +74,7 @@ namespace AvalonDock.Controls
 		#region LayoutItem
 
 		/// <summary><see cref="LayoutItem"/> Read-Only dependency property.</summary>
-		private static readonly DependencyPropertyKey LayoutItemPropertyKey = DependencyProperty.RegisterReadOnly(nameof(LayoutItem), typeof(LayoutItem), typeof(LayoutAnchorableTabItem),
+		private static readonly DependencyPropertyKey LayoutItemPropertyKey = DependencyProperty.RegisterReadOnly(nameof(LayoutItem), typeof(LayoutItem), typeof(LayoutAnchorableExpanderGroupTabItem),
 				new FrameworkPropertyMetadata(null));
 
 		public static readonly DependencyProperty LayoutItemProperty = LayoutItemPropertyKey.DependencyProperty;
@@ -113,12 +113,12 @@ namespace AvalonDock.Controls
 		{
 			base.OnMouseLeftButtonDown(e);
 
-			// Start a drag & drop action for a LayoutAnchorable
-			var anchorAble = this.Model as LayoutAnchorable;
-			if (anchorAble != null)
-			{
-				if (anchorAble.CanMove == false) return;
-			}
+			// Start a drag & drop action for a LayoutAnchorableExpanderGroup
+			//var anchorAble = this.Model as LayoutAnchorableExpanderGroup;
+			//if (anchorAble != null)
+			//{
+			//	if (anchorAble.CanMove == false) return;
+			//}
 
 			_isMouseDown = true;
 			_draggingItem = this;
@@ -169,8 +169,8 @@ namespace AvalonDock.Controls
 			var model = Model;
 			var container = model.Parent;
 			var containerPane = model.Parent as ILayoutPane;
-			if (containerPane is LayoutAnchorablePane layoutAnchorablePane && !layoutAnchorablePane.CanRepositionItems) return;
-			if (containerPane.Parent is LayoutAnchorablePaneGroup layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
+			if (containerPane is LayoutAnchorableExpanderGroup layoutAnchorablePane && !layoutAnchorablePane.CanRepositionItems) return;
+			if (containerPane.Parent is LayoutAnchorableExpanderGroupPane layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
 			var childrenList = container.Children.ToList();
 
 			// Hotfix to avoid crash caused by a likely threading issue Back in the containerPane.

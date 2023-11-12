@@ -24,7 +24,7 @@ namespace AvalonDock.Controls
 {
 	/// <summary>
 	/// Implements a floating window control that can host other controls
-	/// (<see cref="LayoutAnchorableControl"/>, <see cref="LayoutDocumentControl"/>)
+	/// (<see cref="LayoutAnchorableExpanderControl"/>, <see cref="LayoutDocumentControl"/>)
 	/// and be dragged (independently of the <see cref="DockingManager"/>) around the screen.
 	/// </summary>
 	public class LayoutDocumentFloatingWindowControl : LayoutFloatingWindowControl, IOverlayWindowHost
@@ -223,8 +223,9 @@ namespace AvalonDock.Controls
 			return HitTest(this.TransformToDeviceDPI(dragPoint));
 		}
 
-		bool HitTest(Point dragPoint)
-		{
+		bool HitTest(Point dragPoint) {
+			if(dragPoint == default(Point))
+				return false;
 			var detectionRect = new Rect(this.PointToScreenDPIWithoutFlowDirection(new Point()), this.TransformActualSizeToAncestor());
 			return detectionRect.Contains(dragPoint);
 		}
@@ -294,8 +295,8 @@ namespace AvalonDock.Controls
 
 			var rootVisual = ((FloatingWindowContentHost)Content).RootVisual;
 
-			foreach (var areaHost in rootVisual.FindVisualChildren<LayoutAnchorablePaneControl>())
-				_dropAreas.Add(new DropArea<LayoutAnchorablePaneControl>(areaHost, DropAreaType.AnchorablePane));
+			foreach (var areaHost in rootVisual.FindVisualChildren<LayoutAnchorableExpanderControl>())
+				_dropAreas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorablePane));
 
 			if (dockAsDocument)
 			{
@@ -320,9 +321,9 @@ namespace AvalonDock.Controls
 			if (!(draggingWindow.Model is LayoutAnchorableFloatingWindow layoutAnchorableFloatingWindow)) yield break;
 			//big part of code for getting type
 
-			if (layoutAnchorableFloatingWindow.SinglePane is LayoutAnchorablePane layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null))
+			if (layoutAnchorableFloatingWindow.SinglePane is LayoutAnchorableExpanderGroup layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null))
 			{
-				var layoutAnchorable = ((LayoutAnchorablePane)layoutAnchorableFloatingWindow.SinglePane).SelectedContent as LayoutAnchorable;
+				var layoutAnchorable = ((LayoutAnchorableExpanderGroup)layoutAnchorableFloatingWindow.SinglePane).SelectedContent as LayoutAnchorable;
 				yield return layoutAnchorable;
 			}
 			else
@@ -331,17 +332,17 @@ namespace AvalonDock.Controls
 		}
 
 		/// <summary>
-		/// Finds all <see cref="LayoutAnchorable"/> objects (toolwindows) within a
+		/// Finds all <see cref="LayoutAnchorableExpander"/> objects (toolwindows) within a
 		/// <see cref="LayoutAnchorablePaneGroup"/> (if any) and return them.
 		/// </summary>
 		/// <param name="layoutAnchPaneGroup"></param>
 		/// <returns>All the anchorable items found.</returns>
-		/// <seealso cref="LayoutAnchorable"/>
+		/// <seealso cref="LayoutAnchorableExpander"/>
 		/// <seealso cref="LayoutAnchorablePaneGroup"/>
-		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorableExpanderGroup layoutAnchPaneGroup)
+		internal IEnumerable<LayoutAnchorableExpander> GetLayoutAnchorable(LayoutAnchorableExpanderGroup layoutAnchPaneGroup)
 		{
 			if (layoutAnchPaneGroup == null) yield break;
-			foreach (var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorable>())
+			foreach (var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorableExpander>())
 				yield return anchorable;
 		}
 

@@ -18,8 +18,8 @@ using System.Windows.Input;
 namespace AvalonDock.Controls {
 	/// <inheritdoc />
 	/// <summary>
-	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorablePaneControl"/>
-	/// shows more than 1 <see cref="LayoutAnchorableControl"/>. This TabItem is displayed at the bottom
+	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorableExpanderGroupPaneControl"/>
+	/// shows more than 1 <see cref="LayoutAnchorableExpanderGroupControl"/>. This TabItem is displayed at the bottom
 	/// of a <see cref="LayoutAnchorablePaneControl"/>.
 	/// </summary>
 	/// <seealso cref="Control"/>
@@ -38,6 +38,9 @@ namespace AvalonDock.Controls {
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(LayoutActivityTabItem), new FrameworkPropertyMetadata(typeof(LayoutActivityTabItem)));
 		}
 
+		public LayoutActivityTabItem() {
+		}
+
 		#endregion Constructors
 
 		#region Properties
@@ -52,7 +55,10 @@ namespace AvalonDock.Controls {
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
 		public LayoutAnchorableExpanderGroup Model {
 			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
-			set => SetValue(ModelProperty, value);
+			set {
+				//Debug.WriteLine($"{Model?.GetType()?.Name}", "LayoutActivityTabItem_Model 1");
+				SetValue(ModelProperty, value);
+			}
 		}
 
 		/// <summary>Handles changes to the <see cref="Model"/> property.</summary>
@@ -61,14 +67,15 @@ namespace AvalonDock.Controls {
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e) {
 			//SetLayoutItem(Model?.Root.Manager.GetLayoutItemFromModel(Model));
-			//Model.TabItem2 = this;
+			//Debug.WriteLine($"{Model?.GetType()?.Name}", "LayoutActivityTabItem_OnModelChanged 1");
+			Model.TabItem = this;
 			//UpdateLogicalParent();
 		}
 
+
+
 		#endregion Model
-
 		#region LayoutItem
-
 		/// <summary><see cref="LayoutItem"/> Read-Only dependency property.</summary>
 		private static readonly DependencyPropertyKey LayoutItemPropertyKey = DependencyProperty.RegisterReadOnly(nameof(LayoutItem), typeof(LayoutItem), typeof(LayoutActivityTabItem),
 				new FrameworkPropertyMetadata(null));
@@ -173,9 +180,9 @@ namespace AvalonDock.Controls {
 				return;
 
 			var model = Model;
-			var container = model.Parent;
+			var container = model.Parent as ILayoutContainer;
 			var containerPane = model.Parent as ILayoutPane;
-			Debug.WriteLine($"{model?.GetType().Name}, {container.GetType().Name}, {containerPane?.GetType().Name}, {container is ILayoutPane}", "LayoutActivityTabItem_OnMouseEnter 1");
+			Debug.WriteLine($"{model?.GetType().Name}, {container.GetType().Name}, {container is ILayoutPane}, {container.Root?.GetType().Name}, {container.Root?.Manager == null}", "LayoutActivityTabItem_OnMouseEnter 1");
 			if(containerPane is LayoutAnchorableExpanderGroupPane expGroupBox && !expGroupBox.CanRepositionItems)
 				return;
 			//if (containerPane.Parent is LayoutAnchorablePaneGroup layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
@@ -190,6 +197,8 @@ namespace AvalonDock.Controls {
 				containerPane.MoveChild(oldIndex, newIndex);
 		}
 
+
+		
 		#endregion Overrides
 	}
 }

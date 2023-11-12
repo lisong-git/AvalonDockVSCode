@@ -25,7 +25,7 @@ namespace AvalonDock.Controls {
 	/// It is used to show a title bar with docking window buttons to let users interact
 	/// with a <see cref="LayoutAnchorableExpander"/> via drop down menu click or drag & drop.
 	/// </summary>
-	public class AnchorablePaneTitle :ToggleButton {
+	public class AnchorableExpanderTitle :ToggleButton {
 		#region fields
 
 		private bool _isMouseDown = false;
@@ -38,10 +38,10 @@ namespace AvalonDock.Controls {
 		/// <summary>
 		/// Static class constructor
 		/// </summary>
-		static AnchorablePaneTitle() {
-			IsHitTestVisibleProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(true));
-			FocusableProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(false));
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(typeof(AnchorablePaneTitle)));
+		static AnchorableExpanderTitle() {
+			IsHitTestVisibleProperty.OverrideMetadata(typeof(AnchorableExpanderTitle), new FrameworkPropertyMetadata(true));
+			FocusableProperty.OverrideMetadata(typeof(AnchorableExpanderTitle), new FrameworkPropertyMetadata(false));
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(AnchorableExpanderTitle), new FrameworkPropertyMetadata(typeof(AnchorableExpanderTitle)));
 		}
 
 		//protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e) {
@@ -53,7 +53,7 @@ namespace AvalonDock.Controls {
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpander), typeof(AnchorablePaneTitle),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpander), typeof(AnchorableExpanderTitle),
 				new FrameworkPropertyMetadata(null, _OnModelChanged));
 
 		/// <summary>Gets/sets the <see cref="LayoutAnchorableExpander"/> model attached of this view.</summary>
@@ -63,7 +63,7 @@ namespace AvalonDock.Controls {
 			set => SetValue(ModelProperty, value);
 		}
 
-		private static void _OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) => ((AnchorablePaneTitle) sender).OnModelChanged(e);
+		private static void _OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) => ((AnchorableExpanderTitle) sender).OnModelChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e) {
@@ -78,7 +78,7 @@ namespace AvalonDock.Controls {
 		#region LayoutItem
 
 		/// <summary><see cref="LayoutItem"/> Read-Only dependency property.</summary>
-		private static readonly DependencyPropertyKey LayoutItemPropertyKey = DependencyProperty.RegisterReadOnly(nameof(LayoutItem), typeof(LayoutItem), typeof(AnchorablePaneTitle),
+		private static readonly DependencyPropertyKey LayoutItemPropertyKey = DependencyProperty.RegisterReadOnly(nameof(LayoutItem), typeof(LayoutItem), typeof(AnchorableExpanderTitle),
 				new FrameworkPropertyMetadata((LayoutItem)null));
 
 		public static readonly DependencyProperty LayoutItemProperty = LayoutItemPropertyKey.DependencyProperty;
@@ -107,16 +107,16 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeave(MouseEventArgs e) {
-			//Debug.WriteLine($"", $"AnchorablePaneTitle OnMouseLeave 1");
+			//Debug.WriteLine($"", $"AnchorableExpanderTitle_OnMouseLeave 1");
 
 			base.OnMouseLeave(e);
 			if(_isMouseDown && e.LeftButton == MouseButtonState.Pressed) {
-					Debug.WriteLine($"{Model?.GetType()}", $"AnchorablePaneTitle OnMouseLeave 2");
-				var pane = this.FindVisualAncestor<LayoutAnchorablePaneControl>();
+					//Debug.WriteLine($"{Model?.GetType().Name}, {Model.Root == null}, {Model?.Root?.Manager == null}", $"AnchorableExpanderTitle_OnMouseLeave 2");
+				var pane = this.FindVisualAncestor<LayoutAnchorableExpanderGroupControl>();
 
 				if(pane != null) {
 
-					var paneModel = pane.Model as LayoutAnchorablePane;
+					var paneModel = pane.Model as LayoutAnchorableExpanderGroup;
 					var manager = paneModel.Root.Manager;
 					manager.StartDraggingFloatingWindowForPane(paneModel);
 				} else {
@@ -134,15 +134,13 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
-			//Debug.WriteLine($"{e.LeftButton}, {e.Handled}", $"AnchorablePaneTitle OnMouseLeftButtonDown 1");
-
 			// Start a drag & drop action for a LayoutAnchorableExpander
 			if(e.Handled || Model.CanMove == false)
 				return;
 			var attachFloatingWindow = false;
 			var parentFloatingWindow = Model.FindParent<LayoutAnchorableFloatingWindow>();
 			if(parentFloatingWindow != null)
-				attachFloatingWindow = parentFloatingWindow.Descendents().OfType<LayoutAnchorablePane>().Count() == 1;
+				attachFloatingWindow = parentFloatingWindow.Descendents().OfType<LayoutAnchorableExpanderGroup>().Count() == 1;
 
 			if(attachFloatingWindow) {
 				//the pane is hosted inside a floating window that contains only an anchorable pane so drag the floating window itself

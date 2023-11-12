@@ -393,7 +393,7 @@ namespace AvalonDock.Controls {
 
 					{
 						var paneModel = targetModel as LayoutDocumentPane;
-						LayoutAnchorableExpanderGroup layoutAnchorablePaneGroup = floatingWindow.RootPanel;
+						LayoutAnchorableExpanderGroup layoutAnchorableGroup = floatingWindow.RootPanel;
 
 						bool checkPreviousContainer = true;
 						int i = 0;
@@ -403,7 +403,7 @@ namespace AvalonDock.Controls {
 						}
 						LayoutAnchorable anchorableToActivate = null;
 
-						foreach(var anchorableToImport in layoutAnchorablePaneGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
+						foreach(var anchorableToImport in layoutAnchorableGroup.Descendents().OfType<LayoutAnchorable>().ToArray()) {
 							if(checkPreviousContainer) {
 								var previousContainer = ((ILayoutPreviousContainer)anchorableToImport).PreviousContainer;
 								if(object.ReferenceEquals(previousContainer, targetModel) && (anchorableToImport.PreviousContainerIndex != -1)) {

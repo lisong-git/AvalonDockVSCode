@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -10,7 +10,7 @@
 namespace AvalonDock.Layout
 {
 	/// <summary>Defines an interface for that identifies a <see cref="LayoutAnchorablePane"/>
-	/// or an equivalent class (<see cref="LayoutAnchorablePaneGroup"/>, <see cref="LayoutAnchorablePaneGroupControl"/> etc.)</summary>
+	/// or an equivalent class (<see cref="LayoutAnchorableExpanderGroupPane"/>, <see cref="LayoutAnchorableExpanderGroupPaneControl"/> etc.)</summary>
 	public interface ILayoutAnchorablePane : ILayoutPanelElement, ILayoutPane
 	{
 	}

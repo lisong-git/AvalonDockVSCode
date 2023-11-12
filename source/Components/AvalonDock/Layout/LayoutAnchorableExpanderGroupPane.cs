@@ -43,7 +43,10 @@ namespace AvalonDock.Layout {
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableExpanderGroupPane() {
+		public LayoutAnchorableExpanderGroupPane() :base(){
+		}
+		public LayoutAnchorableExpanderGroupPane(LayoutAnchorableExpanderGroup anchorableExpanderGroup):this() {
+			Children.Add(anchorableExpanderGroup);
 		}
 
 		#endregion Constructors
@@ -66,7 +69,7 @@ namespace AvalonDock.Layout {
 		}
 
 		public string Title {
-			get => _title ?? Children.FirstOrDefault().Title;
+			get => _title ?? Children.FirstOrDefault()?.Title ?? "Empty Title";
 			set {
 				if(value == _title)
 					return;
@@ -231,7 +234,7 @@ namespace AvalonDock.Layout {
 		public int SelectedIndex {
 			get => _selectedIndex;
 			set {
-				Debug.WriteLine($"{_selectedIndex}, {value}", $"SelectedIndex");
+				//Debug.WriteLine($"{_selectedIndex}, {value}", $"SelectedIndex");
 
 				if(_selectedIndex != value) {
 					_selectedIndex = value;
@@ -287,6 +290,12 @@ namespace AvalonDock.Layout {
 				child.Orientation = _orientation;
 			}
 		}
+
+
+		/// <summary>
+		/// Updates whether this object is hosted at the root level of a floating window control or not.
+		/// </summary>
+		internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 
 		#endregion Private Methods
 	}

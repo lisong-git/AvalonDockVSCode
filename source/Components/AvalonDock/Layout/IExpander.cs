@@ -8,6 +8,9 @@ namespace AvalonDock.Layout {
 		ExpandDirection ExpandDirection { get; 
 			//set; 
 		}
-		bool IsExpanded { get; set; }
+		bool IsExpanded { 
+			get; 
+			//set;
+		}
 	}
 }

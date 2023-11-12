@@ -167,10 +167,10 @@ namespace AvalonDock.Controls
 		{
 			var focusedElement = e.NewFocus as Visual;
 			if (focusedElement != null &&
-				!(focusedElement is LayoutAnchorableTabItem || focusedElement is LayoutDocumentTabItem))
+				!(focusedElement is LayoutAnchorableExpanderGroupTabItem || focusedElement is LayoutDocumentTabItem))
 			//Avoid tracking focus for elements like this
 			{
-				var parentAnchorable = focusedElement.FindVisualAncestor<LayoutAnchorableControl>();
+				var parentAnchorable = focusedElement.FindVisualAncestor<LayoutAnchorableExpanderControl>();
 				if (parentAnchorable != null)
 				{
 					_modelFocusedElement[parentAnchorable.Model] = e.NewFocus;
@@ -194,7 +194,7 @@ namespace AvalonDock.Controls
 
 				if (hostContainingFocusedHandle != null)
 				{
-					var parentAnchorable = hostContainingFocusedHandle.FindVisualAncestor<LayoutAnchorableControl>();
+					var parentAnchorable = hostContainingFocusedHandle.FindVisualAncestor<LayoutAnchorableExpanderControl>();
 					if (parentAnchorable != null)
 					{
 						_modelFocusedWindowHandle[parentAnchorable.Model] = e.GotFocusWinHandle;
