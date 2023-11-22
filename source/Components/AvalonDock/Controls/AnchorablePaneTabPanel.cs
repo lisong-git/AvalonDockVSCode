@@ -75,6 +75,7 @@ namespace AvalonDock.Controls {
 				desideredSize.Width += childWidth;
 				desideredSize.Height = Math.Max(desideredSize.Height, child.DesiredSize.Height);
 			}
+
 			return new Size(Math.Min( desideredSize.Width, availableSize.Width), desideredSize.Height);
 		}
 
@@ -111,17 +112,10 @@ namespace AvalonDock.Controls {
 					offset += child.ActualWidth + child.Margin.Left + child.Margin.Right;
 				}
 			}
-
 			SetValue(HasOverflowItemsPropertyKey, skipAllOthers);
-			//Debug.WriteLine($"{finalSize.Height}, {offset}, ", "ArrangeOverride");
 			return new Size(offset, finalSize.Height);
 		}
 
-		//private void PrintParents() {
-		//	foreach (var child in Parent.GetParents()) {
-		//		Debug.WriteLine($"{child.GetType()}", "PP");
-		//	}
-		//}
 
 		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e) {
 			if(e.LeftButton == System.Windows.Input.MouseButtonState.Pressed &&
