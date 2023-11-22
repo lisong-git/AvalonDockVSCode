@@ -22,7 +22,7 @@ namespace AvalonDock.Layout {
 	public class LayoutAnchorableFloatingWindow :LayoutFloatingWindow, ILayoutElementWithVisibility {
 		#region fields
 
-		private LayoutAnchorableExpanderGroup _rootPanel;
+		private LayoutAnchorableExpanderGroupPane _rootPanel;
 
 		[NonSerialized]
 		private bool _isVisible = true;
@@ -54,7 +54,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public LayoutAnchorableExpanderGroup RootPanel {
+		public LayoutAnchorableExpanderGroupPane RootPanel {
 			get => _rootPanel;
 			set {
 				if(value == _rootPanel)
@@ -81,7 +81,7 @@ namespace AvalonDock.Layout {
 			get {
 				if(!IsSinglePane)
 					return null;
-				var singlePane = RootPanel.Descendents().OfType<LayoutAnchorableExpanderGroupPane>().Single(p => p.IsVisible);
+				var singlePane = RootPanel.Descendents().OfType<LayoutAnchorableExpanderGroup>().Single(p => p.IsVisible);
 				singlePane.UpdateIsDirectlyHostedInFloatingWindow();
 				return singlePane;
 			}
@@ -112,7 +112,7 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		public override void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement) {
 			Debug.Assert(oldElement == RootPanel && oldElement != null);
-			RootPanel = newElement as LayoutAnchorableExpanderGroup;
+			RootPanel = newElement as LayoutAnchorableExpanderGroupPane;
 		}
 
 		/// <inheritdoc />
@@ -143,15 +143,15 @@ namespace AvalonDock.Layout {
 				}
 
 				XmlSerializer serializer;
-				if(reader.LocalName.Equals(nameof(LayoutAnchorableExpanderGroup)))
-					serializer = XmlSerializersCache.GetSerializer<LayoutAnchorableExpanderGroup>();
+				if(reader.LocalName.Equals(nameof(LayoutAnchorableExpanderGroupPane)))
+					serializer = XmlSerializersCache.GetSerializer<LayoutAnchorableExpanderGroupPane>();
 				else {
 					var type = LayoutRoot.FindType(reader.LocalName);
 					if(type == null)
 						throw new ArgumentException("AvalonDock.LayoutAnchorableFloatingWindow doesn't know how to deserialize " + reader.LocalName);
 					serializer = XmlSerializersCache.GetSerializer(type);
 				}
-				RootPanel = (LayoutAnchorableExpanderGroup) serializer.Deserialize(reader);
+				RootPanel = (LayoutAnchorableExpanderGroupPane) serializer.Deserialize(reader);
 			}
 			reader.ReadEndElement();
 		}

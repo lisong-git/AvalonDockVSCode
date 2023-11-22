@@ -72,8 +72,6 @@ namespace AvalonDock.Controls {
 			//UpdateLogicalParent();
 		}
 
-
-
 		#endregion Model
 		#region LayoutItem
 		/// <summary><see cref="LayoutItem"/> Read-Only dependency property.</summary>
@@ -113,7 +111,7 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
-			base.OnMouseLeftButtonDown(e);
+			//base.OnMouseLeftButtonDown(e);
 
 			// Start a drag & drop action for a LayoutAnchorable
 			//var anchorAble = this.Model as LayoutAnchorable;
@@ -151,8 +149,8 @@ namespace AvalonDock.Controls {
 				var activityBar = model.Parent as LayoutActivityBar;
 				var paneModel = activityBar.LayoutAnchorableExpanderGroupPane;
 				//Debug.WriteLine($"{_lastSelectedIndex}, {activityBar.SelectedIndex}", $"OnMouseLeftButtonUp 1");
-
 				if(_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
+					//Model.IsActive = true;
 					paneModel.SetVisible(!paneModel.IsVisible);
 				}
 			}

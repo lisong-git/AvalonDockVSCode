@@ -30,9 +30,9 @@ namespace AvalonDock.Controls {
 		#region Constructors
 
 
-		public LayoutAnchorableExpanderGroupControl() {
-			//Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");
-		}
+		//public LayoutAnchorableExpanderGroupControl() {
+		//	//Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");
+		//}
 
 
 		#endregion Constructors
@@ -93,36 +93,36 @@ namespace AvalonDock.Controls {
 		#region Overrides
 
 		protected override void OnFixChildrenDockLengths() {
-			var model = Model as LayoutAnchorableExpanderGroup;
-			if(model == null)
-				return;
-			//Debug.WriteLine($"", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
+			//var model = Model as LayoutAnchorableExpanderGroup;
+			//if(model == null)
+			//	return;
+			////Debug.WriteLine($"", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
 
-			if(model.Orientation == Orientation.Horizontal) {
-				// Setup DockWidth for children
-				for(int i = 0; i < model.Children.Count; i++) {
-					var childModel = model.Children[i] as ILayoutPositionableElement;
-					//if(!childModel.DockWidth.IsStar) {
-					//	childModel.DockWidth = new GridLength(1.0, GridUnitType.Star);
-					//}
-					if(!childModel.DockWidth.IsAuto) {
-						childModel.DockWidth = new GridLength(0.0, GridUnitType.Auto);
-					}
-				}
-			} else {
-				// Setup DockHeight for children
-				for(int i = 0; i < model.Children.Count; i++) {
-					var childModel = model.Children[i] as ILayoutPositionableElement;
-					//Debug.WriteLine($"{childModel.DockHeight}", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
+			//if(model.Orientation == Orientation.Horizontal) {
+			//	// Setup DockWidth for children
+			//	for(int i = 0; i < model.Children.Count; i++) {
+			//		var childModel = model.Children[i] as ILayoutPositionableElement;
+			//		//if(!childModel.DockWidth.IsStar) {
+			//		//	childModel.DockWidth = new GridLength(1.0, GridUnitType.Star);
+			//		//}
+			//		if(!childModel.DockWidth.IsAuto) {
+			//			childModel.DockWidth = new GridLength(0.0, GridUnitType.Auto);
+			//		}
+			//	}
+			//} else {
+			//	// Setup DockHeight for children
+			//	for(int i = 0; i < model.Children.Count; i++) {
+			//		var childModel = model.Children[i] as ILayoutPositionableElement;
+			//		//Debug.WriteLine($"{childModel.DockHeight}", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
 
-					//if(!childModel.DockHeight.IsAuto) {
-					//	//childModel.DockHeight = new GridLength(1.0, GridUnitType.Star);
-					//}
-					if(!childModel.DockHeight.IsAuto) {
-						childModel.DockHeight = new GridLength(0.0, GridUnitType.Auto);
-					}
-				}
-			}
+			//		//if(!childModel.DockHeight.IsAuto) {
+			//		//	//childModel.DockHeight = new GridLength(1.0, GridUnitType.Star);
+			//		//}
+			//		if(!childModel.DockHeight.IsAuto) {
+			//			childModel.DockHeight = new GridLength(0.0, GridUnitType.Auto);
+			//		}
+			//	}
+			//}
 		}
 
 		#endregion Overrides

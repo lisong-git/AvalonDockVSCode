@@ -244,7 +244,7 @@ namespace AvalonDock.Layout {
 		}
 
 		public LayoutAnchorableExpanderGroup SelectedItem {
-			get => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
+			get => Children.Where((o, index) => index == SelectedIndex).SingleOrDefault();
 			set {
 				//if(value != SelectedItem) { 
 

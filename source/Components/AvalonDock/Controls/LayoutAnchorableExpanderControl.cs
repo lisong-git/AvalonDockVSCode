@@ -10,6 +10,7 @@
 using AvalonDock.Layout;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -166,6 +167,7 @@ namespace AvalonDock.Controls {
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
 			//var modelWithActualSize = _model as ILayoutPositionableElementWithActualSize;
 			var modelWithActualSize = Model as ILayoutPositionableElementWithActualSize;
+			//Debug.WriteLine($"{Model.Title}, {modelWithActualSize.DockWidth}, {ActualWidth}", "OnSizeChanged");
 			modelWithActualSize.ActualWidth = ActualWidth;
 			modelWithActualSize.ActualHeight = ActualHeight;
 		}

@@ -19,10 +19,8 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace AvalonDock.Controls
-{
-	internal static class FocusElementManager
-	{
+namespace AvalonDock.Controls {
+	internal static class FocusElementManager {
 		#region fields
 
 		private static List<DockingManager> _managers = new List<DockingManager>();
@@ -37,33 +35,27 @@ namespace AvalonDock.Controls
 
 		#region Internal Methods
 
-		internal static void SetupFocusManagement(DockingManager manager)
-		{
-			if (_managers.Count == 0)
-			{
+		internal static void SetupFocusManagement(DockingManager manager) {
+			if(_managers.Count == 0) {
 				//InputManager.SelectedContent.EnterMenuMode += new EventHandler(InputManager_EnterMenuMode);
 				//InputManager.SelectedContent.LeaveMenuMode += new EventHandler(InputManager_LeaveMenuMode);
 				_windowHandler = new WindowHookHandler();
 				_windowHandler.FocusChanged += new EventHandler<FocusChangeEventArgs>(WindowFocusChanging);
 				//_windowHandler.Activate += new EventHandler<WindowActivateEventArgs>(WindowActivating);
 				_windowHandler.Attach();
-				if (Application.Current != null)
-				{
+				if(Application.Current != null) {
 					//Application.SelectedContent.Exit += new ExitEventHandler( Current_Exit );
 					//Application.SelectedContent.Dispatcher.Invoke(new Action(() => Application.SelectedContent.Exit += new ExitEventHandler(Current_Exit)));
 					var disp = Application.Current.Dispatcher;
 					Action subscribeToExitAction = new Action(() => Application.Current.Exit += new ExitEventHandler(Current_Exit));
-					if (disp.CheckAccess())
-					{
+					if(disp.CheckAccess()) {
 						// if we are already on the dispatcher thread we don't need to call Invoke/BeginInvoke
 						subscribeToExitAction();
-					}
-					else
-					{
+					} else {
 						// For resolve issue "System.InvalidOperationException: Cannot perform this operation while dispatcher processing is suspended." make async subscribing instead of sync subscribing.
 						int disableProcessingCount = (int?)typeof(Dispatcher).GetField("_disableProcessingCount", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(disp) ?? 0;
 
-						if (disableProcessingCount == 0)
+						if(disableProcessingCount == 0)
 							disp.Invoke(subscribeToExitAction);
 						else
 							disp.BeginInvoke(subscribeToExitAction);
@@ -75,17 +67,14 @@ namespace AvalonDock.Controls
 			_managers.Add(manager);
 		}
 
-		internal static void FinalizeFocusManagement(DockingManager manager)
-		{
+		internal static void FinalizeFocusManagement(DockingManager manager) {
 			manager.PreviewGotKeyboardFocus -= new KeyboardFocusChangedEventHandler(manager_PreviewGotKeyboardFocus);
 			_managers.Remove(manager);
 
-			if (_managers.Count == 0)
-			{
+			if(_managers.Count == 0) {
 				//InputManager.SelectedContent.EnterMenuMode -= new EventHandler(InputManager_EnterMenuMode);
 				//InputManager.SelectedContent.LeaveMenuMode -= new EventHandler(InputManager_LeaveMenuMode);
-				if (_windowHandler != null)
-				{
+				if(_windowHandler != null) {
 					_windowHandler.FocusChanged -= new EventHandler<FocusChangeEventArgs>(WindowFocusChanging);
 					//_windowHandler.Activate -= new EventHandler<WindowActivateEventArgs>(WindowActivating);
 					_windowHandler.Detach();
@@ -99,10 +88,9 @@ namespace AvalonDock.Controls
 		/// </summary>
 		/// <param name="model">Element to look for</param>
 		/// <returns>Input element </returns>
-		internal static IInputElement GetLastFocusedElement(ILayoutElement model)
-		{
+		internal static IInputElement GetLastFocusedElement(ILayoutElement model) {
 			IInputElement objectWithFocus;
-			if (_modelFocusedElement.GetValue(model, out objectWithFocus))
+			if(_modelFocusedElement.GetValue(model, out objectWithFocus))
 				return objectWithFocus;
 
 			return null;
@@ -113,10 +101,9 @@ namespace AvalonDock.Controls
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		internal static IntPtr GetLastWindowHandle(ILayoutElement model)
-		{
+		internal static IntPtr GetLastWindowHandle(ILayoutElement model) {
 			IntPtr handleWithFocus;
-			if (_modelFocusedWindowHandle.GetValue(model, out handleWithFocus))
+			if(_modelFocusedWindowHandle.GetValue(model, out handleWithFocus))
 				return handleWithFocus;
 
 			return IntPtr.Zero;
@@ -126,21 +113,18 @@ namespace AvalonDock.Controls
 		/// Given a layout element tries to set the focus of the keyword where it was before user moved to another element
 		/// </summary>
 		/// <param name="model"></param>
-		internal static void SetFocusOnLastElement(ILayoutElement model)
-		{
+		internal static void SetFocusOnLastElement(ILayoutElement model) {
 			bool focused = false;
 			IInputElement objectToFocus;
-			if (_modelFocusedElement.GetValue(model, out objectToFocus))
-			{
+			if(_modelFocusedElement.GetValue(model, out objectToFocus)) {
 				focused = objectToFocus == Keyboard.Focus(objectToFocus);
 			}
 
 			IntPtr handleToFocus;
-			if (_modelFocusedWindowHandle.GetValue(model, out handleToFocus))
+			if(_modelFocusedWindowHandle.GetValue(model, out handleToFocus))
 				focused = IntPtr.Zero != Win32Helper.SetFocus(handleToFocus);
 
-			if (focused)
-			{
+			if(focused) {
 				_lastFocusedElement = new WeakReference(model);
 			}
 		}
@@ -149,13 +133,11 @@ namespace AvalonDock.Controls
 
 		#region Private Methods
 
-		private static void Current_Exit(object sender, ExitEventArgs e)
-		{
-			if (Application.Current != null)
+		private static void Current_Exit(object sender, ExitEventArgs e) {
+			if(Application.Current != null)
 				Application.Current.Exit -= new ExitEventHandler(Current_Exit);
 
-			if (_windowHandler != null)
-			{
+			if(_windowHandler != null) {
 				_windowHandler.FocusChanged -= new EventHandler<FocusChangeEventArgs>(WindowFocusChanging);
 				//_windowHandler.Activate -= new EventHandler<WindowActivateEventArgs>(WindowActivating);
 				_windowHandler.Detach();
@@ -163,51 +145,39 @@ namespace AvalonDock.Controls
 			}
 		}
 
-		private static void manager_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-		{
+		private static void manager_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) {
 			var focusedElement = e.NewFocus as Visual;
-			if (focusedElement != null &&
+			if(focusedElement != null &&
 				!(focusedElement is LayoutAnchorableExpanderGroupTabItem || focusedElement is LayoutDocumentTabItem))
 			//Avoid tracking focus for elements like this
 			{
 				var parentAnchorable = focusedElement.FindVisualAncestor<LayoutAnchorableExpanderControl>();
-				if (parentAnchorable != null)
-				{
+				if(parentAnchorable != null) {
 					_modelFocusedElement[parentAnchorable.Model] = e.NewFocus;
-				}
-				else
-				{
+				} else {
 					var parentDocument = focusedElement.FindVisualAncestor<LayoutDocumentControl>();
-					if (parentDocument != null)
-					{
+					if(parentDocument != null) {
 						_modelFocusedElement[parentDocument.Model] = e.NewFocus;
 					}
 				}
 			}
 		}
 
-		private static void WindowFocusChanging(object sender, FocusChangeEventArgs e)
-		{
-			foreach (var manager in _managers)
-			{
+		private static void WindowFocusChanging(object sender, FocusChangeEventArgs e) {
+			foreach(var manager in _managers) {
 				var hostContainingFocusedHandle = manager.FindLogicalChildren<HwndHost>().FirstOrDefault(hw => Win32Helper.IsChild(hw.Handle, e.GotFocusWinHandle));
 
-				if (hostContainingFocusedHandle != null)
-				{
+				if(hostContainingFocusedHandle != null) {
 					var parentAnchorable = hostContainingFocusedHandle.FindVisualAncestor<LayoutAnchorableExpanderControl>();
-					if (parentAnchorable != null)
-					{
+					if(parentAnchorable != null) {
 						_modelFocusedWindowHandle[parentAnchorable.Model] = e.GotFocusWinHandle;
-						if (parentAnchorable.Model != null)
+						if(parentAnchorable.Model != null)
 							parentAnchorable.Model.IsActive = true;
-					}
-					else
-					{
+					} else {
 						var parentDocument = hostContainingFocusedHandle.FindVisualAncestor<LayoutDocumentControl>();
-						if (parentDocument != null)
-						{
+						if(parentDocument != null) {
 							_modelFocusedWindowHandle[parentDocument.Model] = e.GotFocusWinHandle;
-							if (parentDocument.Model != null)
+							if(parentDocument.Model != null)
 								parentDocument.Model.IsActive = true;
 						}
 					}
@@ -215,49 +185,40 @@ namespace AvalonDock.Controls
 			}
 		}
 
-		private static void WindowActivating(object sender, WindowActivateEventArgs e)
-		{
-			if (Keyboard.FocusedElement == null &&
+		private static void WindowActivating(object sender, WindowActivateEventArgs e) {
+			if(Keyboard.FocusedElement == null &&
 				_lastFocusedElement != null &&
-				_lastFocusedElement.IsAlive)
-			{
+				_lastFocusedElement.IsAlive) {
 				var elementToSetFocus = _lastFocusedElement.Target as ILayoutElement;
-				if (elementToSetFocus != null)
-				{
+				if(elementToSetFocus != null) {
 					var manager = elementToSetFocus.Root.Manager;
-					if (manager == null)
+					if(manager == null)
 						return;
 
 					IntPtr parentHwnd;
-					if (!manager.GetParentWindowHandle(out parentHwnd))
+					if(!manager.GetParentWindowHandle(out parentHwnd))
 						return;
 
-					if (e.HwndActivating != parentHwnd)
+					if(e.HwndActivating != parentHwnd)
 						return;
 
-					_setFocusAsyncOperation = Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
-				  {
-					  try
-					  {
-						  SetFocusOnLastElement(elementToSetFocus);
-					  }
-					  finally
-					  {
-						  _setFocusAsyncOperation = null;
-					  }
-				  }), DispatcherPriority.Input);
+					_setFocusAsyncOperation = Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => {
+						try {
+							SetFocusOnLastElement(elementToSetFocus);
+						} finally {
+							_setFocusAsyncOperation = null;
+						}
+					}), DispatcherPriority.Input);
 				}
 			}
 		}
 
-		private static void InputManager_EnterMenuMode(object sender, EventArgs e)
-		{
-			if (Keyboard.FocusedElement == null)
+		private static void InputManager_EnterMenuMode(object sender, EventArgs e) {
+			if(Keyboard.FocusedElement == null)
 				return;
 
 			var lastfocusDepObj = Keyboard.FocusedElement as DependencyObject;
-			if (lastfocusDepObj.FindLogicalAncestor<DockingManager>() == null)
-			{
+			if(lastfocusDepObj.FindLogicalAncestor<DockingManager>() == null) {
 				_lastFocusedElementBeforeEnterMenuMode = null;
 				return;
 			}
@@ -265,15 +226,12 @@ namespace AvalonDock.Controls
 			_lastFocusedElementBeforeEnterMenuMode = new WeakReference(Keyboard.FocusedElement);
 		}
 
-		private static void InputManager_LeaveMenuMode(object sender, EventArgs e)
-		{
-			if (_lastFocusedElementBeforeEnterMenuMode != null &&
-				_lastFocusedElementBeforeEnterMenuMode.IsAlive)
-			{
+		private static void InputManager_LeaveMenuMode(object sender, EventArgs e) {
+			if(_lastFocusedElementBeforeEnterMenuMode != null &&
+				_lastFocusedElementBeforeEnterMenuMode.IsAlive) {
 				var lastFocusedInputElement = _lastFocusedElementBeforeEnterMenuMode.GetValueOrDefault<UIElement>();
-				if (lastFocusedInputElement != null)
-				{
-					if (lastFocusedInputElement != Keyboard.Focus(lastFocusedInputElement))
+				if(lastFocusedInputElement != null) {
+					if(lastFocusedInputElement != Keyboard.Focus(lastFocusedInputElement))
 						Debug.WriteLine("Unable to activate the element");
 				}
 			}

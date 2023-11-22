@@ -10,6 +10,7 @@
 using AvalonDock.Layout;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -109,5 +110,16 @@ namespace AvalonDock.Controls {
 		}
 
 		#endregion Private Methods
+
+		private void PrintClick(object sender, RoutedEventArgs e) {
+			Debug.WriteLine($"{SelectedContent.GetType().Name}", "PrintClick");
+			
+			//var rows = container.RowDefinitions.Select((col, i)=> $"{i}, {col.Height}, {col.ActualHeight}, {col.MinHeight}, {col.MaxHeight}, {col.Offset}");
+			//foreach(var col in rows) {
+			//	Debug.WriteLine($"{col}", "TestExplanderWindow_LayoutUpdated");
+
+			//}
+			//columnListView.ItemsSource = rows;
+		}
 	}
 }

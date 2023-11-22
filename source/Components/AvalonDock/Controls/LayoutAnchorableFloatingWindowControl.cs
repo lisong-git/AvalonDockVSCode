@@ -190,9 +190,9 @@ namespace AvalonDock.Controls {
 		/// <inheritdoc />
 		protected override void OnInitialized(EventArgs e) {
 			base.OnInitialized(e);
-			Debug.WriteLine($"{_model.GetType().Name}, {_model.Root == null}", "OnInitialized");
 			var manager = _model.Root.Manager;
 			Content = manager.CreateUIElementForModel(_model.RootPanel);
+			Debug.WriteLine($"{_model?.Root.GetType().Name}, {_model?.RootPanel.GetType().Name}, {Content?.GetType().Name}", "OnInitialized");
 			//SetBinding(VisibilityProperty, new Binding("IsVisible") { Source = _model, Converter = new BoolToVisibilityConverter(), Mode = BindingMode.OneWay, ConverterParameter = Visibility.Hidden });
 
 			//Issue: http://avalondock.codeplex.com/workitem/15036

@@ -1,4 +1,4 @@
-/************************************************************************
+﻿/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -6,6 +6,8 @@
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at https://opensource.org/licenses/MS-PL
  ************************************************************************/
+
+
 
 using AvalonDock.Layout;
 using System.Collections.Generic;
@@ -28,6 +30,10 @@ namespace AvalonDock.Controls {
 		#endregion fields
 
 		#region Constructors
+
+		#endregion Constructors
+
+		#region Overrides
 
 		/// <summary>
 		/// Class constructor from parameters without a specific tabindex as dock position.
@@ -59,10 +65,6 @@ namespace AvalonDock.Controls {
 			_tabIndex = tabIndex;
 		}
 
-		#endregion Constructors
-
-		#region Overrides
-
 		/// <summary>
 		/// Method is invoked to complete a drag & drop operation with a (new) docking position
 		/// by docking of the <paramref name="floatingWindow"/> into this drop target.
@@ -85,7 +87,7 @@ namespace AvalonDock.Controls {
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
 
-						LayoutAnchorableExpanderGroup paneModel = floatingWindow.RootPanel;
+						LayoutAnchorableExpanderGroupPane paneModel = floatingWindow.RootPanel;
 						Debug.WriteLine($"{paneModel?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
 						if(paneModel != null &&
 							(paneModel.Children.Count == 1 ||

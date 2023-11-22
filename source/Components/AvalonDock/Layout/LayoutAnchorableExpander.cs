@@ -18,7 +18,7 @@ namespace AvalonDock.Layout {
 	/// A layout anchorable pane control can have multiple LayoutAnchorable controls  as its children.
 	/// </summary>
 	[Serializable]
-	public class LayoutAnchorableExpander :LayoutPositionable,  ILayoutPositionableElement, IExpander, ILayoutPaneSerializable {
+	public class LayoutAnchorableExpander :LayoutExpanderPositionable,  ILayoutPositionableElement, IExpander, ILayoutPaneSerializable {
 		#region fields
 		private string _name = null;
 		private string _id;
@@ -66,7 +66,7 @@ namespace AvalonDock.Layout {
 				_isExpanded = value;
 				//Debug.WriteLine($"==========================================", "LayoutAnchorableExpanderPane IsExpanded");
 				//Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 1");
-				UpdateSize();
+				//UpdateSize();
 				//Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 2");
 				RaisePropertyChanged(nameof(IsExpanded));
 			}

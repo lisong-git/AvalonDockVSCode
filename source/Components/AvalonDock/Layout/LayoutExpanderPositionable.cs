@@ -20,20 +20,21 @@ namespace AvalonDock.Layout {
 	/// <summary>Provides a base class for other layout panel models that support a specific class of panel.</summary>
 	/// <typeparam name="T"></typeparam>
 	[Serializable]
-	public abstract class LayoutPositionable :LayoutAnchorable, IXmlSerializable, ILayoutPositionableElementWithActualSize {
+	public abstract class LayoutExpanderPositionable :LayoutAnchorable, IXmlSerializable, ILayoutPositionableElementWithActualSize {
 		#region fields
 		//private T _content;
 		//private bool _isVisible = true;
 		//private static GridLengthConverter _gridLengthConverter = new GridLengthConverter();
 
 		// DockWidth fields
-		private GridLength _dockWidth = new GridLength(0.0, GridUnitType.Auto);
+		private GridLength _dockWidth = new GridLength(1.0, GridUnitType.Star);
+		//private GridLength _dockWidth = new GridLength(0.0, GridUnitType.Auto);
 
 		private double? _resizableAbsoluteDockWidth;
 
 		// DockHeight fields
-		//private GridLength _dockHeight = new GridLength(1.0, GridUnitType.Star);
-		private GridLength _dockHeight = new GridLength(0.0, GridUnitType.Auto);
+		private GridLength _dockHeight = new GridLength(1.0, GridUnitType.Star);
+		//private GridLength _dockHeight = new GridLength(0.0, GridUnitType.Auto);
 
 		private double? _resizableAbsoluteDockHeight;
 
@@ -42,6 +43,8 @@ namespace AvalonDock.Layout {
 
 		private double _dockMinWidth = 21.0;
 		private double _dockMinHeight = 21.0;
+		//private double _dockMinWidth = 0.0;
+		//private double _dockMinHeight = 0.0;
 		//private double _floatingWidth = 0.0;
 		//private double _floatingHeight = 0.0;
 		//private double _floatingLeft = 0.0;
@@ -84,14 +87,17 @@ namespace AvalonDock.Layout {
 			//get => _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
 			//			new GridLength(_resizableAbsoluteDockWidth.Value) : _dockWidth;
 			get {
-
-				var h = _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
+				var width = _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
 			new GridLength(_resizableAbsoluteDockWidth.Value) : _dockWidth;
-				return h;
+				//Debug.WriteLine($"{width}, {_dockWidth}, {_dockWidth.IsAbsolute}, {_dockWidth.Value}, {_dockMinWidth}, {_resizableAbsoluteDockWidth}", "LayoutPositionable 2");
+				return width;
 			}
 			set {
 				if(value == _dockWidth || !(value.Value > 0))
 					return;
+
+				//Debug.WriteLine($"{_dockWidth}, {value}, {_resizableAbsoluteDockHeight}", "LayoutPositionable 3");
+
 				if(value.IsAbsolute)
 					_resizableAbsoluteDockWidth = value.Value;
 				RaisePropertyChanging(nameof(DockWidth));
@@ -126,10 +132,10 @@ namespace AvalonDock.Layout {
 			//get => _dockHeight.IsAbsolute && _resizableAbsoluteDockHeight < _dockHeight.Value && _resizableAbsoluteDockHeight.HasValue ?
 			//			new GridLength(_resizableAbsoluteDockHeight.Value) : _dockHeight;
 			get {
-			var h =	_dockHeight.IsAbsolute && _resizableAbsoluteDockHeight < _dockHeight.Value && _resizableAbsoluteDockHeight.HasValue ?
+				var h = _dockHeight.IsAbsolute && _resizableAbsoluteDockHeight < _dockHeight.Value && _resizableAbsoluteDockHeight.HasValue ?
 			new GridLength(_resizableAbsoluteDockHeight.Value) : _dockHeight;
 
-				//Debug.WriteLine($"{Title}, {h}", "LayoutPositionable DockHeight 1");
+				//Debug.WriteLine($"{Title}, {width}", "LayoutPositionable DockHeight 1");
 
 				return h;
 			}
@@ -228,6 +234,18 @@ namespace AvalonDock.Layout {
 
 			//return Math.Max(this._dockMinWidth, DockWidth);
 			return _dockMinWidth;
+
+
+			//var childrenDockMinWidth = 0.0;
+			//var visibleChildren = Children.OfType<ILayoutPositionableElement>().Where(child => child.IsVisible).ToList();
+			//if(this is ILayoutOrientableGroup orientableGroup && visibleChildren.Any()) {
+			//	if(orientableGroup.Orientation == Orientation.Vertical) {
+			//		childrenDockMinWidth = visibleChildren.Max(child => child.CalculatedDockMinWidth());
+			//	} else {
+			//		childrenDockMinWidth = visibleChildren.Sum(child => child.CalculatedDockMinWidth() + (Root?.Manager?.GridSplitterWidth ?? 0) * (visibleChildren.Count - 1));
+			//	}
+			//}
+			//return Math.Max(this._dockMinWidth, childrenDockMinWidth);
 		}
 
 		/// <summary>
@@ -249,7 +267,7 @@ namespace AvalonDock.Layout {
 		}
 
 		public double CalculatedDockMinHeight() {
-			//Debug.WriteLine($"{Content.GetType()}", "LayoutPositionable CalculatedDockMinHeight");
+			Debug.WriteLine($"{_dockMinHeight}", $"{nameof(LayoutExpanderPositionable)} CalculatedDockMinHeight");
 			//var dockContent =  (ILayoutPositionableElement) Content;
 			//double childrenDockMinHeight = dockContent.CalculatedDockMinHeight();
 			//return Math.Max(this._dockMinHeight, childrenDockMinHeight);

@@ -104,7 +104,7 @@ namespace AvalonDock.Controls {
 		#endregion Internal Methods
 
 		#region Private Methods
-
+		
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
 			var modelWithAtcualSize = _model as ILayoutPositionableElementWithActualSize;
 			modelWithAtcualSize.ActualWidth = ActualWidth;

@@ -29,6 +29,9 @@
   <ItemGroup>
     <None Include="LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WPF-UI" Version="2.1.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AvalonDock\AvalonDock.csproj" />

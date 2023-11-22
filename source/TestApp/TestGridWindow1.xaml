@@ -1,0 +1,130 @@
+<Window
+  x:Class="TestApp.TestGridWindow1"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:TestApp"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  Title="TestGridWindow1"
+  Width="800"
+  Height="450"
+  mc:Ignorable="d">
+  <Grid x:Name="grid" Background="Black">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="60" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="160" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <!--<Grid
+      x:Name="container"
+      Grid.RowSpan="2"
+      Grid.Column="0">
+    -->
+    <!--<Grid.RowDefinitions>
+        <RowDefinition x:Name="row1" Height="Auto" />
+        <RowDefinition x:Name="row2" Height="3" />
+        <RowDefinition x:Name="row3" Height="Auto" />
+        <RowDefinition x:Name="row4" Height="3" />
+        <RowDefinition x:Name="row5" Height="*" />
+      </Grid.RowDefinitions>
+    -->
+    <!--<Grid.ColumnDefinitions>
+        <RowDefinition x:Name="row1" Height="Auto" />
+
+        <RowDefinition x:Name="row2" Height="4" />
+        <RowDefinition x:Name="row3" Height="Auto" />
+        <RowDefinition x:Name="row4" Height="4" />
+        <RowDefinition x:Name="row5" Height="Auto" />
+      </Grid.ColumnDefinitions>-->
+    <!--
+      <Expander
+        x:Name="expander1"
+        Grid.Row="0"
+        VerticalAlignment="Stretch"
+        Background="Green"
+        Collapsed="Expander_Collapsed"
+        Expanded="Expander_Expanded">
+        <Expander.Header>
+          <TextBlock Text="Expander Title 1" />
+        </Expander.Header>
+        <StackPanel>
+          <TextBlock Text="Content1" />
+          <TextBlock Text="Content2" />
+          <TextBlock Text="Content3" />
+          <TextBlock Text="Content4" />
+        </StackPanel>
+      </Expander>
+      <GridSplitter
+        x:Name="gs1"
+        Grid.Row="1"
+        HorizontalAlignment="Stretch"
+        Background="Red" />
+      <Expander
+        x:Name="expander2"
+        Grid.Row="2"
+        VerticalAlignment="Stretch"
+        Background="Blue"
+        Collapsed="Expander_Collapsed"
+        Expanded="Expander_Expanded">
+        <Expander.Header>
+          <TextBlock Text="Expander Title 2" />
+        </Expander.Header>
+        <StackPanel>
+          <TextBlock Text="Content1" />
+          <TextBlock Text="Content2" />
+          <TextBlock Text="Content3" />
+          <TextBlock Text="Content4" />
+          <TextBlock Text="Content5" />
+          <TextBlock Text="Content6" />
+        </StackPanel>
+      </Expander>
+
+      <GridSplitter
+        x:Name="gs2"
+        Grid.Row="3"
+        HorizontalAlignment="Stretch"
+        Background="Red" />
+      <Expander
+        x:Name="expander3"
+        Grid.Row="4"
+        VerticalAlignment="Stretch"
+        Background="Green"
+        Collapsed="Expander_Collapsed"
+        Expanded="Expander_Expanded"
+        IsExpanded="True">
+        <Expander.Header>
+          <TextBlock Text="Expander Title 3" />
+        </Expander.Header>
+        <StackPanel VerticalAlignment="Top">
+          <TextBlock Text="Content1" />
+          <TextBlock Text="Content2" />
+          <TextBlock Text="Content3" />
+          <TextBlock Text="Content4" />
+          <TextBlock Text="Content5" />
+          <TextBlock Text="Content6" />
+        </StackPanel>
+      </Expander>-->
+    <!--
+    </Grid>-->
+
+    <Border
+      Grid.Column="1"
+      BorderBrush="WhiteSmoke"
+      BorderThickness="1,0,0,0">
+      <StackPanel>
+        <Button Background="Red" Content="打印" />
+        <ListBox
+          x:Name="columnListView"
+          Grid.Column="1"
+          d:ItemsSource="{d:SampleData ItemCount=5}" />
+      </StackPanel>
+    </Border>
+
+  </Grid>
+
+</Window>

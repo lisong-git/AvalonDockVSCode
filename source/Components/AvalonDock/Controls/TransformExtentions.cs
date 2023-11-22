@@ -7,6 +7,7 @@
    License (Ms-PL) as published at https://opensource.org/licenses/MS-PL
  ************************************************************************/
 
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -36,12 +37,6 @@ namespace AvalonDock.Controls
 
 		public static Rect GetScreenArea(this FrameworkElement element)
 		{
-			//    return new Rect(element.PointToScreenDPI(new Point()),
-			//        element.TransformActualSizeToAncestor());
-			//}
-
-			//public static Rect GetScreenAreaWithoutFlowDirection(this FrameworkElement element)
-			//{
 			var point = element.PointToScreenDPI(new Point());
 			if (FrameworkElement.GetFlowDirection(element) == FlowDirection.RightToLeft)
 			{

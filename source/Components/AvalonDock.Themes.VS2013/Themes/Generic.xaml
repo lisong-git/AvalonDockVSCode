@@ -40,7 +40,7 @@
             x:Name="Bd"
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="0">
+            BorderThickness="{TemplateBinding BorderThickness}">
             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Border>
           <ControlTemplate.Triggers>
@@ -355,7 +355,6 @@
             <Grid
               x:Name="OverflowGrid"
               Grid.Column="1"
-              MinWidth="21"
               HorizontalAlignment="Right"
               DockPanel.Dock="Right">
               <ToggleButton
@@ -578,7 +577,7 @@
             <Border Grid.RowSpan="2" Background="Transparent" />
             <Grid
               Grid.Row="0"
-              Margin="1,0"
+              Margin="0,0"
               Panel.ZIndex="1"
               ScrollViewerHelper.WheelScrollsHorizontally="True"
               Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type avalonDockControls:LayoutDocumentPaneControl}}, Path=Model.ShowHeader, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
@@ -601,7 +600,7 @@
                   <Style BasedOn="{StaticResource UiScrollBar}" TargetType="{x:Type ScrollBar}" />
                 </ScrollViewer.Resources>-->
 
-                <TabPanel
+                <DocumentPaneTabPanel
                   x:Name="HeaderPanel"
                   Grid.Row="0"
                   Grid.Column="0"
@@ -1083,8 +1082,8 @@
               IsItemsHost="true"
               Visibility="Visible" />
 
-            <!--  x:Name="HeaderPanel"  -->
-            <Grid Grid.Row="0">
+            <!--  x:Name="FactHeaderPanel"  -->
+            <Grid x:Name="FactHeaderPanel" Grid.Row="0">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="16" />
                 <ColumnDefinition Width="Auto" MinWidth="48" />
@@ -1244,10 +1243,10 @@
   <!--#region SecondarySideBarStyle-->
   <Style x:Key="SecondarySideBarStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
     <Setter Property="TabStripPlacement" Value="Bottom" />
-    <Setter Property="Padding" Value="0" />
+    <Setter Property="BorderBrush" Value="{x:Null}" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
+    <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
@@ -1273,12 +1272,13 @@
               <Border
                 x:Name="Bd"
                 Grid.ColumnSpan="2"
-                BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionInactiveGrip}}"
+                Panel.ZIndex="1"
+                BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.GridResizerBackground}}"
                 BorderThickness="0,0,0,1" />
 
               <WrapPanel
                 Grid.Row="0"
-                Margin="4,0,0,1"
+                Margin="4,0,0,0"
                 Orientation="Horizontal">
                 <DockPanel>
                   <ToggleButton
@@ -1286,7 +1286,8 @@
                     Width="21"
                     Height="21"
                     DockPanel.Dock="Right"
-                    Style="{StaticResource ToolToggleButtonStyle}">
+                    Style="{StaticResource ToolToggleButtonStyle}"
+                    Visibility="{Binding HasOverflowItems, ElementName=HeaderPanel, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                     <Path
                       Data="{StaticResource ic_fluent_more_horizontal_24_filled}"
                       Fill="{TemplateBinding Foreground}"
@@ -1307,7 +1308,8 @@
                 Grid.Column="1"
                 Background="Transparent"
                 DockPanel.Dock="Right"
-                Style="{DynamicResource SimpleToolBar}">
+                Style="{DynamicResource SimpleToolBar}"
+                UseLayoutRounding="False">
                 <Button
                   Width="21"
                   Height="21"
@@ -1337,7 +1339,6 @@
               Visibility="Visible">
               <ContentPresenter
                 x:Name="PART_SelectedContentHost"
-                Margin="{TemplateBinding Padding}"
                 ContentSource="SelectedContent"
                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
             </Border>
@@ -1347,9 +1348,9 @@
             <Trigger Property="IsEnabled" Value="false">
               <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
             </Trigger>
-            <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
+            <!--<DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
               <Setter TargetName="HeaderPanel" Property="Margin" Value="0" />
-            </DataTrigger>
+            </DataTrigger>-->
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
@@ -1462,49 +1463,6 @@
   <!--#endregion-->
 
   <!--#region PanelStyle-->
-  <!--<Style x:Key="PanelTitleSytle" TargetType="{x:Type AnchorableGroupPaneTitle}">
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate>
-          <Grid
-            Grid.Row="0"
-            Margin="0,0"
-            Panel.ZIndex="1">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition />
-              <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Border
-              x:Name="Bd"
-              Grid.ColumnSpan="2"
-              BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionInactiveGrip}}"
-              BorderThickness="0,0,0,1" />
-            <avalonDockControls:AnchorablePaneTabPanel
-              x:Name="HeaderPanel"
-              Grid.Row="0"
-              Margin="4,0,0,1"
-              Panel.ZIndex="1"
-              IsItemsHost="true"
-              KeyboardNavigation.TabIndex="1"
-              Visibility="Visible" />
-            <Button
-              Grid.Column="1"
-              Width="22"
-              Height="22"
-              Margin="0,0,-1,1"
-              VerticalAlignment="Center"
-              Focusable="False"
-              Style="{StaticResource ToolButtonStyle}">
-              <Path
-                x:Name="ButtonImage"
-                Data="{DynamicResource PinClose}"
-                Fill="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellOverflowButtonDefaultGlyph}}" />
-            </Button>
-          </Grid>
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
-  </Style>-->
 
   <Style x:Key="PanelStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
     <Setter Property="TabStripPlacement" Value="Bottom" />
@@ -1516,7 +1474,7 @@
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
           <Grid
-            ClipToBounds="False"
+            ClipToBounds="True"
             KeyboardNavigation.TabNavigation="Local"
             SnapsToDevicePixels="true">
             <Grid.RowDefinitions>
@@ -1527,7 +1485,6 @@
             <Border Grid.RowSpan="2" Background="Transparent" />
 
             <Grid
-              x:Name="HeaderContainer"
               Grid.Row="0"
               Margin="0,0"
               Panel.ZIndex="1">
@@ -1541,15 +1498,6 @@
                 BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionInactiveGrip}}"
                 BorderThickness="0,0,0,1" />
 
-              <!--<avalonDockControls:AnchorablePaneTabPanel
-                x:Name="HeaderPanel"
-                Grid.Row="0"
-                Margin="4,0,0,1"
-                Panel.ZIndex="1"
-                IsItemsHost="true"
-                KeyboardNavigation.TabIndex="1"
-                Visibility="Visible" />-->
-
               <WrapPanel
                 Grid.Row="0"
                 Margin="4,0,0,1"
@@ -1557,10 +1505,11 @@
                 <DockPanel>
                   <ToggleButton
                     x:Name="OverflowToggleButton"
-                    Width="23"
-                    Height="23"
+                    Width="21"
+                    Height="21"
                     DockPanel.Dock="Right"
-                    Style="{StaticResource ToolToggleButtonStyle}">
+                    Style="{StaticResource ToolToggleButtonStyle}"
+                    Visibility="{Binding HasOverflowItems, Mode=OneWay, ElementName=HeaderPanel, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                     <Path
                       Data="{StaticResource ic_fluent_more_horizontal_24_filled}"
                       Fill="{TemplateBinding Foreground}"
@@ -1580,7 +1529,8 @@
                 Grid.Column="1"
                 Background="Transparent"
                 DockPanel.Dock="Right"
-                Style="{DynamicResource SimpleToolBar}">
+                Style="{DynamicResource SimpleToolBar}"
+                UseLayoutRounding="False">
                 <Button
                   Width="21"
                   Height="21"
@@ -1618,9 +1568,9 @@
             <Trigger Property="IsEnabled" Value="false">
               <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
             </Trigger>
-            <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
+            <!--<DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
               <Setter TargetName="HeaderPanel" Property="Margin" Value="0" />
-            </DataTrigger>
+            </DataTrigger>-->
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
@@ -1646,9 +1596,8 @@
                     Visibility="Collapsed" />
                   <Border
                     x:Name="Bd"
-                    Margin="0"
                     Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="0,0,0,0">
                     <ContentPresenter
                       x:Name="Content"
@@ -1732,6 +1681,8 @@
   </Style>
   <!--#endregion-->
 
+
+
   <!--#region AnchorableExpanderControlStyle-->
   <Style x:Key="AnchorableExpanderControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderControl}">
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
@@ -1743,7 +1694,7 @@
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="VerticalAlignment" Value="Top" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
     <Setter Property="IsExpanded" Value="{Binding Model.IsExpanded, RelativeSource={RelativeSource Self}}" />
     <Setter Property="SnapsToDevicePixels" Value="True" />
     <!--<Setter Property="VerticalAlignment" Value="Top" />-->
@@ -1756,24 +1707,32 @@
             x:Name="Border"
             Margin="0"
             Padding="0"
+            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+            VerticalAlignment="{TemplateBinding VerticalAlignment}"
             BorderBrush="{x:Null}"
             BorderThickness="0">
             <!--  Background="{TemplateBinding Background}"  -->
 
-            <DockPanel LastChildFill="True">
+            <DockPanel
+              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+              Background="Transparent"
+              LastChildFill="True">
 
+              <!--<Border DockPanel.Dock="Top" Background="Orange" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>-->
               <AnchorableExpanderTitle
                 x:Name="HeaderSite"
                 Cursor="Hand"
                 DockPanel.Dock="Top"
                 Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
-                Style="{DynamicResource ExpanderTitleStyle}" />
+                Style="{DynamicResource ExpanderTitleHorizontalStyle}" />
+
 
               <Border
                 x:Name="ExpandSiteBorder"
-                BorderThickness="0"
-                DockPanel.Dock="Bottom"
-                Opacity="0">
+                BorderBrush="#45000000"
+                BorderThickness="0,1,0,0"
+                DockPanel.Dock="Bottom">
 
                 <ContentPresenter
                   Grid.Row="1"
@@ -1782,51 +1741,13 @@
                   ContentTemplateSelector="{Binding LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
                   FlowDirection="{TemplateBinding FlowDirection}" />
 
-                <Border.LayoutTransform>
+                <!--<Border.LayoutTransform>
                   <ScaleTransform ScaleY="0" />
-                </Border.LayoutTransform>
+                </Border.LayoutTransform>-->
               </Border>
             </DockPanel>
           </Border>
           <ControlTemplate.Triggers>
-            <Trigger Property="IsExpanded" Value="True">
-              <Trigger.EnterActions>
-                <BeginStoryboard>
-                  <Storyboard>
-                    <DoubleAnimation
-                      Storyboard.TargetName="ExpandSiteBorder"
-                      Storyboard.TargetProperty="(Border.LayoutTransform).(ScaleTransform.ScaleY)"
-                      From="0.0"
-                      To="1.0"
-                      Duration="00:00:00.167" />
-                    <DoubleAnimation
-                      Storyboard.TargetName="ExpandSiteBorder"
-                      Storyboard.TargetProperty="(Border.Opacity)"
-                      From="0.0"
-                      To="1.0"
-                      Duration="00:00:00.167" />
-                  </Storyboard>
-                </BeginStoryboard>
-              </Trigger.EnterActions>
-              <Trigger.ExitActions>
-                <BeginStoryboard>
-                  <Storyboard>
-                    <DoubleAnimation
-                      Storyboard.TargetName="ExpandSiteBorder"
-                      Storyboard.TargetProperty="(Border.LayoutTransform).(ScaleTransform.ScaleY)"
-                      From="1.0"
-                      To="0"
-                      Duration="00:00:00.167" />
-                    <DoubleAnimation
-                      Storyboard.TargetName="ExpandSiteBorder"
-                      Storyboard.TargetProperty="(Border.Opacity)"
-                      From="1.0"
-                      To="0.0"
-                      Duration="00:00:00.167" />
-                  </Storyboard>
-                </BeginStoryboard>
-              </Trigger.ExitActions>
-            </Trigger>
 
             <Trigger Property="IsMouseOver" Value="True">
               <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
@@ -1837,19 +1758,91 @@
               <Setter TargetName="HeaderSite" Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
             </Trigger>
 
-            <Trigger Property="ExpandDirection" Value="Right">
-              <Setter TargetName="ExpandSiteBorder" Property="DockPanel.Dock" Value="Right" />
-              <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" />
+            <MultiTrigger>
+              <MultiTrigger.Conditions>
+                <Condition Property="ExpandDirection" Value="Down" />
+                <Condition Property="IsExpanded" Value="False" />
+              </MultiTrigger.Conditions>
+              <!--<Setter TargetName="ExpandSiteBorder" Property="BorderThickness" Value="0,1,0,0" />-->
+
+              <Setter TargetName="ExpandSiteBorder" Property="Visibility" Value="Collapsed" />
+              <!--<Setter TargetName="HeaderSite" Property="Background" Value="Yellow" />-->
+              <!--<Setter TargetName="HeaderSite" Property="Padding" Value="0,-2" />
+
+              <Setter Property="HorizontalAlignment" Value="Stretch" />
+              <Setter Property="VerticalAlignment" Value="Top" />
+              <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+              <Setter Property="VerticalContentAlignment" Value="Top" />-->
+            </MultiTrigger>
+
+            <MultiTrigger>
+              <MultiTrigger.Conditions>
+                <Condition Property="ExpandDirection" Value="Right" />
+                <Condition Property="IsExpanded" Value="True" />
+              </MultiTrigger.Conditions>
+              <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Top" />
+              <!--<Setter TargetName="HeaderSite" Property="Background" Value="Blue" />-->
+              <Setter TargetName="HeaderSite" Property="Width" Value="Auto" />
+              <Setter TargetName="HeaderSite" Property="Height" Value="21" />
+
+              <!--<Setter TargetName="HeaderSite" Property="Padding" Value="0,-2" />-->
+
               <Setter TargetName="HeaderSite" Property="LayoutTransform">
+                <Setter.Value>
+                  <RotateTransform Angle="0" CenterX="0.5" CenterY="0.5" />
+                </Setter.Value>
+              </Setter>
+
+              <!--<Setter TargetName="ExpandSiteBorder" Property="BorderThickness" Value="0,1,0,0" />-->
+              <Setter TargetName="ExpandSiteBorder" Property="DockPanel.Dock" Value="Bottom" />
+              <Setter TargetName="ExpandSiteBorder" Property="Opacity" Value="1.0" />
+              <Setter TargetName="ExpandSiteBorder" Property="LayoutTransform">
+                <Setter.Value>
+                  <ScaleTransform ScaleY="1.0" />
+                </Setter.Value>
+              </Setter>
+            </MultiTrigger>
+
+            <MultiTrigger>
+              <MultiTrigger.Conditions>
+                <Condition Property="ExpandDirection" Value="Right" />
+                <Condition Property="IsExpanded" Value="False" />
+              </MultiTrigger.Conditions>
+              <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" />
+              <Setter TargetName="HeaderSite" Property="Style" Value="{DynamicResource ExpanderTitleVerticalStyle}" />
+              <!--<Setter TargetName="HeaderSite" Property="Width" Value="Auto" />
+							<Setter TargetName="HeaderSite" Property="Height" Value="21" />-->
+              <!--<Setter TargetName="HeaderSite" Property="Background" Value="Red" />-->
+              <!--<Setter TargetName="HeaderSite" Property="Padding" Value="0,0" />-->
+
+              <!--<Setter TargetName="HeaderSite" Property="LayoutTransform">
                 <Setter.Value>
                   <RotateTransform Angle="90" />
                 </Setter.Value>
-              </Setter>
-              <Setter Property="Padding" Value="0" />
-              <Setter Property="VerticalContentAlignment" Value="Stretch" />
-              <Setter Property="VerticalAlignment" Value="Stretch" />
-            </Trigger>
+              </Setter>-->
+              <!--<Setter TargetName="HeaderSite" Property="LayoutTransform">
+                <Setter.Value>
+                  <ScaleTransform CenterX="0" CenterY="0" ScaleX="0.8" ScaleY="0.8" />
+                </Setter.Value>
+              </Setter>-->
 
+              <Setter Property="Height" Value="Auto" />
+              <Setter Property="Width" Value="21" />
+
+              <Setter Property="VerticalAlignment" Value="Stretch" />
+              <Setter Property="VerticalContentAlignment" Value="Stretch" />
+              <!--<Setter Property="VerticalAlignment" Value="Stretch" />-->
+              <!--<Setter TargetName="ExpandSiteBorder" Property="BorderThickness" Value="0,1,0,0" />-->
+
+              <Setter TargetName="ExpandSiteBorder" Property="DockPanel.Dock" Value="Right" />
+              <Setter TargetName="ExpandSiteBorder" Property="Opacity" Value="0.0" />
+              <Setter TargetName="ExpandSiteBorder" Property="Visibility" Value="Collapsed" />
+              <!--<Setter TargetName="ExpandSiteBorder" Property="LayoutTransform">
+                <Setter.Value>
+                  <ScaleTransform ScaleY="0.0" />
+                </Setter.Value>
+              </Setter>-->
+            </MultiTrigger>
           </ControlTemplate.Triggers>
 
         </ControlTemplate>
@@ -1874,23 +1867,22 @@
   </Style>
   <!--#endregion AnchorableExpanderControlStyle-->
 
-  <Style x:Key="ExpanderTitleStyle" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
-    <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
-    <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
+  <!--<Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />-->
+  <Style x:Key="ExpanderTitleHorizontalStyle" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
     <Setter Property="Height" Value="21" />
-    <Setter Property="Model" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
-    <Setter Property="Tag" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+    <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
+    <!--<Setter Property="Model" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />-->
     <Setter Property="IsChecked" Value="{Binding Path=Model.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
           <Border
             x:Name="Bd"
-            Margin="0,-1"
+            Margin="{TemplateBinding Padding}"
             Background="Transparent"
             BorderBrush="Transparent"
             BorderThickness="1">
-            <Grid Margin="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+            <Grid Background="{TemplateBinding Background}">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -1955,7 +1947,9 @@
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-                <!--<Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />-->
+
+                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
+
                 <Condition Binding="{Binding Model.IsActive, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
 
               </MultiDataTrigger.Conditions>
@@ -1969,11 +1963,15 @@
               </MultiDataTrigger.Conditions>
               <Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />
             </MultiDataTrigger>
-            <!--<DataTrigger Binding="{Binding Model.ExpandDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Right" >
-							-->
-            <!--<Setter TargetName="Bd" Property="Margin" Value="-1, 0,0,0"/>-->
+
+            <!--<DataTrigger Binding="{Binding Model.ExpandDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Right">
+
+            -->
+            <!--<Setter TargetName="Bd" Property="Margin" Value="-1,0,0,0" />-->
             <!--
-						</DataTrigger>-->
+
+            </DataTrigger>-->
+
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsActive, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
@@ -1982,7 +1980,7 @@
             </MultiDataTrigger>
 
             <Trigger Property="IsChecked" Value="True">
-              <Trigger.EnterActions>
+              <!--<Trigger.EnterActions>
                 <BeginStoryboard>
                   <Storyboard>
                     <DoubleAnimation
@@ -2003,13 +2001,171 @@
                       Duration="00:00:00.050" />
                   </Storyboard>
                 </BeginStoryboard>
-              </Trigger.ExitActions>
+              </Trigger.ExitActions>-->
+              <Setter TargetName="ChevronGrid" Property="RenderTransform">
+                <Setter.Value>
+                  <RotateTransform Angle="0" />
+                </Setter.Value>
+              </Setter>
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
   </Style>
+
+  <Style x:Key="ExpanderTitleVerticalStyle" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
+    <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
+    <!--<Setter Property="Model" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />-->
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="IsChecked" Value="{Binding Path=Model.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
+          <Border
+            x:Name="Bd"
+            Margin="{TemplateBinding Padding}"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            BorderThickness="1">
+            <DockPanel
+              HorizontalAlignment="Center"
+              VerticalAlignment="Stretch"
+              LastChildFill="True">
+              <Grid
+                x:Name="ChevronGrid"
+                Margin="4,8"
+                HorizontalAlignment="Center"
+                Background="Transparent"
+                DockPanel.Dock="Top"
+                RenderTransformOrigin="0.5, 0.5">
+                <Grid.RenderTransform>
+                  <RotateTransform Angle="-90" />
+                </Grid.RenderTransform>
+                <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                  <Path
+                    x:Name="ControlChevronIcon"
+                    Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                    Fill="{TemplateBinding Foreground}"
+                    Stretch="Uniform" />
+                </Viewbox>
+              </Grid>
+
+              <DockPanel Margin="0,4,0,0">
+                <TextBlock Text="{Binding Path=Model.Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" TextTrimming="WordEllipsis">
+                  <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="90" />
+                  </TextBlock.LayoutTransform>
+                </TextBlock>
+                <!--<TextBlock
+                  HorizontalAlignment="Right"
+                  DockPanel.Dock="Top"
+                  Foreground="{TemplateBinding Foreground}"
+                  Text="{Binding Path=Model.Title, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+									RenderTransformOrigin="0.5, 0.5"
+                  TextTrimming="WordEllipsis">
+                  <TextBlock.RenderTransform>
+                    <RotateTransform Angle="90" />
+                  </TextBlock.RenderTransform>
+
+                </TextBlock>-->
+
+                <!--  ItemsSource="{Binding Path=Model.ToolBars, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                <!--<ToolBar
+                  x:Name="PART_ToolBar"
+                  Background="Transparent"
+                  DockPanel.Dock="Bottom"
+                  Style="{DynamicResource SimpleToolBar}"
+                  Visibility="Collapsed">
+                  <Button
+                    Width="21"
+                    Height="21"
+                    Content="1" />
+                  <Button
+                    Width="21"
+                    Height="21"
+                    Content="2"
+                    Foreground="{TemplateBinding Foreground}" />
+                  <Button
+                    Width="21"
+                    Height="21"
+                    Content="3"
+                    Foreground="{TemplateBinding Foreground}"
+                    ToolBar.OverflowMode="Always" />
+                </ToolBar>-->
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding ExpandDirection, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="Right" />
+            <MultiDataTrigger>
+              <MultiDataTrigger.Conditions>
+                <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
+                <Condition Binding="{Binding Model.IsActive, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+
+              </MultiDataTrigger.Conditions>
+              <!--<Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />-->
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+              <MultiDataTrigger.Conditions>
+                <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
+
+              </MultiDataTrigger.Conditions>
+              <!--<Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />-->
+            </MultiDataTrigger>
+
+            <!--<DataTrigger Binding="{Binding Model.ExpandDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Right">
+
+            -->
+            <!--<Setter TargetName="Bd" Property="Margin" Value="-1,0,0,0" />-->
+            <!--
+
+            </DataTrigger>-->
+
+            <MultiDataTrigger>
+              <MultiDataTrigger.Conditions>
+                <Condition Binding="{Binding Model.IsActive, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+              </MultiDataTrigger.Conditions>
+              <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionActiveBackground}}" />
+            </MultiDataTrigger>
+
+            <Trigger Property="IsChecked" Value="True">
+              <!--<Trigger.EnterActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation
+                      Storyboard.TargetName="ChevronGrid"
+                      Storyboard.TargetProperty="(Grid.RenderTransform).(RotateTransform.Angle)"
+                      To="0"
+                      Duration="00:00:00.050" />
+                  </Storyboard>
+                </BeginStoryboard>
+              </Trigger.EnterActions>
+              <Trigger.ExitActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation
+                      Storyboard.TargetName="ChevronGrid"
+                      Storyboard.TargetProperty="(Grid.RenderTransform).(RotateTransform.Angle)"
+                      To="-90"
+                      Duration="00:00:00.050" />
+                  </Storyboard>
+                </BeginStoryboard>
+              </Trigger.ExitActions>-->
+              <Setter TargetName="ChevronGrid" Property="RenderTransform">
+                <Setter.Value>
+                  <RotateTransform Angle="0" />
+                </Setter.Value>
+              </Setter>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
 
   <Style x:Key="{x:Type avalonDockControls:OverlayWindow}" TargetType="{x:Type avalonDockControls:OverlayWindow}">
     <Setter Property="UseLayoutRounding" Value="True" />
@@ -2508,14 +2664,33 @@
    </Setter>
  </Style>-->
   <!--  x:Name="GridSplitterHorizontalStyle"  -->
-  <Style x:Name="GridSplitterHorizontalStyle" TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+  <!--<Style x:Key="ActivityBarControlStyle" TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">-->
+
+  <Style x:Key="GridSplitterHorizontalStyle" TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+    <Setter Property="Panel.ZIndex" Value="1" />
+    <Setter Property="Margin" Value="0,-1" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-
           <!--<Border Background="{DynamicResource {x:Static reskeys:ResourceKeys.GridResizerBackground}}" />-->
+          <Border Background="Transparent">
+            <Border Margin="0,1" Background="{DynamicResource {x:Static reskeys:ResourceKeys.GridResizerBackground}}" />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
-          <Border Background="Red" />
+  <Style x:Key="GridSplitterVerticalStyle" TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+    <Setter Property="Panel.ZIndex" Value="1" />
+    <Setter Property="Margin" Value="-1,0" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+          <!--<Border Background="{DynamicResource {x:Static reskeys:ResourceKeys.GridResizerBackground}}" />-->
+          <Border Background="Transparent">
+            <Border Margin="1,0" Background="{DynamicResource {x:Static reskeys:ResourceKeys.GridResizerBackground}}" />
+          </Border>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
@@ -2534,9 +2709,7 @@
     <Setter Property="PanelStyle" Value="{StaticResource PanelStyle}" />
     <Setter Property="ActivityBarControlStyle" Value="{StaticResource ActivityBarControlStyle}" />
     <!--<Setter Property="ActivityBarTemplate" Value="{StaticResource ActivityBarTemplate}" />-->
-    <!--<Setter Property="AnchorSideTemplate" Value="{StaticResource AnchorSideTemplate}" />
-    <Setter Property="AnchorGroupTemplate" Value="{StaticResource AnchorGroupTemplate}" />
-    <Setter Property="AnchorTemplate" Value="{StaticResource AnchorTemplate}" />-->
+
     <Setter Property="DocumentHeaderTemplate" Value="{StaticResource DocumentHeaderTemplate}" />
     <Setter Property="AnchorableHeaderTemplate" Value="{StaticResource AnchorableHeaderTemplate}" />
     <Setter Property="DocumentTitleTemplate" Value="{StaticResource DocumentTitleTemplate}" />
@@ -2547,7 +2720,8 @@
     <Setter Property="IconContentTemplate" Value="{StaticResource IconContentTemplate}" />
     <Setter Property="GridSplitterWidth" Value="1" />
     <Setter Property="GridSplitterHeight" Value="1" />
-    <!--<Setter Property="GridSplitterHorizontalStyle" Value="{StaticResource GridSplitterHorizontalStyle}" />-->
+    <Setter Property="GridSplitterHorizontalStyle" Value="{StaticResource GridSplitterHorizontalStyle}" />
+    <Setter Property="GridSplitterVerticalStyle" Value="{StaticResource GridSplitterVerticalStyle}" />
     <!--  <Setter Property="GridSplitterHorizontalStyle"  -->
     <Setter Property="Template">
       <Setter.Value>
@@ -3178,13 +3352,15 @@
     <Setter Property="UseLayoutRounding" Value="True" />
     <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBorder}}" />
+    <Setter Property="ResizeMode" Value="NoResize" />
+    <Setter Property="WindowStyle" Value="None" />
     <Setter Property="shell:WindowChrome.WindowChrome">
       <Setter.Value>
         <shell:WindowChrome
-          CaptionHeight="21"
-          CornerRadius="0"
-          GlassFrameThickness="0"
-          ResizeBorderThickness="10" />
+          CaptionHeight="51"
+          CornerRadius="5"
+          GlassFrameThickness="-1"
+          ResizeBorderThickness="3" />
       </Setter.Value>
     </Setter>
     <Setter Property="Template">
@@ -3221,56 +3397,26 @@
                       Visibility="Collapsed" />
 
                     <DockPanel>
-                      <Border
+											<Border
                         Padding="2,0,4,0"
                         HorizontalAlignment="Left"
                         Visibility="{Binding Path=Model.IsSinglePane, RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
-                        <avalonDockControls:DropDownControlArea
+												<avalonDockControls:DropDownControlArea
                           DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
                           DropDownContextMenuDataContext="{Binding Path=SingleContentLayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
                           Style="{DynamicResource DropDownControlArea}">
-                          <ContentPresenter
+													<ContentPresenter
                             Content="{Binding Model.SinglePane.SelectedContent, RelativeSource={RelativeSource TemplatedParent}}"
                             ContentTemplate="{Binding Model.Root.Manager.AnchorableTitleTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                             ContentTemplateSelector="{Binding Model.Root.Manager.AnchorableTitleTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </avalonDockControls:DropDownControlArea>
-                      </Border>
+												</avalonDockControls:DropDownControlArea>
+											</Border>
 
-                      <!--<Rectangle
-                        x:Name="DragHandleTexture"
-                        Height="5"
-                        Margin="4,0,4,0"
-                        VerticalAlignment="Center"
-                        RenderOptions.BitmapScalingMode="NearestNeighbor"
-                        UseLayoutRounding="True">
-                        <Rectangle.Fill>
-                          <DrawingBrush
-                            TileMode="Tile"
-                            Viewbox="0,0,4,4"
-                            ViewboxUnits="Absolute"
-                            Viewport="0,0,4,4"
-                            ViewportUnits="Absolute">
-                            <DrawingBrush.Drawing>
-                              <GeometryDrawing Brush="{Binding Fill, ElementName=DragHandleGeometryPlaceholder, Mode=OneWay, Converter={avalonDockConverters:NullToDoNothingConverter}}">
-                                <GeometryDrawing.Geometry>
-                                  <GeometryGroup>
-                                    <GeometryGroup.Children>
-                                      <RectangleGeometry Rect="0,0,1,1" />
-                                      <RectangleGeometry Rect="2,2,1,1" />
-                                    </GeometryGroup.Children>
-                                  </GeometryGroup>
-                                </GeometryDrawing.Geometry>
-                              </GeometryDrawing>
-                            </DrawingBrush.Drawing>
-                          </DrawingBrush>
-                        </Rectangle.Fill>
-                      </Rectangle>-->
-
-                      <TextBlock
+											<TextBlock
                         Margin="4,0,4,0"
                         VerticalAlignment="Center"
                         Tag="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
-                        Text="Binding Title" />
+                        Text="Binding Model.Title" />
                       <!--<TextBlock VerticalAlignment="Center" Text="{Binding Title}" Tag="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"/>-->
                     </DockPanel>
 
@@ -3375,6 +3521,13 @@
                     </Button>
                   </Grid>
                 </Border>
+                <!--<StackPanel Grid.Row="1">
+                  <TextBlock Background="Green" Text="TextBlock1" />
+                  <TextBlock Text="TextBlock1" />
+                  <TextBlock Text="TextBlock1" />
+                  <TextBlock Text="TextBlock1" />
+                  <TextBlock Text="TextBlock1" />
+                </StackPanel>-->
                 <ContentPresenter Grid.Row="1" Content="{TemplateBinding Content}" />
               </Grid>
             </Border>
@@ -3561,6 +3714,12 @@
               <Setter TargetName="PART_PinClose" Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedActivePressedBorder}}" />
               <Setter TargetName="PART_ImgPinClose" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedActivePressedGlyph}}" />
             </MultiDataTrigger>
+            <Trigger Property="IsDragging" Value="True">
+              <Setter Property="Opacity" Value="0.75" />
+            </Trigger>
+            <Trigger Property="IsDragging" Value="False">
+              <Setter Property="Opacity" Value="1.0" />
+            </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>

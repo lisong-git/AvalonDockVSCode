@@ -26,7 +26,7 @@ namespace AvalonDock.Layout {
 	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup, ILayoutPaneSerializable {
 		#region fields
 
-		private Orientation _orientation;
+		private Orientation _orientation = Orientation.Vertical;
 		private int _selectedIndex;
 		private string _id;
 

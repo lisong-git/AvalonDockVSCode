@@ -38,8 +38,10 @@ namespace AvalonDock.Layout
 		private bool _allowDuplicateContent = true;
 		private bool _canRepositionItems = true;
 
-		private double _dockMinWidth = 21.0;
-		private double _dockMinHeight = 21.0;
+		//private double _dockMinWidth = 21.0;
+		//private double _dockMinHeight = 21.0; 
+		private double _dockMinWidth = 0.0;
+		private double _dockMinHeight = 0.0;
 		private double _floatingWidth = 0.0;
 		private double _floatingHeight = 0.0;
 		private double _floatingLeft = 0.0;

@@ -79,7 +79,7 @@ namespace AvalonDock.Controls {
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
-						LayoutAnchorableExpanderGroup layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
+						LayoutAnchorableExpanderGroupPane layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
 						layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
 						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
 						//layoutAnchorableExpanderGroup.Parent = null;
@@ -94,7 +94,7 @@ namespace AvalonDock.Controls {
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
-						LayoutAnchorableExpanderGroup layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
+						LayoutAnchorableExpanderGroupPane layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
 						layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
 						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
 						//layoutAnchorableExpanderGroup.Parent = null;

@@ -1448,7 +1448,7 @@ namespace AvalonDock {
 		/// <returns>All the anchorable items found.</returns>
 		/// <seealso cref="LayoutAnchorable"/>
 		/// <seealso cref="LayoutAnchorablePaneGroup"/>
-		internal IEnumerable<LayoutAnchorableExpander> GetLayoutAnchorable(LayoutAnchorableExpanderGroup layoutAnchPaneGroup) {
+		internal IEnumerable<LayoutAnchorableExpander> GetLayoutAnchorable(LayoutAnchorableExpanderGroupPane layoutAnchPaneGroup) {
 			if(layoutAnchPaneGroup == null)
 				yield break;
 			foreach(var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorableExpander>())
@@ -1467,7 +1467,7 @@ namespace AvalonDock {
 		}
 
 		public LayoutFloatingWindowControl CreateFloatingWindow(LayoutContent contentModel, bool isContentImmutable) {
-			Debug.WriteLine($"{contentModel.GetType()}, {isContentImmutable}", "CreateFloatingWindow 1");
+			Debug.WriteLine($"{contentModel.GetType()}, {isContentImmutable}", "CreateFloatingWindow 0");
 
 			if(contentModel is LayoutAnchorableExpander anchorable) {
 				if(!(contentModel.Parent is ILayoutPane)) {
@@ -1478,7 +1478,7 @@ namespace AvalonDock {
 						FloatingWidth = contentModel.FloatingWidth,
 						FloatingHeight = contentModel.FloatingHeight
 					};
-					Debug.WriteLine($"{contentModel.Title}", "CreateFloatingWindow 0 ");
+					Debug.WriteLine($"{contentModel.Title}", "CreateFloatingWindow 1 ");
 					return CreateFloatingWindowForLayoutAnchorableWithoutParent(group, isContentImmutable);
 				}
 			}
@@ -1493,10 +1493,11 @@ namespace AvalonDock {
 		public LayoutAnchorableExpanderGroupPane PrimarySideBar { get; set; }
 		public LayoutAnchorableExpanderGroupPane SecondarySideBar { get; set; }
 		public LayoutAnchorableExpanderGroupPane Panel { get; set; }
-		public LayoutAnchorableExpanderGroupPaneControl PrimarySideBarControl { get; set; }
+		//public LayoutAnchorableExpanderGroupPaneControl PrimarySideBarControl { get; set; }
 
-		public LayoutAnchorableExpanderGroupPaneControl SecondarySideBarControl { get; set; }
-		public LayoutAnchorableExpanderGroupPaneControl PanelControl { get; set; }
+		//public LayoutAnchorableExpanderGroupPaneControl SecondarySideBarControl { get; set; }
+		//public LayoutAnchorableExpanderGroupPaneControl PanelControl { get; set; }
+
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
 		///
@@ -1528,6 +1529,8 @@ namespace AvalonDock {
 				} else if(LayoutActivityBar.PanelKey == layoutAnchorableExpanderGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(PanelStyleProperty.Name) { Source = this });
 					Panel = layoutAnchorableExpanderGroupPane;
+				//} else {
+				//	templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
 				}
 				return templateModelView;
 			}
@@ -1535,9 +1538,9 @@ namespace AvalonDock {
 			if(model is LayoutAnchorableExpander) {
 				var templateModelView = new LayoutAnchorableExpanderControl(model as LayoutAnchorableExpander, IsVirtualizingAnchorable);
 				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderPaneControlStyleProperty.Name) { Source = this });
-
 				return templateModelView;
 			}
+
 			if(model is LayoutDocumentPaneGroup)
 				return new LayoutDocumentPaneGroupControl(model as LayoutDocumentPaneGroup);
 
@@ -2639,6 +2642,7 @@ namespace AvalonDock {
 
 				paneModel.RemoveChildAt(paneModel.Children.Count - 1);
 				destPane.Children.Insert(0, contentModel);
+				contentModel.IsExpanded = true;
 			}
 
 			if(destPane.Children.Count > 0)
@@ -2650,7 +2654,12 @@ namespace AvalonDock {
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
 			fw = new LayoutAnchorableFloatingWindow {
-				RootPanel = destPane
+				RootPanel = new LayoutAnchorableExpanderGroupPane(destPane) {
+					DockHeight = destPane.DockHeight,
+					DockWidth = destPane.DockWidth,
+					DockMinHeight = destPane.DockMinHeight,
+					DockMinWidth = destPane.DockMinWidth,
+				}
 			};
 
 			Layout.FloatingWindows.Add(fw);
@@ -2672,6 +2681,9 @@ namespace AvalonDock {
 		private LayoutFloatingWindowControl CreateFloatingWindowCore(LayoutContent contentModel, bool isContentImmutable) {
 			if(!contentModel.CanFloat)
 				return null;
+
+			Debug.WriteLine($"{contentModel.GetType().Name}, {isContentImmutable}", "CreateFloatingWindowCore 0");
+
 			//if(contentModel is LayoutAnchorable contentModelAsAnchorable && contentModelAsAnchorable.IsAutoHidden)
 			//	contentModelAsAnchorable.ToggleAutoHide();
 
@@ -2707,7 +2719,7 @@ namespace AvalonDock {
 				var anchorableContent = contentModel as LayoutAnchorableExpander;
 
 				fw = new LayoutAnchorableFloatingWindow {
-					RootPanel = new LayoutAnchorableExpanderGroup(anchorableContent) {
+					RootPanel = new LayoutAnchorableExpanderGroupPane(new LayoutAnchorableExpanderGroup(anchorableContent)) {
 						DockWidth = parentPaneAsPositionableElement.DockWidth,
 						DockHeight = parentPaneAsPositionableElement.DockHeight,
 						DockMinHeight = parentPaneAsPositionableElement.DockMinHeight,

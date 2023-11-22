@@ -9,6 +9,7 @@
 
 using AvalonDock.Layout;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -26,6 +27,38 @@ namespace AvalonDock.Controls {
 		}
 
 		#endregion Constructors
+
+		#region Property
+
+		#region HasOverflowItems
+
+		/// <summary>
+		///     The key needed set a read-only property.
+		/// </summary>
+		internal static readonly DependencyPropertyKey HasOverflowItemsPropertyKey =
+								DependencyProperty.RegisterReadOnly(
+												"HasOverflowItems",
+												typeof(bool),
+												typeof(AnchorablePaneTabPanel),
+												new FrameworkPropertyMetadata(false));
+
+		/// <summary>
+		///     The DependencyProperty for the HasOverflowItems property.
+		///     Flags:              None
+		///     Default Value:      false
+		/// </summary>
+		public static readonly DependencyProperty HasOverflowItemsProperty =
+								HasOverflowItemsPropertyKey.DependencyProperty;
+
+		/// <summary>
+		/// Whether we have overflow items
+		/// </summary>
+		public bool HasOverflowItems {
+			get => (bool) GetValue(HasOverflowItemsProperty);
+		}
+		#endregion HasOverflowItems
+
+		#endregion Property
 
 		#region Overrides
 
@@ -79,6 +112,7 @@ namespace AvalonDock.Controls {
 				}
 			}
 
+			SetValue(HasOverflowItemsPropertyKey, skipAllOthers);
 			//Debug.WriteLine($"{finalSize.Height}, {offset}, ", "ArrangeOverride");
 			return new Size(offset, finalSize.Height);
 		}

@@ -363,13 +363,13 @@
             </Grid>
           </Border>
           <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding Model.IsAutoHidden, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+            <!--<DataTrigger Binding="{Binding Model.IsAutoHidden, RelativeSource={RelativeSource Mode=Self}}" Value="True">
               <Setter TargetName="PART_AutoHidePin" Property="LayoutTransform">
                 <Setter.Value>
                   <RotateTransform Angle="90" />
                 </Setter.Value>
               </Setter>
-            </DataTrigger>
+            </DataTrigger>-->
             <DataTrigger Binding="{Binding Model.CanClose, RelativeSource={RelativeSource Mode=Self}}" Value="True">
               <Setter TargetName="PART_HidePin" Property="Command" Value="{Binding Path=LayoutItem.CloseCommand, RelativeSource={RelativeSource TemplatedParent}}" />
               <Setter TargetName="PART_HidePin" Property="ToolTip" Value="{x:Static avalonDockProperties:Resources.Document_Close}" />
@@ -747,22 +747,25 @@
   </Style>
 
   <!--  LayoutGridResizerControl  -->
-	<Style TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
-					<Border Background="#3F3F46" />
-					<!--<Border Background="Transparent" SnapsToDevicePixels="True">
+  <Style TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutGridResizerControl}">
+          <!--<Grid>
+						
+					</Grid>-->
+          <Border Background="#3F3F46" />
+          <!--<Border Background="Green" SnapsToDevicePixels="True" >
 						<Border
               Background="Red"
               SnapsToDevicePixels="True" />
 					</Border>-->
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
-	<Style TargetType="{x:Type avalonDockControls:LayoutDocumentControl}">
+  <Style TargetType="{x:Type avalonDockControls:LayoutDocumentControl}">
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentControl}">
