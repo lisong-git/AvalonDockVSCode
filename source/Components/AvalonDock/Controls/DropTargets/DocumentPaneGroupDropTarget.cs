@@ -12,7 +12,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-namespace AvalonDock.Controls
+namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
 	/// Implements a <see cref="LayoutDocumentPaneGroupControl"/> drop target

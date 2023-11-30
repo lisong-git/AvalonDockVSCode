@@ -8,6 +8,7 @@
  ************************************************************************/
 
 using AvalonDock.Layout;
+using Microsoft.VisualBasic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -87,7 +88,14 @@ namespace AvalonDock.Controls {
 		#endregion Model
 
 		public double EmptyLength() {
-		 return ActualHeight - Children.OfType<FrameworkElement>().Sum(o => o.ActualHeight);
+			Debug.WriteLine($"{ActualWidth}; " +
+				$"{string.Join(", ", ColumnDefinitions.OfType<ColumnDefinition>().Select(o=> o.ActualWidth))}; " +
+				$"{ColumnDefinitions.LastOrDefault()?.Offset}; " +
+				$"{ColumnDefinitions.LastOrDefault()?.Offset + ColumnDefinitions.LastOrDefault() ?.ActualWidth}; " +
+				$"{ActualWidth}; " +
+				$"{ColumnDefinitions.OfType<ColumnDefinition>().Sum(o => o.ActualWidth)}; " +
+				$"{ActualWidth - ColumnDefinitions.OfType<ColumnDefinition>().Sum(o => o.ActualWidth)}", "EmptyLength");
+		 return ActualWidth - ColumnDefinitions.OfType<ColumnDefinition>().Select(o => o.ActualWidth).Sum();
 		}
 
 		#region Overrides

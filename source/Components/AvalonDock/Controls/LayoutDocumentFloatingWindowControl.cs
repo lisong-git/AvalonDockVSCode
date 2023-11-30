@@ -198,7 +198,7 @@ namespace AvalonDock.Controls {
 			var rootVisual = ((FloatingWindowContentHost)Content).RootVisual;
 
 			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutAnchorableExpanderControl>())
-				_dropAreas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorablePane));
+				_dropAreas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpander));
 
 			if(dockAsDocument) {
 				foreach(var areaHost in rootVisual.FindVisualChildren<LayoutDocumentPaneControl>()) {

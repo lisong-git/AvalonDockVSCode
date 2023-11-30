@@ -164,16 +164,15 @@ namespace AvalonDock.Controls {
 		}
 
 		IEnumerable<IDropArea> IOverlayWindowHost.GetDropAreas(LayoutFloatingWindowControl draggingWindow) {
-			Debug.WriteLine($"{draggingWindow.Model.GetType()}", "LayoutAnchorableFloatingWindowControl GetDropAreas");
-
 			if(_dropAreas != null)
 				return _dropAreas;
 			_dropAreas = new List<IDropArea>();
 			if(draggingWindow.Model is LayoutDocumentFloatingWindow)
 				return _dropAreas;
 			var rootVisual = (Content as FloatingWindowContentHost).RootVisual;
-			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutAnchorableExpanderGroupControl>())
-				_dropAreas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorablePane));
+			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
+				_dropAreas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderGroupPane));
+			}
 			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutDocumentPaneControl>())
 				_dropAreas.Add(new DropArea<LayoutDocumentPaneControl>(areaHost, DropAreaType.DocumentPane));
 			return _dropAreas;
@@ -192,12 +191,12 @@ namespace AvalonDock.Controls {
 			base.OnInitialized(e);
 			var manager = _model.Root.Manager;
 			Content = manager.CreateUIElementForModel(_model.RootPanel);
-			Debug.WriteLine($"{_model?.Root.GetType().Name}, {_model?.RootPanel.GetType().Name}, {Content?.GetType().Name}", "OnInitialized");
+			Debug.WriteLine($"{_model?.Root.GetType().Name}, {_model?.RootPanel.GetType().Name}, {Content?.GetType().Name}", "LayoutAnchorableFloatingWindowControl OnInitialized");
 			//SetBinding(VisibilityProperty, new Binding("IsVisible") { Source = _model, Converter = new BoolToVisibilityConverter(), Mode = BindingMode.OneWay, ConverterParameter = Visibility.Hidden });
 
 			//Issue: http://avalondock.codeplex.com/workitem/15036
 			IsVisibleChanged += LayoutAnchorableFloatingWindowControl_IsVisibleChanged;
-			SetBinding(SingleContentLayoutItemProperty, new Binding("Model.SinglePane.SelectedItem") { Source = this, Converter = new LayoutItemFromLayoutModelConverter() });
+			//SetBinding(SingleContentLayoutItemProperty, new Binding("Model.SinglePane.SelectedItem") { Source = this, Converter = new LayoutItemFromLayoutModelConverter() });
 			_model.PropertyChanged += _model_PropertyChanged;
 		}
 

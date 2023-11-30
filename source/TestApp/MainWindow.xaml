@@ -105,7 +105,7 @@
                   Title="Document 1"
                   ContentId="document1"
                   IconSource="/TestApp;component/Images/alarm-clock-blue.png">
-                  <Grid>
+									<Grid>
                     <Grid.RowDefinitions>
                       <RowDefinition />
                       <RowDefinition Height="Auto" />
@@ -113,6 +113,7 @@
                     <Button
                       Height="Auto"
                       VerticalAlignment="Top"
+											
                       Click="AddTwoDocuments_click"
                       Content="Click to add 2 documents" />
                     <TextBox Grid.Row="1" Text="Document 1 Content" />

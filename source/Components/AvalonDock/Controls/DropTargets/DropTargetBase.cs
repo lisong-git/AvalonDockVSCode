@@ -10,7 +10,7 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace AvalonDock.Controls
+namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>Implements a base implementation for the abstract <see cref="DropTarget{T}"/> class.</summary>
 	internal abstract class DropTargetBase : DependencyObject
@@ -21,7 +21,7 @@ namespace AvalonDock.Controls
 
 		/// <summary>IsDraggingOver Attached Dependency Property</summary>
 		public static readonly DependencyProperty IsDraggingOverProperty = DependencyProperty.RegisterAttached("IsDraggingOver", typeof(bool), typeof(DropTargetBase),
-				new FrameworkPropertyMetadata((bool)false));
+				new FrameworkPropertyMetadata(false));
 
 		/// <summary>Gets wether the user is dragging a window over the target element.</summary>
 		[Bindable(true), Description("Gets wether the user is dragging a window over the target element."), Category("Other")]

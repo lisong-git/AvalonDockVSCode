@@ -14,7 +14,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-namespace AvalonDock.Controls
+namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
 	/// Implements a <see cref="DockingManager"/> drop target
@@ -240,7 +240,7 @@ namespace AvalonDock.Controls
 			var targetScreenRect = TargetElement.GetScreenArea();
 			Debug.WriteLine($"{Type}", "GetPreviewPath");
 
-			switch(Type)
+			switch (Type)
 			{
 				case DropTargetType.DockingManagerDockLeft:
 					{

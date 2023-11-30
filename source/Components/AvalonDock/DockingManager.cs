@@ -1348,9 +1348,6 @@ namespace AvalonDock {
 		/// <inheritdoc/>
 		IEnumerable<IDropArea> IOverlayWindowHost.GetDropAreas(LayoutFloatingWindowControl draggingWindow) {
 			//Debug.WriteLine($"{draggingWindow.Model.GetType()}", "DockingManager GetDropAreas 1");
-			//Debug.WriteLineIf(this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>().Any(), 
-			//	$"{string.Join(",", $"{this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()}")}", 
-			//	"DockingManager GetDropAreas 2");
 
 			if(_areas != null)
 				return _areas;
@@ -1391,31 +1388,36 @@ namespace AvalonDock {
 				}
 			}
 
-			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
-				_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpanderPane));
-			}
-
-			//Debug.WriteLine($"{this.FindVisualChildren<LayoutAnchorableItem>().Count()}", "DockingManager GetDropAreas 3");
-			//Debug.WriteLine($"{this.FindVisualChildren<LayoutAnchorableTabItem>().Count()}", "DockingManager GetDropAreas 4");
-			//Debug.WriteLine($"{this.FindVisualChildren<TabItem>().Count()}", "DockingManager GetDropAreas 5");
-
-
-			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableTabItem>()) {
-			//	_areas.Add(new DropArea<LayoutAnchorableTabItem>(areaHost, DropAreaType.AnchorableItem));
-			//}
-
-			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
-			//	_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderPane));
+			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpander));
 			//}
 
 			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()) {
-			//	Debug.WriteLine($"{areaHost.EmptyLength()}", "GetDropAreas");
-			//	if(areaHost.EmptyLength() > 1) {
-			//		_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorableExpanderPaneGroup));
-			//	}
+			//	//Debug.WriteLine($"{areaHost.EmptyLength()}", "GetDropAreas");
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorableExpanderGroup));
 			//}
+
+			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupTabItem>()) {
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderGroupTabItem>(areaHost, DropAreaType.AnchorableExpanderGroupTabItem));
+			//}
+
+			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
+				_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderGroupPane));
+			}
+
 			foreach(var areaHost in this.FindVisualChildren<LayoutActivityTabItem>()) {
 				_areas.Add(new DropArea<LayoutActivityTabItem>(areaHost, DropAreaType.ActivityBar));
+			}
+
+			//if(this.FindVisualChildren<WrapPanel>().SingleOrDefault(o=> "PART_ActivityTabItemWarpContainer" == o.Name) is WrapPanel activityWarpContainerAreaHost) {
+			//	Debug.WriteLine($"{areaHost.Name}", "GetDropAreas");
+			//	//_areas.Add(new DropArea<TabPaneWarpPanel>(areaHost, DropAreaType.TabPaneWarpPanel));
+			//}
+
+			if(this.FindVisualChildren<WrapPanel>().SingleOrDefault(o=> "PART_ActivityTabItemWarpContainer" == o.Name) is WrapPanel activityWarpContainerAreaHost) {
+			//if(this.FindName("PART_ActivityTabItemWarpContainer") is WrapPanel activityWarpContainerAreaHost) {
+				Debug.WriteLine($"{activityWarpContainerAreaHost.Name}", "GetDropAreas");
+				_areas.Add(new DropArea<WrapPanel>(activityWarpContainerAreaHost, DropAreaType.ActivityBarPanel));
 			}
 
 			return _areas;
@@ -1441,17 +1443,16 @@ namespace AvalonDock {
 		}
 
 		/// <summary>
-		/// Finds all <see cref="LayoutAnchorable"/> objects (toolwindows) within a
-		/// <see cref="LayoutAnchorablePaneGroup"/> (if any) and return them.
+		/// Finds all <see cref="LayoutAnchorableExpander"/> objects (toolwindows) within a
+		/// <see cref="LayoutAnchorableExpanderGroup"/> (if any) and return them.
 		/// </summary>
-		/// <param name="layoutAnchPaneGroup"></param>
 		/// <returns>All the anchorable items found.</returns>
-		/// <seealso cref="LayoutAnchorable"/>
-		/// <seealso cref="LayoutAnchorablePaneGroup"/>
-		internal IEnumerable<LayoutAnchorableExpander> GetLayoutAnchorable(LayoutAnchorableExpanderGroupPane layoutAnchPaneGroup) {
-			if(layoutAnchPaneGroup == null)
+		/// <seealso cref="LayoutAnchorableExpander"/>
+		/// <seealso cref="LayoutAnchorableExpanderGroup"/>
+		internal IEnumerable<LayoutAnchorableExpander> GetLayoutAnchorable(LayoutAnchorableExpanderGroupPane layoutAnchorableGroupPane) {
+			if(layoutAnchorableGroupPane == null)
 				yield break;
-			foreach(var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorableExpander>())
+			foreach(var anchorable in layoutAnchorableGroupPane.Descendents().OfType<LayoutAnchorableExpander>())
 				yield return anchorable;
 		}
 

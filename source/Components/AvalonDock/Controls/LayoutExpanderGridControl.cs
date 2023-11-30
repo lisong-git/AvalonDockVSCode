@@ -289,7 +289,7 @@ namespace AvalonDock.Controls {
 					});
 
 					var row = RowDefinitions.Last();
-					Debug.WriteLine($"{childModel.Title}, {row.Height}, {row.ActualHeight}, {row.MinHeight}, {row.MaxHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
+					//Debug.WriteLine($"{childModel.Title}, {row.Height}, {row.ActualHeight}, {row.MinHeight}, {row.MaxHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
 
 					Grid.SetRow(InternalChildren[iChild], iRow);
 
@@ -452,7 +452,7 @@ namespace AvalonDock.Controls {
 		}
 
 		public virtual void AdjustFixedChildrenPanelSizes(Size? parentSize = null) {
-			Debug.WriteLine($"", "ExpanderGridControl AdjustFixedChildrenPanelSizes");
+			//Debug.WriteLine($"", "ExpanderGridControl AdjustFixedChildrenPanelSizes");
 			//PrintFirstResizerControlSize();
 			var visibleChildren = GetVisibleChildren();
 			if(visibleChildren.Count == 0)

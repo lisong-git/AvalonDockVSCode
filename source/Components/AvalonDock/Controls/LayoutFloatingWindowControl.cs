@@ -318,7 +318,7 @@ namespace AvalonDock.Controls {
 		}
 
 		internal void AttachDrag(bool onActivated = true) {
-			Debug.WriteLine($"{onActivated}", "AttachDrag 1");
+			//Debug.WriteLine($"{onActivated}", "AttachDrag 1");
 			if(onActivated) {
 				_attachDrag = true;
 				Activated += OnActivated;

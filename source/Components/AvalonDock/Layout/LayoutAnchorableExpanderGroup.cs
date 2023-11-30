@@ -181,7 +181,7 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		public override void ConsoleDump(int tab) {
 			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-			System.Diagnostics.Trace.WriteLine(string.Format("AnchorableExpanderPane({0})", Orientation));
+			System.Diagnostics.Trace.WriteLine(string.Format("AnchorableExpander({0})", Orientation));
 
 			foreach(LayoutElement child in Children)
 				child.ConsoleDump(tab + 1);

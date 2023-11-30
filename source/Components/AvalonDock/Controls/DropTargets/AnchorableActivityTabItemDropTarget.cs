@@ -14,12 +14,14 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-namespace AvalonDock.Controls {
+namespace AvalonDock.Controls.DropTargets
+{
 	/// <summary>
 	/// Implements a <see cref="LayoutAnchorableExpanderControl"/> drop target
 	/// on which other items (<see cref="LayoutAnchorableExpanderGroup"/>) can be dropped.
 	/// </summary>
-	internal class AnchorableActivityBarDropTarget :DropTarget<LayoutActivityTabItem> {
+	internal class AnchorableActivityTabItemDropTarget : DropTarget<LayoutActivityTabItem>
+	{
 		#region fields
 
 		private LayoutActivityTabItem _targetPane;
@@ -35,10 +37,11 @@ namespace AvalonDock.Controls {
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
-		internal AnchorableActivityBarDropTarget(LayoutActivityTabItem paneControl,
+		internal AnchorableActivityTabItemDropTarget(LayoutActivityTabItem paneControl,
 																	 Rect detectionRect,
 																	 DropTargetType type)
-			: base(paneControl, detectionRect, type) {
+			: base(paneControl, detectionRect, type)
+		{
 			_targetPane = paneControl;
 		}
 
@@ -50,11 +53,12 @@ namespace AvalonDock.Controls {
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
 		/// <param name="index"></paramLayoutAnchorableExpanderGroupPaneControl
-		internal AnchorableActivityBarDropTarget(LayoutActivityTabItem paneControl,
+		internal AnchorableActivityTabItemDropTarget(LayoutActivityTabItem paneControl,
 											Rect detectionRect,
 											DropTargetType type,
 											int index)
-			: base(paneControl, detectionRect, type) {
+			: base(paneControl, detectionRect, type)
+		{
 			_targetPane = paneControl;
 			_index = index;
 		}
@@ -68,14 +72,16 @@ namespace AvalonDock.Controls {
 		/// by docking of the <paramref name="floatingWindow"/> into this drop target.
 		/// </summary>
 		/// <param name="floatingWindow"></param>
-		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow) {
+		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
+		{
 			Debug.WriteLine($"{Type}", $"AnchorableActivityBarDropTarget Drop 1");
 
 			LayoutAnchorableExpanderGroup targetModel = _targetPane.Model;
-			switch(Type) {
-				case DropTargetType.AnchorableExpanderPaneDockTop:
+			switch (Type)
+			{
+				case DropTargetType.AnchorableExpanderDockTop:
 					#region DropTargetType.Bottom
-	{
+					{
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
@@ -88,7 +94,7 @@ namespace AvalonDock.Controls {
 					break;
 
 				#endregion DropTargetType.Bottom
-				case DropTargetType.AnchorableExpanderPaneDockBottom:
+				case DropTargetType.AnchorableExpanderDockBottom:
 					#region DropTargetType.Bottom
 					{
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
@@ -137,12 +143,15 @@ namespace AvalonDock.Controls {
 		/// <param name="floatingWindowModel"></param>
 		/// <retur ns>The geometry of the preview/highlighting WPF figure path.</returns>
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
-												LayoutFloatingWindow floatingWindowModel) {
+												LayoutFloatingWindow floatingWindowModel)
+		{
 			//Debug.WriteLine($"{Type}", $"{nameof(AnchorableActivityBarDropTarget)} GetPreviewPath");
 			var targetModel = _targetPane.Model as LayoutAnchorableExpanderGroup;
 
-			switch(Type) {
-				case DropTargetType.AnchorableExpanderPaneDockTop: {
+			switch (Type)
+			{
+				case DropTargetType.AnchorableExpanderDockTop:
+					{
 						var targetScreenRect = TargetElement.GetScreenArea();
 
 						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
@@ -150,7 +159,8 @@ namespace AvalonDock.Controls {
 
 						return new RectangleGeometry(targetScreenRect);
 					}
-				case DropTargetType.AnchorableExpanderPaneDockBottom: {
+				case DropTargetType.AnchorableExpanderDockBottom:
+					{
 						//var expanderGroup = targetModel.Parent as ILayoutGroup;
 						var targetScreenRect = TargetElement.GetScreenArea();
 

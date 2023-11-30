@@ -7,7 +7,7 @@
    License (Ms-PL) as published at https://opensource.org/licenses/MS-PL
  ************************************************************************/
 
-namespace AvalonDock.Controls
+namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
 	/// Describes a specific drop target area inside a given type of drop area. A drop area
@@ -49,6 +49,9 @@ namespace AvalonDock.Controls
 		/// and the drop target will be part of a tabbed display).</summary>
 		DocumentPaneDockInside,
 
+		DocumentPaneDockPreInside,
+		DocumentPaneDockNextInside,
+
 		#endregion DocumentPane
 
 		/// <summary>The specific drop area is a <see cref="LayoutDocumentPaneGroupControl"/> control (the dropped control
@@ -75,16 +78,16 @@ namespace AvalonDock.Controls
 
 		#endregion AnchorablePane
 
-		#region AnchorableExpanderPaneGroup
+		#region AnchorableExpander
 
 		/// <summary>The specific drop area is the bottom of a <see cref="LayoutAnchorableExpanderControl"/> control.</summary>
-		AnchorableExpanderPaneDockTop,
-		AnchorableExpanderPaneDockBottom,
-		AnchorableExpanderPaneDockLeft,
-		AnchorableExpanderPaneDockRight,
-		AnchorableExpanderPaneDockInside,
+		AnchorableExpanderDockTop,
+		AnchorableExpanderDockBottom,
+		AnchorableExpanderDockLeft,
+		AnchorableExpanderDockRight,
+		AnchorableExpanderDockInside,
 
-		#endregion AnchorableExpanderPaneGroup
+		#endregion AnchorableExpander
 
 		#region AnchorablePaneGroup
 

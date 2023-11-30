@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -124,6 +124,24 @@ namespace AvalonDock
 				thickness.Top + other.Top,
 				thickness.Right + other.Right,
 				thickness.Bottom + other.Bottom);
+		}
+
+		public static Rect TopHalf(this Rect rect) {
+			return new Rect(rect.Location, new Size(rect.Size.Width, rect.Size.Height / 2));
+		}
+
+		public static Rect BottomHalf(this Rect rect) {
+			var halfHeight = rect.Size.Height / 2;
+			return new Rect(new Point(rect.Location.X, rect.Location.Y + halfHeight), new Size(rect.Size.Width, halfHeight));
+		}
+
+		public static Rect LeftHalf(this Rect rect) {
+			return new Rect(rect.Location, new Size(rect.Size.Width /2, rect.Size.Height));
+		}
+
+		public static Rect RightHalf(this Rect rect) {
+			var halfWidth = rect.Size.Width / 2;
+			return new Rect(new Point(rect.Location.X + halfWidth, rect.Location.Y), new Size(rect.Size.Width / 2, rect.Size.Height));
 		}
 	}
 }

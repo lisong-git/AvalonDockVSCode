@@ -16,7 +16,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace AvalonDock.Controls
+namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
 	/// Abstract class to implement base for various drop target implementations on <see cref="DockingManager"/>,
@@ -130,12 +130,12 @@ namespace AvalonDock.Controls
 
 			if (fwAsAnchorable != null)
 			{
-				this.Drop(fwAsAnchorable);
+				Drop(fwAsAnchorable);
 			}
 			else
 			{
 				var fwAsDocument = floatingWindow as LayoutDocumentFloatingWindow;
-				this.Drop(fwAsDocument);
+				Drop(fwAsDocument);
 			}
 			if (currentActiveContent == null)
 				return;

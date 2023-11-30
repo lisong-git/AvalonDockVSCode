@@ -267,7 +267,7 @@ namespace AvalonDock.Layout {
 		}
 
 		public double CalculatedDockMinHeight() {
-			Debug.WriteLine($"{_dockMinHeight}", $"{nameof(LayoutExpanderPositionable)} CalculatedDockMinHeight");
+			//Debug.WriteLine($"{_dockMinHeight}", $"{nameof(LayoutExpanderPositionable)} CalculatedDockMinHeight");
 			//var dockContent =  (ILayoutPositionableElement) Content;
 			//double childrenDockMinHeight = dockContent.CalculatedDockMinHeight();
 			//return Math.Max(this._dockMinHeight, childrenDockMinHeight);

@@ -590,6 +590,7 @@
                 BorderBrush="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabSelectedActiveBackground}}"
                 BorderThickness="0,0,0,1" />
               <ScrollViewer
+                x:Name="DocumentPaneTabPanelWrapPanel"
                 Grid.Row="0"
                 Grid.Column="0"
                 HorizontalScrollBarVisibility="Visible"
@@ -812,6 +813,7 @@
             </Grid.RowDefinitions>
 
             <WrapPanel
+              x:Name="PART_ActivityTabItemWarpContainer"
               Grid.Row="0"
               Grid.Column="0"
               Background="Transparent"
@@ -1053,6 +1055,7 @@
 
   <!--  region  DefaultLayoutAnchorableExpanderGroupPaneControlStyle  -->
   <Style TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+    <Setter Property="TabStripPlacement" Value="Bottom" />
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
@@ -1093,6 +1096,13 @@
             </Border>
 
           </Grid>
+          <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
+              <Setter TargetName="HeaderPanel" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+
+          </ControlTemplate.Triggers>
+
         </ControlTemplate>
       </Setter.Value>
     </Setter>
@@ -1105,6 +1115,7 @@
           <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowTabUnselectedText}}" />
           <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
           <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+          <!--<Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}"/>-->
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="{x:Type TabItem}">
@@ -1156,11 +1167,11 @@
               </ControlTemplate>
             </Setter.Value>
           </Setter>
-          <Style.Triggers>
+          <!--<Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
               <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
-          </Style.Triggers>
+          </Style.Triggers>-->
         </Style>
       </Setter.Value>
     </Setter>
@@ -1344,11 +1355,11 @@
               </ControlTemplate>
             </Setter.Value>
           </Setter>
-          <Style.Triggers>
+          <!--<Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
               <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
-          </Style.Triggers>
+          </Style.Triggers>-->
         </Style>
       </Setter.Value>
     </Setter>
@@ -1409,6 +1420,7 @@
                 BorderThickness="0,0,0,1" />
 
               <WrapPanel
+                x:Name="WarpContainer"
                 Grid.Row="0"
                 Margin="4,0,0,0"
                 Orientation="Horizontal">
@@ -1637,6 +1649,7 @@
                 BorderThickness="0,0,0,1" />
 
               <WrapPanel
+                x:Name="WarpContainer"
                 Grid.Row="0"
                 Margin="4,0,0,1"
                 Orientation="Horizontal">
@@ -1739,7 +1752,7 @@
                     BorderThickness="0,0,0,0">
                     <ContentPresenter
                       x:Name="Content"
-                      Margin="6,1,6,3"
+                      Margin="0"
                       HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                       VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                       ContentSource="Header"
@@ -1835,7 +1848,6 @@
     <Setter Property="VerticalContentAlignment" Value="Top" />
     <Setter Property="IsExpanded" Value="{Binding Model.IsExpanded, RelativeSource={RelativeSource Self}}" />
     <Setter Property="SnapsToDevicePixels" Value="True" />
-    <!--<Setter Property="VerticalAlignment" Value="Top" />-->
     <Setter Property="OverridesDefaultStyle" Value="True" />
     <Setter Property="ExpandDirection" Value="{Binding ExpandDirection, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
@@ -1845,17 +1857,14 @@
             x:Name="Border"
             Margin="0"
             Padding="0"
-            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-            VerticalAlignment="{TemplateBinding VerticalAlignment}"
             BorderBrush="{x:Null}"
             BorderThickness="0">
 
-            <DockPanel
-              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-              Background="Transparent"
-              LastChildFill="True">
-
+            <!--
+              HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+              VerticalAlignment="{TemplateBinding VerticalAlignment}"
+            -->
+            <DockPanel Background="Transparent" LastChildFill="True">
               <AnchorableExpanderTitle
                 x:Name="HeaderSite"
                 Cursor="Hand"
@@ -1895,9 +1904,7 @@
                 <Condition Property="ExpandDirection" Value="Down" />
                 <Condition Property="IsExpanded" Value="False" />
               </MultiTrigger.Conditions>
-
               <Setter TargetName="ExpandSiteBorder" Property="Visibility" Value="Collapsed" />
-
             </MultiTrigger>
 
             <MultiTrigger>
@@ -1910,7 +1917,6 @@
               <Setter TargetName="HeaderSite" Property="Height" Value="21" />
 
               <Setter TargetName="ExpandSiteBorder" Property="DockPanel.Dock" Value="Bottom" />
-
             </MultiTrigger>
 
             <MultiTrigger>
@@ -2037,11 +2043,8 @@
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-
                 <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
-
                 <Condition Binding="{Binding Model.IsActive, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-
               </MultiDataTrigger.Conditions>
               <Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />
             </MultiDataTrigger>
@@ -2049,18 +2052,9 @@
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
                 <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
-
               </MultiDataTrigger.Conditions>
               <Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />
             </MultiDataTrigger>
-
-            <!--<DataTrigger Binding="{Binding Model.ExpandDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Right">
-
-            -->
-            <!--<Setter TargetName="Bd" Property="Margin" Value="-1,0,0,0" />-->
-            <!--
-
-            </DataTrigger>-->
 
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
@@ -2068,30 +2062,7 @@
               </MultiDataTrigger.Conditions>
               <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionActiveBackground}}" />
             </MultiDataTrigger>
-
             <Trigger Property="IsChecked" Value="True">
-              <!--<Trigger.EnterActions>
-                <BeginStoryboard>
-                  <Storyboard>
-                    <DoubleAnimation
-                      Storyboard.TargetName="ChevronGrid"
-                      Storyboard.TargetProperty="(Grid.RenderTransform).(RotateTransform.Angle)"
-                      To="0"
-                      Duration="00:00:00.050" />
-                  </Storyboard>
-                </BeginStoryboard>
-              </Trigger.EnterActions>
-              <Trigger.ExitActions>
-                <BeginStoryboard>
-                  <Storyboard>
-                    <DoubleAnimation
-                      Storyboard.TargetName="ChevronGrid"
-                      Storyboard.TargetProperty="(Grid.RenderTransform).(RotateTransform.Angle)"
-                      To="-90"
-                      Duration="00:00:00.050" />
-                  </Storyboard>
-                </BeginStoryboard>
-              </Trigger.ExitActions>-->
               <Setter TargetName="ChevronGrid" Property="RenderTransform">
                 <Setter.Value>
                   <RotateTransform Angle="0" />
@@ -2266,8 +2237,10 @@
           <Canvas x:Name="PART_DropTargetsContainer" Opacity="0.9">
             <Path
               x:Name="PART_PreviewBox"
-              Fill="{DynamicResource {x:Static reskeys:ResourceKeys.DockingButtonStarBackgroundBrushKey}}"
+              Fill="Red"
               StrokeThickness="0" />
+            <!--  Fill="{DynamicResource {x:Static reskeys:ResourceKeys.DockingButtonStarBackgroundBrushKey}}"  -->
+
             <!--  Stroke="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"  -->
 
             <Path
@@ -2280,7 +2253,7 @@
                 x:Name="PART_DockingManagerDropTargetLeft"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Background="Red" />
+                Background="Blue" />
               <Border
                 x:Name="PART_DockingManagerDropTargetRight"
                 HorizontalAlignment="Right"
@@ -2297,9 +2270,10 @@
                 x:Name="PART_DockingManagerDropTargetTop"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Background="Red" />
+                Background="Orange" />
 
             </Grid>
+
             <Grid x:Name="PART_AnchorablePaneDropTargets">
               <Grid
                 Width="112"
@@ -2366,7 +2340,7 @@
               </Grid>
             </Grid>
 
-            <Grid x:Name="PART_AnchorableExpanderPaneDropTargets">
+            <Grid x:Name="PART_AnchorableExpanderDropTargets">
               <Grid>
                 <Grid.RowDefinitions>
                   <RowDefinition Height="1*" />
@@ -2384,45 +2358,41 @@
                        Stretch="None"
                        Visibility="Collapsed" />-->
                 <Border
-                  Name="PART_AnchorableExpanderPaneDropTargetTop"
+                  Name="PART_AnchorableExpanderDropTargetTop"
                   Grid.Row="0"
                   Grid.ColumnSpan="2"
-                  Margin="0"
-                  VerticalAlignment="Stretch"
-                  Background="Transparent">
+                  VerticalAlignment="Stretch">
+                  <!--  Background="Blue"  -->
                   <!--<Image Source="Images/DockDocumentAsAnchorableTop.png" Stretch="None" />-->
                 </Border>
                 <Border
-                  Name="PART_AnchorableExpanderPaneDropTargetBottom"
+                  Name="PART_AnchorableExpanderDropTargetBottom"
                   Grid.Row="1"
                   Grid.ColumnSpan="2"
-                  Margin="0"
-                  VerticalAlignment="Stretch"
-                  Background="Transparent">
+                  VerticalAlignment="Stretch">
+                  <!--  Background="Green"  -->
                   <!--<Image Source="Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />-->
                 </Border>
 
                 <Border
-                  Name="PART_AnchorableExpanderPaneDropTargetLeft"
+                  Name="PART_AnchorableExpanderDropTargetLeft"
                   Grid.RowSpan="2"
                   Grid.Column="0"
-                  Margin="0"
-                  VerticalAlignment="Stretch"
-                  Background="Transparent">
+                  VerticalAlignment="Stretch">
+                  <!--  Background="RosyBrown"  -->
                   <!--<Image Source="Images/DockDocumentAsAnchorableTop.png" Stretch="None" />-->
                 </Border>
                 <Border
-                  Name="PART_AnchorableExpanderPaneDropTargetRight"
+                  Name="PART_AnchorableExpanderDropTargetRight"
                   Grid.RowSpan="2"
                   Grid.Column="1"
-                  Margin="0"
-                  VerticalAlignment="Stretch"
-                  Background="Transparent">
+                  VerticalAlignment="Stretch">
+                  <!--  Background="OrangeRed"  -->
                   <!--<Image Source="Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />-->
                 </Border>
-
               </Grid>
             </Grid>
+
             <Grid x:Name="PART_AnchorableActivityBarDropTargets">
               <Grid>
                 <Grid.RowDefinitions>
@@ -2449,170 +2419,143 @@
 
               </Grid>
             </Grid>
+
             <Grid x:Name="PART_AnchorableItemDropTargets">
-              <Grid>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*" />
-                  <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+              </Grid.ColumnDefinitions>
 
-                <Border
-                  Name="PART_AnchorableItemDropTargetLeft"
-                  Grid.Column="0"
-                  Margin="0"
-                  HorizontalAlignment="Stretch"
-                  Background="Transparent" />
-                <Border
-                  Name="PART_AnchorableItemDropTargetRight"
-                  Grid.Column="1"
-                  Margin="0"
-                  HorizontalAlignment="Stretch"
-                  Background="Transparent">
-                  <!--<Image Source="Images/DockDocumentAsAnchorableRight.png" Stretch="None" />-->
-                </Border>
-
-              </Grid>
+              <Border
+                Name="PART_AnchorableItemDropTargetLeft"
+                Grid.Column="0"
+                Margin="0"
+                HorizontalAlignment="Stretch"
+                Background="Transparent" />
+              <Border
+                Name="PART_AnchorableItemDropTargetRight"
+                Grid.Column="1"
+                Margin="0"
+                HorizontalAlignment="Stretch"
+                Background="Transparent">
+                <!--<Image Source="Images/DockDocumentAsAnchorableRight.png" Stretch="None" />-->
+              </Border>
             </Grid>
 
             <Grid x:Name="PART_DocumentPaneDropTargets">
-              <Grid
-                Width="112"
-                Height="112"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition />
-                  <ColumnDefinition />
-                  <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition />
-                  <RowDefinition />
-                  <RowDefinition />
-                </Grid.RowDefinitions>
-                <Border
-                  Grid.RowSpan="3"
-                  Grid.ColumnSpan="3"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetTop"
-                  Grid.Row="0"
-                  Grid.Column="1"
-                  Margin="2"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetRight"
-                  Grid.Row="1"
-                  Grid.Column="2"
-                  Margin="2"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetBottom"
-                  Grid.Row="2"
-                  Grid.Column="1"
-                  Margin="2"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetLeft"
-                  Grid.Row="1"
-                  Grid.Column="0"
-                  Margin="2"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetInto"
-                  Grid.Row="1"
-                  Grid.Column="1"
-                  Background="Red" />
-              </Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="1*" />
+              </Grid.RowDefinitions>
+              <Border
+                Name="PART_DocumentPaneDropTargetTop"
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0" />
+              <!--  Background="Blue"  -->
+              <Border
+                Name="PART_DocumentPaneDropTargetRight"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="2"
+                Margin="0" />
+              <!--  Background="BlueViolet"  -->
+              <Border
+                Name="PART_DocumentPaneDropTargetBottom"
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="0" />
+              <!--  Background="YellowGreen"  -->
+              <Border
+                Name="PART_DocumentPaneDropTargetLeft"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Margin="0" />
+              <!--  Background="Green"  -->
+              <Border
+                Name="PART_DocumentPaneDropTargetInto"
+                Grid.Row="1"
+                Grid.Column="1" />
+              <!--  Background="Yellow"  -->
             </Grid>
 
             <Grid x:Name="PART_DocumentPaneFullDropTargets">
-              <Grid
-                Width="184"
-                Height="184"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition />
-                  <ColumnDefinition />
-                  <ColumnDefinition />
-                  <ColumnDefinition />
-                  <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition />
-                  <RowDefinition />
-                  <RowDefinition />
-                  <RowDefinition />
-                  <RowDefinition />
-                </Grid.RowDefinitions>
-                <Border
-                  Grid.RowSpan="5"
-                  Grid.ColumnSpan="5"
-                  Background="Red"
-                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:OverlayWindowToVisibilityConverter}, ConverterParameter=True}" />
-                <Border
-                  Grid.RowSpan="5"
-                  Grid.ColumnSpan="5"
-                  Background="Red"
-                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:OverlayWindowToVisibilityConverter}, ConverterParameter=False}" />
-                <Border
-                  Name="PART_DocumentPaneFullDropTargetTop"
-                  Grid.Row="1"
-                  Grid.Column="2"
-                  Background="Red">
-                  <!--<Image
-                    Margin="2"
-                    Source="Images/DockDocumentTop.png"
-                    Stretch="None" />-->
-                </Border>
-                <Border
-                  Name="PART_DocumentPaneFullDropTargetRight"
-                  Grid.Row="2"
-                  Grid.Column="3"
-                  Background="Red">
-                  <!--<Image
-                    Margin="2"
-                    Source="Images/DockDocumentRight.png"
-                    Stretch="None" />-->
-                </Border>
-                <Border
-                  Name="PART_DocumentPaneFullDropTargetBottom"
-                  Grid.Row="3"
-                  Grid.Column="2"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneFullDropTargetLeft"
-                  Grid.Row="2"
-                  Grid.Column="1"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneFullDropTargetInto"
-                  Grid.Row="2"
-                  Grid.Column="2"
-                  Background="Red" />
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="1*" />
+              </Grid.RowDefinitions>
+              <Border
+                Name="PART_DocumentPaneFullDropTargetTop"
+                Grid.Row="0"
+                Grid.Column="1"
+                BorderThickness="0">
+                <!--  Background="BlueViolet"  -->
 
-                <Border
-                  Name="PART_DocumentPaneDropTargetTopAsAnchorablePane"
-                  Grid.Row="0"
-                  Grid.Column="2"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetRightAsAnchorablePane"
-                  Grid.Row="2"
-                  Grid.Column="4"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetBottomAsAnchorablePane"
-                  Grid.Row="4"
-                  Grid.Column="2"
-                  Background="Red" />
-                <Border
-                  Name="PART_DocumentPaneDropTargetLeftAsAnchorablePane"
-                  Grid.Row="2"
-                  Grid.Column="0"
-                  Background="Red" />
-              </Grid>
+                <TextBlock
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  FontSize="6"
+                  Text="PART_DocumentPaneFullDropTargetTop" />
+              </Border>
+              <Border
+                Name="PART_DocumentPaneFullDropTargetRight"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="2">
+                <!--  Background="Green"  -->
+                <TextBlock
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  FontSize="6"
+                  Text="PART_DocumentPaneFullDropTargetRight" />
+              </Border>
+              <Border
+                Name="PART_DocumentPaneFullDropTargetBottom"
+                Grid.Row="2"
+                Grid.Column="1">
+                <!--  Background="GreenYellow"  -->
+                <TextBlock
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  FontSize="6"
+                  Text="PART_DocumentPaneFullDropTargetBottom" />
+              </Border>
+              <Border
+                Name="PART_DocumentPaneFullDropTargetLeft"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0">
+                <!--  Background="Orange"  -->
+                <TextBlock
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  FontSize="6"
+                  Text="PART_DocumentPaneFullDropTargetLeft" />
+              </Border>
+              <Border
+                Name="PART_DocumentPaneFullDropTargetInto"
+                Grid.Row="1"
+                Grid.Column="1">
+                <!--  Background="PaleVioletRed"  -->
+                <TextBlock
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  FontSize="6"
+                  Text="PART_DocumentPaneFullDropTargetInto" />
+              </Border>
             </Grid>
           </Canvas>
         </ControlTemplate>
@@ -3116,6 +3059,7 @@
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupTabItem}">
           <avalonDockControls:DropDownControlArea DropDownContextMenu="{Binding Root.Manager.AnchorableContextMenu}" DropDownContextMenuDataContext="{Binding LayoutItem, RelativeSource={RelativeSource TemplatedParent}}">
             <Border
+              Margin="6,1,6,3"
               Background="{TemplateBinding Background}"
               BorderBrush="{TemplateBinding BorderBrush}"
               BorderThickness="{TemplateBinding BorderThickness}">
@@ -3173,7 +3117,7 @@
         <shell:WindowChrome
           CaptionHeight="32"
           CornerRadius="0"
-          GlassFrameThickness="-1"
+          GlassFrameThickness="0"
           ResizeBorderThickness="10"
           ShowSystemMenu="False" />
       </Setter.Value>
@@ -3442,9 +3386,9 @@
     <Setter Property="UseLayoutRounding" Value="True" />
     <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBorder}}" />
-    <!--<Setter Property="ResizeMode" Value="CanResize" />-->
-    <Setter Property="OverridesDefaultStyle" Value="True" />
-    <!--<Setter Property="WindowStyle" Value="None" />-->
+    <!--<Setter Property="OverridesDefaultStyle" Value="True" />-->
+    <!--<Setter Property="ResizeMode" Value="CanMinimize" />
+    <Setter Property="WindowStyle" Value="None" />-->
     <Setter Property="shell:WindowChrome.WindowChrome">
       <Setter.Value>
         <shell:WindowChrome
@@ -3606,13 +3550,7 @@
                     </Button>
                   </Grid>
                 </Border>
-                <!--<StackPanel Grid.Row="1">
-                  <TextBlock Background="Green" Text="TextBlock1" />
-                  <TextBlock Text="TextBlock1" />
-                  <TextBlock Text="TextBlock1" />
-                  <TextBlock Text="TextBlock1" />
-                  <TextBlock Text="TextBlock1" />
-                </StackPanel>-->
+
                 <ContentPresenter Grid.Row="1" Content="{TemplateBinding Content}" />
               </Grid>
             </Border>
@@ -3627,10 +3565,10 @@
               <Setter TargetName="Header" Property="TextElement.Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionActiveText}}" />
               <Setter TargetName="DragHandleGeometryPlaceholder" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionActiveGrip}}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Model.SinglePane.SelectedContent.CanClose, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+            <!--<DataTrigger Binding="{Binding Model.SinglePane.SelectedContent.CanClose, RelativeSource={RelativeSource Mode=Self}}" Value="True">
               <Setter TargetName="PART_PinClose" Property="Command" Value="{Binding CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}" />
               <Setter TargetName="PART_PinClose" Property="ToolTip" Value="{x:Static avalonDockProperties:Resources.Document_Close}" />
-            </DataTrigger>
+            </DataTrigger>-->
             <!--  Document Well : Tab : Button / Selected, inactive, hovered  -->
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
@@ -3799,16 +3737,12 @@
               <Setter TargetName="PART_PinClose" Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedActivePressedBorder}}" />
               <Setter TargetName="PART_ImgPinClose" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedActivePressedGlyph}}" />
             </MultiDataTrigger>
-            <!--<Trigger Property="IsDragging" Value="True">
-              <Setter Property="ResizeMode" Value="NoResize" />
-							-->
-            <!--<Setter Property="shell:WindowChrome.GlassFrameThickness" Value="-1"/>-->
-            <!--
-							<Setter Property="Opacity" Value="0.75" />
+
+            <Trigger Property="IsDragging" Value="True">
+              <!--<Setter Property="ResizeMode" Value="NoResize" />
+              <Setter Property="shell:WindowChrome.GlassFrameThickness" Value="-1" />-->
+              <Setter Property="Opacity" Value="0.5" />
             </Trigger>
-            <Trigger Property="IsDragging" Value="False">
-              <Setter Property="Opacity" Value="1.0" />
-            </Trigger>-->
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>

@@ -181,18 +181,18 @@ namespace AvalonDock.Controls
 			//foreach(var v in _currentHost.GetDropAreas(_floatingWindow)) {
 			//	Debug.WriteLine($"{v.Type}", "UpdateMouseLocation 01");
 			//}
-			//获取当前所处区域下的控件
+			//获取当前所处区域下的可拖拽停靠控件
 			var areasToAdd =
 				_currentHost.GetDropAreas(_floatingWindow)
-				//.Where(o=> o.)
 								.Where(cw => !_currentWindowAreas.Contains(cw) && cw.DetectionRect.Contains(cw.TransformToDeviceDPI(dragPosition)))
 								.ToList();
 			//Debug.WriteLine($"=================================================================================");
 			_currentWindowAreas.AddRange(areasToAdd);
 
-			//Debug.WriteLine( $"{areasToAdd.Count}; {string.Join(",", areasToAdd.Select(o=> o.Type))}", "UpdateMouseLocation 1");
-			//Debug.WriteLineIf(areasToAdd.Any(), $"{string.Join(",", areasToAdd.Select(o => o.Type))}", "UpdateMouseLocation 1");
-			//显示可插入区域小图预览
+			Debug.WriteLine($"{_currentHost.GetDropAreas(_floatingWindow).Count()}; {string.Join(",", _currentHost.GetDropAreas(_floatingWindow).Select(o => o.Type))}", "UpdateMouseLocation 1");
+			//Debug.WriteLine($"{areasToAdd.Count}; {string.Join(",", areasToAdd.Select(o => o.Type))}", "UpdateMouseLocation 2");
+			//Debug.WriteLineIf(areasToAdd.Count > 0, $"{areasToAdd.Count}; {string.Join(",", areasToAdd.Select(o => o.Type))}", "UpdateMouseLocation 1");
+			//显示可插入的区域小图预览
 			areasToAdd.ForEach(a => _currentWindow.DragEnter(a));
 			//Debug.WriteLine($"{_currentDropTarget?.Type}, {_currentWindow.GetType().Name}", "UpdateMouseLocation 2");
 
@@ -201,11 +201,11 @@ namespace AvalonDock.Controls
 					if(_currentDropTarget != null)
 						return;
 
-					//Debug.WriteLine($"{string.Join($";", _currentWindow.GetTargets().Select(o => o.GetType().Name).ToHashSet<string>())}", "UpdateMouseLocation 3");
-
 					_currentDropTarget = _currentWindow.GetTargets().FirstOrDefault(dt => dt.HitTestScreen(dragPosition));
+					//var v = _currentWindow.GetTargets().OfType<AnchorableExpanderGroupDropTarget>().Where(o=> o.Type == DropTargetType.AnchorableExpanderDockLeft).SingleOrDefault();
+					//Debug.WriteLine($"{v.DetectionRects.FirstOrDefault()}; {dragPosition}", "UpdateMouseLocation 4");
+					//Debug.WriteLine($"{_currentDropTarget != null}, {_currentWindow.GetTargets().Select(o => o.Type.ToString()).Aggregate((o1, o2) => $"{o1}, {o2}")}", "UpdateMouseLocation 4");
 					if(_currentDropTarget != null) {
-						//Debug.WriteLine($"{_currentDropTarget.Type}", "UpdateMouseLocation 4");
 						// 显示可插入区域大图预览
 						_currentWindow.DragEnter(_currentDropTarget);
 						BringWindowToTop2((Window) _currentWindow);
