@@ -1840,8 +1840,6 @@
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <!--<Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />-->
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="Padding" Value="0" />
-    <Setter Property="Margin" Value="0" />
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="VerticalAlignment" Value="Top" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -1879,7 +1877,7 @@
                 DockPanel.Dock="Bottom">
 
                 <ContentPresenter
-                  Grid.Row="1"
+                  Grid.Row="1"									
                   Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
                   ContentTemplate="{Binding LayoutItem.View.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                   ContentTemplateSelector="{Binding LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"

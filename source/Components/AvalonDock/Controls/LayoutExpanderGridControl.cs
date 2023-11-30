@@ -167,7 +167,7 @@ namespace AvalonDock.Controls {
 			}
 			CreateSplitters();
 			UpdateRowColDefinitions();
-			AttachNewSplitters();
+			//AttachNewSplitters();
 			AttachPropertyChangeHandler();
 			//Debug.WriteLine($"", "ExpanderGridControl UpdateChildren 3");
 		}
@@ -259,19 +259,22 @@ namespace AvalonDock.Controls {
 					iChild++;
 					iColumn++;
 
-					var nextChildModelVisibleExist = false;
+					var nextChildModelIsExpanded = false;
 					for(var i = iChildModel + 1; i < _model.Children.Count; i++) {
-						var nextChildModel = _model.Children[i] as ILayoutPositionableElement;
-						if(!nextChildModel.IsVisible)
+						//var nextChildModel = _model.Children[i] as ILayoutPositionableElement;
+						var nextChildModel = _model.Children[i] as LayoutAnchorableExpander;
+						if(!nextChildModel.IsExpanded)
 							continue;
-						nextChildModelVisibleExist = true;
+						nextChildModelIsExpanded = true;
 						break;
 					}
 
 					ColumnDefinitions.Add(new ColumnDefinition {
-						Width = childModel.IsVisible && nextChildModelVisibleExist ? new GridLength(manager.GridSplitterWidth) : new GridLength(0.0, GridUnitType.Pixel)
+						Width = new GridLength(manager.GridSplitterWidth)
 					});
-					Grid.SetColumn(InternalChildren[iChild], iColumn);
+					UIElement element = InternalChildren[iChild];
+					element.IsEnabled = childModel.IsExpanded && nextChildModelIsExpanded;
+					Grid.SetColumn(element, iColumn);
 				}
 				#endregion
 			} else //if (_model.Orientation == Orientation.Vertical)
@@ -288,7 +291,7 @@ namespace AvalonDock.Controls {
 						MinHeight = childModel.CalculatedDockMinHeight()
 					});
 
-					var row = RowDefinitions.Last();
+					//var row = RowDefinitions.Last();
 					//Debug.WriteLine($"{childModel.Title}, {row.Height}, {row.ActualHeight}, {row.MinHeight}, {row.MaxHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
 
 					Grid.SetRow(InternalChildren[iChild], iRow);
@@ -302,22 +305,24 @@ namespace AvalonDock.Controls {
 					iChild++;
 					iRow++;
 
-					var nextChildModelVisibleExist = false;
-					//var isNextExpanded = false;
+					var nextChildModelExpanded = false;
 
 					for(var i = iChildModel + 1; i < _model.Children.Count; i++) {
-						var nextChildModel = _model.Children[i] as ILayoutPositionableElement;
-						if(!nextChildModel.IsVisible)
+						var nextChildModel = _model.Children[i] as LayoutAnchorableExpander;
+						if(!nextChildModel.IsExpanded)
 							continue;
-						nextChildModelVisibleExist = true;
-						//isNextExpanded = true;
+						nextChildModelExpanded = true;
 						break;
 					}
 
 					RowDefinitions.Add(new RowDefinition {
-						Height = childModel.IsVisible && nextChildModelVisibleExist ? new GridLength(manager.GridSplitterHeight) : new GridLength(0.0, GridUnitType.Pixel),
+						Height =  new GridLength(manager.GridSplitterHeight),
 						MinHeight = 1,
 					});
+					Debug.WriteLine($"{childModel.Title}, {childModel.IsExpanded}, {nextChildModelExpanded}, {childModel.IsExpanded || nextChildModelExpanded}", $"LayoutExpanderGridControl UpdateRowColDefinitions 3");
+
+					UIElement element = InternalChildren[iChild];
+					element.IsEnabled = childModel.IsExpanded && nextChildModelExpanded;
 					//if (RowDefinitions.Last().Height.Value == 0.0)
 					//    System.Diagnostics.Debugger.Break();
 					Grid.SetRow(InternalChildren[iChild], iRow);
@@ -336,19 +341,18 @@ namespace AvalonDock.Controls {
 				var splitter = new LayoutGridResizerControl();
 				if(Orientation == Orientation.Horizontal) {
 					splitter.Cursor = Cursors.SizeWE;
-					splitter.Style = _model.Root?.Manager?.GridSplitterVerticalStyle;
+					//splitter.Style = _model.Root?.Manager?.GridSplitterVerticalStyle;
 					splitter.Width = 3;
 					//splitter.Width = _model.Root?.Manager?.GridSplitterWidth ?? 3;
-					//splitter.VerticalAlignment = VerticalAlignment.Stretch;
+					//splitter.Background = new SolidColorBrush(Colors.DarkRed);
+					splitter.VerticalAlignment = VerticalAlignment.Stretch;
 				} else {
 					splitter.Cursor = Cursors.SizeNS;
-					splitter.Style = _model.Root?.Manager?.GridSplitterHorizontalStyle;
+					//splitter.Style = _model.Root?.Manager?.GridSplitterHorizontalStyle;
 					splitter.Height = 3;
 					//splitter.Height = _model.Root?.Manager?.GridSplitterHeight ?? 3;
-					//splitter.Margin = new Thickness(0, -1, 0, -1);
-
 					//splitter.Background = new SolidColorBrush(Colors.DarkRed);
-					//splitter.HorizontalAlignment = HorizontalAlignment.Stretch;
+					splitter.HorizontalAlignment = HorizontalAlignment.Stretch;
 				}
 
 				Children.Insert(iChild, splitter);

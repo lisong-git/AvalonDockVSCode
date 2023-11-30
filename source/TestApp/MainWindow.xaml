@@ -219,13 +219,14 @@
             <LayoutAnchorableExpanderGroup Orientation="Vertical">
               <LayoutAnchorableExpander Title="E1" IsExpanded="False">
                 <TextBox
+									Margin="8"
                   Background="Transparent"
                   BorderThickness="0"
                   Foreground="{DynamicResource WindowForeground}"
                   Text="内容一" />
               </LayoutAnchorableExpander>
               <LayoutAnchorableExpander Title="E2" IsExpanded="False">
-                <StackPanel Background="Transparent">
+								<StackPanel Background="Transparent" Margin="8">
                   <TextBox
                     Background="Transparent"
                     BorderThickness="0"
@@ -242,6 +243,7 @@
                 <TextBox
                   Background="Transparent"
                   BorderThickness="0"
+									Margin="8"
                   Foreground="{DynamicResource WindowForeground}"
                   Text="内容二" />
               </LayoutAnchorableExpander>
