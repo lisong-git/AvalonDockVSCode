@@ -19,7 +19,7 @@ namespace AvalonDock.Controls
 	/// Implements a button that is used to display a <see cref="ContextMenuEx"/>
 	/// when the user clicks on it
 	/// (see templates for <see cref="LayoutAnchorableFloatingWindowControl"/>,
-	/// <see cref="AnchorablePaneTitle"/>, and <see cref="LayoutDocumentPaneControl"/>).
+	/// <see cref="AnchorableExpanderTitle"/>, and <see cref="LayoutDocumentPaneControl"/>).
 	/// </summary>
 	/// <seealso cref="ToggleButton"/>
 	public class DropDownButton : ToggleButton

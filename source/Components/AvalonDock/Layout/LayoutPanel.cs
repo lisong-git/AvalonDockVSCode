@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -51,7 +51,7 @@ namespace AvalonDock.Layout
 			set
 			{
 				if (value == _orientation) return;
-				RaisePropertyChanging(nameof(Orientation));
+				RaisePropertyChanging(nameof(Orientation)); 
 				_orientation = value;
 				RaisePropertyChanged(nameof(Orientation));
 			}

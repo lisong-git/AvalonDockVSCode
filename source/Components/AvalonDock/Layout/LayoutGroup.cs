@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -24,7 +25,8 @@ namespace AvalonDock.Layout {
 	public abstract class LayoutGroup<T> :LayoutGroupBase, ILayoutGroup, IXmlSerializable where T : class, ILayoutElement {
 		#region fields
 
-		private readonly ObservableCollection<T> _children = new ObservableCollection<T>();
+		//private readonly ObservableCollection<T> _children = new ObservableCollection<T>();
+		private ObservableCollection<T> _children = new ObservableCollection<T>();
 		private bool _isVisible = true;
 
 		#endregion fields
@@ -39,6 +41,13 @@ namespace AvalonDock.Layout {
 		#endregion Constructors
 
 		#region Properties
+
+		internal void ReplaceChildrenNoCollectionChangedSubscribe(ObservableCollection<T> children) {
+			_children.CollectionChanged -= Children_CollectionChanged;
+			_children = children;
+			RaisePropertyChanged(nameof(Children));
+		}
+
 
 		/// <summary>Gets a collection of children objects below this object.</summary>
 		public ObservableCollection<T> Children => _children;
@@ -89,14 +98,16 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc cref="ILayoutGroup" />
 		public void InsertChildAt(int index, ILayoutElement element) {
+			//Debug.WriteLine($"{element.GetType().Name}, {element is T}, {typeof(T).Name}", $"LayoutGroup InsertChildAt");
 			if(element is T t)
 				_children.Insert(index, t);
 		}
 
 		/// <inheritdoc cref="ILayoutContainer" />
 		public void RemoveChild(ILayoutElement element) {
-			if(element is T t)
+			if(element is T t) {
 				_children.Remove(t);
+			}
 		}
 
 		/// <inheritdoc cref="ILayoutContainer" />
@@ -219,6 +230,8 @@ namespace AvalonDock.Layout {
 		}
 
 		private void UpdateParentVisibility() {
+			//Debug.WriteLine($"", "LayoutGroup_Children UpdateParentVisibility");
+
 			if(Parent is ILayoutElementWithVisibility parentPane)
 				parentPane.ComputeVisibility();
 		}

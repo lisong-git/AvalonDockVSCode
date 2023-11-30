@@ -13,20 +13,17 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <summary>
 	/// Provides a panel that contains the TabItem Headers of the <see cref="LayoutDocumentPaneControl"/>.
 	/// </summary>
-	public class DocumentPaneTabPanel : Panel
-	{
+	public class DocumentPaneTabPanel :Panel {
 		#region Constructors
 
 		/// <summary>
 		/// Static constructor
 		/// </summary>
-		public DocumentPaneTabPanel()
-		{
+		public DocumentPaneTabPanel() {
 			this.FlowDirection = System.Windows.FlowDirection.LeftToRight;
 		}
 
@@ -34,11 +31,9 @@ namespace AvalonDock.Controls
 
 		#region Overrides
 
-		protected override Size MeasureOverride(Size availableSize)
-		{
+		protected override Size MeasureOverride(Size availableSize) {
 			Size desideredSize = new Size();
-			foreach (FrameworkElement child in Children)
-			{
+			foreach(FrameworkElement child in Children) {
 				child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 				desideredSize.Width += child.DesiredSize.Width;
 
@@ -48,40 +43,33 @@ namespace AvalonDock.Controls
 			return new Size(Math.Min(desideredSize.Width, availableSize.Width), desideredSize.Height);
 		}
 
-		protected override Size ArrangeOverride(Size finalSize)
-		{
+		protected override Size ArrangeOverride(Size finalSize) {
 			var visibleChildren = Children.Cast<UIElement>().Where(ch => ch.Visibility != System.Windows.Visibility.Collapsed);
 			var offset = 0.0;
 			var skipAllOthers = false;
-			foreach (TabItem doc in visibleChildren)
-			{
-				if (skipAllOthers || offset + doc.DesiredSize.Width > finalSize.Width)
-				{
+			foreach(TabItem doc in visibleChildren) {
+				if(skipAllOthers || offset + doc.DesiredSize.Width > finalSize.Width) {
 					bool isLayoutContentSelected = false;
 					var layoutContent = doc.Content as LayoutContent;
 
-					if (layoutContent != null)
+					if(layoutContent != null)
 						isLayoutContentSelected = layoutContent.IsSelected;
 
-					if (isLayoutContentSelected && !doc.IsVisible)
-					{
+					if(isLayoutContentSelected && !doc.IsVisible) {
 						var parentContainer = layoutContent.Parent as ILayoutContainer;
 						var parentSelector = layoutContent.Parent as ILayoutContentSelector;
 						var parentPane = layoutContent.Parent as ILayoutPane;
 						int contentIndex = parentSelector.IndexOf(layoutContent);
-						if (contentIndex > 0 &&
-							parentContainer.ChildrenCount > 1)
-						{
+						if(contentIndex > 0 &&
+							parentContainer.ChildrenCount > 1) {
 							parentPane.MoveChild(contentIndex, 0);
-							parentSelector.SelectedContentIndex = 0;
+							parentSelector.SelectedIndex = 0;
 							return ArrangeOverride(finalSize);
 						}
 					}
 					doc.Visibility = System.Windows.Visibility.Hidden;
 					skipAllOthers = true;
-				}
-				else
-				{
+				} else {
 					doc.Visibility = System.Windows.Visibility.Visible;
 					doc.Arrange(new Rect(offset, 0.0, doc.DesiredSize.Width, finalSize.Height));
 					offset += doc.ActualWidth + doc.Margin.Left + doc.Margin.Right;
@@ -90,8 +78,7 @@ namespace AvalonDock.Controls
 			return finalSize;
 		}
 
-		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e)
-		{
+		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e) {
 			//if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed &&
 			//    LayoutDocumentTabItem.IsDraggingItem())
 			//{

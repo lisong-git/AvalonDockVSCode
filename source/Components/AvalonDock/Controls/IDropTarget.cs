@@ -7,6 +7,7 @@
    License (Ms-PL) as published at https://opensource.org/licenses/MS-PL
  ************************************************************************/
 
+using AvalonDock.Controls.DropTargets;
 using AvalonDock.Layout;
 using System.Windows;
 using System.Windows.Media;

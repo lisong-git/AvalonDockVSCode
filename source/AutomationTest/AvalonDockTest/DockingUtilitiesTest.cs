@@ -1,4 +1,4 @@
-﻿namespace AvalonDockTest
+namespace AvalonDockTest
 {
 	using System;
 	using System.Windows.Controls;

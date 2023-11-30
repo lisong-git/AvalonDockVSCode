@@ -46,7 +46,7 @@ namespace AvalonDock {
 		// in e.OldValue and e.NewValue of the passed event
 		private ResourceDictionary currentThemeResourceDictionary;
 
-		private AutoHideWindowManager _autoHideWindowManager;
+		//private AutoHideWindowManager _autoHideWindowManager;
 		private FrameworkElement _autohideArea;
 		private readonly List<LayoutFloatingWindowControl> _fwList = new List<LayoutFloatingWindowControl>();
 		private readonly List<LayoutFloatingWindowControl> _fwHiddenList = new List<LayoutFloatingWindowControl>();
@@ -212,10 +212,6 @@ namespace AvalonDock {
 
 			if(IsLoaded) {
 				LayoutRootPanel = CreateUIElementForModel(Layout.RootPanel) as LayoutPanelControl;
-				LeftSidePanel = CreateUIElementForModel(Layout.LeftSide) as LayoutAnchorSideControl;
-				TopSidePanel = CreateUIElementForModel(Layout.TopSide) as LayoutAnchorSideControl;
-				RightSidePanel = CreateUIElementForModel(Layout.RightSide) as LayoutAnchorSideControl;
-				BottomSidePanel = CreateUIElementForModel(Layout.BottomSide) as LayoutAnchorSideControl;
 
 				foreach(var fw in Layout.FloatingWindows.ToArray())
 					if(fw.IsValid)
@@ -263,7 +259,7 @@ namespace AvalonDock {
 		/// <summary>
 		/// Gets/sets the layout strategy class that can be to called by the framework when it needs to position a <see cref="LayoutAnchorable"/> inside an existing layout.
 		/// </summary>
-		/// <remarks>Sometimes it's impossible to automatically insert an anchorable in the layout without specifing the target parent pane.
+		/// <remarks>Sometimes it's impossible to automatically insert an anchorable in the layout without specifing the target parent group.
 		/// Set this property to an object that will be asked to insert the anchorable to the desidered position.</remarks>
 		[Bindable(true), Description("Gets/sets the layout strategy class that can be to called by the framework when it needs to position a LayoutAnchorable inside an existing layout."), Category("Layout")]
 		public ILayoutUpdateStrategy LayoutUpdateStrategy {
@@ -336,35 +332,20 @@ namespace AvalonDock {
 
 		#endregion AnchorSideTemplate
 
-		#region AnchorGroupTemplate
+		#region ActivityBarTemplate
 
-		/// <summary><see cref="AnchorGroupTemplate"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorGroupTemplateProperty = DependencyProperty.Register(nameof(AnchorGroupTemplate), typeof(ControlTemplate), typeof(DockingManager),
+		/// <summary>The <see cref="ActivityBarTemplate"/> dependency property.</summary>
+		public static readonly DependencyProperty ActivityBarTemplateProperty = DependencyProperty.Register(nameof(ActivityBarTemplate), typeof(ControlTemplate), typeof(DockingManager),
 				new FrameworkPropertyMetadata((ControlTemplate)null));
 
-		/// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render the <see cref="LayoutAnchorGroupControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the ControlTemplate used to render LayoutAnchorGroupControl."), Category("Anchor")]
-		public ControlTemplate AnchorGroupTemplate {
-			get => (ControlTemplate) GetValue(AnchorGroupTemplateProperty);
-			set => SetValue(AnchorGroupTemplateProperty, value);
+		/// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render <see cref="LayoutActivityBarControl"/>.</summary>
+		[Bindable(true), Description("Gets/sets the ControlTemplate used to render LayoutActityBarControl."), Category("Activity Bar")]
+		public ControlTemplate ActivityBarTemplate {
+			get => (ControlTemplate) GetValue(ActivityBarTemplateProperty);
+			set => SetValue(ActivityBarTemplateProperty, value);
 		}
 
-		#endregion AnchorGroupTemplate
-
-		#region AnchorTemplate
-
-		/// <summary><see cref="AnchorTemplate"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorTemplateProperty = DependencyProperty.Register(nameof(AnchorTemplate), typeof(ControlTemplate), typeof(DockingManager),
-				new FrameworkPropertyMetadata((ControlTemplate)null));
-
-		/// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render a <see cref="LayoutAnchorControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the ControlTemplate used to render a LayoutAnchorControl."), Category("Anchor")]
-		public ControlTemplate AnchorTemplate {
-			get => (ControlTemplate) GetValue(AnchorTemplateProperty);
-			set => SetValue(AnchorTemplateProperty, value);
-		}
-
-		#endregion AnchorTemplate
+		#endregion ActivityBarTemplate
 
 		#region DocumentPaneControlStyle
 
@@ -410,50 +391,94 @@ namespace AvalonDock {
 
 		#endregion AnchorablePaneControlStyle
 
-		#region AnchorableGroupTabControlStyle
+		#region PrimarySideBarStyle
 
-		/// <summary><see cref="AnchorableExpanderGroupPaneControlStyle"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorableExpanderGroupPaneControlStyleProperty = DependencyProperty.Register(nameof(AnchorableExpanderGroupPaneControlStyle), typeof(Style), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnAnchorableGroupTabControlChanged));
+		/// <summary><see cref="PrimarySideBarStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty PrimarySideBarStyleProperty = DependencyProperty.Register(nameof(PrimarySideBarStyle), typeof(Style), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnPrimarySideBarStyleChanged));
+
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderGroupPaneControl"/>.</summary>
+		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableExpanderGroupPaneControl."), Category("Anchorable")]
+		public Style PrimarySideBarStyle {
+			get => (Style) GetValue(PrimarySideBarStyleProperty);
+			set => SetValue(PrimarySideBarStyleProperty, value);
+		}
+
+		/// <summary>Handles changes to the <see cref="PrimarySideBarStyle"/> property.</summary>
+		private static void OnPrimarySideBarStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnPrimarySideBarStyleChanged(e);
+
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="PrimarySideBarStyle"/> property.</summary>
+		protected virtual void OnPrimarySideBarStyleChanged(DependencyPropertyChangedEventArgs e) {
+		}
+
+		#endregion PrimarySideBarStyle
+
+		#region SecondarySideBarStyle
+
+		/// <summary><see cref="SecondarySideBarStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty SecondarySideBarStyleProperty = DependencyProperty.Register(nameof(SecondarySideBarStyle), typeof(Style), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnSecondarySideBarStyleChanged));
 
 		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorablePaneControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl."), Category("Anchorable")]
-		public Style AnchorableExpanderGroupPaneControlStyle {
-			get => (Style) GetValue(AnchorableExpanderGroupPaneControlStyleProperty);
-			set => SetValue(AnchorableExpanderGroupPaneControlStyleProperty, value);
+		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableExpanderGroupPaneControl."), Category("Anchorable")]
+		public Style SecondarySideBarStyle {
+			get => (Style) GetValue(SecondarySideBarStyleProperty);
+			set => SetValue(SecondarySideBarStyleProperty, value);
 		}
 
-		/// <summary>Handles changes to the <see cref="AnchorablePaneControlStyle"/> property.</summary>
-		private static void OnAnchorableGroupTabControlChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnAnchorableGroupTabControlChanged(e);
+		/// <summary>Handles changes to the <see cref="SecondarySideBarStyle"/> property.</summary>
+		private static void OnSecondarySideBarStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnSecondarySideBarStyleChanged(e);
 
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="AnchorablePaneControlStyle"/> property.</summary>
-		protected virtual void OnAnchorableGroupTabControlChanged(DependencyPropertyChangedEventArgs e) {
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="SecondarySideBarStyle"/> property.</summary>
+		protected virtual void OnSecondarySideBarStyleChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		#endregion AnchorablePaneControlStyle
+		#endregion SecondarySideBarStyle
+
+		#region PanelStyle
+
+		/// <summary><see cref="PanelStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty PanelStyleProperty = DependencyProperty.Register(nameof(PanelStyle), typeof(Style), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnPanelStyleChanged));
+
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorablePaneControl"/>.</summary>
+		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableExpanderGroupPaneControl."), Category("Anchorable")]
+		public Style PanelStyle {
+			get => (Style) GetValue(PanelStyleProperty);
+			set => SetValue(PanelStyleProperty, value);
+		}
+
+		/// <summary>Handles changes to the <see cref="PanelStyle"/> property.</summary>
+		private static void OnPanelStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnPanelStyleChanged(e);
+
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="PanelStyle"/> property.</summary>
+		protected virtual void OnPanelStyleChanged(DependencyPropertyChangedEventArgs e) {
+		}
+
+		#endregion PanelStyle
 
 
-		#region AnchorablePaneControl2Style
+		#region ActivityBarControlStyle
 
-		/// <summary><see cref="AnchorablePaneControl2Style"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorablePaneControl2StyleProperty = DependencyProperty.Register(nameof(AnchorablePaneControl2Style), typeof(Style), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnAnchorablePaneControl2StyleChanged));
+		/// <summary><see cref="ActivityBarControlStyle"/> dependency property.</summary>
+		public static readonly DependencyProperty ActivityBarControlStyleProperty = DependencyProperty.Register(nameof(ActivityBarControlStyle), typeof(Style), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnActivityBarControlStylePropertyChanged));
 
-		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderGroupBoxControl"/>.</summary>
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutActivityBarControl"/>.</summary>
 		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl2."), Category("Anchorable")]
-		public Style AnchorablePaneControl2Style {
-			get => (Style) GetValue(AnchorablePaneControl2StyleProperty);
-			set => SetValue(AnchorablePaneControl2StyleProperty, value);
+		public Style ActivityBarControlStyle {
+			get => (Style) GetValue(ActivityBarControlStyleProperty);
+			set => SetValue(ActivityBarControlStyleProperty, value);
 		}
 
-		/// <summary>Handles changes to the <see cref="AnchorablePaneControl2Style"/> property.</summary>
-		private static void OnAnchorablePaneControl2StyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnAnchorablePaneControl2StyleChanged(e);
+		/// <summary>Handles changes to the <see cref="ActivityBarControlStyle"/> property.</summary>
+		private static void OnActivityBarControlStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnActivityBarControlStylePropertyChanged(e);
 
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="AnchorablePaneControl2Style"/> property.</summary>
-		protected virtual void OnAnchorablePaneControl2StyleChanged(DependencyPropertyChangedEventArgs e) {
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="ActivityBarControlStyleProperty"/> property.</summary>
+		protected virtual void OnActivityBarControlStylePropertyChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		#endregion AnchorablePaneControl2Style
+		#endregion ActivityBarControlStyle
 
 		#region AnchorableExpanderPaneControlStyle
 
@@ -464,40 +489,18 @@ namespace AvalonDock {
 		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableExpanderControl"/>.</summary>
 		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableExpanderPaneControl."), Category("Anchorable")]
 		public Style AnchorableExpanderPaneControlStyle {
-			get => (Style)GetValue(AnchorableExpanderPaneControlStyleProperty);
+			get => (Style) GetValue(AnchorableExpanderPaneControlStyleProperty);
 			set => SetValue(AnchorableExpanderPaneControlStyleProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="AnchorablePaneControlStyle"/> property.</summary>
-		private static void OnAnchorableExpanderPaneControlStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager)d).OnAnchorableExpanderPaneControlStyleChanged(e);
+		private static void OnAnchorableExpanderPaneControlStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnAnchorableExpanderPaneControlStyleChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="AnchorablePaneControlStyle"/> property.</summary>
 		protected virtual void OnAnchorableExpanderPaneControlStyleChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		#endregion AnchorablePaneControlStyle
-
-		#region LayoutAnchorablePaneGroupControl2Style
-
-		/// <summary><see cref="LayoutAnchorablePaneGroupControl2Style"/> dependency property.</summary>
-		public static readonly DependencyProperty LayoutAnchorablePaneGroupControl2StyleProperty = DependencyProperty.Register(nameof(LayoutAnchorablePaneGroupControl2Style), typeof(Style), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnLayoutAnchorablePaneGroupControl2StyleChanged));
-
-		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorablePaneControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorablePaneControl."), Category("Anchorable")]
-		public Style LayoutAnchorablePaneGroupControl2Style {
-			get => (Style) GetValue(LayoutAnchorablePaneGroupControl2StyleProperty);
-			set => SetValue(LayoutAnchorablePaneGroupControl2StyleProperty, value);
-		}
-
-		/// <summary>Handles changes to the <see cref="LayoutAnchorablePaneGroupControl2Style"/> property.</summary>
-		private static void OnLayoutAnchorablePaneGroupControl2StyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnAnchorablePaneControlStyleChanged(e);
-
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="LayoutAnchorablePaneGroupControl2Style"/> property.</summary>
-		protected virtual void OnLayoutAnchorablePaneGroupControl2StyleChanged(DependencyPropertyChangedEventArgs e) {
-		}
-
-		#endregion LayoutAnchorablePaneGroupControl2Style
 
 		#region DocumentHeaderTemplate
 
@@ -745,170 +748,31 @@ namespace AvalonDock {
 
 		#endregion LayoutRootPanel
 
-		#region RightSidePanel
+		#region ActivityBar
 
-		/// <summary><see cref="RightSidePanel"/> dependency property.</summary>
-		public static readonly DependencyProperty RightSidePanelProperty = DependencyProperty.Register(nameof(RightSidePanel), typeof(LayoutAnchorSideControl), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnRightSidePanelChanged));
+		/// <summary><see cref="ActivityBar"/> dependency property.</summary>
+		public static readonly DependencyProperty ActivityBarProperty = DependencyProperty.Register(nameof(ActivityBar), typeof(LayoutActivityBarControl), typeof(DockingManager),
+				new FrameworkPropertyMetadata(null, OnActivityBarChanged));
 
-		/// <summary>Gets/sets the <see cref="LayoutAnchorSideControl"/> that is displayed as right side panel control.</summary>
-		[Bindable(true), Description("Gets/sets the LayoutAnchorSideControl that is displayed as right side panel control."), Category("Side Panel")]
-		public LayoutAnchorSideControl RightSidePanel {
-			get => (LayoutAnchorSideControl) GetValue(RightSidePanelProperty);
-			set => SetValue(RightSidePanelProperty, value);
+		/// <summary>Gets/sets the <see cref="LayoutActivityBarControl"/> that is displayed as left side panel control.</summary>
+		[Bindable(true), Description("Gets/sets the LayoutActivityBarControl that is displayed as activity bar control."), Category("Activity Bar")]
+		public LayoutActivityBarControl ActivityBar {
+			get => (LayoutActivityBarControl) GetValue(ActivityBarProperty);
+			set => SetValue(ActivityBarProperty, value);
 		}
 
-		/// <summary>Handles changes to the <see cref="RightSidePanel"/> property.</summary>
-		private static void OnRightSidePanelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnRightSidePanelChanged(e);
+		/// <summary>Handles changes to the <see cref="ActivityBar"/> property.</summary>
+		private static void OnActivityBarChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnActivityBarChanged(e);
 
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="RightSidePanel"/> property.</summary>
-		protected virtual void OnRightSidePanelChanged(DependencyPropertyChangedEventArgs e) {
+		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="ActivityBar"/> property.</summary>
+		protected virtual void OnActivityBarChanged(DependencyPropertyChangedEventArgs e) {
 			if(e.OldValue != null)
 				InternalRemoveLogicalChild(e.OldValue);
 			if(e.NewValue != null)
 				InternalAddLogicalChild(e.NewValue);
 		}
 
-		#endregion RightSidePanel
-
-		#region LeftSidePanel
-
-		/// <summary><see cref="LeftSidePanel"/> dependency property.</summary>
-		public static readonly DependencyProperty LeftSidePanelProperty = DependencyProperty.Register(nameof(LeftSidePanel), typeof(LayoutAnchorSideControl), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnLeftSidePanelChanged));
-
-		/// <summary>Gets/sets the <see cref="LayoutAnchorSideControl"/> that is displayed as left side panel control.</summary>
-		[Bindable(true), Description("Gets/sets the LayoutAnchorSideControl that is displayed as left side panel control."), Category("Side Panel")]
-		public LayoutAnchorSideControl LeftSidePanel {
-			get => (LayoutAnchorSideControl) GetValue(LeftSidePanelProperty);
-			set => SetValue(LeftSidePanelProperty, value);
-		}
-
-		/// <summary>Handles changes to the <see cref="LeftSidePanel"/> property.</summary>
-		private static void OnLeftSidePanelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnLeftSidePanelChanged(e);
-
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="LeftSidePanel"/> property.</summary>
-		protected virtual void OnLeftSidePanelChanged(DependencyPropertyChangedEventArgs e) {
-			if(e.OldValue != null)
-				InternalRemoveLogicalChild(e.OldValue);
-			if(e.NewValue != null)
-				InternalAddLogicalChild(e.NewValue);
-		}
-
-		#endregion LeftSidePanel
-
-		#region TopSidePanel
-
-		/// <summary><see cref="TopSidePanel"/> dependency property.</summary>
-		public static readonly DependencyProperty TopSidePanelProperty = DependencyProperty.Register(nameof(TopSidePanel), typeof(LayoutAnchorSideControl), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnTopSidePanelChanged));
-
-		/// <summary>Gets/sets the <see cref="LayoutAnchorSideControl"/> that is displayed as top side panel control.</summary>
-		[Bindable(true), Description("Gets/sets the LayoutAnchorSideControl that is displayed as top side panel control."), Category("Side Panel")]
-		public LayoutAnchorSideControl TopSidePanel {
-			get => (LayoutAnchorSideControl) GetValue(TopSidePanelProperty);
-			set => SetValue(TopSidePanelProperty, value);
-		}
-
-		/// <summary>Handles changes to the <see cref="TopSidePanel"/> property.</summary>
-		private static void OnTopSidePanelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnTopSidePanelChanged(e);
-
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="TopSidePanel"/> property.</summary>
-		protected virtual void OnTopSidePanelChanged(DependencyPropertyChangedEventArgs e) {
-			if(e.OldValue != null)
-				InternalRemoveLogicalChild(e.OldValue);
-			if(e.NewValue != null)
-				InternalAddLogicalChild(e.NewValue);
-		}
-
-		#endregion TopSidePanel
-
-		#region BottomSidePanel
-
-		/// <summary><see cref="BottomSidePanel"/> dependency property. </summary>
-		public static readonly DependencyProperty BottomSidePanelProperty = DependencyProperty.Register(nameof(BottomSidePanel), typeof(LayoutAnchorSideControl), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnBottomSidePanelChanged));
-
-		/// <summary>Gets/sets the <see cref="LayoutAnchorSideControl"/> that is displayed as bottom side panel control.</summary>
-		[Bindable(true), Description("Gets/sets the LayoutAnchorSideControl that is displayed as bottom side panel control."), Category("Side Panel")]
-		public LayoutAnchorSideControl BottomSidePanel {
-			get => (LayoutAnchorSideControl) GetValue(BottomSidePanelProperty);
-			set => SetValue(BottomSidePanelProperty, value);
-		}
-
-		/// <summary>Handles changes to the <see cref="BottomSidePanel"/> property.</summary>
-		private static void OnBottomSidePanelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnBottomSidePanelChanged(e);
-
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="BottomSidePanel"/> property.</summary>
-		protected virtual void OnBottomSidePanelChanged(DependencyPropertyChangedEventArgs e) {
-			if(e.OldValue != null)
-				InternalRemoveLogicalChild(e.OldValue);
-			if(e.NewValue != null)
-				InternalAddLogicalChild(e.NewValue);
-		}
-
-		#endregion BottomSidePanel
-
-		#region AutoHideWindow
-
-		/// <summary><see cref="AutoHideWindow"/> Read-Only dependency property.</summary>
-		private static readonly DependencyPropertyKey AutoHideWindowPropertyKey = DependencyProperty.RegisterReadOnly(nameof(AutoHideWindow), typeof(LayoutAutoHideWindowControl), typeof(DockingManager),
-				new FrameworkPropertyMetadata(null, OnAutoHideWindowChanged));
-
-		public static readonly DependencyProperty AutoHideWindowProperty = AutoHideWindowPropertyKey.DependencyProperty;
-
-		/// <summary>Gets the <see cref="LayoutAutoHideWindowControl"/> that is currently shown as autohide window.</summary>
-		[Bindable(true), Description("Gets the LayoutAutoHideWindowControl that is currently shown as autohide window."), Category("AutoHideWindow")]
-		public LayoutAutoHideWindowControl AutoHideWindow => (LayoutAutoHideWindowControl) GetValue(AutoHideWindowProperty);
-
-		/// <summary>
-		/// Provides a secure method for setting the <see cref="AutoHideWindow"/> property.
-		/// This dependency property indicates the currently shown autohide window.
-		/// </summary>
-		/// <param name="value">The new value for the property.</param>
-		protected void SetAutoHideWindow(LayoutAutoHideWindowControl value) => SetValue(AutoHideWindowPropertyKey, value);
-
-		/// <summary>Handles changes to the <see cref="AutoHideWindow"/> property.</summary>
-		private static void OnAutoHideWindowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((DockingManager) d).OnAutoHideWindowChanged(e);
-
-		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="AutoHideWindow"/> property.</summary>
-		protected virtual void OnAutoHideWindowChanged(DependencyPropertyChangedEventArgs e) {
-			if(e.OldValue != null)
-				InternalRemoveLogicalChild(e.OldValue);
-			if(e.NewValue != null)
-				InternalAddLogicalChild(e.NewValue);
-		}
-
-		#endregion AutoHideWindow
-
-		#region AutoHideDelay
-
-		/// <summary>
-		/// Implements the backing store of the <see cref="AutoHideDelay"/> dependency property.
-		/// </summary>
-		public static readonly DependencyProperty AutoHideDelayProperty =
-			DependencyProperty.Register("AutoHideDelay", typeof(int), typeof(DockingManager),
-										new UIPropertyMetadata(500));
-
-		/// <summary>
-		/// Gets/sets the wait time in milliseconds that is applicable when the system AutoHides
-		/// a <see cref="LayoutAnchorableControl"/> (reduces it to a side anchor) after the user:
-		///
-		/// 1) clicks on a <see cref="LayoutAnchorControl "/> that is anchored in one of the <see cref="Layout"/>
-		/// property sides (top, right, left, or bottom) and
-		///
-		/// 2) clicks somewhere else into a focusable element (different document).
-		///
-		/// Expected behavior: The system waits for the configured time and reduces the <see cref="LayoutAnchorableControl"/> (into its side anchor).
-		/// Recommended configuration value range should be between 0 and 1500 milliseconds.
-		/// </summary>
-		[Bindable(true), Description("Gets/sets the wait time in milliseconds that is applicable when the system AutoHides a LayoutAnchorableControl (reduces it to a side anchor)."), Category("AutoHideWindow")]
-		public int AutoHideDelay {
-			get => (int) GetValue(AutoHideDelayProperty);
-			set => SetValue(AutoHideDelayProperty, value);
-		}
-
-		#endregion AutoHideDelay
+		#endregion ActivityBar
 
 		/// <summary>Enumerates all <see cref="LayoutFloatingWindowControl"/>s managed by this framework.</summary>
 		[Bindable(false), Description("Enumerates all LayoutFloatingWindowControls managed by this framework."), Category("FloatingWindow")]
@@ -1199,8 +1063,8 @@ namespace AvalonDock {
 		public static readonly DependencyProperty DocumentPaneMenuItemHeaderTemplateProperty = DependencyProperty.Register(nameof(DocumentPaneMenuItemHeaderTemplate), typeof(DataTemplate), typeof(DockingManager),
 				new FrameworkPropertyMetadata(null, OnDocumentPaneMenuItemHeaderTemplateChanged, CoerceDocumentPaneMenuItemHeaderTemplateValue));
 
-		/// <summary>Gets/sets the <see cref="DataTemplate"/> for the header to display menu dropdown items on a document pane.</summary>
-		[Bindable(true), Description("Gets/sets the DataTemplate for the header to display menu dropdown items on a document pane."), Category("Other")]
+		/// <summary>Gets/sets the <see cref="DataTemplate"/> for the header to display menu dropdown items on a document group.</summary>
+		[Bindable(true), Description("Gets/sets the DataTemplate for the header to display menu dropdown items on a document group."), Category("Other")]
 		public DataTemplate DocumentPaneMenuItemHeaderTemplate {
 			get => (DataTemplate) GetValue(DocumentPaneMenuItemHeaderTemplateProperty);
 			set => SetValue(DocumentPaneMenuItemHeaderTemplateProperty, value);
@@ -1484,9 +1348,6 @@ namespace AvalonDock {
 		/// <inheritdoc/>
 		IEnumerable<IDropArea> IOverlayWindowHost.GetDropAreas(LayoutFloatingWindowControl draggingWindow) {
 			//Debug.WriteLine($"{draggingWindow.Model.GetType()}", "DockingManager GetDropAreas 1");
-			//Debug.WriteLineIf(this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>().Any(), 
-			//	$"{string.Join(",", $"{this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()}")}", 
-			//	"DockingManager GetDropAreas 2");
 
 			if(_areas != null)
 				return _areas;
@@ -1497,9 +1358,9 @@ namespace AvalonDock {
 
 
 
-				foreach(var areaHost in this.FindVisualChildren<LayoutAnchorablePaneControl>())
-					if(areaHost.Model.Descendents().Any())
-						_areas.Add(new DropArea<LayoutAnchorablePaneControl>(areaHost, DropAreaType.AnchorablePane));
+				//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>())
+				//	if(areaHost.Model.Descendents().Any())
+				//		_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorablePane));
 			}
 
 			// Determine if floatingWindow is configured to dock as document or not
@@ -1528,19 +1389,36 @@ namespace AvalonDock {
 			}
 
 			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
-			//	_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpanderPane));
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderControl>(areaHost, DropAreaType.AnchorableExpander));
+			//}
+
+			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()) {
+			//	//Debug.WriteLine($"{areaHost.EmptyLength()}", "GetDropAreas");
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorableExpanderGroup));
+			//}
+
+			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupTabItem>()) {
+			//	_areas.Add(new DropArea<LayoutAnchorableExpanderGroupTabItem>(areaHost, DropAreaType.AnchorableExpanderGroupTabItem));
 			//}
 
 			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
-				_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderPane));
+				_areas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderGroupPane));
 			}
-			
-			//foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableExpanderGroupControl>()) {
-			//	Debug.WriteLine($"{areaHost.EmptyLength()}", "GetDropAreas");
-			//	if(areaHost.EmptyLength() > 1) {
-			//		_areas.Add(new DropArea<LayoutAnchorableExpanderGroupControl>(areaHost, DropAreaType.AnchorableExpanderPaneGroup));
-			//	}
+
+			foreach(var areaHost in this.FindVisualChildren<LayoutActivityTabItem>()) {
+				_areas.Add(new DropArea<LayoutActivityTabItem>(areaHost, DropAreaType.ActivityBar));
+			}
+
+			//if(this.FindVisualChildren<WrapPanel>().SingleOrDefault(o=> "PART_ActivityTabItemWarpContainer" == o.Name) is WrapPanel activityWarpContainerAreaHost) {
+			//	Debug.WriteLine($"{areaHost.Name}", "GetDropAreas");
+			//	//_areas.Add(new DropArea<TabPaneWarpPanel>(areaHost, DropAreaType.TabPaneWarpPanel));
 			//}
+
+			if(this.FindVisualChildren<WrapPanel>().SingleOrDefault(o=> "PART_ActivityTabItemWarpContainer" == o.Name) is WrapPanel activityWarpContainerAreaHost) {
+			//if(this.FindName("PART_ActivityTabItemWarpContainer") is WrapPanel activityWarpContainerAreaHost) {
+				Debug.WriteLine($"{activityWarpContainerAreaHost.Name}", "GetDropAreas");
+				_areas.Add(new DropArea<WrapPanel>(activityWarpContainerAreaHost, DropAreaType.ActivityBarPanel));
+			}
 
 			return _areas;
 		}
@@ -1556,26 +1434,25 @@ namespace AvalonDock {
 				yield break;
 			//big part of code for getting type
 
-			if(layoutAnchorableFloatingWindow.SinglePane is LayoutAnchorablePane layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null)) {
-				var layoutAnchorable = ((LayoutAnchorablePane)layoutAnchorableFloatingWindow.SinglePane).SelectedContent as LayoutAnchorable;
-				yield return layoutAnchorable;
+			if(layoutAnchorableFloatingWindow.SinglePane is LayoutAnchorableExpanderGroup layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null)) {
+				//var layoutAnchorable = ((LayoutAnchorableExpanderGroupPane)layoutAnchorableFloatingWindow.SinglePane).SelectedItem as LayoutAnchorable;
+				//yield return layoutAnchorable;
 			} else
 				foreach(var item in GetLayoutAnchorable(layoutAnchorableFloatingWindow.RootPanel))
 					yield return item;
 		}
 
 		/// <summary>
-		/// Finds all <see cref="LayoutAnchorable"/> objects (toolwindows) within a
-		/// <see cref="LayoutAnchorablePaneGroup"/> (if any) and return them.
+		/// Finds all <see cref="LayoutAnchorableExpander"/> objects (toolwindows) within a
+		/// <see cref="LayoutAnchorableExpanderGroup"/> (if any) and return them.
 		/// </summary>
-		/// <param name="layoutAnchPaneGroup"></param>
 		/// <returns>All the anchorable items found.</returns>
-		/// <seealso cref="LayoutAnchorable"/>
-		/// <seealso cref="LayoutAnchorablePaneGroup"/>
-		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorablePaneGroup layoutAnchPaneGroup) {
-			if(layoutAnchPaneGroup == null)
+		/// <seealso cref="LayoutAnchorableExpander"/>
+		/// <seealso cref="LayoutAnchorableExpanderGroup"/>
+		internal IEnumerable<LayoutAnchorableExpander> GetLayoutAnchorable(LayoutAnchorableExpanderGroupPane layoutAnchorableGroupPane) {
+			if(layoutAnchorableGroupPane == null)
 				yield break;
-			foreach(var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorable>())
+			foreach(var anchorable in layoutAnchorableGroupPane.Descendents().OfType<LayoutAnchorableExpander>())
 				yield return anchorable;
 		}
 
@@ -1591,16 +1468,19 @@ namespace AvalonDock {
 		}
 
 		public LayoutFloatingWindowControl CreateFloatingWindow(LayoutContent contentModel, bool isContentImmutable) {
-			if(contentModel is LayoutAnchorable anchorable) {
+			Debug.WriteLine($"{contentModel.GetType()}, {isContentImmutable}", "CreateFloatingWindow 0");
+
+			if(contentModel is LayoutAnchorableExpander anchorable) {
 				if(!(contentModel.Parent is ILayoutPane)) {
-					var pane = new LayoutAnchorablePane(anchorable)
+					var group = new LayoutAnchorableExpanderGroup(anchorable)
 					{
 						FloatingTop = contentModel.FloatingTop,
 						FloatingLeft = contentModel.FloatingLeft,
 						FloatingWidth = contentModel.FloatingWidth,
 						FloatingHeight = contentModel.FloatingHeight
 					};
-					return CreateFloatingWindowForLayoutAnchorableWithoutParent(pane, isContentImmutable);
+					Debug.WriteLine($"{contentModel.Title}", "CreateFloatingWindow 1 ");
+					return CreateFloatingWindowForLayoutAnchorableWithoutParent(group, isContentImmutable);
 				}
 			}
 
@@ -1610,6 +1490,14 @@ namespace AvalonDock {
 		#endregion Public Methods
 
 		#region Internal Methods
+
+		public LayoutAnchorableExpanderGroupPane PrimarySideBar { get; set; }
+		public LayoutAnchorableExpanderGroupPane SecondarySideBar { get; set; }
+		public LayoutAnchorableExpanderGroupPane Panel { get; set; }
+		//public LayoutAnchorableExpanderGroupPaneControl PrimarySideBarControl { get; set; }
+
+		//public LayoutAnchorableExpanderGroupPaneControl SecondarySideBarControl { get; set; }
+		//public LayoutAnchorableExpanderGroupPaneControl PanelControl { get; set; }
 
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
@@ -1622,75 +1510,47 @@ namespace AvalonDock {
 		/// <returns></returns>
 		internal UIElement CreateUIElementForModel(ILayoutElement model) {
 			if(model is LayoutPanel) {
-				var v = new LayoutPanelControl(model as LayoutPanel) {
-					Background = new SolidColorBrush(Colors.Orange)
-				};
-				return v;
+				return new LayoutPanelControl(model as LayoutPanel);
 			}
-			if(model is LayoutAnchorablePaneGroup) {
-				var v = new LayoutAnchorablePaneGroupControl(model as LayoutAnchorablePaneGroup) {
-					//Background = new SolidColorBrush(Colors.Aqua),
-					//Margin = new Thickness(5, 5, 5, 5)
-				};
-				return v;
+			if(model is LayoutActivityBar layoutActivityBar) {
+				var templateModelView = new LayoutActivityBarControl(layoutActivityBar);
+				templateModelView.SetBinding(StyleProperty, new Binding(ActivityBarControlStyleProperty.Name) { Source = this });
+				return templateModelView;
 			}
+
+			if(model is LayoutAnchorableExpanderGroupPane layoutAnchorableExpanderGroupPane) {
+				var templateModelView = new LayoutAnchorableExpanderGroupPaneControl(layoutAnchorableExpanderGroupPane, IsVirtualizingAnchorable);
+
+				if(LayoutActivityBar.PrimarySideBarKey == layoutAnchorableExpanderGroupPane.Name) {
+					templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
+					PrimarySideBar = layoutAnchorableExpanderGroupPane;
+				} else if(LayoutActivityBar.SecondarySideBarKey == layoutAnchorableExpanderGroupPane.Name) {
+					templateModelView.SetBinding(StyleProperty, new Binding(SecondarySideBarStyleProperty.Name) { Source = this });
+					SecondarySideBar = layoutAnchorableExpanderGroupPane;
+				} else if(LayoutActivityBar.PanelKey == layoutAnchorableExpanderGroupPane.Name) {
+					templateModelView.SetBinding(StyleProperty, new Binding(PanelStyleProperty.Name) { Source = this });
+					Panel = layoutAnchorableExpanderGroupPane;
+				//} else {
+				//	templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
+				}
+				return templateModelView;
+			}
+
+			if(model is LayoutAnchorableExpander) {
+				var templateModelView = new LayoutAnchorableExpanderControl(model as LayoutAnchorableExpander, IsVirtualizingAnchorable);
+				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderPaneControlStyleProperty.Name) { Source = this });
+				return templateModelView;
+			}
+
 			if(model is LayoutDocumentPaneGroup)
 				return new LayoutDocumentPaneGroupControl(model as LayoutDocumentPaneGroup);
-
-			if(model is LayoutAnchorSide) {
-				var templateModelView = new LayoutAnchorSideControl(model as LayoutAnchorSide);
-				templateModelView.SetBinding(TemplateProperty, new Binding(AnchorSideTemplateProperty.Name) { Source = this });
-				return templateModelView;
-			}
-			if(model is LayoutAnchorGroup) {
-				var templateModelView = new LayoutAnchorGroupControl(model as LayoutAnchorGroup);
-				templateModelView.SetBinding(TemplateProperty, new Binding(AnchorGroupTemplateProperty.Name) { Source = this });
-				return templateModelView;
-			}
 
 			if(model is LayoutDocumentPane) {
 				var templateModelView = new LayoutDocumentPaneControl(model as LayoutDocumentPane, IsVirtualizingDocument);
 				templateModelView.SetBinding(StyleProperty, new Binding(DocumentPaneControlStyleProperty.Name) { Source = this });
 				return templateModelView;
 			}
-			if(model is LayoutAnchorablePane) {
-				var templateModelView = new LayoutAnchorablePaneControl(model as LayoutAnchorablePane, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorablePaneControlStyleProperty.Name) { Source = this });
-				return templateModelView;
-			}
-			if(model is LayoutAnchorableExpanderGroupPane layoutAnchorableGroupTabModel) {
-				var templateModelView = new LayoutAnchorableExpanderGroupPaneControl(layoutAnchorableGroupTabModel, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderGroupPaneControlStyleProperty.Name) { Source = this });
-				return templateModelView;
-			}
-			if(model is LayoutAnchorableExpanderGroupBox) {
-				var templateModelView = new LayoutAnchorableExpanderGroupBoxControl(model as LayoutAnchorableExpanderGroupBox, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorablePaneControl2StyleProperty.Name) { Source = this });
-				templateModelView.Background = new SolidColorBrush(Colors.BlueViolet);
-				//templateModelView.M
-				return templateModelView;
-			}
-			if (model is LayoutAnchorableExpander) {
-				var templateModelView = new LayoutAnchorableExpanderControl(model as LayoutAnchorableExpander, IsVirtualizingAnchorable);
-				templateModelView.SetBinding(StyleProperty, new Binding(AnchorableExpanderPaneControlStyleProperty.Name) { Source = this });
-				//templateModelView.Background = new SolidColorBrush(Colors.BlueViolet);
-				//templateModelView.M
-				return templateModelView;
-			}
-			if (model is LayoutAnchorable) {
-				var templateModelView = new LayoutAnchorableControl {
-					Model = model as LayoutAnchorable
-				};
-				return templateModelView;
-			}
-			//if(model is LayoutAnchorablePaneGroup2) {
-			//	Debug.WriteLine($"2", "CreateUIElementForModel");
 
-			//	var templateModelView = new LayoutAnchorableExpanderGroupControl(model as LayoutAnchorablePaneGroup2);
-			//	templateModelView.SetBinding(StyleProperty, new Binding(LayoutAnchorablePaneGroupControl2StyleProperty.Name) { Source = this });
-			//	//templateModelView.Model = model as LayoutAnchorablePaneGroup2;
-			//	return templateModelView;
-			//}
 			if(model is LayoutAnchorableFloatingWindow) {
 				if(DesignerProperties.GetIsInDesignMode(this))
 					return null;
@@ -1772,11 +1632,11 @@ namespace AvalonDock {
 
 		/// <summary>Method is invoked to pop put an Anchorable that was in AutoHide mode.</summary>
 		/// <param name="anchor"><see cref="LayoutAnchorControl"/> to pop out of the side panel.</param>
-		internal void ShowAutoHideWindow(LayoutAnchorControl anchor) {
-			_autoHideWindowManager.ShowAutoHideWindow(anchor);
-		}
+		//internal void ShowAutoHideWindow(LayoutAnchorControl anchor) {
+		//	_autoHideWindowManager.ShowAutoHideWindow(anchor);
+		//}
 
-		internal void HideAutoHideWindow(LayoutAnchorControl anchor) => _autoHideWindowManager.HideAutoWindow(anchor);
+		//internal void HideAutoHideWindow(LayoutAnchorControl anchor) => _autoHideWindowManager.HideAutoWindow(anchor);
 
 		internal FrameworkElement GetAutoHideAreaElement() => _autohideArea;
 
@@ -1787,6 +1647,7 @@ namespace AvalonDock {
 		/// <param name="contentModel"></param>
 		/// <param name="startDrag"></param>
 		internal void StartDraggingFloatingWindowForContent(LayoutContent contentModel, bool startDrag = true) {
+			Debug.WriteLine($"{startDrag}, {contentModel.Title}", "StartDraggingFloatingWindowForContent");
 			// Ensure window can float only if corresponding property is set accordingly
 			if(contentModel == null)
 				return;
@@ -1823,13 +1684,11 @@ namespace AvalonDock {
 			}
 		}
 
-		/// <summary>
-		/// Executes when the user starts to drag a docked <see cref="LayoutAnchorable"/> (tool window)
-		/// by dragging its title bar (top header of a tool window).
-		/// </summary>
-		/// <param name="paneModel"></param>
-		internal void StartDraggingFloatingWindowForPane(LayoutAnchorablePane paneModel) {
+		internal void StartDraggingFloatingWindowForPane(LayoutAnchorableExpanderGroup paneModel) {
+			Debug.WriteLine($"{paneModel.Title}", "StartDraggingFloatingWindowForPane 0 ");
+
 			var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);
+			Debug.WriteLine($"{paneModel.Title}, {fwc != null}", "StartDraggingFloatingWindowForPane 1 ");
 			if(fwc == null)
 				return;
 
@@ -1880,8 +1739,8 @@ namespace AvalonDock {
 				currentHandle = Win32Helper.GetWindow(currentHandle, (uint) Win32Helper.GetWindow_Cmd.GW_HWNDNEXT);
 			}
 
-			overlayWindowHosts.AddRange(topFloatingWindows);
 			overlayWindowHosts.Add(this);
+			overlayWindowHosts.AddRange(topFloatingWindows);
 			overlayWindowHosts.AddRange(bottomFloatingWindows);
 		}
 
@@ -2017,7 +1876,7 @@ namespace AvalonDock {
 		//}
 
 		internal void ExecuteHideCommand(LayoutAnchorable anchorable) {
-			Debug.WriteLine($"{anchorable != null}", "ExecuteHideCommand 1");
+			//Debug.WriteLine($"{anchorable != null}", "ExecuteHideCommand 1");
 
 			if(!(anchorable is LayoutAnchorable model))
 				return;
@@ -2025,7 +1884,7 @@ namespace AvalonDock {
 			AnchorableHidingEventArgs hidingArgs = null;
 			AnchorableHiding?.Invoke(this, hidingArgs = new AnchorableHidingEventArgs(model));
 			if(hidingArgs?.CloseInsteadOfHide == true) {
-				Debug.WriteLine($"", "ExecuteHideCommand 2");
+				//Debug.WriteLine($"", "ExecuteHideCommand 2");
 
 				// ExecuteCloseCommand(model);
 				return;
@@ -2037,13 +1896,6 @@ namespace AvalonDock {
 				AnchorableHidden?.Invoke(this, new AnchorableHiddenEventArgs(model));
 		}
 
-		//internal void ExecuteAutoHideCommand(LayoutAnchorable _anchorable) => _anchorable.ToggleAutoHide();
-
-		internal void ExecuteAutoHideCommand(LayoutAnchorable _anchorable) {
-			Debug.WriteLine($"", "ExecuteAutoHideCommand");
-
-			_anchorable.ToggleAutoHide();
-		}
 		/// <summary>
 		/// Method executes when the user clicks the Float button in the context menu of an <see cref="LayoutAnchorable"/>.
 		///
@@ -2139,17 +1991,14 @@ namespace AvalonDock {
 				return;
 			if(Layout.Manager == this) {
 				LayoutRootPanel = CreateUIElementForModel(Layout.RootPanel) as LayoutPanelControl;
-				LeftSidePanel = CreateUIElementForModel(Layout.LeftSide) as LayoutAnchorSideControl;
-				TopSidePanel = CreateUIElementForModel(Layout.TopSide) as LayoutAnchorSideControl;
-				RightSidePanel = CreateUIElementForModel(Layout.RightSide) as LayoutAnchorSideControl;
-				BottomSidePanel = CreateUIElementForModel(Layout.BottomSide) as LayoutAnchorSideControl;
-
+				ActivityBar = CreateUIElementForModel(Layout.ActivityBar) as LayoutActivityBarControl;
 				// In order to prevent resource leaks, unsubscribe from SizeChanged event for case when we have no stored Layout settings.
 				SizeChanged -= OnSizeChanged;
 				SizeChanged += OnSizeChanged;
+
 			}
 
-			SetupAutoHideWindow();
+			//SetupAutoHideWindow();
 
 			foreach(var fwc in _fwHiddenList) {
 				fwc.EnableBindings();
@@ -2177,9 +2026,10 @@ namespace AvalonDock {
 		/// <param name="e"></param>
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
 			// Lets make sure this always remains non-negative to avoid crach in layout system
-			var width = Math.Max(ActualWidth - GridSplitterWidth - RightSidePanel.ActualWidth - LeftSidePanel.ActualWidth, 0);
-			var height = Math.Max(ActualHeight - GridSplitterHeight - TopSidePanel.ActualHeight - BottomSidePanel.ActualHeight, 0);
-
+			//var width = Math.Max(ActualWidth - GridSplitterWidth - RightSidePanel.ActualWidth - LeftSidePanel.ActualWidth, 0);
+			//var height = Math.Max(ActualHeight - GridSplitterHeight - TopSidePanel.ActualHeight - BottomSidePanel.ActualHeight, 0);
+			var width = Math.Max(ActualWidth - GridSplitterWidth, 0);
+			var height = Math.Max(ActualHeight - GridSplitterHeight, 0);
 			LayoutRootPanel.AdjustFixedChildrenPanelSizes(new Size(width, height));
 		}
 
@@ -2188,9 +2038,9 @@ namespace AvalonDock {
 
 			if(DesignerProperties.GetIsInDesignMode(this))
 				return;
-			_autoHideWindowManager?.HideAutoWindow();
+			//_autoHideWindowManager?.HideAutoWindow();
 
-			AutoHideWindow?.Dispose();
+			//AutoHideWindow?.Dispose();
 
 			foreach(var fw in _fwList.ToArray()) {
 				////fw.Owner = null;
@@ -2216,15 +2066,15 @@ namespace AvalonDock {
 			FocusElementManager.FinalizeFocusManagement(this);
 		}
 
-		private void SetupAutoHideWindow() {
-			if(_autoHideWindowManager != null)
-				_autoHideWindowManager.HideAutoWindow();
-			else
-				_autoHideWindowManager = new AutoHideWindowManager(this);
+		//private void SetupAutoHideWindow() {
+		//	if(_autoHideWindowManager != null)
+		//		_autoHideWindowManager.HideAutoWindow();
+		//	else
+		//		_autoHideWindowManager = new AutoHideWindowManager(this);
 
-			AutoHideWindow?.Dispose();
-			SetAutoHideWindow(new LayoutAutoHideWindowControl());
-		}
+		//	AutoHideWindow?.Dispose();
+		//	SetAutoHideWindow(new LayoutAutoHideWindowControl());
+		//}
 
 		private void CreateOverlayWindow(LayoutFloatingWindowControl draggingWindow = null) {
 			if(_overlayWindow == null) {
@@ -2452,22 +2302,22 @@ namespace AvalonDock {
 				if(anchorablesImported.Contains(document))
 					listOfAnchorablesToImport.Remove(document);
 			}
-			LayoutAnchorablePane anchorablePane = null;
+			LayoutAnchorableExpanderGroup anchorablePane = null;
 			if(layout.ActiveContent != null) {
-				//look for active content parent pane
-				anchorablePane = layout.ActiveContent.Parent as LayoutAnchorablePane;
+				//look for active content parent group
+				anchorablePane = layout.ActiveContent.Parent as LayoutAnchorableExpanderGroup;
 			}
+			//if(anchorablePane == null) {
+			//	//look for a group on the right side
+			//	anchorablePane = layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(group => !group.IsHostedInFloatingWindow && group.GetSide() == AnchorSide.Right);
+			//}
 			if(anchorablePane == null) {
-				//look for a pane on the right side
-				anchorablePane = layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
-			}
-			if(anchorablePane == null) {
-				//look for an available pane
-				anchorablePane = layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault();
+				//look for an available group
+				anchorablePane = layout.Descendents().OfType<LayoutAnchorableExpanderGroup>().FirstOrDefault();
 			}
 			_suspendLayoutItemCreation = true;
 			foreach(var anchorableContentToImport in listOfAnchorablesToImport) {
-				var anchorableToImport = new LayoutAnchorable { Content = anchorableContentToImport };
+				var anchorableToImport = new LayoutAnchorableExpander { Content = anchorableContentToImport };
 				var added = false;
 				if(LayoutUpdateStrategy != null)
 					added = LayoutUpdateStrategy.BeforeInsertAnchorable(layout, anchorableToImport, anchorablePane);
@@ -2480,7 +2330,7 @@ namespace AvalonDock {
 						}
 
 						layout.RootPanel = mainLayoutPanel;
-						anchorablePane = new LayoutAnchorablePane { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+						anchorablePane = new LayoutAnchorableExpanderGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
 						mainLayoutPanel.Children.Add(anchorablePane);
 					}
 
@@ -2519,22 +2369,22 @@ namespace AvalonDock {
 			//handle add
 			if(e.NewItems != null && (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)) {
 				if(e.NewItems != null) {
-					LayoutAnchorablePane anchorablePane = null;
+					LayoutAnchorableExpanderGroup anchorablePane = null;
 					if(Layout.ActiveContent != null) {
-						//look for active content parent pane
-						anchorablePane = Layout.ActiveContent.Parent as LayoutAnchorablePane;
+						//look for active content parent group
+						anchorablePane = Layout.ActiveContent.Parent as LayoutAnchorableExpanderGroup;
 					}
+					//if(anchorablePane == null) {
+					//	//look for a group on the right side
+					//	anchorablePane = Layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(group => !group.IsHostedInFloatingWindow && group.GetSide() == AnchorSide.Right);
+					//}
 					if(anchorablePane == null) {
-						//look for a pane on the right side
-						anchorablePane = Layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
-					}
-					if(anchorablePane == null) {
-						//look for an available pane
-						anchorablePane = Layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault();
+						//look for an available group
+						anchorablePane = Layout.Descendents().OfType<LayoutAnchorableExpanderGroup>().FirstOrDefault();
 					}
 					_suspendLayoutItemCreation = true;
 					foreach(var anchorableContentToImport in e.NewItems) {
-						var anchorableToImport = new LayoutAnchorable { Content = anchorableContentToImport };
+						var anchorableToImport = new LayoutAnchorableExpander { Content = anchorableContentToImport };
 						var added = false;
 						if(LayoutUpdateStrategy != null)
 							added = LayoutUpdateStrategy.BeforeInsertAnchorable(Layout, anchorableToImport, anchorablePane);
@@ -2545,7 +2395,7 @@ namespace AvalonDock {
 									mainLayoutPanel.Children.Add(Layout.RootPanel);
 								}
 								Layout.RootPanel = mainLayoutPanel;
-								anchorablePane = new LayoutAnchorablePane { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+								anchorablePane = new LayoutAnchorableExpanderGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
 								mainLayoutPanel.Children.Add(anchorablePane);
 							}
 							anchorablePane.Children.Add(anchorableToImport);
@@ -2751,9 +2601,11 @@ namespace AvalonDock {
 			_navigatorWindow = null;
 		}
 
-		private LayoutFloatingWindowControl CreateFloatingWindowForLayoutAnchorableWithoutParent(LayoutAnchorablePane paneModel, bool isContentImmutable) {
-			if(paneModel.Children.Any(c => !c.CanFloat))
-				return null;
+		private LayoutFloatingWindowControl CreateFloatingWindowForLayoutAnchorableWithoutParent(LayoutAnchorableExpanderGroup paneModel, bool isContentImmutable) {
+			Debug.WriteLine($"{paneModel.Children.Count}", "CreateFloatingWindowForLayoutAnchorableWithoutParent 0 ");
+
+			//if(paneModel.Children.Any())
+			//	return null;
 			var paneAsPositionableElement = paneModel as ILayoutPositionableElement;
 			var paneAsWithActualSize = paneModel as ILayoutPositionableElementWithActualSize;
 
@@ -2767,7 +2619,7 @@ namespace AvalonDock {
 			if(fwHeight == 0.0)
 				fwHeight = paneAsWithActualSize.ActualHeight + 10;   //10 includes BorderThickness and Margins inside LayoutAnchorableFloatingWindowControl.
 
-			var destPane = new LayoutAnchorablePane
+			var destPane = new LayoutAnchorableExpanderGroup()
 			{
 				DockWidth = paneAsPositionableElement.DockWidth,
 				DockHeight = paneAsPositionableElement.DockHeight,
@@ -2780,7 +2632,7 @@ namespace AvalonDock {
 			};
 
 			var savePreviousContainer = paneModel.FindParent<LayoutFloatingWindow>() == null;
-			var currentSelectedContentIndex = paneModel.SelectedContentIndex;
+			var currentSelectedContentIndex = paneModel.SelectedIndex;
 			while(paneModel.Children.Count > 0) {
 				var contentModel = paneModel.Children[paneModel.Children.Count - 1];
 
@@ -2791,14 +2643,19 @@ namespace AvalonDock {
 
 				paneModel.RemoveChildAt(paneModel.Children.Count - 1);
 				destPane.Children.Insert(0, contentModel);
+				contentModel.IsExpanded = true;
 			}
 
 			if(destPane.Children.Count > 0)
-				destPane.SelectedContentIndex = currentSelectedContentIndex;
+				destPane.SelectedIndex = currentSelectedContentIndex;
+
+			var parent = paneModel.Parent;
+			parent?.RemoveChild(paneModel);
+
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
 			fw = new LayoutAnchorableFloatingWindow {
-				RootPanel = new LayoutAnchorablePaneGroup(destPane) {
+				RootPanel = new LayoutAnchorableExpanderGroupPane(destPane) {
 					DockHeight = destPane.DockHeight,
 					DockWidth = destPane.DockWidth,
 					DockMinHeight = destPane.DockMinHeight,
@@ -2812,10 +2669,10 @@ namespace AvalonDock {
 				Width = fwWidth,
 				Height = fwHeight,
 				Top = fwTop,
-				Left = fwLeft
+				Left = fwLeft,
 			};
-			//fwc.Owner = Window.GetWindow(this);
-			//fwc.SetParentToMainWindowOf(this);
+				//fwc.Owner = Window.GetWindow(this);
+				//fwc.SetParentToMainWindowOf(this);
 			_fwList.Add(fwc);
 			Layout.CollectGarbage();
 			InvalidateArrange();
@@ -2825,8 +2682,11 @@ namespace AvalonDock {
 		private LayoutFloatingWindowControl CreateFloatingWindowCore(LayoutContent contentModel, bool isContentImmutable) {
 			if(!contentModel.CanFloat)
 				return null;
-			if(contentModel is LayoutAnchorable contentModelAsAnchorable && contentModelAsAnchorable.IsAutoHidden)
-				contentModelAsAnchorable.ToggleAutoHide();
+
+			Debug.WriteLine($"{contentModel.GetType().Name}, {isContentImmutable}", "CreateFloatingWindowCore 0");
+
+			//if(contentModel is LayoutAnchorable contentModelAsAnchorable && contentModelAsAnchorable.IsAutoHidden)
+			//	contentModelAsAnchorable.ToggleAutoHide();
 
 			var parentPane = contentModel.Parent as ILayoutPane;
 			var parentPaneAsPositionableElement = contentModel.Parent as ILayoutPositionableElement;
@@ -2855,10 +2715,12 @@ namespace AvalonDock {
 
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
-			if(contentModel is LayoutAnchorable) {
-				var anchorableContent = contentModel as LayoutAnchorable;
+
+			if(contentModel is LayoutAnchorableExpander) {
+				var anchorableContent = contentModel as LayoutAnchorableExpander;
+
 				fw = new LayoutAnchorableFloatingWindow {
-					RootPanel = new LayoutAnchorablePaneGroup(new LayoutAnchorablePane(anchorableContent) {
+					RootPanel = new LayoutAnchorableExpanderGroupPane(new LayoutAnchorableExpanderGroup(anchorableContent)) {
 						DockWidth = parentPaneAsPositionableElement.DockWidth,
 						DockHeight = parentPaneAsPositionableElement.DockHeight,
 						DockMinHeight = parentPaneAsPositionableElement.DockMinHeight,
@@ -2867,7 +2729,7 @@ namespace AvalonDock {
 						FloatingTop = parentPaneAsPositionableElement.FloatingTop,
 						FloatingWidth = parentPaneAsPositionableElement.FloatingWidth,
 						FloatingHeight = parentPaneAsPositionableElement.FloatingHeight,
-					})
+					}
 				};
 
 				Layout.FloatingWindows.Add(fw);
@@ -2909,5 +2771,12 @@ namespace AvalonDock {
 		}
 
 		#endregion Private Methods
+
+
+
+
+
+
+
 	}
 }

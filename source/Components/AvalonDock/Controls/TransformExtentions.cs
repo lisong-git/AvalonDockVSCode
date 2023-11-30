@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -7,6 +7,7 @@
    License (Ms-PL) as published at https://opensource.org/licenses/MS-PL
  ************************************************************************/
 
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -36,12 +37,6 @@ namespace AvalonDock.Controls
 
 		public static Rect GetScreenArea(this FrameworkElement element)
 		{
-			//    return new Rect(element.PointToScreenDPI(new Point()),
-			//        element.TransformActualSizeToAncestor());
-			//}
-
-			//public static Rect GetScreenAreaWithoutFlowDirection(this FrameworkElement element)
-			//{
 			var point = element.PointToScreenDPI(new Point());
 			if (FrameworkElement.GetFlowDirection(element) == FlowDirection.RightToLeft)
 			{
@@ -57,9 +52,11 @@ namespace AvalonDock.Controls
 				element.TransformActualSizeToAncestor());
 		}
 
-		public static Point TransformToDeviceDPI(this Visual visual, Point pt)
-		{
-			Matrix m = PresentationSource.FromVisual(visual).CompositionTarget.TransformToDevice;
+		public static Point TransformToDeviceDPI(this Visual visual, Point pt) {
+			var compositionTarget = PresentationSource.FromVisual(visual).CompositionTarget;
+			if(compositionTarget == null)
+				return default(Point);
+			Matrix m = compositionTarget.TransformToDevice;
 			return new Point(pt.X / m.M11, pt.Y / m.M22);
 		}
 

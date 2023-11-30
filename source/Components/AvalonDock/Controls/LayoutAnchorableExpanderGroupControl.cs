@@ -8,6 +8,7 @@
  ************************************************************************/
 
 using AvalonDock.Layout;
+using Microsoft.VisualBasic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace AvalonDock.Controls {
 	/// This Grid based control can host multiple other controls in its Children collection
 	/// (<see cref="LayoutAnchorableControl"/>).
 	/// </summary>
-	public class LayoutAnchorableExpanderGroupControl :ExpanderGridControl<LayoutAnchorableExpander>, ILayoutControl {
+	public class LayoutAnchorableExpanderGroupControl :LayoutExpanderGridControl<LayoutAnchorableExpander> {
 		#region fields
 
 
@@ -29,18 +30,10 @@ namespace AvalonDock.Controls {
 
 		#region Constructors
 
-		/// <summary>
-		/// Class constructor from layout model.
-		/// </summary>
-		/// <param name="model"></param>
-		//internal LayoutAnchorableExpanderGroupControl(LayoutAnchorablePaneGroup2 model):base(model) {
-		//	Model = model;
-		//	Debug.WriteLine($"2", "LayoutAnchorableExpanderGroupControl");
-		//}
 
-		public LayoutAnchorableExpanderGroupControl() {
-			//Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");
-		}
+		//public LayoutAnchorableExpanderGroupControl() {
+		//	//Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");
+		//}
 
 
 		#endregion Constructors
@@ -74,7 +67,7 @@ namespace AvalonDock.Controls {
 			//SetLayoutItem(Model?.Root?.Manager?.GetLayoutItemFromModel(Model));
 			//} else
 			//SetLayoutItem(null);
-			Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableExpanderGroupControl OnModelChanged");
+			//Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableExpanderGroupControl OnOverflowOpenChanged");
 			if(e.NewValue is LayoutAnchorableExpanderGroup model) {
 				base.Model = model;
 			}
@@ -88,40 +81,56 @@ namespace AvalonDock.Controls {
 			//IsEnabled = Model.IsEnabled;
 			//iIsEnabled || !Model.IsActive)
 			//	return;f(
-			if(Model.Parent != null && Model.Parent is LayoutAnchorablePane layoutAnchorablePane)
+			if(Model.Parent != null && Model.Parent is LayoutAnchorableExpanderGroup layoutAnchorablePane)
 				layoutAnchorablePane.SetNextSelectedIndex();
 		}
 
 		#endregion Model
 
 		public double EmptyLength() {
-		 return ActualHeight - Children.OfType<FrameworkElement>().Sum(o => o.ActualHeight);
+			Debug.WriteLine($"{ActualWidth}; " +
+				$"{string.Join(", ", ColumnDefinitions.OfType<ColumnDefinition>().Select(o=> o.ActualWidth))}; " +
+				$"{ColumnDefinitions.LastOrDefault()?.Offset}; " +
+				$"{ColumnDefinitions.LastOrDefault()?.Offset + ColumnDefinitions.LastOrDefault() ?.ActualWidth}; " +
+				$"{ActualWidth}; " +
+				$"{ColumnDefinitions.OfType<ColumnDefinition>().Sum(o => o.ActualWidth)}; " +
+				$"{ActualWidth - ColumnDefinitions.OfType<ColumnDefinition>().Sum(o => o.ActualWidth)}", "EmptyLength");
+		 return ActualWidth - ColumnDefinitions.OfType<ColumnDefinition>().Select(o => o.ActualWidth).Sum();
 		}
 
 		#region Overrides
 
 		protected override void OnFixChildrenDockLengths() {
-			var model = Model as LayoutAnchorableExpanderGroup;
-			if(model == null)
-				return;
+			//var model = Model as LayoutAnchorableExpanderGroup;
+			//if(model == null)
+			//	return;
+			////Debug.WriteLine($"", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
 
-			if(model.Orientation == Orientation.Horizontal) {
-				// Setup DockWidth for children
-				for(int i = 0; i < model.Children.Count; i++) {
-					var childModel = model.Children[i] as ILayoutPositionableElement;
-					if(!childModel.DockWidth.IsStar) {
-						childModel.DockWidth = new GridLength(1.0, GridUnitType.Star);
-					}
-				}
-			} else {
-				// Setup DockHeight for children
-				for(int i = 0; i < model.Children.Count; i++) {
-					var childModel = model.Children[i] as ILayoutPositionableElement;
-					if(!childModel.DockHeight.IsStar) {
-						childModel.DockHeight = new GridLength(1.0, GridUnitType.Star);
-					}
-				}
-			}
+			//if(model.Orientation == Orientation.Horizontal) {
+			//	// Setup DockWidth for children
+			//	for(int i = 0; i < model.Children.Count; i++) {
+			//		var childModel = model.Children[i] as ILayoutPositionableElement;
+			//		//if(!childModel.DockWidth.IsStar) {
+			//		//	childModel.DockWidth = new GridLength(1.0, GridUnitType.Star);
+			//		//}
+			//		if(!childModel.DockWidth.IsAuto) {
+			//			childModel.DockWidth = new GridLength(0.0, GridUnitType.Auto);
+			//		}
+			//	}
+			//} else {
+			//	// Setup DockHeight for children
+			//	for(int i = 0; i < model.Children.Count; i++) {
+			//		var childModel = model.Children[i] as ILayoutPositionableElement;
+			//		//Debug.WriteLine($"{childModel.DockHeight}", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
+
+			//		//if(!childModel.DockHeight.IsAuto) {
+			//		//	//childModel.DockHeight = new GridLength(1.0, GridUnitType.Star);
+			//		//}
+			//		if(!childModel.DockHeight.IsAuto) {
+			//			childModel.DockHeight = new GridLength(0.0, GridUnitType.Auto);
+			//		}
+			//	}
+			//}
 		}
 
 		#endregion Overrides

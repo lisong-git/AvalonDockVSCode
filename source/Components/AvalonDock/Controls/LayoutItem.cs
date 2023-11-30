@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -18,16 +18,14 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace AvalonDock.Controls
-{
+namespace AvalonDock.Controls {
 	/// <inheritdoc />
 	/// <summary>
 	/// This class provides a basic wrapper around the custom content view of <see cref="LayoutElement"/>.
 	/// Implements the <see cref="System.Windows.FrameworkElement" />
 	/// </summary>
 	/// <seealso cref="System.Windows.FrameworkElement" />
-	public abstract class LayoutItem : FrameworkElement
-	{
+	public abstract class LayoutItem :FrameworkElement {
 		#region fields
 
 		private ICommand _defaultCloseCommand;
@@ -48,14 +46,12 @@ namespace AvalonDock.Controls
 
 		#region Constructors
 
-		static LayoutItem()
-		{
+		static LayoutItem() {
 			ToolTipProperty.OverrideMetadata(typeof(LayoutItem), new FrameworkPropertyMetadata(null, OnToolTipChanged));
 			VisibilityProperty.OverrideMetadata(typeof(LayoutItem), new FrameworkPropertyMetadata(Visibility.Visible, OnVisibilityChanged));
 		}
 
-		internal LayoutItem()
-		{
+		internal LayoutItem() {
 		}
 
 		#endregion Constructors
@@ -76,14 +72,14 @@ namespace AvalonDock.Controls
 
 		#region View
 
-		public ContentPresenter View
-		{
-			get
-			{
-				if (_view != null) return _view;
+		public ContentPresenter View {
+			get {
+				if(_view != null)
+					return _view;
 				_view = new ContentPresenter();
 				_view.SetBinding(ContentPresenter.ContentProperty, new Binding(nameof(ContentPresenter.Content)) { Source = LayoutElement });
-				if (LayoutElement?.Root == null) return _view;
+				if(LayoutElement?.Root == null)
+					return _view;
 				_view.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding(nameof(DockingManager.LayoutItemTemplate)) { Source = LayoutElement.Root.Manager });
 				_view.SetBinding(ContentPresenter.ContentTemplateSelectorProperty, new Binding(nameof(DockingManager.LayoutItemTemplateSelector)) { Source = LayoutElement.Root.Manager });
 				LayoutElement.Root.Manager?.InternalAddLogicalChild(_view);
@@ -101,19 +97,18 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the the title of the element.</summary>
 		[Bindable(true), Description("Gets/sets the the title of the element."), Category("Other")]
-		public string Title
-		{
-			get => (string)GetValue(TitleProperty);
+		public string Title {
+			get => (string) GetValue(TitleProperty);
 			set => SetValue(TitleProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="Title"/> property.</summary>
-		private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnTitleChanged(e);
+		private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnTitleChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Title"/> property.</summary>
-		protected virtual void OnTitleChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (LayoutElement != null) LayoutElement.Title = (string)e.NewValue;
+		protected virtual void OnTitleChanged(DependencyPropertyChangedEventArgs e) {
+			if(LayoutElement != null)
+				LayoutElement.Title = (string) e.NewValue;
 		}
 
 		#endregion Title
@@ -126,19 +121,18 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the icon associated with the item.</summary>
 		[Bindable(true), Description("Gets/sets the icon associated with the item."), Category("Other")]
-		public ImageSource IconSource
-		{
-			get => (ImageSource)GetValue(IconSourceProperty);
+		public ImageSource IconSource {
+			get => (ImageSource) GetValue(IconSourceProperty);
 			set => SetValue(IconSourceProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="IconSource"/> property.</summary>
-		private static void OnIconSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnIconSourceChanged(e);
+		private static void OnIconSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnIconSourceChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="IconSource"/> property.</summary>
-		protected virtual void OnIconSourceChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (LayoutElement != null) LayoutElement.IconSource = IconSource;
+		protected virtual void OnIconSourceChanged(DependencyPropertyChangedEventArgs e) {
+			if(LayoutElement != null)
+				LayoutElement.IconSource = IconSource;
 		}
 
 		#endregion IconSource
@@ -151,19 +145,18 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the content id used to retrieve content when deserializing layouts.</summary>
 		[Bindable(true), Description("Gets/sets the content id used to retrieve content when deserializing layouts."), Category("Other")]
-		public string ContentId
-		{
-			get => (string)GetValue(ContentIdProperty);
+		public string ContentId {
+			get => (string) GetValue(ContentIdProperty);
 			set => SetValue(ContentIdProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="ContentId"/> property.</summary>
-		private static void OnContentIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnContentIdChanged(e);
+		private static void OnContentIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnContentIdChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="ContentId"/> property.</summary>
-		protected virtual void OnContentIdChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (LayoutElement != null) LayoutElement.ContentId = (string)e.NewValue;
+		protected virtual void OnContentIdChanged(DependencyPropertyChangedEventArgs e) {
+			if(LayoutElement != null)
+				LayoutElement.ContentId = (string) e.NewValue;
 		}
 
 		#endregion ContentId
@@ -176,22 +169,21 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets wether the item is selected inside its container or not.</summary>
 		[Bindable(true), Description("Gets/sets wether the item is selected inside its container or not."), Category("Other")]
-		public bool IsSelected
-		{
-			get => (bool)GetValue(IsSelectedProperty);
+		public bool IsSelected {
+			get => (bool) GetValue(IsSelectedProperty);
 			set => SetValue(IsSelectedProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="IsSelected"/> property.</summary>
-		private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnIsSelectedChanged(e);
+		private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnIsSelectedChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="IsSelected"/> property.</summary>
-		protected virtual void OnIsSelectedChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (!_isSelectedReentrantFlag.CanEnter) return;
-			using (_isSelectedReentrantFlag.Enter())
-			{
-				if (LayoutElement != null) LayoutElement.IsSelected = (bool)e.NewValue;
+		protected virtual void OnIsSelectedChanged(DependencyPropertyChangedEventArgs e) {
+			if(!_isSelectedReentrantFlag.CanEnter)
+				return;
+			using(_isSelectedReentrantFlag.Enter()) {
+				if(LayoutElement != null)
+					LayoutElement.IsSelected = (bool) e.NewValue;
 			}
 		}
 
@@ -205,22 +197,21 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets wether the item is active in the UI or not.</summary>
 		[Bindable(true), Description("Gets/sets wether the item is active in the UI or not."), Category("Other")]
-		public bool IsActive
-		{
-			get => (bool)GetValue(IsActiveProperty);
+		public bool IsActive {
+			get => (bool) GetValue(IsActiveProperty);
 			set => SetValue(IsActiveProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="IsActive"/> property.</summary>
-		private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnIsActiveChanged(e);
+		private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnIsActiveChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="IsActive"/> property.</summary>
-		protected virtual void OnIsActiveChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (!_isActiveReentrantFlag.CanEnter) return;
-			using (_isActiveReentrantFlag.Enter())
-			{
-				if (LayoutElement != null) LayoutElement.IsActive = (bool)e.NewValue;
+		protected virtual void OnIsActiveChanged(DependencyPropertyChangedEventArgs e) {
+			if(!_isActiveReentrantFlag.CanEnter)
+				return;
+			using(_isActiveReentrantFlag.Enter()) {
+				if(LayoutElement != null)
+					LayoutElement.IsActive = (bool) e.NewValue;
 			}
 		}
 
@@ -234,19 +225,18 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets wetherthe item can be closed or not.</summary>
 		[Bindable(true), Description("Gets/sets wetherthe item can be closed or not."), Category("Other")]
-		public bool CanClose
-		{
-			get => (bool)GetValue(CanCloseProperty);
+		public bool CanClose {
+			get => (bool) GetValue(CanCloseProperty);
 			set => SetValue(CanCloseProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="CanClose"/> property.</summary>
-		private static void OnCanCloseChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnCanCloseChanged(e);
+		private static void OnCanCloseChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnCanCloseChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="CanClose"/> property.</summary>
-		protected virtual void OnCanCloseChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (LayoutElement != null) LayoutElement.CanClose = (bool)e.NewValue;
+		protected virtual void OnCanCloseChanged(DependencyPropertyChangedEventArgs e) {
+			if(LayoutElement != null)
+				LayoutElement.CanClose = (bool) e.NewValue;
 		}
 
 		#endregion CanClose
@@ -259,19 +249,18 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets wether the user can move the layout element dragging it to another position.</summary>
 		[Bindable(true), Description("Gets/sets wether the user can move the layout element dragging it to another position."), Category("Other")]
-		public bool CanFloat
-		{
-			get => (bool)GetValue(CanFloatProperty);
+		public bool CanFloat {
+			get => (bool) GetValue(CanFloatProperty);
 			set => SetValue(CanFloatProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="CanFloat"/> property.</summary>
-		private static void OnCanFloatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnCanFloatChanged(e);
+		private static void OnCanFloatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnCanFloatChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="CanFloat"/> property.</summary>
-		protected virtual void OnCanFloatChanged(DependencyPropertyChangedEventArgs e)
-		{
-			if (LayoutElement != null) LayoutElement.CanFloat = (bool)e.NewValue;
+		protected virtual void OnCanFloatChanged(DependencyPropertyChangedEventArgs e) {
+			if(LayoutElement != null)
+				LayoutElement.CanFloat = (bool) e.NewValue;
 		}
 
 		#endregion CanFloat
@@ -284,18 +273,16 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the command to execute when user click the document close button.</summary>
 		[Bindable(true), Description("Gets/sets the command to execute when user click the document close button."), Category("Other")]
-		public ICommand CloseCommand
-		{
-			get => (ICommand)GetValue(CloseCommandProperty);
+		public ICommand CloseCommand {
+			get => (ICommand) GetValue(CloseCommandProperty);
 			set => SetValue(CloseCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="CloseCommand"/> property.</summary>
-		private static void OnCloseCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnCloseCommandChanged(e);
+		private static void OnCloseCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnCloseCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="CloseCommand"/>  property.</summary>
-		protected virtual void OnCloseCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnCloseCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		/// <summary>Coerces the <see cref="CloseCommand"/>  value.</summary>
@@ -319,18 +306,16 @@ namespace AvalonDock.Controls
 		/// Gets/sets the command to execute when the user clicks the float button.</summary>
 		/// <remarks>By default this command move the anchorable inside new floating window.</remarks>
 		[Bindable(true), Description("Gets/sets the command to execute when the user clicks the float button."), Category("Other")]
-		public ICommand FloatCommand
-		{
-			get => (ICommand)GetValue(FloatCommandProperty);
+		public ICommand FloatCommand {
+			get => (ICommand) GetValue(FloatCommandProperty);
 			set => SetValue(FloatCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="FloatCommand"/> property.</summary>
-		private static void OnFloatCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnFloatCommandChanged(e);
+		private static void OnFloatCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnFloatCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="FloatCommand"/> property.</summary>
-		protected virtual void OnFloatCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnFloatCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		/// <summary>Coerces the <see cref="FloatCommand"/> value.</summary>
@@ -353,18 +338,16 @@ namespace AvalonDock.Controls
 		/// <summary>Gets/sets the command to execute when user click the DockAsDocument button.</summary>
 		/// <remarks>By default this command move the anchorable inside the last focused document pane.</remarks>
 		[Bindable(true), Description("Gets/sets the command to execute when user click the DockAsDocument button."), Category("Other")]
-		public ICommand DockAsDocumentCommand
-		{
-			get => (ICommand)GetValue(DockAsDocumentCommandProperty);
+		public ICommand DockAsDocumentCommand {
+			get => (ICommand) GetValue(DockAsDocumentCommandProperty);
 			set => SetValue(DockAsDocumentCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="DockAsDocumentCommand"/> property.</summary>
-		private static void OnDockAsDocumentCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnDockAsDocumentCommandChanged(e);
+		private static void OnDockAsDocumentCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnDockAsDocumentCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="DockAsDocumentCommand"/> property.</summary>
-		protected virtual void OnDockAsDocumentCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnDockAsDocumentCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		/// <summary>Coerces the <see cref="DockAsDocumentCommand"/> value.</summary>
@@ -386,27 +369,25 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the the 'Close All But This' command.</summary>
 		[Bindable(true), Description("Gets/sets the the 'Close All But This' command."), Category("Other")]
-		public ICommand CloseAllButThisCommand
-		{
-			get => (ICommand)GetValue(CloseAllButThisCommandProperty);
+		public ICommand CloseAllButThisCommand {
+			get => (ICommand) GetValue(CloseAllButThisCommandProperty);
 			set => SetValue(CloseAllButThisCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="CloseAllButThisCommand"/> property.</summary>
-		private static void OnCloseAllButThisCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnCloseAllButThisCommandChanged(e);
+		private static void OnCloseAllButThisCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnCloseAllButThisCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="CloseAllButThisCommand"/> property.</summary>
-		protected virtual void OnCloseAllButThisCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnCloseAllButThisCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		/// <summary>Coerces the <see cref="CloseAllButThisCommand"/> value.</summary>
 		private static object CoerceCloseAllButThisCommandValue(DependencyObject d, object value) => value;
 
-		private bool CanExecuteCloseAllButThisCommand(object parameter)
-		{
+		private bool CanExecuteCloseAllButThisCommand(object parameter) {
 			var root = LayoutElement?.Root;
-			if (root == null) return false;
+			if(root == null)
+				return false;
 			return LayoutElement.Root.Manager.Layout.Descendents().OfType<LayoutContent>().Any(d => d != LayoutElement && (d.Parent is LayoutDocumentPane || d.Parent is LayoutDocumentFloatingWindow));
 		}
 
@@ -422,27 +403,25 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the 'Close All' command.</summary>
 		[Bindable(true), Description("Gets/sets the 'Close All' command."), Category("Other")]
-		public ICommand CloseAllCommand
-		{
-			get => (ICommand)GetValue(CloseAllCommandProperty);
+		public ICommand CloseAllCommand {
+			get => (ICommand) GetValue(CloseAllCommandProperty);
 			set => SetValue(CloseAllCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="CloseAllCommand"/> property.</summary>
-		private static void OnCloseAllCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnCloseAllCommandChanged(e);
+		private static void OnCloseAllCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnCloseAllCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="CloseAllCommand"/> property.</summary>
-		protected virtual void OnCloseAllCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnCloseAllCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		/// <summary>Coerces the <see cref="CloseAllCommand"/> value.</summary>
 		private static object CoerceCloseAllCommandValue(DependencyObject d, object value) => value;
 
-		private bool CanExecuteCloseAllCommand(object parameter)
-		{
+		private bool CanExecuteCloseAllCommand(object parameter) {
 			var root = LayoutElement?.Root;
-			if (root == null) return false;
+			if(root == null)
+				return false;
 			return LayoutElement.Root.Manager.Layout.Descendents().OfType<LayoutContent>().Any(d => d.Parent is LayoutDocumentPane || d.Parent is LayoutDocumentFloatingWindow);
 		}
 
@@ -458,18 +437,16 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the command to execute when user wants to activate a content (either a Document or an Anchorable).</summary>
 		[Bindable(true), Description("Gets/sets the command to execute when user wants to activate a content (either a Document or an Anchorable)."), Category("Other")]
-		public ICommand ActivateCommand
-		{
-			get => (ICommand)GetValue(ActivateCommandProperty);
+		public ICommand ActivateCommand {
+			get => (ICommand) GetValue(ActivateCommandProperty);
 			set => SetValue(ActivateCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="ActivateCommand"/> property.</summary>
-		private static void OnActivateCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnActivateCommandChanged(e);
+		private static void OnActivateCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnActivateCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="ActivateCommand"/> property.</summary>
-		protected virtual void OnActivateCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnActivateCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		/// <summary>Coerces the <see cref="ActivateCommand"/> value.</summary>
@@ -489,41 +466,38 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the new vertical tab group command.</summary>
 		[Bindable(true), Description("Gets/sets the new vertical tab group command."), Category("Other")]
-		public ICommand NewVerticalTabGroupCommand
-		{
-			get => (ICommand)GetValue(NewVerticalTabGroupCommandProperty);
+		public ICommand NewVerticalTabGroupCommand {
+			get => (ICommand) GetValue(NewVerticalTabGroupCommandProperty);
 			set => SetValue(NewVerticalTabGroupCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="NewVerticalTabGroupCommand"/> property.</summary>
-		private static void OnNewVerticalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnNewVerticalTabGroupCommandChanged(e);
+		private static void OnNewVerticalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnNewVerticalTabGroupCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="NewVerticalTabGroupCommand"/> property.</summary>
-		protected virtual void OnNewVerticalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnNewVerticalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		private bool CanExecuteNewVerticalTabGroupCommand(object parameter)
-		{
-			if (LayoutElement == null) return false;
-			if (LayoutElement is LayoutDocument layoutDocument && !layoutDocument.CanMove) return false;
+		private bool CanExecuteNewVerticalTabGroupCommand(object parameter) {
+			if(LayoutElement == null)
+				return false;
+			if(LayoutElement is LayoutDocument layoutDocument && !layoutDocument.CanMove)
+				return false;
 			var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
 			return (parentDocumentGroup == null ||
-					  parentDocumentGroup.ChildrenCount == 1 ||
-					  parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
-					  parentDocumentGroup.Orientation == Orientation.Horizontal) &&
+						parentDocumentGroup.ChildrenCount == 1 ||
+						parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
+						parentDocumentGroup.Orientation == Orientation.Horizontal) &&
 					 LayoutElement.Parent is LayoutDocumentPane parentDocumentPane &&
 					 parentDocumentPane.ChildrenCount > 1;
 		}
 
-		private void ExecuteNewVerticalTabGroupCommand(object parameter)
-		{
+		private void ExecuteNewVerticalTabGroupCommand(object parameter) {
 			var layoutElement = LayoutElement;
 			var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
 			var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
 
-			if (parentDocumentGroup == null)
-			{
+			if(parentDocumentGroup == null) {
 				var grandParent = parentDocumentPane.Parent;
 				parentDocumentGroup = new LayoutDocumentPaneGroup { Orientation = Orientation.Horizontal };
 				grandParent.ReplaceChild(parentDocumentPane, parentDocumentGroup);
@@ -546,41 +520,38 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the new horizontal tab group command.</summary>
 		[Bindable(true), Description("Gets/sets the new horizontal tab group command."), Category("Other")]
-		public ICommand NewHorizontalTabGroupCommand
-		{
-			get => (ICommand)GetValue(NewHorizontalTabGroupCommandProperty);
+		public ICommand NewHorizontalTabGroupCommand {
+			get => (ICommand) GetValue(NewHorizontalTabGroupCommandProperty);
 			set => SetValue(NewHorizontalTabGroupCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="NewHorizontalTabGroupCommand"/> property.</summary>
-		private static void OnNewHorizontalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnNewHorizontalTabGroupCommandChanged(e);
+		private static void OnNewHorizontalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnNewHorizontalTabGroupCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="NewHorizontalTabGroupCommand"/> property.</summary>
-		protected virtual void OnNewHorizontalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnNewHorizontalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		private bool CanExecuteNewHorizontalTabGroupCommand(object parameter)
-		{
-			if (LayoutElement == null) return false;
-			if (LayoutElement is LayoutDocument layoutDocument && !layoutDocument.CanMove) return false;
+		private bool CanExecuteNewHorizontalTabGroupCommand(object parameter) {
+			if(LayoutElement == null)
+				return false;
+			if(LayoutElement is LayoutDocument layoutDocument && !layoutDocument.CanMove)
+				return false;
 			var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
 			return (parentDocumentGroup == null ||
-					  parentDocumentGroup.ChildrenCount == 1 ||
-					  parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
-					  parentDocumentGroup.Orientation == Orientation.Vertical) &&
+						parentDocumentGroup.ChildrenCount == 1 ||
+						parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
+						parentDocumentGroup.Orientation == Orientation.Vertical) &&
 					 LayoutElement.Parent is LayoutDocumentPane parentDocumentPane &&
 					 parentDocumentPane.ChildrenCount > 1;
 		}
 
-		private void ExecuteNewHorizontalTabGroupCommand(object parameter)
-		{
+		private void ExecuteNewHorizontalTabGroupCommand(object parameter) {
 			var layoutElement = LayoutElement;
 			var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
 			var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
 
-			if (parentDocumentGroup == null)
-			{
+			if(parentDocumentGroup == null) {
 				var grandParent = parentDocumentPane.Parent;
 				parentDocumentGroup = new LayoutDocumentPaneGroup { Orientation = Orientation.Vertical };
 				grandParent.ReplaceChild(parentDocumentPane, parentDocumentGroup);
@@ -603,23 +574,21 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the move to next tab group command.</summary>
 		[Bindable(true), Description("Gets/sets the move to next tab group command."), Category("Other")]
-		public ICommand MoveToNextTabGroupCommand
-		{
-			get => (ICommand)GetValue(MoveToNextTabGroupCommandProperty);
+		public ICommand MoveToNextTabGroupCommand {
+			get => (ICommand) GetValue(MoveToNextTabGroupCommandProperty);
 			set => SetValue(MoveToNextTabGroupCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="MoveToNextTabGroupCommand"/> property.</summary>
-		private static void OnMoveToNextTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnMoveToNextTabGroupCommandChanged(e);
+		private static void OnMoveToNextTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnMoveToNextTabGroupCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="MoveToNextTabGroupCommand"/> property.</summary>
-		protected virtual void OnMoveToNextTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnMoveToNextTabGroupCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		private bool CanExecuteMoveToNextTabGroupCommand(object parameter)
-		{
-			if (LayoutElement == null) return false;
+		private bool CanExecuteMoveToNextTabGroupCommand(object parameter) {
+			if(LayoutElement == null)
+				return false;
 			var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
 			return parentDocumentGroup != null &&
 					 LayoutElement.Parent is LayoutDocumentPane parentDocumentPane &&
@@ -628,8 +597,7 @@ namespace AvalonDock.Controls
 					 parentDocumentGroup.Children[parentDocumentGroup.IndexOfChild(parentDocumentPane) + 1] is LayoutDocumentPane;
 		}
 
-		private void ExecuteMoveToNextTabGroupCommand(object parameter)
-		{
+		private void ExecuteMoveToNextTabGroupCommand(object parameter) {
 			var layoutElement = LayoutElement;
 			var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
 			var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
@@ -650,23 +618,21 @@ namespace AvalonDock.Controls
 
 		/// <summary>Gets/sets the move to previous tab group command.</summary>
 		[Bindable(true), Description("Gets/sets the move to previous tab group command."), Category("Other")]
-		public ICommand MoveToPreviousTabGroupCommand
-		{
-			get => (ICommand)GetValue(MoveToPreviousTabGroupCommandProperty);
+		public ICommand MoveToPreviousTabGroupCommand {
+			get => (ICommand) GetValue(MoveToPreviousTabGroupCommandProperty);
 			set => SetValue(MoveToPreviousTabGroupCommandProperty, value);
 		}
 
 		/// <summary>Handles changes to the <see cref="MoveToPreviousTabGroupCommand"/> property.</summary>
-		private static void OnMoveToPreviousTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem)d).OnMoveToPreviousTabGroupCommandChanged(e);
+		private static void OnMoveToPreviousTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutItem) d).OnMoveToPreviousTabGroupCommandChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="MoveToPreviousTabGroupCommand"/> property.</summary>
-		protected virtual void OnMoveToPreviousTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
-		{
+		protected virtual void OnMoveToPreviousTabGroupCommandChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
-		private bool CanExecuteMoveToPreviousTabGroupCommand(object parameter)
-		{
-			if (LayoutElement == null) return false;
+		private bool CanExecuteMoveToPreviousTabGroupCommand(object parameter) {
+			if(LayoutElement == null)
+				return false;
 			var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
 			return parentDocumentGroup != null &&
 					 LayoutElement.Parent is LayoutDocumentPane parentDocumentPane &&
@@ -675,8 +641,7 @@ namespace AvalonDock.Controls
 					 parentDocumentGroup.Children[parentDocumentGroup.IndexOfChild(parentDocumentPane) - 1] is LayoutDocumentPane;
 		}
 
-		private void ExecuteMoveToPreviousTabGroupCommand(object parameter)
-		{
+		private void ExecuteMoveToPreviousTabGroupCommand(object parameter) {
 			var layoutElement = LayoutElement;
 			var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
 			var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
@@ -693,8 +658,7 @@ namespace AvalonDock.Controls
 
 		#region Internal Methods
 
-		protected virtual void InitDefaultCommands()
-		{
+		protected virtual void InitDefaultCommands() {
 			_defaultCloseCommand = new RelayCommand<object>(ExecuteCloseCommand, CanExecuteCloseCommand);
 			_defaultFloatCommand = new RelayCommand<object>(ExecuteFloatCommand, CanExecuteFloatCommand);
 			_defaultDockAsDocumentCommand = new RelayCommand<object>(ExecuteDockAsDocumentCommand, CanExecuteDockAsDocumentCommand);
@@ -707,51 +671,49 @@ namespace AvalonDock.Controls
 			_defaultMoveToPreviousTabGroupCommand = new RelayCommand<object>(ExecuteMoveToPreviousTabGroupCommand, CanExecuteMoveToPreviousTabGroupCommand);
 		}
 
-		protected virtual void ClearDefaultBindings()
-		{
-			if (CloseCommand == _defaultCloseCommand)
+		protected virtual void ClearDefaultBindings() {
+			if(CloseCommand == _defaultCloseCommand)
 				BindingOperations.ClearBinding(this, CloseCommandProperty);
-			if (FloatCommand == _defaultFloatCommand)
+			if(FloatCommand == _defaultFloatCommand)
 				BindingOperations.ClearBinding(this, FloatCommandProperty);
-			if (DockAsDocumentCommand == _defaultDockAsDocumentCommand)
+			if(DockAsDocumentCommand == _defaultDockAsDocumentCommand)
 				BindingOperations.ClearBinding(this, DockAsDocumentCommandProperty);
-			if (CloseAllButThisCommand == _defaultCloseAllButThisCommand)
+			if(CloseAllButThisCommand == _defaultCloseAllButThisCommand)
 				BindingOperations.ClearBinding(this, CloseAllButThisCommandProperty);
-			if (CloseAllCommand == _defaultCloseAllCommand)
+			if(CloseAllCommand == _defaultCloseAllCommand)
 				BindingOperations.ClearBinding(this, CloseAllCommandProperty);
-			if (ActivateCommand == _defaultActivateCommand)
+			if(ActivateCommand == _defaultActivateCommand)
 				BindingOperations.ClearBinding(this, ActivateCommandProperty);
-			if (NewVerticalTabGroupCommand == _defaultNewVerticalTabGroupCommand)
+			if(NewVerticalTabGroupCommand == _defaultNewVerticalTabGroupCommand)
 				BindingOperations.ClearBinding(this, NewVerticalTabGroupCommandProperty);
-			if (NewHorizontalTabGroupCommand == _defaultNewHorizontalTabGroupCommand)
+			if(NewHorizontalTabGroupCommand == _defaultNewHorizontalTabGroupCommand)
 				BindingOperations.ClearBinding(this, NewHorizontalTabGroupCommandProperty);
-			if (MoveToNextTabGroupCommand == _defaultMoveToNextTabGroupCommand)
+			if(MoveToNextTabGroupCommand == _defaultMoveToNextTabGroupCommand)
 				BindingOperations.ClearBinding(this, MoveToNextTabGroupCommandProperty);
-			if (MoveToPreviousTabGroupCommand == _defaultMoveToPreviousTabGroupCommand)
+			if(MoveToPreviousTabGroupCommand == _defaultMoveToPreviousTabGroupCommand)
 				BindingOperations.ClearBinding(this, MoveToPreviousTabGroupCommandProperty);
 		}
 
-		protected virtual void SetDefaultBindings()
-		{
-			if (CloseCommand == null)
+		protected virtual void SetDefaultBindings() {
+			if(CloseCommand == null)
 				CloseCommand = _defaultCloseCommand;
-			if (FloatCommand == null)
+			if(FloatCommand == null)
 				FloatCommand = _defaultFloatCommand;
-			if (DockAsDocumentCommand == null)
+			if(DockAsDocumentCommand == null)
 				DockAsDocumentCommand = _defaultDockAsDocumentCommand;
-			if (CloseAllButThisCommand == null)
+			if(CloseAllButThisCommand == null)
 				CloseAllButThisCommand = _defaultCloseAllButThisCommand;
-			if (CloseAllCommand == null)
+			if(CloseAllCommand == null)
 				CloseAllCommand = _defaultCloseAllCommand;
-			if (ActivateCommand == null)
+			if(ActivateCommand == null)
 				ActivateCommand = _defaultActivateCommand;
-			if (NewVerticalTabGroupCommand == null)
+			if(NewVerticalTabGroupCommand == null)
 				NewVerticalTabGroupCommand = _defaultNewVerticalTabGroupCommand;
-			if (NewHorizontalTabGroupCommand == null)
+			if(NewHorizontalTabGroupCommand == null)
 				NewHorizontalTabGroupCommand = _defaultNewHorizontalTabGroupCommand;
-			if (MoveToNextTabGroupCommand == null)
+			if(MoveToNextTabGroupCommand == null)
 				MoveToNextTabGroupCommand = _defaultMoveToNextTabGroupCommand;
-			if (MoveToPreviousTabGroupCommand == null)
+			if(MoveToPreviousTabGroupCommand == null)
 				MoveToPreviousTabGroupCommand = _defaultMoveToPreviousTabGroupCommand;
 
 			IsSelected = LayoutElement.IsSelected;
@@ -759,14 +721,12 @@ namespace AvalonDock.Controls
 			CanClose = LayoutElement.CanClose;
 		}
 
-		protected virtual void OnVisibilityChanged()
-		{
-			if (LayoutElement != null && Visibility == Visibility.Collapsed)
+		protected virtual void OnVisibilityChanged() {
+			if(LayoutElement != null && Visibility == Visibility.Collapsed)
 				LayoutElement.Close();
 		}
 
-		internal virtual void Attach(LayoutContent model)
-		{
+		internal virtual void Attach(LayoutContent model) {
 			LayoutElement = model;
 			Model = model.Content;
 			InitDefaultCommands();
@@ -775,8 +735,7 @@ namespace AvalonDock.Controls
 			DataContext = this;
 		}
 
-		internal virtual void Detach()
-		{
+		internal virtual void Detach() {
 			LayoutElement.IsSelectedChanged -= LayoutElement_IsSelectedChanged;
 			LayoutElement.IsActiveChanged -= LayoutElement_IsActiveChanged;
 			LayoutElement = null;
@@ -793,34 +752,32 @@ namespace AvalonDock.Controls
 
 		#region Private Methods
 
-		private void LayoutElement_IsActiveChanged(object sender, EventArgs e)
-		{
-			if (!_isActiveReentrantFlag.CanEnter) return;
-			using (_isActiveReentrantFlag.Enter())
-			{
+		private void LayoutElement_IsActiveChanged(object sender, EventArgs e) {
+			if(!_isActiveReentrantFlag.CanEnter)
+				return;
+			using(_isActiveReentrantFlag.Enter()) {
 				var bnd = BindingOperations.GetBinding(this, IsActiveProperty);
 				IsActive = LayoutElement.IsActive;
 				var bnd2 = BindingOperations.GetBinding(this, IsActiveProperty);
 			}
 		}
 
-		private void LayoutElement_IsSelectedChanged(object sender, EventArgs e)
-		{
-			if (!_isSelectedReentrantFlag.CanEnter) return;
-			using (_isSelectedReentrantFlag.Enter())
-			{
+		private void LayoutElement_IsSelectedChanged(object sender, EventArgs e) {
+			if(!_isSelectedReentrantFlag.CanEnter)
+				return;
+			using(_isSelectedReentrantFlag.Enter()) {
 				IsSelected = LayoutElement.IsSelected;
 			}
 		}
 
-		private static void OnToolTipChanged(DependencyObject s, DependencyPropertyChangedEventArgs e) => ((LayoutItem)s).OnToolTipChanged();
+		private static void OnToolTipChanged(DependencyObject s, DependencyPropertyChangedEventArgs e) => ((LayoutItem) s).OnToolTipChanged();
 
-		private void OnToolTipChanged()
-		{
-			if (LayoutElement != null) LayoutElement.ToolTip = ToolTip;
+		private void OnToolTipChanged() {
+			if(LayoutElement != null)
+				LayoutElement.ToolTip = ToolTip;
 		}
 
-		private static void OnVisibilityChanged(DependencyObject s, DependencyPropertyChangedEventArgs e) => ((LayoutItem)s).OnVisibilityChanged();
+		private static void OnVisibilityChanged(DependencyObject s, DependencyPropertyChangedEventArgs e) => ((LayoutItem) s).OnVisibilityChanged();
 
 		#endregion Private Methods
 	}

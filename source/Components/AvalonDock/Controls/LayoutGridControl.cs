@@ -54,7 +54,7 @@ namespace AvalonDock.Controls {
 		/// <param name="orientation"></param>
 		internal LayoutGridControl(LayoutPositionableGroup<T> model, Orientation orientation) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
-			//_orientation = orientation;
+			_orientation = orientation;
 			FlowDirection = System.Windows.FlowDirection.LeftToRight;
 			Unloaded += OnUnloaded;
 		}
@@ -104,7 +104,7 @@ namespace AvalonDock.Controls {
 		#endregion Internal Methods
 
 		#region Private Methods
-
+		
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
 			var modelWithAtcualSize = _model as ILayoutPositionableElementWithActualSize;
 			modelWithAtcualSize.ActualWidth = ActualWidth;
@@ -128,8 +128,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void UpdateChildren() {
-			Debug.WriteLine($"{_model?.Children?.Count}", "LayoutGridControl UpdateChildren 1");
-
+			//Debug.WriteLine($"{_model?.Children?.Count}", "LayoutGridControl UpdateChildren 1");
 			var alreadyContainedChildren = Children.OfType<ILayoutControl>().ToArray();
 			DetachOldSplitters();
 			DetachPropertyChangeHandler();
@@ -141,8 +140,6 @@ namespace AvalonDock.Controls {
 				return;
 			foreach(var child in _model.Children) {
 				var foundContainedChild = alreadyContainedChildren.FirstOrDefault(chVM => chVM.Model == child);
-				Debug.WriteLine($"{child}, {Children == null}, {manager == null}", "LayoutGridControl UpdateChildren 2");
-
 				if(foundContainedChild != null)
 					Children.Add(foundContainedChild as UIElement);
 				else
@@ -156,7 +153,7 @@ namespace AvalonDock.Controls {
 
 		private void AttachPropertyChangeHandler() {
 			foreach(var child in InternalChildren.OfType<ILayoutControl>()) {
-				Debug.WriteLine($"{child != null}, {child?.Model != null}", "AttachPropertyChangeHandler");
+				//Debug.WriteLine($"{child != null}, {child?.Model != null}", "AttachPropertyChangeHandler");
 				if(child.Model!= null) 
 				child.Model.PropertyChanged += this.OnChildModelPropertyChanged;
 			}
@@ -168,7 +165,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void OnChildModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			Debug.WriteLine($"{e.PropertyName}", "OnChildModelPropertyChanged");
+			//Debug.WriteLine($"{e.PropertyName}", "OnChildModelPropertyChanged");
 
 			if(AsyncRefreshCalled)
 				return;
@@ -191,7 +188,7 @@ namespace AvalonDock.Controls {
 		}
 
 		private void UpdateRowColDefinitions() {
-			Debug.WriteLine($"", "LayoutGridControl UpdateRowColDefinitions");
+			//Debug.WriteLine($"", "LayoutGridControl UpdateRowColDefinitions");
 
 			var root = _model.Root;
 			var manager = root?.Manager;
@@ -390,7 +387,7 @@ namespace AvalonDock.Controls {
 		}
 
 		public virtual void AdjustFixedChildrenPanelSizes(Size? parentSize = null) {
-			Debug.WriteLine($"", "AdjustFixedChildrenPanelSizes");
+			//Debug.WriteLine($"", "AdjustFixedChildrenPanelSizes");
 
 			var visibleChildren = GetVisibleChildren();
 			if(visibleChildren.Count == 0)

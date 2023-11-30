@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -183,7 +183,7 @@ namespace Microsoft.Windows.Shell
 
 			var rcWindow = NativeMethods.GetWindowRect(_messageHwnd.Handle);
 
-			// Reorient the Top/Right to be relative to the top right edge of the Window.
+			// Reorient the DockTop/DockRight to be relative to the top right edge of the Window.
 			var deviceCaptionLocation = new Rect(
 				rcAllCaptionButtons.Left - rcWindow.Width - rcWindow.Left,
 				rcAllCaptionButtons.Top - rcWindow.Top,
@@ -286,7 +286,7 @@ namespace Microsoft.Windows.Shell
 		#endregion Initialization and Update Methods
 
 		/// <summary>
-		/// Private constructor.  The public way to access this class is through the static Current property.
+		/// Private constructor.  The public way to access this class is through the static Content property.
 		/// </summary>
 		private SystemParameters2()
 		{
