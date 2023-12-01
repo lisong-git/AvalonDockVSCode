@@ -288,7 +288,7 @@
           </BeginStoryboard>
         </Trigger.ExitActions>
       </Trigger>
-      <!--<DataTrigger Binding="{Binding Path=ExpandDirection, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="Left">
+      <!--<DataTrigger Binding="{Binding Path=ExpandDirection, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableControl}}}" Value="Left">
         <Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />
       </DataTrigger>-->
     </ControlTemplate.Triggers>
@@ -1046,7 +1046,7 @@
     <Setter Property="ContentTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupControl Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1054,13 +1054,13 @@
   <!--#endregion-->
 
   <!--  region  DefaultLayoutAnchorableExpanderGroupPaneControlStyle  -->
-  <Style TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+  <Style TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
     <Setter Property="TabStripPlacement" Value="Bottom" />
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
           <Grid
             ClipToBounds="true"
             KeyboardNavigation.TabNavigation="Local"
@@ -1179,7 +1179,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupTabItem Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupTabItem Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1187,7 +1187,7 @@
     <Setter Property="ContentTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupControl Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1196,13 +1196,13 @@
   <!--#endregion-->
 
   <!--  region  PrimarySideBarStyle  -->
-  <Style x:Key="PrimarySideBarStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+  <Style x:Key="PrimarySideBarStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
           <Grid
             ClipToBounds="true"
             KeyboardNavigation.TabNavigation="Local"
@@ -1238,7 +1238,7 @@
                 VerticalAlignment="Center"
                 FontSize="14"
                 FontWeight="Thin"
-                Foreground="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=LayoutAnchorableExpanderGroupPaneControl}}"
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=LayoutAnchorableGroupPaneControl}}"
                 Text="{Binding Path=Model.Title, RelativeSource={RelativeSource TemplatedParent}}" />
 
               <ToolBarTray
@@ -1367,7 +1367,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupTabItem Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupTabItem Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1375,7 +1375,7 @@
     <Setter Property="ContentTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupControl Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1384,7 +1384,7 @@
   <!--#endregion-->
 
   <!--#region SecondarySideBarStyle-->
-  <Style x:Key="SecondarySideBarStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+  <Style x:Key="SecondarySideBarStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
     <Setter Property="TabStripPlacement" Value="Bottom" />
     <Setter Property="BorderBrush" Value="{x:Null}" />
     <Setter Property="BorderThickness" Value="0" />
@@ -1392,7 +1392,7 @@
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
           <Grid
             ClipToBounds="true"
             KeyboardNavigation.TabNavigation="Local"
@@ -1597,7 +1597,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupTabItem Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupTabItem Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1605,7 +1605,7 @@
     <Setter Property="ContentTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupControl Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1614,7 +1614,7 @@
 
   <!--#region PanelStyle-->
 
-  <Style x:Key="PanelStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+  <Style x:Key="PanelStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
     <Setter Property="TabStripPlacement" Value="Bottom" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="BorderThickness" Value="0" />
@@ -1622,7 +1622,7 @@
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupPaneControl}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupPaneControl}">
           <Grid
             ClipToBounds="True"
             KeyboardNavigation.TabNavigation="Local"
@@ -1817,7 +1817,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupTabItem Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupTabItem Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1825,7 +1825,7 @@
     <Setter Property="ContentTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderGroupControl Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableGroupControl Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1835,7 +1835,7 @@
 
 
   <!--#region AnchorableExpanderControlStyle-->
-  <Style x:Key="AnchorableExpanderControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderControl}">
+  <Style x:Key="AnchorableExpanderControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableControl}">
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />
     <!--<Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />-->
@@ -1850,7 +1850,7 @@
     <Setter Property="ExpandDirection" Value="{Binding ExpandDirection, RelativeSource={RelativeSource Self}}" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderControl}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableControl}">
           <Border
             x:Name="Border"
             Margin="0"
@@ -1863,7 +1863,7 @@
               VerticalAlignment="{TemplateBinding VerticalAlignment}"
             -->
             <DockPanel Background="Transparent" LastChildFill="True">
-              <AnchorableExpanderTitle
+              <AnchorableTitle
                 x:Name="HeaderSite"
                 Cursor="Hand"
                 DockPanel.Dock="Top"
@@ -1946,7 +1946,7 @@
     <Setter Property="HeaderTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:AnchorableExpanderTitle Model="{Binding}" />
+          <avalonDockControls:AnchorableTitle Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1954,7 +1954,7 @@
     <Setter Property="ContentTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutAnchorableExpanderControl Model="{Binding}" />
+          <avalonDockControls:LayoutAnchorableControl Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1962,14 +1962,14 @@
   <!--#endregion AnchorableExpanderControlStyle-->
 
   <!--<Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}" />-->
-  <Style x:Key="ExpanderTitleHorizontalStyle" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
+  <Style x:Key="ExpanderTitleHorizontalStyle" TargetType="{x:Type avalonDockControls:AnchorableTitle}">
     <Setter Property="Height" Value="21" />
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <!--<Setter Property="Model" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />-->
     <Setter Property="IsChecked" Value="{Binding Path=Model.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:AnchorableTitle}">
           <Border
             x:Name="Bd"
             Margin="{TemplateBinding Padding}"
@@ -2041,7 +2041,7 @@
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
+                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableControl}}}" Value="True" />
                 <Condition Binding="{Binding Model.IsActive, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
               </MultiDataTrigger.Conditions>
               <Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />
@@ -2049,7 +2049,7 @@
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
+                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableControl}}}" Value="True" />
               </MultiDataTrigger.Conditions>
               <Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />
             </MultiDataTrigger>
@@ -2073,14 +2073,14 @@
     </Setter>
   </Style>
 
-  <Style x:Key="ExpanderTitleVerticalStyle" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
+  <Style x:Key="ExpanderTitleVerticalStyle" TargetType="{x:Type avalonDockControls:AnchorableTitle}">
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
     <!--<Setter Property="Model" Value="{Binding Path=Model, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />-->
     <Setter Property="VerticalAlignment" Value="Stretch" />
     <Setter Property="IsChecked" Value="{Binding Path=Model.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:AnchorableTitle}">
           <Border
             x:Name="Bd"
             Margin="{TemplateBinding Padding}"
@@ -2156,11 +2156,11 @@
             </DockPanel>
           </Border>
           <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding ExpandDirection, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="Right" />
+            <DataTrigger Binding="{Binding ExpandDirection, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableControl}}}" Value="Right" />
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
+                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableControl}}}" Value="True" />
                 <Condition Binding="{Binding Model.IsActive, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
 
               </MultiDataTrigger.Conditions>
@@ -2169,7 +2169,7 @@
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
                 <Condition Binding="{Binding Model.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableExpanderControl}}}" Value="True" />
+                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type avalonDockControls:LayoutAnchorableControl}}}" Value="True" />
 
               </MultiDataTrigger.Conditions>
               <!--<Setter TargetName="PART_ToolBar" Property="Visibility" Value="Visible" />-->
@@ -3051,10 +3051,10 @@
     </Setter>
   </Style>
 
-  <Style TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupTabItem}">
+  <Style TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupTabItem}">
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableExpanderGroupTabItem}">
+        <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableGroupTabItem}">
           <avalonDockControls:DropDownControlArea DropDownContextMenu="{Binding Root.Manager.AnchorableContextMenu}" DropDownContextMenuDataContext="{Binding LayoutItem, RelativeSource={RelativeSource TemplatedParent}}">
             <Border
               Margin="6,1,6,3"

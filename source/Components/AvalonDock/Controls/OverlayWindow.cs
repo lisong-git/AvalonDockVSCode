@@ -281,7 +281,7 @@ namespace AvalonDock.Controls
 		/// </summary>
 		/// <param name="positionableElement">The given LayoutDocumentPane or LayoutAnchorablePane</param>
 		private void SetDropTargetIntoVisibility(ILayoutPositionableElement positionableElement) {
-			if(positionableElement is LayoutAnchorableExpanderGroup) {
+			if(positionableElement is LayoutAnchorableGroup) {
 				_anchorablePaneDropTargetInto.Visibility = Visibility.Visible;
 			} else if(positionableElement is LayoutDocumentPane) {
 				_documentPaneDropTargetInto.Visibility = Visibility.Visible;
@@ -305,7 +305,7 @@ namespace AvalonDock.Controls
 					continue;
 				}
 
-				if(positionableElement is LayoutAnchorableExpanderGroup) {
+				if(positionableElement is LayoutAnchorableGroup) {
 					_anchorablePaneDropTargetInto.Visibility = Visibility.Hidden;
 				} else if(positionableElement is LayoutDocumentPane) {
 					_documentPaneDropTargetInto.Visibility = Visibility.Hidden;
@@ -341,14 +341,14 @@ namespace AvalonDock.Controls
 					continue;
 				}
 
-				if(positionableElement is LayoutAnchorableExpanderControl) {
+				if(positionableElement is LayoutAnchorableControl) {
 					_anchorablePaneDropTargetInto.Visibility = Visibility.Hidden;
 				}
 				break;
 			}
 		}
 
-		private void SetDropTargetIntoVisibility3(LayoutAnchorableExpanderGroup positionableElement) {
+		private void SetDropTargetIntoVisibility3(LayoutAnchorableGroup positionableElement) {
 			_anchorablePaneDropTargetInto.Visibility = Visibility.Visible;
 
 
@@ -417,7 +417,7 @@ namespace AvalonDock.Controls
 				}
 			}
 
-			if(source is LayoutAnchorableExpanderGroup anchorablePane) {
+			if(source is LayoutAnchorableGroup anchorablePane) {
 				foreach(var layoutContent in anchorablePane.Children) {
 					result.Add(layoutContent);
 				}
@@ -454,7 +454,7 @@ namespace AvalonDock.Controls
 
 					//case DropAreaType.AnchorableExpander: {
 					//		// Dragging over AnchorablePane -> Add DropTarget Area
-					//		var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableExpanderControl>;
+					//		var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableControl>;
 					//		var model = dropAreaAnchorablePane.AreaElement.Model;
 					//		var orientable =  (model.Parent as ILayoutOrientableGroup)?.Orientation ?? Orientation.Vertical;
 					//		//Debug.WriteLine($"{orientable}, {model.Parent.GetType()}", "GetTargets 2");
@@ -470,8 +470,8 @@ namespace AvalonDock.Controls
 
 					//case DropAreaType.AnchorableExpanderGroup: {
 					//		// Dragging over AnchorablePane -> Add DropTarget Area
-					//		var dropAreaAnchorableExpanderGroup = visibleArea as DropArea<LayoutAnchorableExpanderGroupControl>;
-					//		var parentPaneModel = dropAreaAnchorableExpanderGroup.AreaElement.Model as LayoutAnchorableExpanderGroup;
+					//		var dropAreaAnchorableExpanderGroup = visibleArea as DropArea<LayoutAnchorableGroupControl>;
+					//		var parentPaneModel = dropAreaAnchorableExpanderGroup.AreaElement.Model as LayoutAnchorableGroup;
 
 					//		if(parentPaneModel.Orientation == Orientation.Vertical) {
 					//			var lastRowDefinition = dropAreaAnchorableExpanderGroup.AreaElement.RowDefinitions.LastOrDefault();
@@ -500,10 +500,10 @@ namespace AvalonDock.Controls
 
 					case DropAreaType.AnchorableExpanderGroupPane: {
 							// Dragging over AnchorablePane -> Add DropTarget Area
-							var dropAreaAnchorableExpanderGroupPane = visibleArea as DropArea<LayoutAnchorableExpanderGroupPaneControl>;
+							var dropAreaAnchorableExpanderGroupPane = visibleArea as DropArea<LayoutAnchorableGroupPaneControl>;
 
-							var anchorableExpanderGroupControl = dropAreaAnchorableExpanderGroupPane.AreaElement.FindVisualChildren<LayoutAnchorableExpanderGroupControl>().FirstOrDefault();
-							var paneModel = anchorableExpanderGroupControl.Model as LayoutAnchorableExpanderGroup;
+							var anchorableExpanderGroupControl = dropAreaAnchorableExpanderGroupPane.AreaElement.FindVisualChildren<LayoutAnchorableGroupControl>().FirstOrDefault();
+							var paneModel = anchorableExpanderGroupControl.Model as LayoutAnchorableGroup;
 
 							
 
@@ -515,13 +515,13 @@ namespace AvalonDock.Controls
 									var area  = anchorableExpanderGroupControl.GetScreenArea();
 									var freeSpace = new Rect(area.Left , area.Top + offset, area.Width , area.Height - offset);
 									//var freeSpace = new Rect(area.Left , area.Top, area.Width , area.Height - offset);
-									yield return new AnchorableExpanderGroupDropTarget(anchorableExpanderGroupControl, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
+									yield return new AnchorableGroupDropTarget(anchorableExpanderGroupControl, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
 								}
 
-								foreach(var anchorableExpanderControl in anchorableExpanderGroupControl.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
+								foreach(var anchorableExpanderControl in anchorableExpanderGroupControl.FindVisualChildren<LayoutAnchorableControl>()) {
 									var area = anchorableExpanderControl.GetScreenArea();
-									yield return new AnchorableExpanderDropTarget(anchorableExpanderControl, area.TopHalf(), DropTargetType.DockTop);
-									yield return new AnchorableExpanderDropTarget(anchorableExpanderControl, area.BottomHalf(), DropTargetType.DockBottom);
+									yield return new AnchorableDropTarget(anchorableExpanderControl, area.TopHalf(), DropTargetType.DockTop);
+									yield return new AnchorableDropTarget(anchorableExpanderControl, area.BottomHalf(), DropTargetType.DockBottom);
 								}
 							} else {
 								var lastColumnDefinition = anchorableExpanderGroupControl.ColumnDefinitions.LastOrDefault();
@@ -530,13 +530,13 @@ namespace AvalonDock.Controls
 									//var layoutPositionableElementWithActualSize = dropAreaAnchorableExpanderGroupPane.AreaElement.Model as ILayoutPositionableElementWithActualSize;
 									var area  = anchorableExpanderGroupControl.GetScreenArea();
 									var freeSpace = new Rect(area.Left + offset, area.Top, area.Width - offset, area.Height);
-									yield return new AnchorableExpanderGroupDropTarget(anchorableExpanderGroupControl, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
+									yield return new AnchorableGroupDropTarget(anchorableExpanderGroupControl, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
 								}
 
-								foreach(var anchorableExpanderControl in anchorableExpanderGroupControl.FindVisualChildren<LayoutAnchorableExpanderControl>()) {
+								foreach(var anchorableExpanderControl in anchorableExpanderGroupControl.FindVisualChildren<LayoutAnchorableControl>()) {
 									var area = anchorableExpanderControl.GetScreenArea();
-									yield return new AnchorableExpanderDropTarget(anchorableExpanderControl, area.LeftHalf(), DropTargetType.DockLeft);
-									yield return new AnchorableExpanderDropTarget(anchorableExpanderControl, area.RightHalf(), DropTargetType.DockRight);
+									yield return new AnchorableDropTarget(anchorableExpanderControl, area.LeftHalf(), DropTargetType.DockLeft);
+									yield return new AnchorableDropTarget(anchorableExpanderControl, area.RightHalf(), DropTargetType.DockRight);
 								}
 							}
 
@@ -548,14 +548,14 @@ namespace AvalonDock.Controls
 									var area  = tabPaneWrapPanel.GetScreenArea();
 									var freeSpace = new Rect(area.Left + offset, area.Top, area.Width - offset, area.Height);
 									//Debug.WriteLine($"{area}, {freeSpace}", "GetTargets 4");
-									yield return new AnchorableExpanderGroupPaneDropTarget(dropAreaAnchorableExpanderGroupPane.AreaElement, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
+									yield return new AnchorableGroupPaneDropTarget(dropAreaAnchorableExpanderGroupPane.AreaElement, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
 								}
-								//Debug.WriteLine($"{dropAreaTabPaneWrapPanel.FindVisualChildren<LayoutAnchorableExpanderGroupTabItem>().Count()}", "GetTargets 5");
+								//Debug.WriteLine($"{dropAreaTabPaneWrapPanel.FindVisualChildren<LayoutAnchorableGroupTabItem>().Count()}", "GetTargets 5");
 
-								foreach(var dropAreaTabItem in tabPaneWrapPanel.FindVisualChildren<LayoutAnchorableExpanderGroupTabItem>()) {
+								foreach(var dropAreaTabItem in tabPaneWrapPanel.FindVisualChildren<LayoutAnchorableGroupTabItem>()) {
 									var tabItemArea = dropAreaTabItem.GetScreenArea();
-									yield return new AnchorableExpanderGroupTabItemDropTarget(dropAreaTabItem, tabItemArea.LeftHalf(), DropTargetType.DockLeft);
-									yield return new AnchorableExpanderGroupTabItemDropTarget(dropAreaTabItem, tabItemArea.RightHalf(), DropTargetType.DockRight);
+									yield return new AnchorableGroupTabItemDropTarget(dropAreaTabItem, tabItemArea.LeftHalf(), DropTargetType.DockLeft);
+									yield return new AnchorableGroupTabItemDropTarget(dropAreaTabItem, tabItemArea.RightHalf(), DropTargetType.DockRight);
 								}
 							}
 
@@ -564,7 +564,7 @@ namespace AvalonDock.Controls
 						break;
 
 					//case DropAreaType.AnchorableExpanderGroupTabItem: {
-					//		var dropAreaAnchorableExpanderGroupPane = visibleArea as DropArea<LayoutAnchorableExpanderGroupTabItem>;
+					//		var dropAreaAnchorableExpanderGroupPane = visibleArea as DropArea<LayoutAnchorableGroupTabItem>;
 					//		var rect = dropAreaAnchorableExpanderGroupPane.DetectionRect;
 
 					//		var wrapContainer = dropAreaAnchorableExpanderGroupPane.AreaElement.FindVisualAncestor<WrapPanel>();
@@ -597,9 +597,9 @@ namespace AvalonDock.Controls
 									//Debug.WriteLine($"{area}, {freeSpace}", "GetTargets 4");
 									yield return new AnchorableActivityWrapPanelDropTarget(areaElement, freeSpace, DropTargetType.AnchorableExpanderDockInside);
 								}
-								//Debug.WriteLine($"{dropAreaTabPaneWrapPanel.FindVisualChildren<LayoutAnchorableExpanderGroupTabItem>().Count()}", "GetTargets 5");
+								//Debug.WriteLine($"{dropAreaTabPaneWrapPanel.FindVisualChildren<LayoutAnchorableGroupTabItem>().Count()}", "GetTargets 5");
 
-								//foreach(var dropAreaTabItem in areaElement.FindVisualChildren<LayoutAnchorableExpanderGroupTabItem>()) {
+								//foreach(var dropAreaTabItem in areaElement.FindVisualChildren<LayoutAnchorableGroupTabItem>()) {
 								//	var tabItemArea = dropAreaTabItem.GetScreenArea();
 								//	yield return new AnchorableExpanderGroupTabItemDropTarget(dropAreaTabItem, tabItemArea.LeftHalf(), DropTargetType.DockLeft);
 								//	yield return new AnchorableExpanderGroupTabItemDropTarget(dropAreaTabItem, tabItemArea.RightHalf(), DropTargetType.DockRight);
@@ -815,9 +815,9 @@ namespace AvalonDock.Controls
 
 				case DropAreaType.AnchorableExpander: {
 						areaElement = _gridAnchorableExpanderDropTargets;
-						var dropAreaAnchorableExpander = area as DropArea<LayoutAnchorableExpanderGroupControl>;
+						var dropAreaAnchorableExpander = area as DropArea<LayoutAnchorableGroupControl>;
 
-						var layoutAnchorableExpander = dropAreaAnchorableExpander.AreaElement.Model as LayoutAnchorableExpanderGroup;
+						var layoutAnchorableExpander = dropAreaAnchorableExpander.AreaElement.Model as LayoutAnchorableGroup;
 						if(layoutAnchorableExpander.Root.Manager != floatingWindowManager) {
 							_visibleAreas.Remove(area);
 							return;
@@ -829,9 +829,9 @@ namespace AvalonDock.Controls
 
 				//case DropAreaType.AnchorableExpanderGroup: {					
 				//		areaElement = _gridAnchorableExpanderGroupDropTargets;
-				//		//var anchorableExpanderGroupControl = area as DropArea<LayoutAnchorableExpanderGroupControl>;
+				//		//var anchorableExpanderGroupControl = area as DropArea<LayoutAnchorableGroupControl>;
 
-				//		//var layoutAnchorableExpander = anchorableExpanderGroupControl.AreaElement.Model as LayoutAnchorableExpanderGroup;
+				//		//var layoutAnchorableExpander = anchorableExpanderGroupControl.AreaElement.Model as LayoutAnchorableGroup;
 				//		//if(layoutAnchorableExpander.Root.Manager != floatingWindowManager) {
 				//		//	_visibleAreas.Remove(area);
 				//		//	return;
@@ -851,10 +851,10 @@ namespace AvalonDock.Controls
 
 				case DropAreaType.AnchorableExpanderGroupPane: {
 						areaElement = _gridAnchorableExpanderGroupPaneDropTargets;
-						//var dropAreaAnchorableExpander = area as DropArea<LayoutAnchorableExpanderGroupPaneControl>;
+						//var dropAreaAnchorableExpander = area as DropArea<LayoutAnchorableGroupPaneControl>;
 						//// Debug.WriteLine($"{areaElement.Name}", "OverlayWindow DragEnter 2");
 
-						//var layoutAnchorableExpander = dropAreaAnchorableExpander.AreaElement.Model as LayoutAnchorableExpanderGroupPane;
+						//var layoutAnchorableExpander = dropAreaAnchorableExpander.AreaElement.Model as LayoutAnchorableGroupPane;
 						//if(layoutAnchorableExpander.Root.Manager != floatingWindowManager) {
 						//	_visibleAreas.Remove(area);
 						//	return;

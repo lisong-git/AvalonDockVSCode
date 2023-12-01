@@ -7,6 +7,7 @@
    License (Ms-PL) as published at https://opensource.org/licenses/MS-PL
  ************************************************************************/
 
+using AvalonDock.Layout;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace AvalonDock.Layout {
@@ -23,7 +25,7 @@ namespace AvalonDock.Layout {
 	/// custom application content (WPF controls) and other children elements.
 	/// </summary>
 	[Serializable]
-	public abstract class LayoutAnchorable :LayoutContent {
+	public class LayoutAnchorable : LayoutContent  ,IXmlSerializable, ILayoutPositionableElementWithActualSize, IExpander, ILayoutPaneSerializable {
 		#region fields
 
 		private double _autohideWidth = 0.0;
@@ -37,6 +39,32 @@ namespace AvalonDock.Layout {
 		//private bool _canCloseValueBeforeInternalSet;
 		private bool _canMove = true;
 		private Visibility _contentVisibility = Visibility.Visible;
+		
+		// DockWidth fields
+		private GridLength _dockWidth = new GridLength(1.0, GridUnitType.Star);
+
+		
+		private double? _resizableAbsoluteDockWidth;
+
+		// DockHeight fields
+		private GridLength _dockHeight = new GridLength(1.0, GridUnitType.Star);
+
+		private double? _resizableAbsoluteDockHeight;
+
+		private bool _allowDuplicateContent = true;
+		//private bool _canRepositionItems = true;
+
+		private double _dockMinWidth = 21.0;
+		private double _dockMinHeight = 21.0;
+
+		[NonSerialized]
+		private double _actualWidth;
+
+		[NonSerialized]
+		private double _actualHeight;
+				private string _name = null;
+		private string _id;
+		private bool _isExpanded;
 		#endregion fields
 
 		#region Constructors
@@ -47,6 +75,8 @@ namespace AvalonDock.Layout {
 			// BD: 14.08.2020 Inverting both _canClose and _canCloseDefault to false as anchorables are only hidden but not closed
 			//     That would allow CanClose to be properly serialized if set to true for an instance of LayoutAnchorable
 			_canClose = _canCloseDefault = false;
+			UpdateSize();
+
 		}
 
 		#endregion Constructors
@@ -186,8 +216,8 @@ namespace AvalonDock.Layout {
 				_contentVisibility = value;
 				//if(Parent is La)
 				//Debug.WriteLine($"{_contentVisibility}", "ContentVisibility");
-				if(Parent is LayoutAnchorableExpanderGroup lap) {
-					if(lap.Parent is LayoutAnchorableExpanderGroupPane pg) {
+				if(Parent is LayoutAnchorableGroup lap) {
+					if(lap.Parent is LayoutAnchorableGroupPane pg) {
 						//Debug.WriteLine($"LayoutAnchorablePane,{lap.Parent.GetType()},  {lap.FixedDockHeight}, {lap.DockHeight}", "ContentVisibility");
 						
 						//if(ContentVisibility == Visibility.Collapsed) {
@@ -202,16 +232,235 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+		
+		
+		public GridLength DockHeight {
+			//get => _dockHeight.IsAbsolute && _resizableAbsoluteDockHeight < _dockHeight.Value && _resizableAbsoluteDockHeight.HasValue ?
+			//			new GridLength(_resizableAbsoluteDockHeight.Value) : _dockHeight;
+			get {
+				var h = _dockHeight.IsAbsolute && _resizableAbsoluteDockHeight < _dockHeight.Value && _resizableAbsoluteDockHeight.HasValue ?
+			new GridLength(_resizableAbsoluteDockHeight.Value) : _dockHeight;
+				return h;
+			}
+			set {
+				//Debug.WriteLine($"{_dockHeight}", "LayoutPositionable DockHeight 2");
+
+				if(_dockHeight == value || !(value.Value > 0))
+					return;
+				if(value.IsAbsolute)
+					_resizableAbsoluteDockHeight = value.Value;
+				RaisePropertyChanging(nameof(DockHeight));
+				_dockHeight = value;
+				//Debug.WriteLine($"{_dockHeight}", "LayoutPositionable DockHeight 2");
+				RaisePropertyChanged(nameof(DockHeight));
+				OnDockHeightChanged();
+			}
+		}
+
+		public double FixedDockHeight => _dockHeight.IsAbsolute && _dockHeight.Value >= _dockMinHeight ? _dockHeight.Value : _dockMinHeight;
+
+		public double ResizableAbsoluteDockHeight {
+			get => _resizableAbsoluteDockHeight ?? 0;
+			set {
+				if(!_dockHeight.IsAbsolute)
+					return;
+				if(value < _dockHeight.Value && value > 0) {
+					RaisePropertyChanging(nameof(DockHeight));
+					_resizableAbsoluteDockHeight = value;
+					RaisePropertyChanged(nameof(DockHeight));
+					OnDockHeightChanged();
+				} else if(value > _dockHeight.Value && _resizableAbsoluteDockHeight < _dockHeight.Value)
+					_resizableAbsoluteDockHeight = _dockHeight.Value;
+				else if(value == 0)
+					_resizableAbsoluteDockHeight = DockMinHeight;
+			}
+		}
+
+		
+		/// <summary>
+		/// Gets or sets the AllowDuplicateContent property.
+		/// When this property is true, then the LayoutDocumentPane or LayoutAnchorablePane allows dropping
+		/// duplicate content (according to its Title and ContentId). When this dependency property is false,
+		/// then the LayoutDocumentPane or LayoutAnchorablePane hides the OverlayWindow.DropInto button to prevent dropping of duplicate content.
+		/// </summary>
+		public bool AllowDuplicateContent {
+			get => _allowDuplicateContent;
+			set {
+				if(value == _allowDuplicateContent)
+					return;
+				RaisePropertyChanging(nameof(AllowDuplicateContent));
+				_allowDuplicateContent = value;
+				RaisePropertyChanged(nameof(AllowDuplicateContent));
+			}
+		}
+
+		/// <summary>
+		/// Defines the smallest available width that can be applied to a deriving element.
+		///
+		/// The system ensures the minimum width by blocking/limiting <see cref="GridSplitter"/>
+		/// movement when the user resizes a deriving element or resizes the main window.
+		/// </summary>
+		public double DockMinWidth {
+			get => _dockMinWidth;
+			set {
+				if(value == _dockMinWidth)
+					return;
+				MathHelper.AssertIsPositiveOrZero(value);
+				RaisePropertyChanging(nameof(DockMinWidth));
+				_dockMinWidth = value;
+				RaisePropertyChanged(nameof(DockMinWidth));
+			}
+		}
+
+		/// <summary>
+		/// Defines the smallest available height that can be applied to a deriving element.
+		///
+		/// The system ensures the minimum height by blocking/limiting <see cref="GridSplitter"/>
+		/// movement when the user resizes a deriving element or resizes the main window.
+		/// </summary>
+		public double DockMinHeight {
+			get => _dockMinHeight;
+			set {
+				if(value == _dockMinHeight)
+					return;
+				MathHelper.AssertIsPositiveOrZero(value);
+				RaisePropertyChanging(nameof(DockMinHeight));
+				_dockMinHeight = value;
+				RaisePropertyChanged(nameof(DockMinHeight));
+			}
+		}
+			
+		double ILayoutPositionableElementWithActualSize.ActualWidth {
+			get => _actualWidth;
+			set => _actualWidth = value;
+		}
+
+		double ILayoutPositionableElementWithActualSize.ActualHeight {
+			get => _actualHeight;
+			set => _actualHeight = value;
+		}
+
+		
+		
+		
+		/// <summary>
+		/// Event fired when floating properties were updated.
+		/// </summary>
+		//public event EventHandler FloatingPropertiesUpdated;
+
+		
+		
+		
+		public GridLength DockWidth {
+			//get => _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
+			//			new GridLength(_resizableAbsoluteDockWidth.Value) : _dockWidth;
+			get {
+				var width = _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
+			new GridLength(_resizableAbsoluteDockWidth.Value) : _dockWidth;
+				//Debug.WriteLine($"{width}, {_dockWidth}, {_dockWidth.IsAbsolute}, {_dockWidth.Value}, {_dockMinWidth}, {_resizableAbsoluteDockWidth}", "LayoutPositionable 2");
+				return width;
+			}
+			set {
+				if(value == _dockWidth || !(value.Value > 0))
+					return;
+
+				//Debug.WriteLine($"{_dockWidth}, {value}, {_resizableAbsoluteDockHeight}", "LayoutPositionable 3");
+
+				if(value.IsAbsolute)
+					_resizableAbsoluteDockWidth = value.Value;
+				RaisePropertyChanging(nameof(DockWidth));
+				_dockWidth = value;
+				RaisePropertyChanged(nameof(DockWidth));
+				OnDockWidthChanged();
+			}
+		}
+
+				
+		public double FixedDockWidth => _dockWidth.IsAbsolute && _dockWidth.Value >= _dockMinWidth ? _dockWidth.Value : _dockMinWidth;
+
+				
+		public double ResizableAbsoluteDockWidth {
+			get => _resizableAbsoluteDockWidth ?? 0;
+			set {
+				if(!_dockWidth.IsAbsolute)
+					return;
+				if(value <= _dockWidth.Value && value > 0) {
+					RaisePropertyChanging(nameof(DockWidth));
+					_resizableAbsoluteDockWidth = value;
+					RaisePropertyChanged(nameof(DockWidth));
+					OnDockWidthChanged();
+				} else if(value > _dockWidth.Value && _resizableAbsoluteDockWidth < _dockWidth.Value)
+					_resizableAbsoluteDockWidth = _dockWidth.Value;
+			}
+		}
+
+		
+		
+		public ExpandDirection ExpandDirection {
+			get {
+				if(Parent is ILayoutOrientableGroup orientableGroup && Orientation.Horizontal == orientableGroup.Orientation) {
+					return ExpandDirection.Right;
+				} else {
+					return ExpandDirection.Down;
+				}
+			}
+		}
+
+				
+		public bool IsExpanded {
+			get => _isExpanded;
+			set {
+				if(_isExpanded == value)
+					return;
+
+				RaisePropertyChanging(nameof(IsExpanded));
+				_isExpanded = value;
+				//Debug.WriteLine($"==========================================", "LayoutAnchorableExpanderPane IsExpanded");
+				//Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 1");
+				//UpdateSize();
+				//Debug.WriteLine($"{_isExpanded}, {DockHeight}", "LayoutAnchorableExpanderPane IsExpanded 2");
+				RaisePropertyChanged(nameof(IsExpanded));
+			}
+		}
+
+				
+		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
+		public string Name {
+			get => _name;
+			set {
+				if(value == _name)
+					return;
+				_name = value;
+				RaisePropertyChanged(nameof(Name));
+			}
+		}
+
+				
+		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
+		string ILayoutPaneSerializable.Id {
+			get => _id;
+			set => _id = value;
+		}
+
 		#endregion Properties
 
 		#region Overrides
 
 		/// <inheritdoc />
 		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
+			if (oldValue is ILayoutGroup oldGroup)
+				oldGroup.ChildrenCollectionChanged -= OnParentChildrenCollectionChanged;
+			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+			if (newValue is ILayoutGroup newGroup)
+				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
+
+			RaisePropertyChanged(nameof(ExpandDirection));
+			UpdateSize();
+
 			UpdateParentVisibility();
 			RaisePropertyChanged(nameof(IsVisible));
 			NotifyIsVisibleChanged();
-			RaisePropertyChanged(nameof(IsHidden));
+			//RaisePropertyChanged(nameof(IsHidden));
 			//RaisePropertyChanged(nameof(IsAutoHidden));
 			base.OnParentChanged(oldValue, newValue);
 		}
@@ -219,17 +468,17 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		protected override void InternalDock() {
 			var root = Root as LayoutRoot;
-			LayoutAnchorableExpanderGroup anchorablePane = null;
+			LayoutAnchorableGroup anchorablePane = null;
 
 			//look for active content parent pane
 			if(root.ActiveContent != null && root.ActiveContent != this)
-				anchorablePane = root.ActiveContent.Parent as LayoutAnchorableExpanderGroup;
+				anchorablePane = root.ActiveContent.Parent as LayoutAnchorableGroup;
 			//look for a pane on the right side
 			//if(anchorablePane == null)
 			//	anchorablePane = root.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
 			//look for an available pane
 			if(anchorablePane == null)
-				anchorablePane = root.Descendents().OfType<LayoutAnchorableExpanderGroup>().FirstOrDefault();
+				anchorablePane = root.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault();
 			var added = false;
 			if(root.Manager.LayoutUpdateStrategy != null)
 				added = root.Manager.LayoutUpdateStrategy.BeforeInsertAnchorable(root, this, anchorablePane);
@@ -241,10 +490,10 @@ namespace AvalonDock.Layout {
 						mainLayoutPanel.Children.Add(root.RootPanel);
 
 					root.RootPanel = mainLayoutPanel;
-					anchorablePane = new LayoutAnchorableExpanderGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+					anchorablePane = new LayoutAnchorableGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
 					mainLayoutPanel.Children.Add(anchorablePane);
 				}
-				if(this is LayoutAnchorableExpander anchorableExpander)
+				if(this is LayoutAnchorable anchorableExpander)
 					anchorablePane.Children.Add(anchorableExpander);
 			}
 			root.Manager.LayoutUpdateStrategy?.AfterInsertAnchorable(root, this);
@@ -318,20 +567,55 @@ namespace AvalonDock.Layout {
 
 		#region Public Methods
 		public void Hide() {
-			if(Root?.Manager is DockingManager dockingManager)
-				dockingManager.ExecuteHideCommand(this);
-			else
-				HideAnchorable(true);
+			//if(Root?.Manager is DockingManager dockingManager)
+			//	dockingManager.ExecuteHideCommand(this);
+			//else
+			//	HideAnchorable(true);
 		}
 
 		/// <summary>Method can be invoked to fire the <see cref="Collapsing"/> event.</summary>
 		/// <param name="args"></param>
 		protected virtual void OnExpanding(CancelEventArgs args) => Collapsing?.Invoke(this, args);
 
-			/// <summary>Hide this contents.</summary>
-			/// <remarks>Add this content to <see cref="ILayoutRoot.Hidden"/> collection of parent root.</remarks>
-			/// <param name="cancelable"></param>
-			internal bool HideAnchorable(bool cancelable) {
+		/// <inheritdoc />
+
+
+		#region Public Methods
+
+		/// <summary>
+		/// Gets whether the model hosts only 1 <see cref="LayoutAnchorable"/> (True)
+		/// or whether there are more than one <see cref="LayoutAnchorable"/>s below
+		/// this model pane.
+		/// </summary>
+		public bool IsDirectlyHostedInFloatingWindow {
+			get {
+				var parentFloatingWindow = this.FindParent<LayoutAnchorableFloatingWindow>();
+				return parentFloatingWindow != null && parentFloatingWindow.IsSinglePane;
+				//return Parent != null && Parent.ChildrenCount == 1 && Parent.Parent is LayoutFloatingWindow;
+			}
+		}
+
+		#endregion Public Methods
+
+		#region Internal Methods
+
+		/// <summary>
+		/// Updates whether this object is hosted at the root level of a floating window control or not.
+		/// </summary>
+		internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
+		#endregion Internal Methods
+
+		#region Private Methods
+
+		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
+		#endregion Private Methods
+
+		/// <summary>Hide this contents.</summary>
+		/// <remarks>Add this content to <see cref="ILayoutRoot.Hidden"/> collection of parent root.</remarks>
+		/// <param name="cancelable"></param>
+		internal bool HideAnchorable(bool cancelable) {
 			//Debug.WriteLine($"{cancelable}", "HideAnchorable 1");
 
 			if(!IsVisible) {
@@ -357,7 +641,7 @@ namespace AvalonDock.Layout {
 				PreviousContainer = parentAsGroup;
 				PreviousContainerIndex = parentAsGroup.IndexOfChild(this);
 			}
-			Root?.Hidden?.Add(this);
+			Root?.Hidden?.Add(this as LayoutAnchorable);
 			RaisePropertyChanged(nameof(IsVisible));
 			RaisePropertyChanged(nameof(IsHidden));
 			NotifyIsVisibleChanged();
@@ -399,61 +683,6 @@ namespace AvalonDock.Layout {
 			NotifyIsVisibleChanged();
 		}
 
-		/// <summary>Add the anchorable to a <see cref="DockingManager"/> layout.</summary>
-		/// <param name="manager"></param>
-		/// <param name="strategy"></param>
-		public void AddToLayout(DockingManager manager, AnchorableShowStrategy strategy) {
-			if(IsVisible || IsHidden)
-				throw new InvalidOperationException();
-
-			var most = (strategy & AnchorableShowStrategy.Most) == AnchorableShowStrategy.Most;
-			var left = (strategy & AnchorableShowStrategy.Left) == AnchorableShowStrategy.Left;
-			var right = (strategy & AnchorableShowStrategy.Right) == AnchorableShowStrategy.Right;
-			var top = (strategy & AnchorableShowStrategy.Top) == AnchorableShowStrategy.Top;
-			var bottom = (strategy & AnchorableShowStrategy.Bottom) == AnchorableShowStrategy.Bottom;
-
-			//if(!most) {
-			//	var side = AnchorSide.Left;
-			//	if(left)
-			//		side = AnchorSide.Left;
-			//	if(right)
-			//		side = AnchorSide.Right;
-			//	if(top)
-			//		side = AnchorSide.Top;
-			//	if(bottom)
-			//		side = AnchorSide.Bottom;
-
-			//	var anchorablePane = manager.Layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(p => p.GetSide() == side);
-			//	if(anchorablePane != null)
-			//		anchorablePane.Children.Add(this);
-			//	else
-			//		most = true;
-			//}
-
-			//if(!most)
-			//	return;
-			//if(manager.Layout.RootPanel == null)
-			//	manager.Layout.RootPanel = new LayoutPanel { Orientation = left || right ? Orientation.Horizontal : Orientation.Vertical };
-
-			//if(left || right) {
-			//	if(manager.Layout.RootPanel.Orientation == Orientation.Vertical && manager.Layout.RootPanel.ChildrenCount > 1)
-			//		manager.Layout.RootPanel = new LayoutPanel(manager.Layout.RootPanel);
-			//	manager.Layout.RootPanel.Orientation = Orientation.Horizontal;
-			//	if(left)
-			//		manager.Layout.RootPanel.Children.Insert(0, new LayoutAnchorablePane(this));
-			//	else
-			//		manager.Layout.RootPanel.Children.Add(new LayoutAnchorablePane(this));
-			//} else {
-			//	if(manager.Layout.RootPanel.Orientation == Orientation.Horizontal && manager.Layout.RootPanel.ChildrenCount > 1)
-			//		manager.Layout.RootPanel = new LayoutPanel(manager.Layout.RootPanel);
-			//	manager.Layout.RootPanel.Orientation = Orientation.Vertical;
-			//	if(top)
-			//		manager.Layout.RootPanel.Children.Insert(0, new LayoutAnchorablePane(this));
-			//	else
-			//		manager.Layout.RootPanel.Children.Add(new LayoutAnchorablePane(this));
-			//}
-		}
-
 		#endregion Public Methods
 
 		#region Internal Methods
@@ -483,6 +712,63 @@ namespace AvalonDock.Layout {
 
 			if(Parent is ILayoutElementWithVisibility parentPane)
 				parentPane.ComputeVisibility();
+		}
+
+		//Todo 寻找更好的解决方法
+		/// <summary>
+		/// 强制更新高度
+		/// </summary>
+		/// <param name="value"></param>
+		public void ForceHeight(GridLength value) {
+			if(value.IsAbsolute)
+				_resizableAbsoluteDockHeight = value.Value;
+			RaisePropertyChanging(nameof(DockHeight));
+			_dockHeight = value;
+			RaisePropertyChanged(nameof(DockHeight));
+			OnDockHeightChanged();
+		}
+
+		public void ForceWidth(GridLength value) {
+			if(value.IsAbsolute)
+				_resizableAbsoluteDockWidth = value.Value;
+			RaisePropertyChanging(nameof(DockWidth));
+			_dockWidth = value;
+			RaisePropertyChanged(nameof(DockWidth));
+			OnDockWidthChanged();
+		}
+
+		public double CalculatedDockMinWidth() {
+			return _dockMinWidth;
+		}
+
+		public double CalculatedDockMinHeight() {
+			return _dockMinHeight;
+		}
+
+		
+		
+		protected virtual void OnDockWidthChanged() {
+		}
+
+		protected virtual void OnDockHeightChanged() {
+		}
+
+				
+		private void UpdateSize() {
+			//Debug.WriteLine($"{LayoutAnchorable?.Title}", "LayoutAnchorableExpanderPane UpdateSize 0");
+			if(IsExpanded) {
+				if(ExpandDirection == ExpandDirection.Right) {
+					ForceWidth(new GridLength(0, GridUnitType.Auto));
+				} else {
+					ForceHeight(new GridLength(0, GridUnitType.Auto));
+				}
+			} else {
+				if(ExpandDirection == ExpandDirection.Right) {
+					DockWidth = new GridLength(0, GridUnitType.Auto);
+				} else {
+					DockHeight = new GridLength(0, GridUnitType.Auto);
+				}
+			}
 		}
 
 		#endregion Private Methods

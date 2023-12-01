@@ -23,7 +23,7 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroup :LayoutPositionableGroup<LayoutAnchorableExpander>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup, ILayoutPaneSerializable {
+	public class LayoutAnchorableGroup :LayoutPositionableGroup<LayoutAnchorable>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup, ILayoutPaneSerializable {
 		#region fields
 
 		private Orientation _orientation = Orientation.Vertical;
@@ -38,11 +38,11 @@ namespace AvalonDock.Layout {
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableExpanderGroup() {
+		public LayoutAnchorableGroup() {
 		}
 
 		/// <summary>Class constructor <paramref name="firstChild"/> to be inserted into collection of children models.</summary>
-		public LayoutAnchorableExpanderGroup(LayoutAnchorableExpander firstChild, Orientation orientation = Orientation.Vertical) {
+		public LayoutAnchorableGroup(LayoutAnchorable firstChild, Orientation orientation = Orientation.Vertical) {
 			Children.Add(firstChild);
 			_orientation = orientation;
 		}
@@ -111,7 +111,7 @@ namespace AvalonDock.Layout {
 		/// </summary>
 		/// <param name="content"></param>
 		public int IndexOf(LayoutContent content) {
-			if(!(content is LayoutAnchorableExpander anchorableChild))
+			if(!(content is LayoutAnchorable anchorableChild))
 				return -1;
 			return Children.IndexOf(anchorableChild);
 		}
@@ -215,7 +215,7 @@ namespace AvalonDock.Layout {
 				var oldValue = _isSelected;
 				RaisePropertyChanging(nameof(IsSelected));
 				_isSelected = value;
-				if(_isSelected && Parent is ILayoutSelector<LayoutAnchorableExpanderGroup> parentSelector) {
+				if(_isSelected && Parent is ILayoutSelector<LayoutAnchorableGroup> parentSelector) {
 					parentSelector.SelectedIndex = parentSelector.IndexOf(this);
 				}
 				if(!_isSelected) {
@@ -223,7 +223,7 @@ namespace AvalonDock.Layout {
 				}
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
-				LayoutAnchorableExpanderGroupTabItem.CancelMouseLeave();
+				LayoutAnchorableGroupTabItem.CancelMouseLeave();
 			}
 		}
 
@@ -249,7 +249,7 @@ namespace AvalonDock.Layout {
 		public bool IsActive {
 			get => _isActive;
 			set {
-				//Debug.WriteLine($"{_isActive}, {value}", $"LayoutAnchorableExpanderGroup IsActive 1");
+				//Debug.WriteLine($"{_isActive}, {value}", $"LayoutAnchorableGroup IsActive 1");
 				if(value == _isActive)
 					return;
 				RaisePropertyChanging(nameof(IsActive));

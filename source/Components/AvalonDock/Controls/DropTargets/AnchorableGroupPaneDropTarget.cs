@@ -8,14 +8,14 @@ using System.Windows.Media;
 namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
-	/// Implements a <see cref="LayoutAnchorableExpanderControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorableExpanderGroup"/>) can be dropped.
+	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
+	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.
 	/// </summary>
-	internal class AnchorableExpanderGroupPaneDropTarget : DropTarget<LayoutAnchorableExpanderGroupPaneControl>
+	internal class AnchorableGroupPaneDropTarget : DropTarget<LayoutAnchorableGroupPaneControl>
 	{
 		#region fields
 
-		private LayoutAnchorableExpanderGroupPaneControl _targetPane;
+		private LayoutAnchorableGroupPaneControl _targetPane;
 		private int _tabIndex = -1;
 
 		#endregion fields
@@ -32,7 +32,7 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
-		internal AnchorableExpanderGroupPaneDropTarget(LayoutAnchorableExpanderGroupPaneControl paneControl,
+		internal AnchorableGroupPaneDropTarget(LayoutAnchorableGroupPaneControl paneControl,
 																	 Rect detectionRect,
 																	 DropTargetType type)
 			: base(paneControl, detectionRect, type)
@@ -48,7 +48,7 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
 		/// <param name="tabIndex"></paramLayoutAnchorableExpanderGroupPaneControl
-		internal AnchorableExpanderGroupPaneDropTarget(LayoutAnchorableExpanderGroupPaneControl paneControl,
+		internal AnchorableGroupPaneDropTarget(LayoutAnchorableGroupPaneControl paneControl,
 											Rect detectionRect,
 											DropTargetType type,
 											int tabIndex)
@@ -65,9 +65,9 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="floatingWindow"></param>
 		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
 		{
-			Debug.WriteLine($"{Type}", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} Drop 1");
+			Debug.WriteLine($"{Type}", $"{nameof(LayoutAnchorableGroupPaneControl)} Drop 1");
 
-			LayoutAnchorableExpander targetModel = _targetPane.Model as LayoutAnchorableExpander;
+			LayoutAnchorable targetModel = _targetPane.Model as LayoutAnchorable;
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
 			switch (Type)
 			{
@@ -82,8 +82,8 @@ namespace AvalonDock.Controls.DropTargets
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
 
-						LayoutAnchorableExpanderGroupPane paneModel = floatingWindow.RootPanel;
-						Debug.WriteLine($"{paneModel?.Children.Count}", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} Drop 2");
+						LayoutAnchorableGroupPane paneModel = floatingWindow.RootPanel;
+						Debug.WriteLine($"{paneModel?.Children.Count}", $"{nameof(LayoutAnchorableGroupPaneControl)} Drop 2");
 						if (paneModel != null &&
 							(paneModel.Children.Count == 1 ||
 								paneModel.Orientation == System.Windows.Controls.Orientation.Vertical))
@@ -93,18 +93,18 @@ namespace AvalonDock.Controls.DropTargets
 							for (int i = 0; i < anchorablesToMove.Length; i++)
 							{
 								//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} Drop 3");
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"{nameof(LayoutAnchorableGroupPaneControl)} Drop 3");
 
 								var temp = anchorablesToMove[i];
 								//expanderGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
 								expanderGroup.InsertChildAt(insertToIndex + 1 + i, temp);
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} Drop 31");
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"{nameof(LayoutAnchorableGroupPaneControl)} Drop 31");
 
 							}
 						}
 						else
 						{
-							Debug.WriteLine($"", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} Drop 4");
+							Debug.WriteLine($"", $"{nameof(LayoutAnchorableGroupPaneControl)} Drop 4");
 							expanderGroup.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
 						}
 					}
@@ -148,8 +148,8 @@ namespace AvalonDock.Controls.DropTargets
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
 												LayoutFloatingWindow floatingWindowModel)
 		{
-			var targetModel = _targetPane.Model as LayoutAnchorableExpanderGroupPane;
-			Debug.WriteLine($"{Type}, {_targetPane.Model?.GetType().Name}", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} GetPreviewPath");
+			var targetModel = _targetPane.Model as LayoutAnchorableGroupPane;
+			Debug.WriteLine($"{Type}, {_targetPane.Model?.GetType().Name}", $"{nameof(LayoutAnchorableGroupPaneControl)} GetPreviewPath");
 			var orientableGroup = targetModel.Parent as ILayoutOrientableGroup;
 			var orientable = orientableGroup.Orientation;
 			//if(orientable == System.Windows.Controls.Orientation.Vertical) {
@@ -174,7 +174,7 @@ namespace AvalonDock.Controls.DropTargets
 			//				//	targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height - 2);
 			//				//	targetScreenRect.Height = 4.0;
 			//				//}
-			//				Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} GetPreviewPath 2");
+			//				Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(LayoutAnchorableGroupPaneControl)} GetPreviewPath 2");
 			//				return new RectangleGeometry(targetScreenRect);
 			//			}
 			//	}
@@ -201,7 +201,7 @@ namespace AvalonDock.Controls.DropTargets
 			//				//	targetScreenRect.Offset(-overlayWindow.Left + targetScreenRect.Width, -overlayWindow.Top);
 			//				//	targetScreenRect.Width = 4.0;
 			//				//}
-			//				//Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(LayoutAnchorableExpanderGroupPaneControl)} GetPreviewPath 2");
+			//				//Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(LayoutAnchorableGroupPaneControl)} GetPreviewPath 2");
 			//				return new RectangleGeometry(targetScreenRect);
 			//			}
 			//	}

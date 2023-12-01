@@ -198,7 +198,7 @@ namespace AvalonDock.Controls {
 				var childFromModel = InternalChildren.OfType<ILayoutControl>().First(ch => ch.Model == changedElement) as UIElement;
 				var indexOfChild = InternalChildren.IndexOf(childFromModel);
 				ColumnDefinitions[indexOfChild].Width = changedElement.DockWidth;
-				if(sender is LayoutAnchorableExpander pane) {
+				if(sender is LayoutAnchorable pane) {
 					if(indexOfChild > 0 && InternalChildren[indexOfChild - 1] is LayoutGridResizerControl sp) {
 						sp.IsEnabled = pane.IsExpanded;
 					}
@@ -213,12 +213,12 @@ namespace AvalonDock.Controls {
 				var indexOfChild = InternalChildren.IndexOf(childFromModel);
 
 				RowDefinitions[indexOfChild].Height = changedElement.DockHeight;
-				if(sender is LayoutAnchorableExpander pane) {
+				if(sender is LayoutAnchorable pane) {
 					if(indexOfChild >0 && InternalChildren[indexOfChild - 1] is LayoutGridResizerControl sp) {
 						sp.IsEnabled = pane.IsExpanded;
 					}
 				}
-			} else if(e.PropertyName == nameof(ILayoutPositionableElement.IsVisible) || e.PropertyName == nameof(LayoutAnchorableExpander.IsExpanded)) {
+			} else if(e.PropertyName == nameof(ILayoutPositionableElement.IsVisible) || e.PropertyName == nameof(LayoutAnchorable.IsExpanded)) {
 				UpdateRowColDefinitions();
 			}
 		}
@@ -243,7 +243,7 @@ namespace AvalonDock.Controls {
 				var iChild = 0;
 				// BD: 24.08.2020 added check for iChild against InternalChildren.Count
 				for(var iChildModel = 0; iChildModel < _model.Children.Count && iChild < InternalChildren.Count; iChildModel++, iColumn++, iChild++) {
-					var childModel = _model.Children[iChildModel] as LayoutAnchorableExpander;
+					var childModel = _model.Children[iChildModel] as LayoutAnchorable;
 					var colDef = new ColumnDefinition {
 						Width = childModel.IsExpanded ? (childModel.DockWidth.IsStar ? childModel.DockWidth : new GridLength(1, GridUnitType.Star)) : new GridLength(1, GridUnitType.Auto),
 						MinWidth = childModel.CalculatedDockMinWidth()
@@ -262,7 +262,7 @@ namespace AvalonDock.Controls {
 					var nextChildModelIsExpanded = false;
 					for(var i = iChildModel + 1; i < _model.Children.Count; i++) {
 						//var nextChildModel = _model.Children[i] as ILayoutPositionableElement;
-						var nextChildModel = _model.Children[i] as LayoutAnchorableExpander;
+						var nextChildModel = _model.Children[i] as LayoutAnchorable;
 						if(!nextChildModel.IsExpanded)
 							continue;
 						nextChildModelIsExpanded = true;
@@ -284,7 +284,7 @@ namespace AvalonDock.Controls {
 				var iChild = 0;
 				// BD: 24.08.2020 added check for iChild against InternalChildren.Count
 				for(var iChildModel = 0; iChildModel < _model.Children.Count && iChild < InternalChildren.Count; iChildModel++, iRow++, iChild++) {
-					var childModel = _model.Children[iChildModel] as LayoutAnchorableExpander;
+					var childModel = _model.Children[iChildModel] as LayoutAnchorable;
 					//Debug.WriteLine($"{temp.GetType()}, {childModel.DockHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
 					RowDefinitions.Add(new RowDefinition {
 						Height = childModel.IsExpanded ? (childModel.DockHeight.IsStar ? childModel.DockHeight : new GridLength(1, GridUnitType.Auto)) : new GridLength(1, GridUnitType.Auto),
@@ -308,7 +308,7 @@ namespace AvalonDock.Controls {
 					var nextChildModelExpanded = false;
 
 					for(var i = iChildModel + 1; i < _model.Children.Count; i++) {
-						var nextChildModel = _model.Children[i] as LayoutAnchorableExpander;
+						var nextChildModel = _model.Children[i] as LayoutAnchorable;
 						if(!nextChildModel.IsExpanded)
 							continue;
 						nextChildModelExpanded = true;

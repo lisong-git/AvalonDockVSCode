@@ -170,8 +170,8 @@ namespace AvalonDock.Controls {
 			if(draggingWindow.Model is LayoutDocumentFloatingWindow)
 				return _dropAreas;
 			var rootVisual = (Content as FloatingWindowContentHost).RootVisual;
-			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutAnchorableExpanderGroupPaneControl>()) {
-				_dropAreas.Add(new DropArea<LayoutAnchorableExpanderGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderGroupPane));
+			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutAnchorableGroupPaneControl>()) {
+				_dropAreas.Add(new DropArea<LayoutAnchorableGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderGroupPane));
 			}
 			foreach(var areaHost in rootVisual.FindVisualChildren<LayoutDocumentPaneControl>())
 				_dropAreas.Add(new DropArea<LayoutDocumentPaneControl>(areaHost, DropAreaType.DocumentPane));

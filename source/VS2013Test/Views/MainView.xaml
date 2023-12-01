@@ -329,21 +329,21 @@
           <LayoutPanel Orientation="Vertical">
             <LayoutDocumentPane />
 
-            <LayoutAnchorableExpanderGroupPane DockHeight="128" Orientation="Horizontal">
-              <LayoutAnchorableExpanderGroup>
-                <LayoutAnchorableExpander Name="ErrorsPane" />
-                <LayoutAnchorableExpander Name="OutputPane" />
-              </LayoutAnchorableExpanderGroup>
+            <LayoutAnchorableGroupPane DockHeight="128" Orientation="Horizontal">
+              <LayoutAnchorableGroup>
+                <LayoutAnchorable Name="ErrorsPane" />
+                <LayoutAnchorable Name="OutputPane" />
+              </LayoutAnchorableGroup>
 
-            </LayoutAnchorableExpanderGroupPane>
+            </LayoutAnchorableGroupPane>
           </LayoutPanel>
 
-          <LayoutAnchorableExpanderGroupPane DockWidth="256" Orientation="Vertical">
-            <LayoutAnchorableExpanderGroup>
-              <LayoutAnchorableExpander Name="ExplorerPane" DockHeight="2*" />
-              <LayoutAnchorableExpander Name="PropertiesPane" />
-            </LayoutAnchorableExpanderGroup>
-          </LayoutAnchorableExpanderGroupPane>
+          <LayoutAnchorableGroupPane DockWidth="256" Orientation="Vertical">
+            <LayoutAnchorableGroup>
+              <LayoutAnchorable Name="ExplorerPane" DockHeight="2*" />
+              <LayoutAnchorable Name="PropertiesPane" />
+            </LayoutAnchorableGroup>
+          </LayoutAnchorableGroupPane>
         </LayoutPanel>
       </LayoutRoot>
     </DockingManager>

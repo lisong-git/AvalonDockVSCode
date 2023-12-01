@@ -1,28 +1,25 @@
 using AvalonDock.Layout;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-namespace AvalonDock.Controls.DropTargets
-{
+namespace AvalonDock.Controls.DropTargets {
+
 	/// <summary>
-	/// Implements a <see cref="LayoutAnchorableExpanderControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorableExpanderGroup"/>) can be dropped.
+	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
+	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.
 	/// </summary>
-	internal class AnchorableExpanderGroupTabItemDropTarget : DropTarget<LayoutAnchorableExpanderGroupTabItem>
-	{
+	internal class AnchorableGroupDropTarget :DropTarget<LayoutAnchorableGroupControl> {
+
 		#region fields
 
-		private LayoutAnchorableExpanderGroupTabItem _targetPane;
+		private LayoutAnchorableGroupControl _targetPane;
 		private int _tabIndex = -1;
 
 		#endregion fields
 
-		#region Constructors
 
-		#endregion Constructors
 
 		#region Overrides
 
@@ -32,11 +29,10 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
-		internal AnchorableExpanderGroupTabItemDropTarget(LayoutAnchorableExpanderGroupTabItem paneControl,
+		internal AnchorableGroupDropTarget(LayoutAnchorableGroupControl paneControl,
 																	 Rect detectionRect,
 																	 DropTargetType type)
-			: base(paneControl, detectionRect, type)
-		{
+			: base(paneControl, detectionRect, type) {
 			_targetPane = paneControl;
 		}
 
@@ -48,12 +44,11 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
 		/// <param name="tabIndex"></paramLayoutAnchorableExpanderGroupControl
-		internal AnchorableExpanderGroupTabItemDropTarget(LayoutAnchorableExpanderGroupTabItem paneControl,
+		internal AnchorableGroupDropTarget(LayoutAnchorableGroupControl paneControl,
 											Rect detectionRect,
 											DropTargetType type,
 											int tabIndex)
-			: base(paneControl, detectionRect, type)
-		{
+			: base(paneControl, detectionRect, type) {
 			_targetPane = paneControl;
 			_tabIndex = tabIndex;
 		}
@@ -63,17 +58,13 @@ namespace AvalonDock.Controls.DropTargets
 		/// by docking of the <paramref name="floatingWindow"/> into this drop target.
 		/// </summary>
 		/// <param name="floatingWindow"></param>
-		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
-		{
-			Debug.WriteLine($"{Type}, {_tabIndex}", $"{nameof(AnchorableExpanderGroupDropTarget)} Drop 1");
+		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow) {
+			Debug.WriteLine($"{Type}, {_tabIndex}", $"{nameof(AnchorableGroupDropTarget)} Drop 1");
 
-			LayoutAnchorableExpanderGroup targetModel = _targetPane.Model as LayoutAnchorableExpanderGroup;
+			LayoutAnchorable targetModel = _targetPane.Model as LayoutAnchorable;
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
-			switch (Type)
-			{
+			switch(Type) {
 				case DropTargetType.AnchorableExpanderDockBottom:
-
-
 
 					#region DropTargetType.AnchorableExpanderPaneDockBottom
 
@@ -81,30 +72,23 @@ namespace AvalonDock.Controls.DropTargets
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
-
-						LayoutAnchorableExpanderGroupPane paneModel = floatingWindow.RootPanel;
-						Debug.WriteLine($"{paneModel?.Children.Count}", $"{nameof(AnchorableExpanderGroupDropTarget)} Drop 2");
-						if (paneModel != null &&
+						LayoutAnchorableGroupPane paneModel = floatingWindow.RootPanel;
+						Debug.WriteLine($"{paneModel?.Children.Count}", $"{nameof(AnchorableGroupDropTarget)} Drop 2");
+						if(paneModel != null &&
 							(paneModel.Children.Count == 1 ||
-								paneModel.Orientation == System.Windows.Controls.Orientation.Vertical))
-						{
-
+								paneModel.Orientation == System.Windows.Controls.Orientation.Vertical)) {
 							var anchorablesToMove = paneModel.Children.ToArray();
-							for (int i = 0; i < anchorablesToMove.Length; i++)
-							{
+							for(int i = 0; i < anchorablesToMove.Length; i++) {
 								//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"{nameof(AnchorableExpanderGroupDropTarget)} Drop 3");
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"{nameof(AnchorableGroupDropTarget)} Drop 3");
 
 								var temp = anchorablesToMove[i];
 								//expanderGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
 								expanderGroup.InsertChildAt(insertToIndex + 1 + i, temp);
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"{nameof(AnchorableExpanderGroupDropTarget)} Drop 31");
-
+								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"{nameof(AnchorableGroupDropTarget)} Drop 31");
 							}
-						}
-						else
-						{
-							Debug.WriteLine($"", $"{nameof(AnchorableExpanderGroupDropTarget)} Drop 4");
+						} else {
+							Debug.WriteLine($"", $"{nameof(AnchorableGroupDropTarget)} Drop 4");
 							expanderGroup.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
 						}
 					}
@@ -146,28 +130,53 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="floatingWindowModel"></param>
 		/// <retur ns>The geometry of the preview/highlighting WPF figure path.</returns>
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
-												LayoutFloatingWindow floatingWindowModel)
-		{
-			var targetModel = _targetPane.Model as LayoutAnchorableExpanderGroup;
+												LayoutFloatingWindow floatingWindowModel) {
+			var targetModel = _targetPane.Model as LayoutAnchorableGroup;
 			var orientableGroup = targetModel as ILayoutOrientableGroup;
 			var orientable = orientableGroup.Orientation;
-			Debug.WriteLine($"{Type}, {orientable}, {_targetPane.Model?.GetType().Name}", $"{nameof(AnchorableExpanderGroupTabItemDropTarget)} GetPreviewPath");
+			Debug.WriteLine($"{Type}, {orientable}, {_targetPane.Model?.GetType().Name}", $"{nameof(AnchorableGroupDropTarget)} GetPreviewPath");
+			if(orientable == System.Windows.Controls.Orientation.Vertical) {
+				switch(Type) {
+					case DropTargetType.AnchorableExpanderDockInside: {
+							var targetScreenRect = DetectionRects.FirstOrDefault();
+							//var targetScreenRect = TargetElement.GetScreenArea();
+							targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+							//targetScreenRect.Offset(0, -10);
+							//targetScreenRect.Offset(targetScreenRect.Width / 2.0, 0.0);
 
-			switch (Type)
-			{
-				case DropTargetType.DockLeft:
-					{
-						var targetScreenRect = DetectionRects.FirstOrDefault();
-						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-						return new RectangleGeometry(targetScreenRect);
-					}
-				default:
-					{
-						var targetScreenRect = DetectionRects.FirstOrDefault();
-						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
-						return new RectangleGeometry(targetScreenRect);
-					}
+							//detectionRect
+							//if(targetModel.IsExpanded) {
+							//Debug.WriteLine($"{overlayWindow}; {targetScreenRect}; {DetectionRects.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupDropTarget)} GetPreviewPath 2");
+
+							//targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height/2);
+							//targetScreenRect.Height /= 2.0;
+							//} else {
+							//	targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height - 2);
+							//	targetScreenRect.Height = 4.0;
+							//}
+							//Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableExpanderGroupDropTarget)} GetPreviewPath 2");
+
+							return new RectangleGeometry(targetScreenRect);
+						}
+				}
+			} else {
+				switch(Type) {
+					case DropTargetType.AnchorableExpanderDockInside: {
+							var targetScreenRect = DetectionRects.FirstOrDefault();
+							//if(targetModel.IsExpanded) {
+							targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+							//targetScreenRect.Width /= 2.0;
+							//} else {
+							//	targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
+							//	targetScreenRect.Width = 4.0;
+							//}
+							return new RectangleGeometry(targetScreenRect);
+						}
+				}
 			}
+
+			//return null;
+			return new RectangleGeometry(DetectionRects.FirstOrDefault());
 		}
 
 		#endregion Overrides

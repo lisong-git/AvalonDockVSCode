@@ -143,7 +143,7 @@ namespace AvalonDock.Controls {
 
 		#endregion Private Methods
 
-		//public IEnumerable<LayoutAnchorableExpanderGroup> ChildrenOverflowing {
+		//public IEnumerable<LayoutAnchorableGroup> ChildrenOverflowing {
 		//	get {
 		//		//Debug.WriteLine($"{Children.OfType<LayoutDocument>().Count()}, {Children.OfType<LayoutDocument>().Where(o=> o.IsVisible).Count()}", "ChildrenOverflowing 1");
 
@@ -154,8 +154,8 @@ namespace AvalonDock.Controls {
 		//		foreach(var child in Items) {
 		//			Debug.WriteLine($"{child.GetType()}, ", "ChildrenOverflowing 2");
 		//		}
-		//		//var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true)).ToList();
-		//		var listSorted = ItemsSource.Cast<LayoutAnchorableExpanderGroup>()
+		//		//var listSorted = Children.OfType<LayoutAnchorableGroup>().Where(o=> !(o.TabItem?.IsVisible == true)).ToList();
+		//		var listSorted = ItemsSource.Cast<LayoutAnchorableGroup>()
 		//			//.Where(o=> !(o.TabItem?.IsVisible == true))
 		//			.ToList();
 		//		//listSorted.Sort();

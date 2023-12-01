@@ -148,10 +148,10 @@ namespace AvalonDock.Controls {
 		private static void manager_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) {
 			var focusedElement = e.NewFocus as Visual;
 			if(focusedElement != null &&
-				!(focusedElement is LayoutAnchorableExpanderGroupTabItem || focusedElement is LayoutDocumentTabItem))
+				!(focusedElement is LayoutAnchorableGroupTabItem || focusedElement is LayoutDocumentTabItem))
 			//Avoid tracking focus for elements like this
 			{
-				var parentAnchorable = focusedElement.FindVisualAncestor<LayoutAnchorableExpanderControl>();
+				var parentAnchorable = focusedElement.FindVisualAncestor<LayoutAnchorableControl>();
 				if(parentAnchorable != null) {
 					_modelFocusedElement[parentAnchorable.Model] = e.NewFocus;
 				} else {
@@ -168,7 +168,7 @@ namespace AvalonDock.Controls {
 				var hostContainingFocusedHandle = manager.FindLogicalChildren<HwndHost>().FirstOrDefault(hw => Win32Helper.IsChild(hw.Handle, e.GotFocusWinHandle));
 
 				if(hostContainingFocusedHandle != null) {
-					var parentAnchorable = hostContainingFocusedHandle.FindVisualAncestor<LayoutAnchorableExpanderControl>();
+					var parentAnchorable = hostContainingFocusedHandle.FindVisualAncestor<LayoutAnchorableControl>();
 					if(parentAnchorable != null) {
 						_modelFocusedWindowHandle[parentAnchorable.Model] = e.GotFocusWinHandle;
 						if(parentAnchorable.Model != null)

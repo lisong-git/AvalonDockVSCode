@@ -22,7 +22,7 @@ namespace AvalonDock.Controls {
 	/// This Grid based control can host multiple other controls in its Children collection
 	/// (<see cref="LayoutAnchorableControl"/>).
 	/// </summary>
-	public class LayoutAnchorableExpanderGroupControl :LayoutExpanderGridControl<LayoutAnchorableExpander> {
+	public class LayoutAnchorableGroupControl :LayoutExpanderGridControl<LayoutAnchorable> {
 		#region fields
 
 
@@ -31,8 +31,8 @@ namespace AvalonDock.Controls {
 		#region Constructors
 
 
-		//public LayoutAnchorableExpanderGroupControl() {
-		//	//Debug.WriteLine($"1", "LayoutAnchorableExpanderGroupControl");
+		//public LayoutAnchorableGroupControl() {
+		//	//Debug.WriteLine($"1", "LayoutAnchorableGroupControl");
 		//}
 
 
@@ -41,22 +41,22 @@ namespace AvalonDock.Controls {
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpanderGroup), typeof(LayoutAnchorableExpanderGroupControl),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableGroup), typeof(LayoutAnchorableGroupControl),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to this view.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to this view."), Category("Other")]
 		public override ILayoutElement Model {
-			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
+			get => (LayoutAnchorableGroup) GetValue(ModelProperty);
 			set {
-				Debug.WriteLine($"{value.GetType()}", "LayoutAnchorableExpanderGroupControl Model");
+				Debug.WriteLine($"{value.GetType()}", "LayoutAnchorableGroupControl Model");
 				SetValue(ModelProperty, value);
 				base.Model = value;
 			}
 		}
 
 		/// <summary>Handles changes to the <see cref="Model"/> property.</summary>
-		private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableExpanderGroupControl) d).OnModelChanged(e);
+		private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableGroupControl) d).OnModelChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e) {
@@ -67,8 +67,8 @@ namespace AvalonDock.Controls {
 			//SetLayoutItem(Model?.Root?.Manager?.GetLayoutItemFromModel(Model));
 			//} else
 			//SetLayoutItem(null);
-			//Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableExpanderGroupControl OnOverflowOpenChanged");
-			if(e.NewValue is LayoutAnchorableExpanderGroup model) {
+			//Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableGroupControl OnOverflowOpenChanged");
+			if(e.NewValue is LayoutAnchorableGroup model) {
 				base.Model = model;
 			}
 		}
@@ -81,7 +81,7 @@ namespace AvalonDock.Controls {
 			//IsEnabled = Model.IsEnabled;
 			//iIsEnabled || !Model.IsActive)
 			//	return;f(
-			if(Model.Parent != null && Model.Parent is LayoutAnchorableExpanderGroup layoutAnchorablePane)
+			if(Model.Parent != null && Model.Parent is LayoutAnchorableGroup layoutAnchorablePane)
 				layoutAnchorablePane.SetNextSelectedIndex();
 		}
 
@@ -101,10 +101,10 @@ namespace AvalonDock.Controls {
 		#region Overrides
 
 		protected override void OnFixChildrenDockLengths() {
-			//var model = Model as LayoutAnchorableExpanderGroup;
+			//var model = Model as LayoutAnchorableGroup;
 			//if(model == null)
 			//	return;
-			////Debug.WriteLine($"", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
+			////Debug.WriteLine($"", "LayoutAnchorableGroupControl OnFixChildrenDockLengths");
 
 			//if(model.Orientation == Orientation.Horizontal) {
 			//	// Setup DockWidth for children
@@ -121,7 +121,7 @@ namespace AvalonDock.Controls {
 			//	// Setup DockHeight for children
 			//	for(int i = 0; i < model.Children.Count; i++) {
 			//		var childModel = model.Children[i] as ILayoutPositionableElement;
-			//		//Debug.WriteLine($"{childModel.DockHeight}", "LayoutAnchorableExpanderGroupControl OnFixChildrenDockLengths");
+			//		//Debug.WriteLine($"{childModel.DockHeight}", "LayoutAnchorableGroupControl OnFixChildrenDockLengths");
 
 			//		//if(!childModel.DockHeight.IsAuto) {
 			//		//	//childModel.DockHeight = new GridLength(1.0, GridUnitType.Star);

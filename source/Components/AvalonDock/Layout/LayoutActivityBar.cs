@@ -14,7 +14,7 @@ namespace AvalonDock.Layout {
 
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableExpanderGroup>, ILayoutPane, ILayoutSelector<LayoutAnchorableExpanderGroup> {
+	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableGroup>, ILayoutPane, ILayoutSelector<LayoutAnchorableGroup> {
 		#region fields
 
 		private string _id;
@@ -26,7 +26,7 @@ namespace AvalonDock.Layout {
 		public static readonly string SecondarySideBarKey = "PART_SecondarySideBar";
 		public static readonly string PanelKey = "PART_Panel";
 
-		private LayoutAnchorableExpanderGroupPane _layoutAnchorableExpanderGroupBox;
+		private LayoutAnchorableGroupPane _layoutAnchorableExpanderGroupBox;
 
 		#endregion fields
 
@@ -37,7 +37,7 @@ namespace AvalonDock.Layout {
 		}
 
 		internal void Init() {
-			LayoutAnchorableExpanderGroupPane = new LayoutAnchorableExpanderGroupPane()
+			LayoutAnchorableGroupPane = new LayoutAnchorableGroupPane()
 			{
 				Name = PrimarySideBarKey,
 				DockMinWidth = 56,
@@ -50,16 +50,16 @@ namespace AvalonDock.Layout {
 
 		#region Properties
 
-		public LayoutAnchorableExpanderGroupPane LayoutAnchorableExpanderGroupPane {
+		public LayoutAnchorableGroupPane LayoutAnchorableGroupPane {
 			get => _layoutAnchorableExpanderGroupBox;
 
 			set {
 				if(value != _layoutAnchorableExpanderGroupBox) {
-					RaisePropertyChanging(nameof(LayoutAnchorableExpanderGroupPane));
+					RaisePropertyChanging(nameof(LayoutAnchorableGroupPane));
 
 					_layoutAnchorableExpanderGroupBox = value;
 					_layoutAnchorableExpanderGroupBox.ReplaceChildrenNoCollectionChangedSubscribe(Children);
-				 var primarySideBar = 	Root.RootPanel.Children.OfType<LayoutAnchorableExpanderGroupPane>()
+				 var primarySideBar = 	Root.RootPanel.Children.OfType<LayoutAnchorableGroupPane>()
 						.Where(o=> PrimarySideBarKey == o.Name)
 						.FirstOrDefault();
 
@@ -69,7 +69,7 @@ namespace AvalonDock.Layout {
 					} else {
 						rootPanel.InsertChildAt(0, _layoutAnchorableExpanderGroupBox);
 					}
-					RaisePropertyChanged(nameof(LayoutAnchorableExpanderGroupPane));
+					RaisePropertyChanged(nameof(LayoutAnchorableGroupPane));
 				}
 			}
 		}
@@ -97,11 +97,11 @@ namespace AvalonDock.Layout {
 			base.ChildMoved(oldIndex, newIndex);
 		}
 
-		protected void RemoveChild(LayoutAnchorableExpanderGroupPane item) {
+		protected void RemoveChild(LayoutAnchorableGroupPane item) {
 			base.RemoveChild(item);
 		}
 
-		protected void InsertChild(int index, LayoutAnchorableExpanderGroupPane item) {
+		protected void InsertChild(int index, LayoutAnchorableGroupPane item) {
 			base.InsertChildAt(index, item);
 		}
 
@@ -116,7 +116,7 @@ namespace AvalonDock.Layout {
 				break;
 			}
 
-			foreach(var child in Children.OfType<LayoutAnchorableExpanderGroup>()) {
+			foreach(var child in Children.OfType<LayoutAnchorableGroup>()) {
 				child.IsActiveChanged -= Child_IsActiveChanged;
 				child.IsActiveChanged += Child_IsActiveChanged;
 			}
@@ -125,10 +125,10 @@ namespace AvalonDock.Layout {
 		}
 
 		private void Child_IsActiveChanged(object sender, EventArgs e) {
-			if(sender is LayoutAnchorableExpanderGroup model) {
+			if(sender is LayoutAnchorableGroup model) {
 				//Debug.WriteLine($"{model.IsActive}", "Child_IsActiveChanged 1");
 				if(model.IsActive) {
-					LayoutAnchorableExpanderGroupPane.SetVisible(true);
+					LayoutAnchorableGroupPane.SetVisible(true);
 				}
 			}
 		}
@@ -202,7 +202,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public LayoutAnchorableExpanderGroup SelectedItem {
+		public LayoutAnchorableGroup SelectedItem {
 			get => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
 			set {
 				if(value != null && value != SelectedItem) {
@@ -216,7 +216,7 @@ namespace AvalonDock.Layout {
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
 		/// </summary>
 		/// <param name="content"></param>
-		public int IndexOf(LayoutAnchorableExpanderGroup content) {
+		public int IndexOf(LayoutAnchorableGroup content) {
 			return Children.IndexOf(content);
 		}
 
@@ -240,7 +240,7 @@ namespace AvalonDock.Layout {
 
 		#endregion Private Methods
 
-		public IEnumerable<LayoutAnchorableExpanderGroup> OverflowItems {
+		public IEnumerable<LayoutAnchorableGroup> OverflowItems {
 			get {
 				var children = Children;
 
@@ -248,8 +248,8 @@ namespace AvalonDock.Layout {
 				//	foreach(var child in children) {
 				//		Debug.WriteLine($"{child?.TabItem?.IsVisible}, ", "OverflowItems 1");
 				//	}
-				var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>().Where(o=> !(o.TabItem?.IsVisible == true));
-				//var listSorted = Children.OfType<LayoutAnchorableExpanderGroup>()
+				var listSorted = Children.OfType<LayoutAnchorableGroup>().Where(o=> !(o.TabItem?.IsVisible == true));
+				//var listSorted = Children.OfType<LayoutAnchorableGroup>()
 				//	//.Where(o=> !(o.TabItem?.IsVisible == true))
 				//	;
 				////listSorted.Sort();
@@ -272,7 +272,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public bool HasOverflowItem => Children.OfType<LayoutAnchorableExpanderGroup>().Any(o => !(o.TabItem?.IsVisible == true));
+		public bool HasOverflowItem => Children.OfType<LayoutAnchorableGroup>().Any(o => !(o.TabItem?.IsVisible == true));
 
 		#region Private Metho
 		private void AutoFixSelectedContent() {

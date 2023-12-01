@@ -151,7 +151,7 @@ namespace AvalonDock.Layout {
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
 				//LayoutAnchorableTabItem.CancelMouseLeave();
-				LayoutAnchorableExpanderGroupTabItem.CancelMouseLeave();
+				LayoutAnchorableGroupTabItem.CancelMouseLeave();
 			}
 		}
 
@@ -451,7 +451,7 @@ namespace AvalonDock.Layout {
 
 		/// <summary>
 		/// Set to false to disable the behavior of auto-showing
-		/// a <see cref="LayoutAnchorableExpanderControl"/> on mouse over.
+		/// a <see cref="LayoutAnchorableControl"/> on mouse over.
 		/// When true, hovering the mouse over an anchorable tab 
 		/// will cause the anchorable to show itself.
 		/// </summary>

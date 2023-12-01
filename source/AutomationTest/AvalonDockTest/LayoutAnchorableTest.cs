@@ -18,14 +18,14 @@ namespace AvalonDockTest
 		[STATestMethod]
 		public void ClearBindingOfHiddenWindowTest()
 		{
-			LayoutAnchorableExpander layoutAnchorable = new LayoutAnchorableExpander
+			LayoutAnchorable layoutAnchorable = new LayoutAnchorable
 			{
 				FloatingWidth = 50,
 				FloatingHeight = 100,
 				ContentId = "Test"
 			};
 
-			var layoutAnchorablePane = new LayoutAnchorableExpanderGroup(layoutAnchorable);
+			var layoutAnchorablePane = new LayoutAnchorableGroup(layoutAnchorable);
 			LayoutAnchorablePaneGroup layoutAnchorablePaneGroup = new LayoutAnchorablePaneGroup(layoutAnchorablePane);
 			LayoutAnchorableFloatingWindow layoutFloatingWindow = new LayoutAnchorableFloatingWindow
 			{

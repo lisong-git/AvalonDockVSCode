@@ -15,8 +15,8 @@ namespace AvalonDock.Converters {
 		// 将整数转换为布尔值，如果整数等于参数，则返回 true，否则返回 false
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 			Debug.WriteLine($"{value?.GetType()}, {targetType.Name}, {parameter?.GetType()}", "ActivityBarActiveConverter 1");
-			if(parameter is LayoutAnchorableExpanderGroup model) {
-			 var p =	model.Parent as LayoutAnchorableExpanderGroupPane; 
+			if(parameter is LayoutAnchorableGroup model) {
+			 var p =	model.Parent as LayoutAnchorableGroupPane; 
 				if(p.SelectedItem == model) {
 					p.SetVisible(!p.IsVisible);
 				} else {

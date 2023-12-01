@@ -300,7 +300,7 @@
   </Style>-->
   <!--#endregion-->
 
-  <Style x:Key="AnchorablePaneTitleStyle" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}">
+  <Style x:Key="AnchorablePaneTitleStyle" TargetType="{x:Type avalonDockControls:AnchorableTitle}">
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate>
@@ -381,7 +381,7 @@
     </Setter>
   </Style>
 
-  <Style BasedOn="{StaticResource AnchorablePaneTitleStyle}" TargetType="{x:Type avalonDockControls:AnchorableExpanderTitle}" />
+  <Style BasedOn="{StaticResource AnchorablePaneTitleStyle}" TargetType="{x:Type avalonDockControls:AnchorableTitle}" />
 
   <!--<ControlTemplate x:Key="AnchorSideTemplate" TargetType="{x:Type avalonDockControls:LayoutAnchorSideControl}">
 		<ItemsControl Background="{TemplateBinding Background}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children1}">

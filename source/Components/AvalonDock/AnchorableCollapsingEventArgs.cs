@@ -22,7 +22,7 @@ namespace AvalonDock
 		/// Class constructor from the anchorables layout model.
 		/// </summary>
 		/// <param name="document"></param>
-		public AnchorableExpandingEventArgs(LayoutAnchorableExpander anchorable)
+		public AnchorableExpandingEventArgs(LayoutAnchorable anchorable)
 		{
 			Anchorable = anchorable;
 		}
@@ -32,6 +32,6 @@ namespace AvalonDock
 		/// <summary>
 		/// Gets the model of the anchorable that has been closed.
 		/// </summary>
-		public LayoutAnchorableExpander Anchorable { get; private set; }
+		public LayoutAnchorable Anchorable { get; private set; }
 	}
 }

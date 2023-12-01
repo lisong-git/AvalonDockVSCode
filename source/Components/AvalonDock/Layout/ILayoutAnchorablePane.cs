@@ -10,7 +10,7 @@
 namespace AvalonDock.Layout
 {
 	/// <summary>Defines an interface for that identifies a <see cref="LayoutAnchorablePane"/>
-	/// or an equivalent class (<see cref="LayoutAnchorableExpanderGroupPane"/>, <see cref="LayoutAnchorableExpanderGroupPaneControl"/> etc.)</summary>
+	/// or an equivalent class (<see cref="LayoutAnchorableGroupPane"/>, <see cref="LayoutAnchorableGroupPaneControl"/> etc.)</summary>
 	public interface ILayoutAnchorablePane : ILayoutPanelElement, ILayoutPane
 	{
 	}

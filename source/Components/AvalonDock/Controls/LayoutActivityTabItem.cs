@@ -18,8 +18,8 @@ using System.Windows.Input;
 namespace AvalonDock.Controls {
 	/// <inheritdoc />
 	/// <summary>
-	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorableExpanderGroupPaneControl"/>
-	/// shows more than 1 <see cref="LayoutAnchorableExpanderGroupControl"/>. This TabItem is displayed at the bottom
+	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorableGroupPaneControl"/>
+	/// shows more than 1 <see cref="LayoutAnchorableGroupControl"/>. This TabItem is displayed at the bottom
 	/// of a <see cref="LayoutAnchorablePaneControl"/>.
 	/// </summary>
 	/// <seealso cref="Control"/>
@@ -48,13 +48,13 @@ namespace AvalonDock.Controls {
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpanderGroup), typeof(LayoutActivityTabItem),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableGroup), typeof(LayoutActivityTabItem),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
-		public LayoutAnchorableExpanderGroup Model {
-			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
+		public LayoutAnchorableGroup Model {
+			get => (LayoutAnchorableGroup) GetValue(ModelProperty);
 			set {
 				//Debug.WriteLine($"{Model?.GetType()?.Name}", "LayoutActivityTabItem_Model 1");
 				SetValue(ModelProperty, value);
@@ -147,7 +147,7 @@ namespace AvalonDock.Controls {
 			var model = Model;
 			if(model != null) {
 				var activityBar = model.Parent as LayoutActivityBar;
-				var paneModel = activityBar.LayoutAnchorableExpanderGroupPane;
+				var paneModel = activityBar.LayoutAnchorableGroupPane;
 				//Debug.WriteLine($"{_lastSelectedIndex}, {activityBar.SelectedIndex}", $"OnMouseLeftButtonUp 1");
 				if(_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
 					//Model.IsActive = true;
@@ -181,7 +181,7 @@ namespace AvalonDock.Controls {
 			var container = model.Parent as ILayoutContainer;
 			var containerPane = model.Parent as ILayoutPane;
 			Debug.WriteLine($"{model?.GetType().Name}, {container.GetType().Name}, {container is ILayoutPane}, {container.Root?.GetType().Name}, {container.Root?.Manager == null}", "LayoutActivityTabItem_OnMouseEnter 1");
-			if(containerPane is LayoutAnchorableExpanderGroupPane expGroupBox && !expGroupBox.CanRepositionItems)
+			if(containerPane is LayoutAnchorableGroupPane expGroupBox && !expGroupBox.CanRepositionItems)
 				return;
 			//if (containerPane.Parent is LayoutAnchorablePaneGroup layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
 			var childrenList = container.Children.ToList();

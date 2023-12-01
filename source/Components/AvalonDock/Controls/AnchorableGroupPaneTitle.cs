@@ -24,13 +24,13 @@ namespace AvalonDock.Controls {
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableExpanderGroup), typeof(AnchorableGroupPaneTitle),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableGroup), typeof(AnchorableGroupPaneTitle),
 				new FrameworkPropertyMetadata(null, _OnModelChanged));
 
-		/// <summary>Gets/sets the <see cref="LayoutAnchorableExpanderGroup"/> model attached of this view.</summary>
+		/// <summary>Gets/sets the <see cref="LayoutAnchorableGroup"/> model attached of this view.</summary>
 		[Bindable(true), Description("Gets/sets the LayoutAnchorable model attached of this view."), Category("Anchorable")]
-		public LayoutAnchorableExpanderGroup Model {
-			get => (LayoutAnchorableExpanderGroup) GetValue(ModelProperty);
+		public LayoutAnchorableGroup Model {
+			get => (LayoutAnchorableGroup) GetValue(ModelProperty);
 			set => SetValue(ModelProperty, value);
 		}
 

@@ -186,7 +186,7 @@ namespace AvalonDock.Layout {
 				if(_activityBar != null) {
 					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
 					_activityBar.Parent = this;
-					//var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableExpanderGroupPane;
+					//var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableGroupPane;
 					//Debug.WriteLine($"{_activityBar.Root?.Manager == null}, {box2 == null}", "LayoutRoot_ActivityBar 1");
 
 					//PrimarySideBar = _activityBar.Current;
@@ -218,9 +218,9 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		//private LayoutAnchorableExpanderGroupPane _primarySideBar;
+		//private LayoutAnchorableGroupPane _primarySideBar;
 
-		//public LayoutAnchorableExpanderGroupPane PrimarySideBar {
+		//public LayoutAnchorableGroupPane PrimarySideBar {
 		//	get => _primarySideBar;
 		//	set {
 		//		if(value == _primarySideBar)
@@ -241,7 +241,7 @@ namespace AvalonDock.Layout {
 		//			// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
 		//			Stopwatch watch = Stopwatch.StartNew();
 
-		//			if((RootPanel.Children.FirstOrDefault(o => o == _primarySideBar) is LayoutAnchorableExpanderGroupPane p)) {
+		//			if((RootPanel.Children.FirstOrDefault(o => o == _primarySideBar) is LayoutAnchorableGroupPane p)) {
 		//				p.SetVisible(true);
 		//				watch.Stop();
 		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
@@ -258,9 +258,9 @@ namespace AvalonDock.Layout {
 		//}
 
 
-		private LayoutAnchorableExpanderGroupPane _secondarySideBar;
+		private LayoutAnchorableGroupPane _secondarySideBar;
 
-		public LayoutAnchorableExpanderGroupPane SecondarySideBar {
+		public LayoutAnchorableGroupPane SecondarySideBar {
 			get => _secondarySideBar;
 			set {
 				if(value == _secondarySideBar)
@@ -413,7 +413,7 @@ namespace AvalonDock.Layout {
 			else if(_floatingWindows != null && _floatingWindows.Contains(element))
 				_floatingWindows.Remove(element as LayoutFloatingWindow);
 			else if(_hiddenAnchorables != null && _hiddenAnchorables.Contains(element))
-				_hiddenAnchorables.Remove(element as LayoutAnchorableExpander);
+				_hiddenAnchorables.Remove(element as LayoutAnchorable);
 			//else if(element == TopSide)
 			//	TopSide = null;
 			//else if(element == RightSide)
@@ -434,9 +434,9 @@ namespace AvalonDock.Layout {
 				_floatingWindows.Remove(oldElement as LayoutFloatingWindow);
 				_floatingWindows.Insert(index, newElement as LayoutFloatingWindow);
 			} else if(_hiddenAnchorables != null && _hiddenAnchorables.Contains(oldElement)) {
-				var index = _hiddenAnchorables.IndexOf(oldElement as LayoutAnchorableExpander);
-				_hiddenAnchorables.Remove(oldElement as LayoutAnchorableExpander);
-				_hiddenAnchorables.Insert(index, newElement as LayoutAnchorableExpander);
+				var index = _hiddenAnchorables.IndexOf(oldElement as LayoutAnchorable);
+				_hiddenAnchorables.Remove(oldElement as LayoutAnchorable);
+				_hiddenAnchorables.Insert(index, newElement as LayoutAnchorable);
 			}
 			//else if(oldElement == TopSide)
 			//	TopSide = (LayoutAnchorSide) newElement;
@@ -470,7 +470,7 @@ namespace AvalonDock.Layout {
 					//...set null any reference coming from contents not yet hosted in a floating window
 					foreach(var contentReferencingEmptyPane in this.Descendents().OfType<LayoutContent>()
 						.Where(c => ((ILayoutPreviousContainer) c).PreviousContainer == emptyPane && !c.IsFloating)) {
-						if(contentReferencingEmptyPane is LayoutAnchorableExpander anchorable &&
+						if(contentReferencingEmptyPane is LayoutAnchorable anchorable &&
 							!anchorable.IsVisible)
 							continue;
 
@@ -495,7 +495,7 @@ namespace AvalonDock.Layout {
 
 				if(!exitFlag) {
 					//removes any empty anchorable pane group
-					foreach(var emptyLayoutAnchorablePaneGroup in this.Descendents().OfType<LayoutAnchorableExpanderGroupPane>().Where(p => p.ChildrenCount == 0)) {
+					foreach(var emptyLayoutAnchorablePaneGroup in this.Descendents().OfType<LayoutAnchorableGroupPane>().Where(p => p.ChildrenCount == 0)) {
 						var parentGroup = emptyLayoutAnchorablePaneGroup.Parent;
 						parentGroup.RemoveChild(emptyLayoutAnchorablePaneGroup);
 						exitFlag = false;
@@ -559,11 +559,11 @@ namespace AvalonDock.Layout {
 			//do {
 			//	exitFlag = true;
 
-			//	Debug.WriteLine($"{this.Descendents().OfType<LayoutAnchorableExpanderGroupPane>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableExpanderGroup).ToArray().Length}", "CollectGarbage 1");
+			//	Debug.WriteLine($"{this.Descendents().OfType<LayoutAnchorableGroupPane>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableGroup).ToArray().Length}", "CollectGarbage 1");
 
 			//	//for each pane that is empty
-			//	foreach(LayoutAnchorableExpanderGroupPane paneGroupToCollapse in this.Descendents().OfType<LayoutAnchorableExpanderGroupPane>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableExpanderGroup).ToArray()) {
-			//		LayoutAnchorableExpanderGroup singleChild = paneGroupToCollapse.Children[0];
+			//	foreach(LayoutAnchorableGroupPane paneGroupToCollapse in this.Descendents().OfType<LayoutAnchorableGroupPane>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableGroup).ToArray()) {
+			//		LayoutAnchorableGroup singleChild = paneGroupToCollapse.Children[0];
 			//		paneGroupToCollapse.Orientation = singleChild.Orientation;
 			//		Debug.WriteLine($"{singleChild.Title}, {singleChild.ChildrenCount}", "CollectGarbage 2");
 			//		while(singleChild.ChildrenCount > 0) {
@@ -623,7 +623,7 @@ namespace AvalonDock.Layout {
 			UpdateActiveContentProperty();
 
 #if DEBUG
-			Debug.Assert(!this.Descendents().OfType<LayoutAnchorableExpanderGroup>().Any(a => a.ChildrenCount == 0 && a.IsVisible));
+			Debug.Assert(!this.Descendents().OfType<LayoutAnchorableGroup>().Any(a => a.ChildrenCount == 0 && a.IsVisible));
 			//DumpTree(true);
 #if TRACE
 			//RootPanel.ConsoleDump(4);
@@ -673,7 +673,7 @@ namespace AvalonDock.Layout {
 			Hidden.Clear();
 			var hidden = ReadElementList(reader, false);
 			foreach(var hiddenObject in hidden)
-				Hidden.Add((LayoutAnchorableExpander) hiddenObject);
+				Hidden.Add((LayoutAnchorable) hiddenObject);
 
 			//Read the closing end element of LayoutRoot
 			reader.ReadEndElement();
@@ -802,7 +802,7 @@ namespace AvalonDock.Layout {
 
 			if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove || e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace) {
 				if(e.OldItems != null) {
-					foreach(LayoutAnchorableExpander element in e.OldItems) {
+					foreach(LayoutAnchorable element in e.OldItems) {
 						if(element.Parent != this)
 							continue;
 						element.Parent = null;
@@ -813,7 +813,7 @@ namespace AvalonDock.Layout {
 
 			if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add || e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace) {
 				if(e.NewItems != null) {
-					foreach(LayoutAnchorableExpander element in e.NewItems) {
+					foreach(LayoutAnchorable element in e.NewItems) {
 						if(element.Parent == this)
 							continue;
 						element.Parent?.RemoveChild(element);
@@ -952,7 +952,7 @@ namespace AvalonDock.Layout {
 						break;
 					resultList.Add(result);
 				} else {
-					if(!(ReadElement(reader) is LayoutAnchorableExpander result))
+					if(!(ReadElement(reader) is LayoutAnchorable result))
 						break;
 					resultList.Add(result);
 				}
@@ -970,16 +970,16 @@ namespace AvalonDock.Layout {
 
 			Type typeToSerialize;
 			switch(reader.LocalName) {
-				case nameof(LayoutAnchorableExpanderGroupPane):
-					typeToSerialize = typeof(LayoutAnchorableExpanderGroupPane);
+				case nameof(LayoutAnchorableGroupPane):
+					typeToSerialize = typeof(LayoutAnchorableGroupPane);
 					break;
 
-				case nameof(LayoutAnchorableExpanderGroup):
-					typeToSerialize = typeof(LayoutAnchorableExpanderGroup);
+				case nameof(LayoutAnchorableGroup):
+					typeToSerialize = typeof(LayoutAnchorableGroup);
 					break;
 
-				case nameof(LayoutAnchorableExpander):
-					typeToSerialize = typeof(LayoutAnchorableExpander);
+				case nameof(LayoutAnchorable):
+					typeToSerialize = typeof(LayoutAnchorable);
 					break;
 
 				case nameof(LayoutDocumentPaneGroup):

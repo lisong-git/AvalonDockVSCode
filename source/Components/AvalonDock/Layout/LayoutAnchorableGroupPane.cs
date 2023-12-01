@@ -20,10 +20,10 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableExpanderGroupPane :LayoutPositionableGroup<LayoutAnchorableExpanderGroup>
+	public class LayoutAnchorableGroupPane :LayoutPositionableGroup<LayoutAnchorableGroup>
 		, ILayoutAnchorablePane
 		, ILayoutPositionableElement
-		, ILayoutSelector<LayoutAnchorableExpanderGroup>
+		, ILayoutSelector<LayoutAnchorableGroup>
 		, ILayoutPaneSerializable {
 		#region fields
 
@@ -43,9 +43,9 @@ namespace AvalonDock.Layout {
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableExpanderGroupPane() :base(){
+		public LayoutAnchorableGroupPane() :base(){
 		}
-		public LayoutAnchorableExpanderGroupPane(LayoutAnchorableExpanderGroup anchorableExpanderGroup):this() {
+		public LayoutAnchorableGroupPane(LayoutAnchorableGroup anchorableExpanderGroup):this() {
 			Children.Add(anchorableExpanderGroup);
 		}
 
@@ -243,7 +243,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public LayoutAnchorableExpanderGroup SelectedItem {
+		public LayoutAnchorableGroup SelectedItem {
 			get => Children.Where((o, index) => index == SelectedIndex).SingleOrDefault();
 			set {
 				//if(value != SelectedItem) { 
@@ -257,7 +257,7 @@ namespace AvalonDock.Layout {
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
 		/// </summary>
 		/// <param name="content"></param>
-		public int IndexOf(LayoutAnchorableExpanderGroup content) {
+		public int IndexOf(LayoutAnchorableGroup content) {
 			return Children.IndexOf(content);
 		}
 		#endregion Public Methods

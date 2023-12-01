@@ -8,14 +8,14 @@ using System.Windows.Media;
 namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
-	/// Implements a <see cref="LayoutAnchorableExpanderControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorableExpanderGroup"/>) can be dropped.
+	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
+	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.
 	/// </summary>
-	internal class AnchorableExpanderDropTarget : DropTarget<LayoutAnchorableExpanderControl>
+	internal class AnchorableDropTarget : DropTarget<LayoutAnchorableControl>
 	{
 		#region fields
 
-		private LayoutAnchorableExpanderControl _targetPane;
+		private LayoutAnchorableControl _targetPane;
 		private int _tabIndex = -1;
 
 		#endregion fields
@@ -32,7 +32,7 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="paneControl"></param>
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
-		internal AnchorableExpanderDropTarget(LayoutAnchorableExpanderControl paneControl,
+		internal AnchorableDropTarget(LayoutAnchorableControl paneControl,
 																	 Rect detectionRect,
 																	 DropTargetType type)
 			: base(paneControl, detectionRect, type)
@@ -48,7 +48,7 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="detectionRect"></param>
 		/// <param name="type"></param>
 		/// <param name="tabIndex"></paramLayoutAnchorableExpanderGroupPaneControl
-		internal AnchorableExpanderDropTarget(LayoutAnchorableExpanderControl paneControl,
+		internal AnchorableDropTarget(LayoutAnchorableControl paneControl,
 											Rect detectionRect,
 											DropTargetType type,
 											int tabIndex)
@@ -67,7 +67,7 @@ namespace AvalonDock.Controls.DropTargets
 		{
 			Debug.WriteLine($"{Type}", $"AnchorableExpanderDropTarget Drop 1");
 
-			LayoutAnchorableExpander targetModel = _targetPane.Model as LayoutAnchorableExpander;
+			LayoutAnchorable targetModel = _targetPane.Model as LayoutAnchorable;
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
 			switch (Type)
 			{
@@ -82,7 +82,7 @@ namespace AvalonDock.Controls.DropTargets
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
 
-						LayoutAnchorableExpanderGroupPane paneModel = floatingWindow.RootPanel;
+						LayoutAnchorableGroupPane paneModel = floatingWindow.RootPanel;
 						Debug.WriteLine($"{paneModel?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
 						if (paneModel != null &&
 							(paneModel.Children.Count == 1 ||
@@ -148,8 +148,8 @@ namespace AvalonDock.Controls.DropTargets
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
 												LayoutFloatingWindow floatingWindowModel)
 		{
-			var targetModel = _targetPane.Model as LayoutAnchorableExpander;
-			Debug.WriteLine($"{Type}, {targetModel.Title}", $"{nameof(AnchorableExpanderDropTarget)} GetPreviewPath");
+			var targetModel = _targetPane.Model as LayoutAnchorable;
+			Debug.WriteLine($"{Type}, {targetModel.Title}", $"{nameof(AnchorableDropTarget)} GetPreviewPath");
 			var orientableGroup = targetModel.Parent as ILayoutOrientableGroup;
 			var orientable = orientableGroup.Orientation;
 			if (orientable == System.Windows.Controls.Orientation.Vertical)
@@ -187,7 +187,7 @@ namespace AvalonDock.Controls.DropTargets
 							//	targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height - 2);
 							//	targetScreenRect.Height = 4.0;
 							//}
-							Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableExpanderDropTarget)} GetPreviewPath 2");
+							Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableDropTarget)} GetPreviewPath 2");
 							return new RectangleGeometry(targetScreenRect);
 						}
 				}

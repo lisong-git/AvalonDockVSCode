@@ -176,7 +176,7 @@ namespace TestApp {
 			//	dockManager.Layout.LeftSide.Children.Add(leftAnchorGroup);
 			//}
 
-			//leftAnchorGroup.Children.Add(new LayoutAnchorableExpander() { Title = "New Anchorable" });
+			//leftAnchorGroup.Children.Add(new LayoutAnchorable() { Title = "New Anchorable" });
 
 		}
 
@@ -231,7 +231,7 @@ namespace TestApp {
 		/// <param name="e"></param>
 		private void OnNewFloatingWindow(object sender, RoutedEventArgs e) {
 			//var view = new TestUserControl();
-			//var anchorable = new LayoutAnchorableExpander()
+			//var anchorable = new LayoutAnchorable()
 			//{
 			//	Title = "Floating window with initial usercontrol size",
 			//	Content = view

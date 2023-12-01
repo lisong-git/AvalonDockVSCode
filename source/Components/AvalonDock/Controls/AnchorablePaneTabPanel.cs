@@ -87,14 +87,14 @@ namespace AvalonDock.Controls {
 			foreach(TabItem child in visibleChildren) {
 				if(skipAllOthers || offset + child.DesiredSize.Width > finalSize.Width) {
 					bool isLayoutContentSelected = false;
-					var layoutContent = child.Content as LayoutAnchorableExpanderGroup;
+					var layoutContent = child.Content as LayoutAnchorableGroup;
 
 					if(layoutContent != null)
 						isLayoutContentSelected = layoutContent.IsSelected;
 
 					if(isLayoutContentSelected && !child.IsVisible) {
 						var parentContainer = layoutContent.Parent as ILayoutContainer;
-						var parentSelector = layoutContent.Parent as ILayoutSelector<LayoutAnchorableExpanderGroup>;
+						var parentSelector = layoutContent.Parent as ILayoutSelector<LayoutAnchorableGroup>;
 						var parentPane = layoutContent.Parent as ILayoutPane;
 						int contentIndex = parentSelector.IndexOf(layoutContent);
 						if(contentIndex > 0 &&
@@ -119,11 +119,11 @@ namespace AvalonDock.Controls {
 
 		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e) {
 			if(e.LeftButton == System.Windows.Input.MouseButtonState.Pressed &&
-				LayoutAnchorableExpanderGroupTabItem.IsDraggingItem()) {
-				var contentModel = LayoutAnchorableExpanderGroupTabItem.GetDraggingItem().Model as LayoutAnchorableExpanderGroup;
+				LayoutAnchorableGroupTabItem.IsDraggingItem()) {
+				var contentModel = LayoutAnchorableGroupTabItem.GetDraggingItem().Model as LayoutAnchorableGroup;
 				Debug.WriteLine($"{contentModel.Title}", "AnchorablePaneTabPanel");
 				var manager = contentModel.Root.Manager;
-				LayoutAnchorableExpanderGroupTabItem.ResetDraggingItem();
+				LayoutAnchorableGroupTabItem.ResetDraggingItem();
 
 				//manager.StartDraggingFloatingWindowForContent(contentModel);
 				manager.StartDraggingFloatingWindowForPane(contentModel);
