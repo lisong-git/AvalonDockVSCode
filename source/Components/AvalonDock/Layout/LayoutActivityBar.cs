@@ -22,11 +22,9 @@ namespace AvalonDock.Layout {
 		[XmlIgnore]
 		private bool _autoFixSelectedContent = true;
 
-		public static readonly string PrimarySideBarKey = "PART_PrimarySideBar";
-		public static readonly string SecondarySideBarKey = "PART_SecondarySideBar";
-		public static readonly string PanelKey = "PART_Panel";
 
-		private LayoutAnchorableGroupPane _layoutAnchorableExpanderGroupBox;
+
+		private LayoutAnchorableGroupPane _layoutAnchorableGroupPane;
 
 		#endregion fields
 
@@ -36,58 +34,55 @@ namespace AvalonDock.Layout {
 		public LayoutActivityBar() {
 		}
 
-		internal void Init() {
-			LayoutAnchorableGroupPane = new LayoutAnchorableGroupPane()
-			{
-				Name = PrimarySideBarKey,
-				DockMinWidth = 56,
-				DockWidth = new GridLength(168)
-			};
-		}
-
+		//internal void Init() {
+		//	//LayoutAnchorableGroupPane = new LayoutAnchorableGroupPane()
+		//	//{
+		//	//	Name = DockingManager.PrimarySideBarKey,
+		//	//	DockMinWidth = 56,
+		//	//	DockWidth = new GridLength(168)
+		//	//};
+		//}
 
 		#endregion Constructors
 
 		#region Properties
 
-		public LayoutAnchorableGroupPane LayoutAnchorableGroupPane {
-			get => _layoutAnchorableExpanderGroupBox;
+		//public LayoutAnchorableGroupPane LayoutAnchorableGroupPane {
+		//	get => _layoutAnchorableGroupPane;
 
-			set {
-				if(value != _layoutAnchorableExpanderGroupBox) {
-					RaisePropertyChanging(nameof(LayoutAnchorableGroupPane));
+		//	//set {
+		//	//	if(value != _layoutAnchorableGroupPane) {
+		//	//		RaisePropertyChanging(nameof(LayoutAnchorableGroupPane));
 
-					_layoutAnchorableExpanderGroupBox = value;
-					_layoutAnchorableExpanderGroupBox.ReplaceChildrenNoCollectionChangedSubscribe(Children);
-				 var primarySideBar = 	Root.RootPanel.Children.OfType<LayoutAnchorableGroupPane>()
-						.Where(o=> PrimarySideBarKey == o.Name)
-						.FirstOrDefault();
+		//	//		_layoutAnchorableGroupPane = value;
+		//	//		_layoutAnchorableGroupPane.ReplaceChildrenNoCollectionChangedSubscribe(Children);
 
-					var rootPanel =Root.RootPanel; ;
-					if(primarySideBar != null) {
-						rootPanel.ReplaceChild(primarySideBar, _layoutAnchorableExpanderGroupBox);
-					} else {
-						rootPanel.InsertChildAt(0, _layoutAnchorableExpanderGroupBox);
-					}
-					RaisePropertyChanged(nameof(LayoutAnchorableGroupPane));
-				}
-			}
-		}
+		//	//		var primarySideBar = Root.Manager.PrimarySideBar;
+		//	//		var rootPanel =Root.RootPanel; ;
+		//	//		if(primarySideBar != null) {
+		//	//			rootPanel.ReplaceChild(primarySideBar, _layoutAnchorableGroupPane);
+		//	//		} else {
+		//	//			rootPanel.InsertChildAt(0, _layoutAnchorableGroupPane);
+		//	//		}
+		//	//		RaisePropertyChanged(nameof(LayoutAnchorableGroupPane));
+		//	//	}
+		//	//}
+		//}
 
-		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
-		//public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
 
-		public ICommand TestCommand => new RelayCommand<object>((p) => {
-			var v =  Root.Manager.PrimarySideBar;
-			//MessageBox.Show($"{box?.IsVisible}");
-			if(v != null) {
-				v.SetVisible(!v.IsVisible);
-			}
-		});
+		//public ICommand TestCommand => new RelayCommand<object>((p) => {
+		//	var v =  Root.Manager.PrimarySideBar;
+		//	//MessageBox.Show($"{box?.IsVisible}");
+		//	if(v != null) {
+		//		v.SetVisible(!v.IsVisible);
+		//	}
+		//});
 
 		#endregion Properties
 
 		#region Overrides
+
+
 
 		/// <inheritdoc />
 		protected override bool GetVisibility() => true;
@@ -128,7 +123,7 @@ namespace AvalonDock.Layout {
 			if(sender is LayoutAnchorableGroup model) {
 				//Debug.WriteLine($"{model.IsActive}", "Child_IsActiveChanged 1");
 				if(model.IsActive) {
-					LayoutAnchorableGroupPane.SetVisible(true);
+					Root.Manager.PrimarySideBar.SetVisible(true);
 				}
 			}
 		}
@@ -141,7 +136,7 @@ namespace AvalonDock.Layout {
 			if(newValue is ILayoutGroup newGroup)
 				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
 
-			Init();
+			//Init();
 
 			base.OnParentChanged(oldValue, newValue);
 		}
@@ -243,32 +238,13 @@ namespace AvalonDock.Layout {
 		public IEnumerable<LayoutAnchorableGroup> OverflowItems {
 			get {
 				var children = Children;
-
-				//if(children != null)
-				//	foreach(var child in children) {
-				//		Debug.WriteLine($"{child?.TabItem?.IsVisible}, ", "OverflowItems 1");
-				//	}
 				var listSorted = Children.OfType<LayoutAnchorableGroup>().Where(o=> !(o.TabItem?.IsVisible == true));
-				//var listSorted = Children.OfType<LayoutAnchorableGroup>()
-				//	//.Where(o=> !(o.TabItem?.IsVisible == true))
-				//	;
-				////listSorted.Sort();
-				//Debug.WriteLine($"{listSorted.Count()}, ", "OverflowItems 2");
-
 				return listSorted.ToList();
-
-				//return children;
 			}
 			set {
 				//Debug.WriteLine($"", "OverflowItems 1");
 				RaisePropertyChanged(nameof(OverflowItems));
 				RaisePropertyChanged(nameof(HasOverflowItem));
-
-				//var children = Children;
-				//if(children != null)
-				//	foreach(var child in children) {
-				//		Debug.WriteLine($"{child?.TabItem?.IsVisible}, {HasOverflowItem}", "OverflowItems 3");
-				//	}
 			}
 		}
 

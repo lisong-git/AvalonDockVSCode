@@ -63,10 +63,6 @@ namespace AvalonDock.Layout {
 
 		/// <summary>Standard class constructor</summary>
 		public LayoutRoot() {
-			//RightSide = new LayoutAnchorSide();
-			//LeftSide = new LayoutAnchorSide();
-			//TopSide = new LayoutAnchorSide();
-			//BottomSide = new LayoutAnchorSide();
 			RootPanel = new LayoutPanel(new LayoutDocumentPane());
 			ActivityBar = new LayoutActivityBar();
 		}
@@ -115,83 +111,31 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		/// <summary>Gets or sets the top side of the layout root.</summary>
-		//public LayoutAnchorSide TopSide {
-		//	get => _topSide;
-		//	set {
-		//		if(_topSide == value)
-		//			return;
-		//		RaisePropertyChanging(nameof(TopSide));
-		//		_topSide = value;
-		//		if(_topSide != null)
-		//			_topSide.Parent = this;
-		//		RaisePropertyChanged(nameof(TopSide));
-		//	}
-		//}
-
-		///// <summary>Gets or sets the right side of the layout root.</summary>
-		//public LayoutAnchorSide RightSide {
-		//	get => _rightSide;
-		//	set {
-		//		if(_rightSide == value)
-		//			return;
-		//		RaisePropertyChanging(nameof(RightSide));
-		//		_rightSide = value;
-		//		if(_rightSide != null)
-		//			_rightSide.Parent = this;
-		//		RaisePropertyChanged(nameof(RightSide));
-		//	}
-		//}
-
-		///// <summary>Gets or sets the left side of the layout root.</summary>
-		//public LayoutAnchorSide LeftSide {
-		//	get => _leftSide;
-		//	set {
-		//		if(value == _leftSide)
-		//			return;
-		//		RaisePropertyChanging(nameof(LeftSide));
-		//		_leftSide = value;
-		//		if(_leftSide != null)
-		//			_leftSide.Parent = this;
-		//		RaisePropertyChanged(nameof(LeftSide));
-		//	}
-		//}
-
-		/// <summary>Gets or sets the bottom side of the layout root.</summary>
-		//public LayoutAnchorSide BottomSide {
-		//	get => _bottomSide;
-		//	set {
-		//		if(value == _bottomSide)
-		//			return;
-		//		RaisePropertyChanging(nameof(BottomSide));
-		//		_bottomSide = value;
-		//		if(_bottomSide != null)
-		//			_bottomSide.Parent = this;
-		//		RaisePropertyChanged(nameof(BottomSide));
-		//	}
-		//}
-
-		//private Stopwatch watch;
 		public LayoutActivityBar ActivityBar {
 			get => _activityBar;
 			set {
 
-				if(value == _activityBar)
+				if (value == _activityBar)
 					return;
 				RaisePropertyChanging(nameof(ActivityBar));
 
-				if(_activeContent != null)
+				if (_activityBar != null) {
 					_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;
+					_activityBar.Parent = null;
+				}
 				_activityBar = value;
-				if(_activityBar != null) {
+				if (_activityBar != null) {
 					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
 					_activityBar.Parent = this;
-					//var box2 =  _activityBar.Root?.Manager?.LayoutAnchorableGroupPane;
-					//Debug.WriteLine($"{_activityBar.Root?.Manager == null}, {box2 == null}", "LayoutRoot_ActivityBar 1");
-
-					//PrimarySideBar = _activityBar.Current;
-					//watch = Stopwatch.StartNew();
-
+					if (RootPanel != null) {
+						var primarySidePar = new LayoutAnchorableGroupPane() {
+							Name = DockingManager.PrimarySideBarKey,
+							DockMinWidth = 56,
+							DockWidth = new GridLength(168)
+						};
+						primarySidePar.ReplaceChildrenNoCollectionChangedSubscribe(_activityBar.Children);
+						RootPanel.InsertChildAt(0, primarySidePar);
+					}
 					RaisePropertyChanged(nameof(ActivityBar));
 				}
 			}
@@ -257,25 +201,6 @@ namespace AvalonDock.Layout {
 		//	}
 		//}
 
-
-		private LayoutAnchorableGroupPane _secondarySideBar;
-
-		public LayoutAnchorableGroupPane SecondarySideBar {
-			get => _secondarySideBar;
-			set {
-				if(value == _secondarySideBar)
-					return;
-				RaisePropertyChanging(nameof(SecondarySideBar));
-				_secondarySideBar = value;
-				if(_secondarySideBar != null)
-					_secondarySideBar.Parent = this;
-				RaisePropertyChanged(nameof(SecondarySideBar));
-			}
-		}
-
-
-
-
 		/// <summary>Gets the floating windows that are part of this layout.</summary>
 		public ObservableCollection<LayoutFloatingWindow> FloatingWindows {
 			get {
@@ -311,14 +236,6 @@ namespace AvalonDock.Layout {
 					foreach(var floatingWindow in _floatingWindows)
 						yield return floatingWindow;
 				}
-				//if(TopSide != null)
-				//	yield return TopSide;
-				//if(RightSide != null)
-				//	yield return RightSide;
-				//if(BottomSide != null)
-				//	yield return BottomSide;
-				//if(LeftSide != null)
-				//	yield return LeftSide;
 				if(ActivityBar != null)
 					yield return ActivityBar;
 				if(_hiddenAnchorables != null) {
@@ -414,40 +331,25 @@ namespace AvalonDock.Layout {
 				_floatingWindows.Remove(element as LayoutFloatingWindow);
 			else if(_hiddenAnchorables != null && _hiddenAnchorables.Contains(element))
 				_hiddenAnchorables.Remove(element as LayoutAnchorable);
-			//else if(element == TopSide)
-			//	TopSide = null;
-			//else if(element == RightSide)
-			//	RightSide = null;
-			//else if(element == BottomSide)
-			//	BottomSide = null;
-			//else if(element == LeftSide)
-			//	LeftSide = null;
 			else if(element == ActivityBar)
 				ActivityBar = null;
 		}
 
 		public void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement) {
-			if(oldElement == RootPanel)
-				RootPanel = (LayoutPanel) newElement;
-			else if(_floatingWindows != null && _floatingWindows.Contains(oldElement)) {
+			if (oldElement == RootPanel)
+				RootPanel = (LayoutPanel)newElement;
+			else if (_floatingWindows != null && _floatingWindows.Contains(oldElement)) {
 				var index = _floatingWindows.IndexOf(oldElement as LayoutFloatingWindow);
 				_floatingWindows.Remove(oldElement as LayoutFloatingWindow);
 				_floatingWindows.Insert(index, newElement as LayoutFloatingWindow);
-			} else if(_hiddenAnchorables != null && _hiddenAnchorables.Contains(oldElement)) {
+			}
+			else if (_hiddenAnchorables != null && _hiddenAnchorables.Contains(oldElement)) {
 				var index = _hiddenAnchorables.IndexOf(oldElement as LayoutAnchorable);
 				_hiddenAnchorables.Remove(oldElement as LayoutAnchorable);
 				_hiddenAnchorables.Insert(index, newElement as LayoutAnchorable);
 			}
-			//else if(oldElement == TopSide)
-			//	TopSide = (LayoutAnchorSide) newElement;
-			//else if(oldElement == RightSide)
-			//	RightSide = (LayoutAnchorSide) newElement;
-			//else if(oldElement == BottomSide)
-			//	BottomSide = (LayoutAnchorSide) newElement;
-			//else if(oldElement == LeftSide)
-			//	LeftSide = (LayoutAnchorSide) newElement;
-			else if(oldElement == ActivityBar)
-				ActivityBar = (LayoutActivityBar) newElement;
+			else if (oldElement == ActivityBar)
+				ActivityBar = (LayoutActivityBar)newElement;
 		}
 
 		/// <summary>Removes any empty container not directly referenced by other layout items.</summary>
@@ -652,19 +554,6 @@ namespace AvalonDock.Layout {
 					RootPanel.Children.Add(panel);
 			}
 
-			//TopSide = new LayoutAnchorSide();
-			//if(ReadElement(reader) != null)
-			//	FillLayoutAnchorSide(reader, TopSide);
-			//RightSide = new LayoutAnchorSide();
-			//if(ReadElement(reader) != null)
-			//	FillLayoutAnchorSide(reader, RightSide);
-			//LeftSide = new LayoutAnchorSide();
-			//if(ReadElement(reader) != null)
-			//	FillLayoutAnchorSide(reader, LeftSide);
-			//BottomSide = new LayoutAnchorSide();
-			//if(ReadElement(reader) != null)
-			//	FillLayoutAnchorSide(reader, BottomSide);
-
 			FloatingWindows.Clear();
 			var floatingWindows = ReadElementList(reader, true);
 			foreach(var floatingWindow in floatingWindows)
@@ -684,22 +573,6 @@ namespace AvalonDock.Layout {
 			writer.WriteStartElement(nameof(RootPanel));
 			RootPanel?.WriteXml(writer);
 			writer.WriteEndElement();
-
-			//writer.WriteStartElement(nameof(TopSide));
-			//TopSide?.WriteXml(writer);
-			//writer.WriteEndElement();
-
-			//writer.WriteStartElement(nameof(RightSide));
-			//RightSide?.WriteXml(writer);
-			//writer.WriteEndElement();
-
-			//writer.WriteStartElement(nameof(LeftSide));
-			//LeftSide?.WriteXml(writer);
-			//writer.WriteEndElement();
-
-			//writer.WriteStartElement(nameof(BottomSide));
-			//BottomSide?.WriteXml(writer);
-			//writer.WriteEndElement();
 
 			writer.WriteStartElement(nameof(ActivityBar));
 			ActivityBar?.WriteXml(writer);
@@ -866,23 +739,6 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		//private void FillLayoutAnchorSide(XmlReader reader, LayoutAnchorSide layoutAnchorSide) {
-		//	var result = new List<LayoutAnchorGroup>();
-
-		//	while(true) {
-		//		//Read all layoutAnchorSide children
-		//		if(ReadElement(reader) is LayoutAnchorGroup element)
-		//			result.Add(element);
-		//		else if(reader.NodeType == XmlNodeType.EndElement)
-		//			break;
-		//	}
-
-		//	reader.ReadEndElement();
-		//	foreach(var las in result) {
-		//		layoutAnchorSide.Children.Add(las);
-		//	}
-		//}
-
 		/// <summary>
 		/// Reads all properties of the <see cref="LayoutPanel"/> and returns them.
 		/// </summary>
@@ -994,10 +850,6 @@ namespace AvalonDock.Layout {
 					typeToSerialize = typeof(LayoutDocument);
 					break;
 
-				//case nameof(LayoutAnchorGroup):
-				//	typeToSerialize = typeof(LayoutAnchorGroup);
-				//	break;
-
 				case nameof(LayoutPanel):
 					typeToSerialize = typeof(LayoutPanel);
 					break;
@@ -1009,16 +861,6 @@ namespace AvalonDock.Layout {
 				case nameof(LayoutAnchorableFloatingWindow):
 					typeToSerialize = typeof(LayoutAnchorableFloatingWindow);
 					break;
-
-				//case nameof(LeftSide):
-				//case nameof(RightSide):
-				//case nameof(TopSide):
-				//case nameof(BottomSide):
-				//	if(reader.IsEmptyElement) {
-				//		reader.Read();
-				//		return null;
-				//	}
-				//	return reader.Read();
 
 				default:
 					typeToSerialize = FindType(reader.LocalName);

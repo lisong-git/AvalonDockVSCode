@@ -23,7 +23,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Markup;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace AvalonDock {
@@ -766,9 +765,9 @@ namespace AvalonDock {
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="ActivityBar"/> property.</summary>
 		protected virtual void OnActivityBarChanged(DependencyPropertyChangedEventArgs e) {
-			if(e.OldValue != null)
+			if (e.OldValue != null)
 				InternalRemoveLogicalChild(e.OldValue);
-			if(e.NewValue != null)
+			if (e.NewValue != null)
 				InternalAddLogicalChild(e.NewValue);
 		}
 
@@ -1491,13 +1490,22 @@ namespace AvalonDock {
 
 		#region Internal Methods
 
-		public LayoutAnchorableGroupPane PrimarySideBar { get; set; }
-		public LayoutAnchorableGroupPane SecondarySideBar { get; set; }
-		public LayoutAnchorableGroupPane Panel { get; set; }
-		//public LayoutAnchorableGroupPaneControl PrimarySideBarControl { get; set; }
+		public static readonly string PrimarySideBarKey = "PART_PrimarySideBar";
+		public static readonly string SecondarySideBarKey = "PART_SecondarySideBar";
+		public static readonly string PanelKey = "PART_Panel";
 
-		//public LayoutAnchorableGroupPaneControl SecondarySideBarControl { get; set; }
-		//public LayoutAnchorableGroupPaneControl PanelControl { get; set; }
+		private LayoutAnchorableGroupPane _primarySideBar;
+
+		public LayoutAnchorableGroupPane PrimarySideBar { get; internal set; }
+
+		public LayoutAnchorableGroupPane SecondarySideBar { get; private set; }
+
+		public LayoutAnchorableGroupPane Panel { get; private set; }
+
+		private LayoutAnchorableGroupPaneControl PrimarySideBarControl { get; set; }
+
+		//private LayoutAnchorableGroupPaneControl SecondarySideBarControl { get; set; }
+		//private LayoutAnchorableGroupPaneControl PanelControl { get; set; }
 
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
@@ -1518,18 +1526,25 @@ namespace AvalonDock {
 				return templateModelView;
 			}
 
-			if(model is LayoutAnchorableGroupPane layoutAnchorableExpanderGroupPane) {
-				var templateModelView = new LayoutAnchorableGroupPaneControl(layoutAnchorableExpanderGroupPane, IsVirtualizingAnchorable);
+			if(model is LayoutAnchorableGroup layoutAnchorableGroup) {
+				var templateModelView = new LayoutAnchorableGroupControl {
+					Model = layoutAnchorableGroup
+				};
+				return templateModelView;
+			}
 
-				if(LayoutActivityBar.PrimarySideBarKey == layoutAnchorableExpanderGroupPane.Name) {
+			if(model is LayoutAnchorableGroupPane layoutAnchorableGroupPane) {
+				var templateModelView = new LayoutAnchorableGroupPaneControl(layoutAnchorableGroupPane, IsVirtualizingAnchorable);
+
+				if(PrimarySideBarKey == layoutAnchorableGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
-					PrimarySideBar = layoutAnchorableExpanderGroupPane;
-				} else if(LayoutActivityBar.SecondarySideBarKey == layoutAnchorableExpanderGroupPane.Name) {
+					PrimarySideBar = layoutAnchorableGroupPane;
+				} else if(SecondarySideBarKey == layoutAnchorableGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(SecondarySideBarStyleProperty.Name) { Source = this });
-					SecondarySideBar = layoutAnchorableExpanderGroupPane;
-				} else if(LayoutActivityBar.PanelKey == layoutAnchorableExpanderGroupPane.Name) {
+					SecondarySideBar = layoutAnchorableGroupPane;
+				} else if(PanelKey == layoutAnchorableGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(PanelStyleProperty.Name) { Source = this });
-					Panel = layoutAnchorableExpanderGroupPane;
+					Panel = layoutAnchorableGroupPane;
 				//} else {
 				//	templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
 				}
@@ -1995,7 +2010,6 @@ namespace AvalonDock {
 				// In order to prevent resource leaks, unsubscribe from SizeChanged event for case when we have no stored Layout settings.
 				SizeChanged -= OnSizeChanged;
 				SizeChanged += OnSizeChanged;
-
 			}
 
 			//SetupAutoHideWindow();

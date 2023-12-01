@@ -105,7 +105,7 @@
                   Title="Document 1"
                   ContentId="document1"
                   IconSource="/TestApp;component/Images/alarm-clock-blue.png">
-									<Grid>
+                  <Grid>
                     <Grid.RowDefinitions>
                       <RowDefinition />
                       <RowDefinition Height="Auto" />
@@ -113,7 +113,6 @@
                     <Button
                       Height="Auto"
                       VerticalAlignment="Top"
-											
                       Click="AddTwoDocuments_click"
                       Content="Click to add 2 documents" />
                     <TextBox Grid.Row="1" Text="Document 1 Content" />
@@ -129,7 +128,7 @@
               </LayoutDocumentPane>
             </LayoutDocumentPaneGroup>
 
-            <LayoutAnchorableGroupPane
+            <!--<LayoutAnchorableGroupPane
               Name="PART_Panel"
               DockHeight="120"
               DockMinWidth="20"
@@ -175,10 +174,10 @@
                 </LayoutAnchorable>
               </LayoutAnchorableGroup>
 
-            </LayoutAnchorableGroupPane>
+            </LayoutAnchorableGroupPane>-->
           </LayoutPanel>
 
-          <LayoutAnchorableGroupPane
+          <!--<LayoutAnchorableGroupPane
             Name="PART_SecondarySideBar"
             DockMinWidth="20"
             DockWidth="120">
@@ -210,23 +209,23 @@
                 <TextBox Text="内容5" />
               </LayoutAnchorable>
             </LayoutAnchorableGroup>
-          </LayoutAnchorableGroupPane>
-
+          </LayoutAnchorableGroupPane>-->
+					
         </LayoutPanel>
 
-        <LayoutRoot.ActivityBar>
+        <!--<LayoutRoot.ActivityBar>
           <LayoutActivityBar>
             <LayoutAnchorableGroup Orientation="Vertical">
               <LayoutAnchorable Title="E1" IsExpanded="False">
                 <TextBox
-									Margin="8"
+                  Margin="8"
                   Background="Transparent"
                   BorderThickness="0"
                   Foreground="{DynamicResource WindowForeground}"
                   Text="内容一" />
               </LayoutAnchorable>
               <LayoutAnchorable Title="E2" IsExpanded="False">
-								<StackPanel Background="Transparent" Margin="8">
+                <StackPanel Margin="8" Background="Transparent">
                   <TextBox
                     Background="Transparent"
                     BorderThickness="0"
@@ -241,13 +240,13 @@
               </LayoutAnchorable>
               <LayoutAnchorable Title="E3" IsExpanded="False">
                 <TextBox
+                  Margin="8"
                   Background="Transparent"
                   BorderThickness="0"
-									Margin="8"
                   Foreground="{DynamicResource WindowForeground}"
                   Text="内容二" />
               </LayoutAnchorable>
-              <!--<LayoutAnchorable Title="E4" IsExpanded="False">
+              --><!--<LayoutAnchorable Title="E4" IsExpanded="False">
 								<TextBox
                   Background="Transparent"
                   BorderThickness="0"
@@ -261,7 +260,7 @@
                   BorderThickness="0"
                   Foreground="{DynamicResource WindowForeground}"
                   Text="内容二" />
-							</LayoutAnchorable>-->
+							</LayoutAnchorable>--><!--
 
             </LayoutAnchorableGroup>
 
@@ -325,8 +324,7 @@
               </LayoutAnchorable>
             </LayoutAnchorableGroup>
           </LayoutActivityBar>
-        </LayoutRoot.ActivityBar>
-
+        </LayoutRoot.ActivityBar>-->
       </LayoutRoot>
     </DockingManager>
   </Grid>

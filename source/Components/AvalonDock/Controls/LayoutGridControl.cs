@@ -140,10 +140,11 @@ namespace AvalonDock.Controls {
 				return;
 			foreach(var child in _model.Children) {
 				var foundContainedChild = alreadyContainedChildren.FirstOrDefault(chVM => chVM.Model == child);
-				if(foundContainedChild != null)
+				if (foundContainedChild != null)
 					Children.Add(foundContainedChild as UIElement);
 				else
 					Children.Add(manager.CreateUIElementForModel(child));
+
 			}
 			CreateSplitters();
 			UpdateRowColDefinitions();
