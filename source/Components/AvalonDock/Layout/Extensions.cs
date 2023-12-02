@@ -62,22 +62,6 @@ namespace AvalonDock.Layout
 
 		public static bool IsOfType<T, S>(this ILayoutContainer container) => container is T || container is S;
 
-		//public static AnchorSide GetSide(this ILayoutElement element)
-		//{
-		//	if (element.Parent is ILayoutOrientableGroup parentContainer)
-		//	{
-		//		var layoutPanel = parentContainer as LayoutPanel ?? parentContainer.FindParent<LayoutPanel>();
-		//		if (layoutPanel != null && layoutPanel.Children.Count > 0)
-		//		{
-		//			if (layoutPanel.Orientation == System.Windows.Controls.Orientation.Horizontal)
-		//				return layoutPanel.Children[0].Equals(element) || layoutPanel.Children[0].Descendents().Contains(element) ? AnchorSide.Left : AnchorSide.Right;
-		//			return layoutPanel.Children[0].Equals(element) || layoutPanel.Children[0].Descendents().Contains(element) ? AnchorSide.Top : AnchorSide.Bottom;
-		//		}
-		//	}
-		//	Debug.Fail("Unable to find the side for an element, possible layout problem!");
-		//	return AnchorSide.Right;
-		//}
-
 		#endregion Public Methods
 
 		#region Internal Methods

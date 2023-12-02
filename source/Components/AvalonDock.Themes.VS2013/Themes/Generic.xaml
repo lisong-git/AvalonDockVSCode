@@ -965,6 +965,7 @@
                     BorderThickness="0">
                     <ContentPresenter
                       x:Name="Content"
+											Margin="4"
                       ContentSource="Header"
                       RecognizesAccessKey="True"
                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
@@ -1066,23 +1067,29 @@
             KeyboardNavigation.TabNavigation="Local"
             SnapsToDevicePixels="true">
             <Grid.RowDefinitions>
-              <RowDefinition Height="*" />
               <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  Following border is required to catch mouse events  -->
             <Border Grid.RowSpan="2" Background="Transparent" />
 
             <!--  Shadow HeaderPanel for TabControl  -->
+            <!--<avalonDockControls:AnchorablePaneTabPanel
+                            x:Name="HeaderPanel"
+                            Grid.Row="0"
+                            IsItemsHost="true"
+							KeyboardNavigation.TabIndex="1" />-->
+
             <avalonDockControls:AnchorablePaneTabPanel
               x:Name="HeaderPanel"
-              Grid.Row="1"
-              Height="0"
-              IsEnabled="True"
-              IsItemsHost="true" />
+              Grid.Row="0"
+              Panel.ZIndex="1"
+              IsItemsHost="true"
+              KeyboardNavigation.TabIndex="1" />
 
             <Border
               x:Name="ContentPanel"
-              Grid.Row="0"
+              Grid.Row="1"
               Background="{TemplateBinding Background}"
               BorderBrush="{TemplateBinding BorderBrush}"
               BorderThickness="0"
@@ -1096,12 +1103,12 @@
             </Border>
 
           </Grid>
-          <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
-              <Setter TargetName="HeaderPanel" Property="Visibility" Value="Collapsed" />
-            </DataTrigger>
+          <!--<ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}, Path=Items.Count}" Value="1">
+                            <Setter TargetName="HeaderPanel" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
 
-          </ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>-->
 
         </ControlTemplate>
       </Setter.Value>
@@ -1877,7 +1884,7 @@
                 DockPanel.Dock="Bottom">
 
                 <ContentPresenter
-                  Grid.Row="1"									
+                  Grid.Row="1"
                   Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
                   ContentTemplate="{Binding LayoutItem.View.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                   ContentTemplateSelector="{Binding LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
@@ -2777,12 +2784,12 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Content="{TemplateBinding ActivityBar}" />
-              <Rectangle
+              <Border
                 Grid.Row="1"
                 Grid.Column="1"
                 Width="1"
                 VerticalAlignment="Stretch"
-                Fill="{DynamicResource {x:Static reskeys:ResourceKeys.GridResizerBackground}}" />
+                Background="{DynamicResource {x:Static reskeys:ResourceKeys.GridResizerBackground}}" />
               <ContentPresenter
                 Grid.Row="1"
                 Grid.Column="2"

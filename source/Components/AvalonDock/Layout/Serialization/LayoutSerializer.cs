@@ -10,11 +10,9 @@
 using System;
 using System.Linq;
 
-namespace AvalonDock.Layout.Serialization
-{
+namespace AvalonDock.Layout.Serialization {
 	/// <summary>Implements a base class for the layout serialization/deserialization of the docking framework.</summary>
-	public abstract class LayoutSerializer
-	{
+	public abstract class LayoutSerializer {
 		#region fields
 
 		private LayoutAnchorable[] _previousAnchorables = null;
@@ -28,8 +26,7 @@ namespace AvalonDock.Layout.Serialization
 		/// Class constructor from <see cref="DockingManager"/> instance.
 		/// </summary>
 		/// <param name="manager"></param>
-		public LayoutSerializer(DockingManager manager)
-		{
+		public LayoutSerializer(DockingManager manager) {
 			Manager = manager ?? throw new ArgumentNullException(nameof(manager));
 			_previousAnchorables = Manager.Layout.Descendents().OfType<LayoutAnchorable>().ToArray();
 			_previousDocuments = Manager.Layout.Descendents().OfType<LayoutDocument>().ToArray();
@@ -58,13 +55,11 @@ namespace AvalonDock.Layout.Serialization
 
 		#region Methods
 
-		protected virtual void FixupLayout(LayoutRoot layout)
-		{
+		protected virtual void FixupLayout(LayoutRoot layout) {
 			foreach (var element in layout.Descendents().OfType<LayoutElement>()) element.FixCachedRootOnDeserialize();
 
 			//fix container panes
-			foreach (var lcToAttach in layout.Descendents().OfType<ILayoutPreviousContainer>().Where(lc => lc.PreviousContainerId != null))
-			{
+			foreach (var lcToAttach in layout.Descendents().OfType<ILayoutPreviousContainer>().Where(lc => lc.PreviousContainerId != null)) {
 				var paneContainerToAttach = layout.Descendents().OfType<ILayoutPaneSerializable>().FirstOrDefault(lps => lps.Id == lcToAttach.PreviousContainerId);
 				if (paneContainerToAttach == null)
 					throw new ArgumentException($"Unable to find a pane with id ='{lcToAttach.PreviousContainerId}'");
@@ -72,8 +67,7 @@ namespace AvalonDock.Layout.Serialization
 			}
 
 			//now fix the content of the layout anchorable contents
-			foreach (var lcToFix in layout.Descendents().OfType<LayoutAnchorable>().Where(lc => lc.Content == null).ToArray())
-			{
+			foreach (var lcToFix in layout.Descendents().OfType<LayoutAnchorable>().Where(lc => lc.Content == null).ToArray()) {
 				LayoutAnchorable previousAchorable = null;            //try find the content in replaced layout
 				if (lcToFix.ContentId != null)
 					previousAchorable = _previousAnchorables.FirstOrDefault(a => a.ContentId == lcToFix.ContentId);
@@ -81,8 +75,7 @@ namespace AvalonDock.Layout.Serialization
 				if (previousAchorable != null && previousAchorable.Title != null)
 					lcToFix.Title = previousAchorable.Title;
 
-				if (LayoutSerializationCallback != null)
-				{
+				if (LayoutSerializationCallback != null) {
 					// Ask client application via callback if item should be deserialized
 					var args = new LayoutSerializationCallbackEventArgs(lcToFix, previousAchorable?.Content);
 					LayoutSerializationCallback(this, args);
@@ -95,22 +88,19 @@ namespace AvalonDock.Layout.Serialization
 				}
 				else if (previousAchorable == null)  // No Callback and no provious document -> skip this
 					lcToFix.HideAnchorable(false);
-				else
-				{   // No Callback but previous anchoreable available -> load content from previous document
+				else {   // No Callback but previous anchoreable available -> load content from previous document
 					lcToFix.Content = previousAchorable.Content;
 					lcToFix.IconSource = previousAchorable.IconSource;
 				}
 			}
 
 			//now fix the content of the layout document contents
-			foreach (var lcToFix in layout.Descendents().OfType<LayoutDocument>().Where(lc => lc.Content == null).ToArray())
-			{
+			foreach (var lcToFix in layout.Descendents().OfType<LayoutDocument>().Where(lc => lc.Content == null).ToArray()) {
 				LayoutDocument previousDocument = null;               //try find the content in replaced layout
 				if (lcToFix.ContentId != null)
 					previousDocument = _previousDocuments.FirstOrDefault(a => a.ContentId == lcToFix.ContentId);
 
-				if (LayoutSerializationCallback != null)
-				{
+				if (LayoutSerializationCallback != null) {
 					// Ask client application via callback if this realy should be deserialized
 					var args = new LayoutSerializationCallbackEventArgs(lcToFix, previousDocument?.Content);
 					LayoutSerializationCallback(this, args);
@@ -124,8 +114,7 @@ namespace AvalonDock.Layout.Serialization
 				}
 				else if (previousDocument == null)  // No Callback and no provious document -> skip this
 					lcToFix.Close();
-				else
-				{   // No Callback but previous document available -> load content from previous document
+				else {   // No Callback but previous document available -> load content from previous document
 					lcToFix.Content = previousDocument.Content;
 					lcToFix.IconSource = previousDocument.IconSource;
 				}
@@ -134,14 +123,12 @@ namespace AvalonDock.Layout.Serialization
 			layout.CollectGarbage();
 		}
 
-		protected void StartDeserialization()
-		{
+		protected void StartDeserialization() {
 			Manager.SuspendDocumentsSourceBinding = true;
 			Manager.SuspendAnchorablesSourceBinding = true;
 		}
 
-		protected void EndDeserialization()
-		{
+		protected void EndDeserialization() {
 			Manager.SuspendDocumentsSourceBinding = false;
 			Manager.SuspendAnchorablesSourceBinding = false;
 		}

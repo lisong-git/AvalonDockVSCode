@@ -60,12 +60,17 @@ namespace AvalonDock.VS2013Test.ViewModels
 			}
 		}
 
-		public IEnumerable<ToolViewModel> Tools
-		{
-			get
-			{
+		public IEnumerable<ToolViewModel> Tools {
+			get {
 				if (_tools == null)
-					_tools = new ToolViewModel[] { Explorer, Props, Errors, Output, Git, Toolbox };
+					_tools = new ToolViewModel[] { 
+						Explorer, 
+						Props, 
+						//Errors, 
+						//Output, 
+						//Git, 
+						//Toolbox 
+					};
 				return _tools;
 			}
 		}

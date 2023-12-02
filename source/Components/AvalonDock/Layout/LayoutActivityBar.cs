@@ -17,72 +17,33 @@ namespace AvalonDock.Layout {
 	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableGroup>, ILayoutPane, ILayoutSelector<LayoutAnchorableGroup> {
 		#region fields
 
-		private string _id;
+		//private string _id;
 		private int _selectedIndex = -1;
 		[XmlIgnore]
 		private bool _autoFixSelectedContent = true;
 
-
-
-		private LayoutAnchorableGroupPane _layoutAnchorableGroupPane;
-
 		#endregion fields
 
 		#region Constructors
-
+		private int key;
 		/// <summary>Class constructor</summary>
-		public LayoutActivityBar() {
+		public LayoutActivityBar() : base() {
+			key = new Random().Next(0, 100);
 		}
-
-		//internal void Init() {
-		//	//LayoutAnchorableGroupPane = new LayoutAnchorableGroupPane()
-		//	//{
-		//	//	Name = DockingManager.PrimarySideBarKey,
-		//	//	DockMinWidth = 56,
-		//	//	DockWidth = new GridLength(168)
-		//	//};
-		//}
 
 		#endregion Constructors
 
 		#region Properties
 
-		//public LayoutAnchorableGroupPane LayoutAnchorableGroupPane {
-		//	get => _layoutAnchorableGroupPane;
-
-		//	//set {
-		//	//	if(value != _layoutAnchorableGroupPane) {
-		//	//		RaisePropertyChanging(nameof(LayoutAnchorableGroupPane));
-
-		//	//		_layoutAnchorableGroupPane = value;
-		//	//		_layoutAnchorableGroupPane.ReplaceChildrenNoCollectionChangedSubscribe(Children);
-
-		//	//		var primarySideBar = Root.Manager.PrimarySideBar;
-		//	//		var rootPanel =Root.RootPanel; ;
-		//	//		if(primarySideBar != null) {
-		//	//			rootPanel.ReplaceChild(primarySideBar, _layoutAnchorableGroupPane);
-		//	//		} else {
-		//	//			rootPanel.InsertChildAt(0, _layoutAnchorableGroupPane);
-		//	//		}
-		//	//		RaisePropertyChanged(nameof(LayoutAnchorableGroupPane));
-		//	//	}
-		//	//}
-		//}
-
-
-		//public ICommand TestCommand => new RelayCommand<object>((p) => {
-		//	var v =  Root.Manager.PrimarySideBar;
-		//	//MessageBox.Show($"{box?.IsVisible}");
-		//	if(v != null) {
-		//		v.SetVisible(!v.IsVisible);
-		//	}
-		//});
+		public ICommand TestCommand => new RelayCommand<object>((p) => {
+			var model = Root?.PrimarySideBar;
+			Debug.WriteLine($"{model?.IsVisible}, {key}", "TestCommand");
+			model?.SetVisible(!model.IsVisible);
+		});
 
 		#endregion Properties
 
 		#region Overrides
-
-
 
 		/// <inheritdoc />
 		protected override bool GetVisibility() => true;
@@ -120,11 +81,20 @@ namespace AvalonDock.Layout {
 		}
 
 		private void Child_IsActiveChanged(object sender, EventArgs e) {
-			if(sender is LayoutAnchorableGroup model) {
-				//Debug.WriteLine($"{model.IsActive}", "Child_IsActiveChanged 1");
-				if(model.IsActive) {
-					Root.Manager.PrimarySideBar.SetVisible(true);
+			if (sender is LayoutAnchorableGroup model && model.IsActive) {
+				Debug.WriteLine($"{Root}, {Root?.PrimarySideBar}, {Parent}", "Child_IsActiveChanged");
+				if (Root.PrimarySideBar != null) {
+					Root.PrimarySideBar.SetVisible(true);
 				}
+				//else {
+				// var pane =	new LayoutAnchorableGroupPane() {
+				//		Name = DockingManager.PrimarySideBarKey,
+				//		DockMinWidth = 56,
+				//		DockWidth = new GridLength(168)
+				//	};
+				//	Root.Manager.PrimarySideBar = pane;
+				//	Root.Manager.PrimarySideBar.SetVisible(true);
+				//}
 			}
 		}
 
@@ -184,12 +154,9 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-
 		public int SelectedIndex {
 			get => _selectedIndex;
 			set {
-				//Debug.WriteLine($"{_selectedIndex}, {value}", $"LayoutActivityBar SelectedIndex");
-
 				if(_selectedIndex != value) {
 					_selectedIndex = value;
 					RaisePropertyChanged(nameof(SelectedIndex));
@@ -219,8 +186,6 @@ namespace AvalonDock.Layout {
 
 		#region Internal Methods
 
-
-
 		/// <summary>
 		/// Updates whether this object is hosted at the root level of a floating window control or not.
 		/// </summary>
@@ -229,7 +194,6 @@ namespace AvalonDock.Layout {
 		#endregion Internal Methods
 
 		#region Private Methods
-
 
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 

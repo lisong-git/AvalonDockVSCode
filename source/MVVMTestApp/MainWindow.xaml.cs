@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -71,14 +71,13 @@ namespace AvalonDock.MVVMTestApp
 			// from current layout using the content ids
 			// LayoutSerializationCallback should anyway be handled to attach contents
 			// not currently loaded
-			layoutSerializer.LayoutSerializationCallback += (s, e) =>
-				{
-					//if (e.Model.ContentId == FileStatsViewModel.ToolContentId)
-					//    e.Content = Workspace.This.FileStats;
-					//else if (!string.IsNullOrWhiteSpace(e.Model.ContentId) &&
-					//    File.Exists(e.Model.ContentId))
-					//    e.Content = Workspace.This.Open(e.Model.ContentId);
-				};
+			layoutSerializer.LayoutSerializationCallback += (s, e) => {
+				if (e.Model.ContentId == FileStatsViewModel.ToolContentId)
+					e.Content = Workspace.This.FileStats;
+				else if (!string.IsNullOrWhiteSpace(e.Model.ContentId) &&
+					File.Exists(e.Model.ContentId))
+					e.Content = Workspace.This.Open(e.Model.ContentId);
+			};
 			layoutSerializer.Deserialize(@".\AvalonDock.Layout.config");
 		}
 

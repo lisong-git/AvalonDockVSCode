@@ -8,14 +8,12 @@
  ************************************************************************/
 
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AvalonDock.Layout
-{
+namespace AvalonDock.Layout {
 	/// <summary>Provides a base class for other layout panel models that support a specific class of panel.</summary>
 	/// <typeparam name="T"></typeparam>
 	[Serializable]

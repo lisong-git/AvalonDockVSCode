@@ -21,7 +21,8 @@ namespace AvalonDock.Layout {
 	[ContentProperty(nameof(Children))]
 	[Serializable]
 	public class LayoutAnchorableGroupPane :LayoutPositionableGroup<LayoutAnchorableGroup>
-		, ILayoutAnchorablePane
+		//, ILayoutAnchorablePane
+		,ILayoutPanelElement
 		, ILayoutPositionableElement
 		, ILayoutSelector<LayoutAnchorableGroup>
 		, ILayoutPaneSerializable {
@@ -43,8 +44,9 @@ namespace AvalonDock.Layout {
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableGroupPane() :base(){
+		public LayoutAnchorableGroupPane():base() {
 		}
+
 		public LayoutAnchorableGroupPane(LayoutAnchorableGroup anchorableExpanderGroup):this() {
 			Children.Add(anchorableExpanderGroup);
 		}
@@ -167,6 +169,7 @@ namespace AvalonDock.Layout {
 			UpdateChildrenOrientation();
 
 			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+			RaisePropertyChanged(nameof(Title));
 			base.OnChildrenCollectionChanged();
 		}
 
@@ -205,7 +208,7 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		public override void ConsoleDump(int tab) {
 			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-			System.Diagnostics.Trace.WriteLine("AnchorablePane()");
+			System.Diagnostics.Trace.WriteLine($"AnchorableGroupPane({Name})");
 
 			foreach(LayoutElement child in Children)
 				child.ConsoleDump(tab + 1);
@@ -225,7 +228,6 @@ namespace AvalonDock.Layout {
 			get {
 				var parentFloatingWindow = this.FindParent<LayoutAnchorableFloatingWindow>();
 				return parentFloatingWindow != null && parentFloatingWindow.IsSinglePane;
-				//return Parent != null && Parent.ChildrenCount == 1 && Parent.Parent is LayoutFloatingWindow;
 			}
 		}
 
@@ -295,7 +297,7 @@ namespace AvalonDock.Layout {
 		/// <summary>
 		/// Updates whether this object is hosted at the root level of a floating window control or not.
 		/// </summary>
-		internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+		//internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 
 		#endregion Private Methods
 	}

@@ -319,7 +319,7 @@ namespace AvalonDock.Controls {
 						Height =  new GridLength(manager.GridSplitterHeight),
 						MinHeight = 1,
 					});
-					Debug.WriteLine($"{childModel.Title}, {childModel.IsExpanded}, {nextChildModelExpanded}, {childModel.IsExpanded || nextChildModelExpanded}", $"LayoutExpanderGridControl UpdateRowColDefinitions 3");
+					//Debug.WriteLine($"{childModel.Title}, {childModel.IsExpanded}, {nextChildModelExpanded}, {childModel.IsExpanded || nextChildModelExpanded}", $"LayoutExpanderGridControl UpdateRowColDefinitions 3");
 
 					UIElement element = InternalChildren[iChild];
 					element.IsEnabled = childModel.IsExpanded && nextChildModelExpanded;

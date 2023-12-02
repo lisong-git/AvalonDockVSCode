@@ -38,7 +38,7 @@ namespace AvalonDock.Layout {
 
 		#region Properties
 
-		public bool IsSinglePane => RootPanel != null && RootPanel.Descendents().OfType<ILayoutAnchorablePane>().Count(p => p.IsVisible) == 1;
+		public bool IsSinglePane => RootPanel != null && RootPanel.Descendents().OfType<ILayoutAnchorableGroup>().Count(p => p.IsVisible) == 1;
 
 		/// <summary>Gets/sets whether this object is in a state where it is visible in the UI or not.</summary>
 		[XmlIgnore]
@@ -77,7 +77,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public ILayoutAnchorablePane SinglePane {
+		public ILayoutAnchorableGroup SinglePane {
 			get {
 				if(!IsSinglePane)
 					return null;

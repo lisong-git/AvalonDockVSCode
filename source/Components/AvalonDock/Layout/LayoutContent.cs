@@ -543,7 +543,10 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		public virtual void WriteXml(System.Xml.XmlWriter writer) {
-			if(!string.IsNullOrWhiteSpace(Title))
+			if (!string.IsNullOrWhiteSpace(ContentId))
+				writer.WriteAttributeString(nameof(ContentId), ContentId);
+
+			if (!string.IsNullOrWhiteSpace(Title))
 				writer.WriteAttributeString(nameof(Title), Title);
 
 			//if (IconSource != null)
@@ -554,9 +557,6 @@ namespace AvalonDock.Layout {
 
 			if(IsLastFocusedDocument)
 				writer.WriteAttributeString(nameof(IsLastFocusedDocument), IsLastFocusedDocument.ToString());
-
-			if(!string.IsNullOrWhiteSpace(ContentId))
-				writer.WriteAttributeString(nameof(ContentId), ContentId);
 
 			if(ToolTip is string toolTip && !string.IsNullOrWhiteSpace(toolTip))
 				writer.WriteAttributeString(nameof(ToolTip), toolTip);

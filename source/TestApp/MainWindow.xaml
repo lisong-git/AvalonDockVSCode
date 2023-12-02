@@ -14,7 +14,6 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:local="clr-namespace:TestApp"
-  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
   Title="MainWindow"
   Width="800"
   Height="480"
@@ -98,6 +97,55 @@
       </DockingManager.DocumentHeaderTemplate>
       <LayoutRoot PropertyChanged="OnLayoutRootPropertyChanged">
         <LayoutPanel Orientation="Horizontal">
+          <LayoutAnchorableGroupPane
+            Name="PART_PrimarySideBar"
+            DockMinWidth="20"
+            DockWidth="120">
+            <LayoutAnchorableGroup Name="A" Orientation="Vertical">
+              <LayoutAnchorable
+                Title="自定义4"
+                ContentId="Primary_G1_A1"
+                IsExpanded="False">
+                <StackPanel Orientation="Vertical">
+                  <TextBox Text="内容1" />
+                  <TextBox Text="内容2" />
+                </StackPanel>
+              </LayoutAnchorable>
+              <LayoutAnchorable
+                Title="自定义5"
+                ContentId="Primary_G1_A2"
+                IsExpanded="False">
+                <TextBox Text="P_G1_A2内容5" />
+              </LayoutAnchorable>
+              <LayoutAnchorable
+                Title="自定义6"
+                ContentId="Primary_G1_A3"
+                IsExpanded="True">
+                <StackPanel Orientation="Vertical">
+                  <TextBox Text="内容31" />
+                  <TextBox Text="内容32" />
+                </StackPanel>
+              </LayoutAnchorable>
+            </LayoutAnchorableGroup>
+            <LayoutAnchorableGroup Name="B" Orientation="Vertical">
+              <LayoutAnchorable
+                Title="自定义7"
+                ContentId="Primary_G2_A1"
+                IsExpanded="True">
+                <StackPanel Orientation="Vertical">
+                  <TextBox Text="内容1" />
+                  <TextBox Text="内容2" />
+                </StackPanel>
+              </LayoutAnchorable>
+              <LayoutAnchorable
+                Title="自定义8"
+                ContentId="Primary_G2_A2"
+                IsExpanded="True">
+                <TextBox Text="P_G2_A2内容5" />
+              </LayoutAnchorable>
+            </LayoutAnchorableGroup>
+          </LayoutAnchorableGroupPane>
+
           <LayoutPanel Orientation="Vertical">
             <LayoutDocumentPaneGroup>
               <LayoutDocumentPane x:Name="LayoutDocumentPane">
@@ -127,16 +175,17 @@
                 </LayoutDocument>
               </LayoutDocumentPane>
             </LayoutDocumentPaneGroup>
-
-            <!--<LayoutAnchorableGroupPane
+            <LayoutAnchorableGroupPane
               Name="PART_Panel"
               DockHeight="120"
               DockMinWidth="20"
               DockWidth="120"
               Orientation="Horizontal">
-              <LayoutAnchorableGroup Orientation="Horizontal">
-
-                <LayoutAnchorable Title="Pane1" IsExpanded="False">
+              <LayoutAnchorableGroup Name="C" Orientation="Horizontal">
+                <LayoutAnchorable
+                  Title="Pane1"
+                  ContentId="P_G1_A1"
+                  IsExpanded="False">
                   <StackPanel
                     HorizontalAlignment="Stretch"
                     Background="Green"
@@ -145,16 +194,20 @@
                     <TextBox Text="内容42" />
                   </StackPanel>
                 </LayoutAnchorable>
-
-                <LayoutAnchorable Title="Pane2" IsExpanded="False">
+                <LayoutAnchorable
+                  Title="Pane2"
+                  ContentId="P_G1_A2"
+                  IsExpanded="False">
                   <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
                     <TextBox Text="内容51" />
                     <TextBox Text="内容52" />
                     <TextBox Text="内容53" />
                   </StackPanel>
                 </LayoutAnchorable>
-
-                <LayoutAnchorable Title="Pane3" IsExpanded="False">
+                <LayoutAnchorable
+                  Title="Pane3"
+                  ContentId="P_G1_A3"
+                  IsExpanded="False">
                   <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
                     <TextBox Text="内容61" />
                     <TextBox Text="内容62" />
@@ -162,169 +215,79 @@
                 </LayoutAnchorable>
               </LayoutAnchorableGroup>
 
-              <LayoutAnchorableGroup Orientation="Vertical">
-                <LayoutAnchorable Title="Pane17" IsExpanded="True">
+              <LayoutAnchorableGroup Name="D" Orientation="Vertical">
+                <LayoutAnchorable
+                  Title="Pane17"
+                  ContentId="P_G2_A1"
+                  IsExpanded="True">
                   <StackPanel Orientation="Vertical">
                     <TextBox Text="内容1" />
                     <TextBox Text="内容2" />
                   </StackPanel>
                 </LayoutAnchorable>
-                <LayoutAnchorable Title="Pane18" IsExpanded="True">
-                  <TextBox Text="内容5" />
+                <LayoutAnchorable
+                  Title="Pane18"
+                  ContentId="P_G2_A2"
+                  IsExpanded="True">
+                  <TextBox Text="P_G2_A2 内容5" />
                 </LayoutAnchorable>
               </LayoutAnchorableGroup>
-
-            </LayoutAnchorableGroupPane>-->
+            </LayoutAnchorableGroupPane>
           </LayoutPanel>
 
-          <!--<LayoutAnchorableGroupPane
+          <LayoutAnchorableGroupPane
             Name="PART_SecondarySideBar"
             DockMinWidth="20"
             DockWidth="120">
-            <LayoutAnchorableGroup Orientation="Vertical">
-              <LayoutAnchorable Title="自定义4" IsExpanded="False">
+            <LayoutAnchorableGroup Name="E" Orientation="Vertical">
+              <LayoutAnchorable
+                Title="自定义4"
+                ContentId="S_G1_A1"
+                IsExpanded="False">
                 <StackPanel Orientation="Vertical">
                   <TextBox Text="内容1" />
                   <TextBox Text="内容2" />
                 </StackPanel>
               </LayoutAnchorable>
-              <LayoutAnchorable Title="自定义5" IsExpanded="False">
-                <TextBox Text="内容5" />
+              <LayoutAnchorable
+                Title="自定义5"
+                ContentId="S_G1_A2"
+                IsExpanded="False">
+                <TextBox Text="S_G1_A2内容5" />
               </LayoutAnchorable>
-              <LayoutAnchorable Title="自定义6" IsExpanded="True">
+              <LayoutAnchorable
+                Title="自定义6"
+                ContentId="S_G1_A3"
+                IsExpanded="True">
                 <StackPanel Orientation="Vertical">
                   <TextBox Text="内容31" />
                   <TextBox Text="内容32" />
                 </StackPanel>
               </LayoutAnchorable>
             </LayoutAnchorableGroup>
-            <LayoutAnchorableGroup Orientation="Vertical">
-              <LayoutAnchorable Title="自定义7" IsExpanded="True">
+            <LayoutAnchorableGroup Name="F" Orientation="Vertical">
+              <LayoutAnchorable
+                Title="自定义7"
+                ContentId="S_G2_A1"
+                IsExpanded="True">
                 <StackPanel Orientation="Vertical">
                   <TextBox Text="内容1" />
                   <TextBox Text="内容2" />
                 </StackPanel>
               </LayoutAnchorable>
-              <LayoutAnchorable Title="自定义8" IsExpanded="True">
-                <TextBox Text="内容5" />
+              <LayoutAnchorable
+                Title="自定义8"
+                ContentId="S_G2_A2"
+                IsExpanded="True">
+                <TextBox Text="S_G2_A2内容5" />
               </LayoutAnchorable>
             </LayoutAnchorableGroup>
-          </LayoutAnchorableGroupPane>-->
-					
+          </LayoutAnchorableGroupPane>
         </LayoutPanel>
 
-        <!--<LayoutRoot.ActivityBar>
-          <LayoutActivityBar>
-            <LayoutAnchorableGroup Orientation="Vertical">
-              <LayoutAnchorable Title="E1" IsExpanded="False">
-                <TextBox
-                  Margin="8"
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Foreground="{DynamicResource WindowForeground}"
-                  Text="内容一" />
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="E2" IsExpanded="False">
-                <StackPanel Margin="8" Background="Transparent">
-                  <TextBox
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Foreground="{DynamicResource WindowForeground}"
-                    Text="内容一" />
-                  <TextBox
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Foreground="{DynamicResource WindowForeground}"
-                    Text="内容二" />
-                </StackPanel>
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="E3" IsExpanded="False">
-                <TextBox
-                  Margin="8"
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Foreground="{DynamicResource WindowForeground}"
-                  Text="内容二" />
-              </LayoutAnchorable>
-              --><!--<LayoutAnchorable Title="E4" IsExpanded="False">
-								<TextBox
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Foreground="{DynamicResource WindowForeground}"
-                  Text="内容二" />
-							</LayoutAnchorable>
-
-							<LayoutAnchorable Title="E5" IsExpanded="False">
-								<TextBox
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Foreground="{DynamicResource WindowForeground}"
-                  Text="内容二" />
-							</LayoutAnchorable>--><!--
-
-            </LayoutAnchorableGroup>
-
-            <LayoutAnchorableGroup Orientation="Vertical">
-              <LayoutAnchorable Title="R4" IsExpanded="True">
-                <TextBox Text="内容一" />
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="R5" IsExpanded="True">
-                <StackPanel>
-                  <TextBox Text="内容一" />
-                  <TextBox Text="内容二" />
-                </StackPanel>
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="自定义6" IsExpanded="False">
-                <TextBox Text="内容二" />
-              </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-
-            <LayoutAnchorableGroup Orientation="Vertical">
-              <LayoutAnchorable Title="K1" IsExpanded="True">
-                <TextBox Text="内容一" />
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="K2" IsExpanded="True">
-                <StackPanel>
-                  <TextBox Text="内容一" />
-                  <TextBox Text="内容二" />
-                </StackPanel>
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="K3" IsExpanded="False">
-                <TextBox Text="内容二" />
-              </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-
-            <LayoutAnchorableGroup Orientation="Vertical">
-              <LayoutAnchorable Title="S1" IsExpanded="True">
-                <TextBox Text="内容一" />
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="S2" IsExpanded="True">
-                <StackPanel>
-                  <TextBox Text="内容一" />
-                  <TextBox Text="内容二" />
-                </StackPanel>
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="S3" IsExpanded="False">
-                <TextBox Text="内容二" />
-              </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-
-            <LayoutAnchorableGroup Orientation="Vertical">
-              <LayoutAnchorable Title="F1" IsExpanded="True">
-                <TextBox Text="内容一" />
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="F2" IsExpanded="True">
-                <StackPanel>
-                  <TextBox Text="内容一" />
-                  <TextBox Text="内容二" />
-                </StackPanel>
-              </LayoutAnchorable>
-              <LayoutAnchorable Title="F3" IsExpanded="False">
-                <TextBox Text="内容二" />
-              </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-          </LayoutActivityBar>
-        </LayoutRoot.ActivityBar>-->
+        <LayoutRoot.ActivityBar>
+          <LayoutActivityBar />
+        </LayoutRoot.ActivityBar>
       </LayoutRoot>
     </DockingManager>
   </Grid>

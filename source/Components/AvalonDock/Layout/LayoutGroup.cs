@@ -61,7 +61,7 @@ namespace AvalonDock.Layout {
 		/// <summary>Gets whether this object is visible or not.</summary>
 		public bool IsVisible {
 			get => _isVisible;
-			protected set {
+			set {
 				if(value == _isVisible)
 					return;
 				RaisePropertyChanging(nameof(IsVisible));
@@ -200,7 +200,14 @@ namespace AvalonDock.Layout {
 		#region Private Methods
 
 		private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-			if(e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {
+#if DEBUG
+			var duplicates = Children.OfType<LayoutAnchorable>().GroupBy(o => o.ContentId).Where(g => g.Count() > 1).Select(g => $"{g.Key}: {string.Join(", ", g.Select(o => $"{{{o.Name}, {o.Title}}}"))}");
+			Debug.WriteLineIf(duplicates.Any(), $"{string.Join(";", duplicates)}", "LayoutGroup Children_CollectionChanged 1");
+			var emptyContentIdLayouts = Children.OfType<LayoutAnchorable>().Where(o=> string.IsNullOrEmpty(o.ContentId)).Select(o => $"{{{o.Name}, {o.Title}}}");
+			Debug.WriteLineIf(emptyContentIdLayouts.Any(), $"{string.Join(";", emptyContentIdLayouts)}", "LayoutGroup Children_CollectionChanged 2");
+#endif
+
+			if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {
 				if(e.OldItems != null) {
 					foreach(LayoutElement element in e.OldItems)
 						if(element.Parent == this || e.Action == NotifyCollectionChangedAction.Remove)

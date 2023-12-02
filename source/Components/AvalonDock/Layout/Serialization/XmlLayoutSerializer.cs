@@ -98,7 +98,6 @@ namespace AvalonDock.Layout.Serialization
 		/// <param name="reader"></param>
 		public void Deserialize(TextReader reader)
 		{
-
 			LayoutRoot function() => _serializer.Deserialize(reader) as LayoutRoot;
 			DeserializeCommon(function);
 		}

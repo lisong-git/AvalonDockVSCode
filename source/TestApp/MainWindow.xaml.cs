@@ -48,7 +48,6 @@ namespace TestApp {
 			this.DataContext = this;
 
 			//winFormsHost.Child = new UserControl1();
-
 		}
 
 		#region TestTimer
@@ -125,13 +124,12 @@ namespace TestApp {
 
 			string fileName = (sender as MenuItem).Header.ToString();
 			var serializer = new XmlLayoutSerializer(dockManager);
-			//serializer.LayoutSerializationCallback += (s, args) =>
-			//    {
-			//        var prevContent = currentContentsList.FirstOrDefault(c => c.ContentId == args.Model.ContentId);
-			//        if (prevContent != null)
-			//            args.Content = prevContent.Content;
-			//    };
-			using(var stream = new StreamReader(string.Format(@".\AvalonDock_{0}.config", fileName)))
+			//serializer.LayoutSerializationCallback += (s, args) => {
+			//	var prevContent = currentContentsList.FirstOrDefault(c => c.ContentId == args.Model.ContentId);
+			//	if (prevContent != null)
+			//		args.Content = prevContent.Content;
+			//};
+			using (var stream = new StreamReader(string.Format(@".\AvalonDock_{0}.config", fileName)))
 				serializer.Deserialize(stream);
 		}
 
@@ -196,8 +194,8 @@ namespace TestApp {
 		}
 
 		private void OnDumpToConsole(object sender, RoutedEventArgs e) {
-			// Uncomment when TRACE is activated on AvalonDock project
-			// dockManager.Layout.ConsoleDump(0);
+			//Uncomment when TRACE is activated on AvalonDock project
+			dockManager.Layout.ConsoleDump(0);
 		}
 
 		private void OnReloadManager(object sender, RoutedEventArgs e) {
@@ -219,7 +217,7 @@ namespace TestApp {
 		}
 
 		private void OnShowHeader(object sender, RoutedEventArgs e) {
-			////            LayoutDocumentPane.ShowHeader = !LayoutDocumentPane.ShowHeader;
+			LayoutDocumentPane.ShowHeader = !LayoutDocumentPane.ShowHeader;
 		}
 
 		/// <summary>

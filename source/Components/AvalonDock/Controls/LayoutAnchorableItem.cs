@@ -33,7 +33,7 @@ namespace AvalonDock.Controls
 		private LayoutAnchorable _anchorable;   // The content of this item
 		private ICommand _defaultHideCommand;
 		private ICommand _expandCommand;
-		private ICommand _defaultAutoHideCommand;
+		//private ICommand _defaultAutoHideCommand;
 		private ICommand _defaultDockCommand;
 		private readonly ReentrantFlag _visibilityReentrantFlag = new ReentrantFlag();
 		private readonly ReentrantFlag _anchorableVisibilityReentrantFlag = new ReentrantFlag();
@@ -140,12 +140,12 @@ namespace AvalonDock.Controls
 		/// <summary>Coerces the <see cref="AutoHideCommand"/> value.</summary>
 		private static object CoerceAutoHideCommandValue(DependencyObject d, object value) => value;
 
-		private bool CanExecuteAutoHideCommand(object parameter)
-		{
-			if (LayoutElement == null) return false;
-			if (LayoutElement.FindParent<LayoutAnchorableFloatingWindow>() != null) return false;//is floating
-			return _anchorable.CanAutoHide;
-		}
+		//private bool CanExecuteAutoHideCommand(object parameter)
+		//{
+		//	if (LayoutElement == null) return false;
+		//	if (LayoutElement.FindParent<LayoutAnchorableFloatingWindow>() != null) return false;//is floating
+		//	return _anchorable.CanAutoHide;
+		//}
 
 		//private void ExecuteAutoHideCommand(object parameter) => _anchorable?.Root?.Manager?.ExecuteAutoHideCommand(_anchorable);
 

@@ -123,8 +123,8 @@ namespace AvalonDock.Controls {
 			_isMouseDown = true;
 			_draggingItem = this;
 
-			if(Model != null) {
-				var activityBar = Model.Parent as LayoutActivityBar;
+			if(Model?.Root?.ActivityBar != null) {
+				var activityBar = Model.Root.ActivityBar;
 				_lastSelectedIndex = activityBar.SelectedIndex;				
 				Model.IsActive = true;
 			}
@@ -146,19 +146,16 @@ namespace AvalonDock.Controls {
 			_isMouseDown = false;
 			var model = Model;
 			if(model != null) {
-				var activityBar = model.Parent as LayoutActivityBar;
-				
-				var paneModel = activityBar.Root.Manager.PrimarySideBar;
-				//Debug.WriteLine($"{_lastSelectedIndex}, {activityBar.SelectedIndex}", $"OnMouseLeftButtonUp 1");
-				if(_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
-					//Model.IsActive = true;
+				var activityBar = model.Root.ActivityBar;
+
+				var paneModel = model.Root.PrimarySideBar;
+				if (_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
 					paneModel.SetVisible(!paneModel.IsVisible);
 				}
 			}
 			_lastSelectedIndex = -1;
 			base.OnMouseLeftButtonUp(e);
 		}
-
 
 		/// <inheritdoc />
 		protected override void OnMouseLeave(MouseEventArgs e) {

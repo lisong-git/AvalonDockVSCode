@@ -11,6 +11,7 @@ using AvalonDock.Commands;
 using AvalonDock.Layout;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,6 +83,8 @@ namespace AvalonDock.Controls {
 					return _view;
 				_view.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding(nameof(DockingManager.LayoutItemTemplate)) { Source = LayoutElement.Root.Manager });
 				_view.SetBinding(ContentPresenter.ContentTemplateSelectorProperty, new Binding(nameof(DockingManager.LayoutItemTemplateSelector)) { Source = LayoutElement.Root.Manager });
+				//Debug.WriteLine($"{ContentId}", "LayoutItem View");
+
 				LayoutElement.Root.Manager?.InternalAddLogicalChild(_view);
 				return _view;
 			}
