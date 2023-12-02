@@ -37,10 +37,6 @@ namespace AvalonDock.Layout {
 		#region fields
 
 		private LayoutPanel _rootPanel;
-		//private LayoutAnchorSide _topSide = null;
-		//private LayoutAnchorSide _rightSide;
-		//private LayoutAnchorSide _leftSide = null;
-		//private LayoutAnchorSide _bottomSide = null;
 		private LayoutActivityBar _activityBar = null;
 
 		private ObservableCollection<LayoutFloatingWindow> _floatingWindows = null;
@@ -59,14 +55,15 @@ namespace AvalonDock.Layout {
 
 		#endregion fields
 
+		public static LayoutPanel DefaultRootPanel => new LayoutPanel(new LayoutPanel(new LayoutDocumentPaneGroup(new LayoutDocumentPane()))) { Orientation = Orientation.Horizontal };
+
 		#region Constructors
 
 		/// <summary>Standard class constructor</summary>
 		public LayoutRoot() {
-			RootPanel = new LayoutPanel(new LayoutDocumentPane());
-			ActivityBar = new LayoutActivityBar();
+			//RootPanel = DefaultRootPanel;
+			//ActivityBar = new LayoutActivityBar();
 		}
-
 		#endregion Constructors
 
 		#region Events
@@ -98,7 +95,7 @@ namespace AvalonDock.Layout {
 				var activeRoot = activeContent?.Root;
 				if(_rootPanel != null && _rootPanel.Parent == this)
 					_rootPanel.Parent = null;
-				_rootPanel = value ?? new LayoutPanel(new LayoutDocumentPane());
+				_rootPanel = value ?? DefaultRootPanel;
 				_rootPanel.Parent = this;
 				if(ActiveContent == null && activeRoot == this && activeContent != null) {
 					ActiveContent = activeContent;
@@ -114,92 +111,53 @@ namespace AvalonDock.Layout {
 		public LayoutActivityBar ActivityBar {
 			get => _activityBar;
 			set {
-
 				if (value == _activityBar)
 					return;
 				RaisePropertyChanging(nameof(ActivityBar));
 
 				if (_activityBar != null) {
-					_activityBar.PropertyChanged -= ActivityBar_PropertyChanged;
 					_activityBar.Parent = null;
 				}
 				_activityBar = value;
-				if (_activityBar != null) {
-					_activityBar.PropertyChanged += ActivityBar_PropertyChanged;
-					_activityBar.Parent = this;
-					if (RootPanel != null) {
-						var primarySidePar = new LayoutAnchorableGroupPane() {
-							Name = DockingManager.PrimarySideBarKey,
-							DockMinWidth = 56,
-							DockWidth = new GridLength(168)
-						};
-						primarySidePar.ReplaceChildrenNoCollectionChangedSubscribe(_activityBar.Children);
-						RootPanel.InsertChildAt(0, primarySidePar);
+				if (_activityBar == null) return;
+				_activityBar.Parent = this;
+
+				if (RootPanel != null) {
+					var sidePar = PrimarySideBar;
+					if (sidePar == null) {
+						sidePar = DefaultPrimarySideBar;
+						PrimarySideBar = sidePar;
 					}
-					RaisePropertyChanged(nameof(ActivityBar));
+					sidePar.ReplaceChildrenNoCollectionChangedSubscribe(_activityBar.Children);
 				}
+
+				RaisePropertyChanged(nameof(ActivityBar));
 			}
 		}
 
-		private void ActivityBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			if(e.PropertyName == nameof(LayoutActivityBar.SelectedItem) && sender is LayoutActivityBar activityBar) {
-				//Debug.WriteLine($"{Root?.Manager}, {activityBar.Root?.Manager}", "ActivityBar_PropertyChanged 00");
+		private LayoutAnchorableGroupPane _primarySideBar;
 
-				//watch.Stop();
+		public LayoutAnchorableGroupPane PrimarySideBar {
+			get => _primarySideBar;
+		  set {
+				if (_primarySideBar == value) return;
 
-				//Debug.WriteLine($"{e.PropertyName}, {watch.ElapsedMilliseconds}, {watch.ElapsedTicks}", "ActivityBar_PropertyChanged 1");
-				//Stopwatch watch = Stopwatch.StartNew();
+				_primarySideBar = value;
+				if (ActivityBar != null) {
+					var activityBar = ActivityBar;
+					_primarySideBar.ReplaceChildrenNoCollectionChangedSubscribe(activityBar.Children);
+					RootPanel.InsertChildAt(0, _primarySideBar);
+				}
 
-				//if(PrimarySideBar == activityBar.Current) {
-				//	watch.Stop();
-				//	Debug.WriteLine($"{watch.ElapsedMilliseconds}ms. {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 2");
-				//} else {
-				//	PrimarySideBar = activityBar.Current;
-				//	watch.Stop();
-				//	Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. {PrimarySideBar.Name}", "ActivityBar_PropertyChanged 3");
-				//	//MessageBox.Show($"{watch.ElapsedMilliseconds}ms", "ActivityBar_PropertyChanged");
-				//}
+				//Debug.WriteLine($"{_primarySideBar == null}", "PrimarySideBar");
 			}
 		}
 
-		//private LayoutAnchorableGroupPane _primarySideBar;
-
-		//public LayoutAnchorableGroupPane PrimarySideBar {
-		//	get => _primarySideBar;
-		//	set {
-		//		if(value == _primarySideBar)
-		//			return;
-		//		RaisePropertyChanging(nameof(PrimarySideBar));
-		//		Debug.WriteLine($"{_primarySideBar == null}, {value == null}", "PrimarySideBar 0");
-		//		//if(_primarySideBar != null) {
-		//		//	width = _primarySideBar.DockWidth;
-		//		//}
-		//		//_primarySideBar?.SetVisible(false);
-
-		//		//_primarySideBar.ComputeVisibility();
-		//		_primarySideBar = value;
-
-		//		if(_primarySideBar != null) {
-		//			_primarySideBar.Parent = RootPanel;
-
-		//			// Debug.WriteLine($"{p == null}, {RootPanel.ChildrenCount}", "PrimarySideBar 1");
-		//			Stopwatch watch = Stopwatch.StartNew();
-
-		//			if((RootPanel.Children.FirstOrDefault(o => o == _primarySideBar) is LayoutAnchorableGroupPane p)) {
-		//				p.SetVisible(true);
-		//				watch.Stop();
-		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 1");
-		//			} else {
-		//				RootPanel.InsertChildAt(0, _primarySideBar);
-		//				_primarySideBar.SetVisible(true);
-		//				watch.Stop();
-		//				Debug.WriteLine($"程序耗时：{watch.ElapsedMilliseconds}ms. ", "PrimarySideBar 2");
-		//			}
-
-		//		}
-		//		RaisePropertyChanged(nameof(PrimarySideBar));
-		//	}
-		//}
+		public static LayoutAnchorableGroupPane DefaultPrimarySideBar => new LayoutAnchorableGroupPane() {
+			Name = DockingManager.PrimarySideBarKey,
+			DockMinWidth = 56,
+			DockWidth = new GridLength(168)
+		};
 
 		/// <summary>Gets the floating windows that are part of this layout.</summary>
 		public ObservableCollection<LayoutFloatingWindow> FloatingWindows {
@@ -387,12 +345,12 @@ namespace AvalonDock.Layout {
 						continue;
 
 					//...if this empty pane is not referenced by anyone, then remove it from its parent container
-					if(!this.Descendents().OfType<ILayoutPreviousContainer>().Any(c => c.PreviousContainer == emptyPane)) {
-						var parentGroup = emptyPane.Parent;
-						parentGroup.RemoveChild(emptyPane);
-						exitFlag = false;
-						break;
-					}
+					//if(!this.Descendents().OfType<ILayoutPreviousContainer>().Any(c => c.PreviousContainer == emptyPane)) {
+					//	var parentGroup = emptyPane.Parent;
+					//	parentGroup.RemoveChild(emptyPane);
+					//	exitFlag = false;
+					//	break;
+					//}
 				}
 
 				if(!exitFlag) {

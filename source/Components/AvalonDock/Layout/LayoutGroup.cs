@@ -61,7 +61,7 @@ namespace AvalonDock.Layout {
 		/// <summary>Gets whether this object is visible or not.</summary>
 		public bool IsVisible {
 			get => _isVisible;
-			protected set {
+			set {
 				if(value == _isVisible)
 					return;
 				RaisePropertyChanging(nameof(IsVisible));

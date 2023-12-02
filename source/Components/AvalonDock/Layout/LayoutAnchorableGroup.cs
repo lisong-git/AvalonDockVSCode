@@ -13,26 +13,31 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace AvalonDock.Layout {
 	/// <summary>
 	/// Implements an element in the layout model tree that can contain and arrange multiple
-	/// <see cref="LayoutAnchorablePane"/> elements in x or y directions, which in turn contain
+	/// <see cref="LayoutAnchorableGroup"/> elements in x or y directions, which in turn contain
 	/// <see cref="LayoutAnchorable"/> elements.
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableGroup :LayoutPositionableGroup<LayoutAnchorable>, ILayoutAnchorablePane, ILayoutContentSelector, ILayoutOrientableGroup, ILayoutPaneSerializable {
+	public class LayoutAnchorableGroup :LayoutPositionableGroup<LayoutAnchorable>
+		, ILayoutAnchorableGroup
+		, ILayoutContentSelector
+		, ILayoutOrientableGroup
+		, ILayoutPaneSerializable {
 		#region fields
-
-		private Orientation _orientation = Orientation.Vertical;
-		private int _selectedIndex;
-		private string _id;
 
 		[XmlIgnore]
 		private bool _autoFixSelectedContent = true;
 
+		private string _id;
+		private string _name;
+		private Orientation _orientation = Orientation.Vertical;
+		private int _selectedIndex;
 		#endregion fields
 
 		#region Constructors
@@ -51,15 +56,39 @@ namespace AvalonDock.Layout {
 
 		#region Properties
 
-		public string Title => Children.FirstOrDefault()?.Title ?? "默认";
+		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
+		string ILayoutPaneSerializable.Id {
+			get => _id;
+			set => _id = value;
+		}
+
+		/// <summary>
+		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
+		/// </summary>
+		public Orientation Orientation {
+			get => _orientation;
+			set {
+				if (value == _orientation)
+					return;
+				RaisePropertyChanging(nameof(Orientation));
+				_orientation = value;
+				RaisePropertyChanged(nameof(Orientation));
+			}
+		}
+
+		/// <summary>Gets whether the pane is hosted in a floating window.</summary>
+		public bool IsHostedInFloatingWindow => this.FindParent<LayoutFloatingWindow>() != null;
+
+		/// <summary>Gets the selected content in the pane or null.</summary>
+		public LayoutContent SelectedContent => _selectedIndex == -1 ? null : Children[_selectedIndex];
 
 		public int SelectedIndex {
 			get => _selectedIndex;
 			set {
-				if(value < 0 || value >= Children.Count)
+				if (value < 0 || value >= Children.Count)
 					value = -1;
 
-				if(value == _selectedIndex) {
+				if (value == _selectedIndex) {
 					return;
 				}
 
@@ -73,37 +102,33 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+		public string Name {
+			get => _name;
+			set {
+				if (value == _name)
+					return;
+				_name = value;
+				RaisePropertyChanged(nameof(Name));
+			}
+		}
+
+		public string Title => Name ?? Children.FirstOrDefault()?.Title ?? "默认";
 		private void SetChildSelected(int index, bool selected) {
 			if(index >= 0 && index < Children.Count)
 				Children[index].IsSelected = selected;
 		}
-
-		/// <summary>Gets the selected content in the pane or null.</summary>
-		public LayoutContent SelectedContent => _selectedIndex == -1 ? null : Children[_selectedIndex];
-
-		/// <summary>Gets/sets the unique id that is used for the serialization of this panel.</summary>
-		string ILayoutPaneSerializable.Id {
-			get => _id;
-			set => _id = value;
-		}
-
-		/// <summary>
-		/// Gets/sets the <see cref="System.Windows.Controls.Orientation"/> of this object.
-		/// </summary>
-		public Orientation Orientation {
-			get => _orientation;
-			set {
-				if(value == _orientation)
-					return;
-				RaisePropertyChanging(nameof(Orientation));
-				_orientation = value;
-				RaisePropertyChanged(nameof(Orientation));
-			}
-		}
-
 		#endregion Properties
 
 		#region Overrides
+
+		/// <inheritdoc />
+		public override void ConsoleDump(int tab) {
+			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
+			System.Diagnostics.Trace.WriteLine(string.Format("AnchorableExpander({0})", Orientation));
+
+			foreach (LayoutElement child in Children)
+				child.ConsoleDump(tab + 1);
+		}
 
 		/// <summary>
 		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
@@ -117,34 +142,26 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <inheritdoc />
+		public override void ReadXml(System.Xml.XmlReader reader) {
+			if (reader.MoveToAttribute(nameof(Orientation)))
+				Orientation = (Orientation)Enum.Parse(typeof(Orientation), reader.Value, true);
+			base.ReadXml(reader);
+		}
+
+		/// <inheritdoc />
+		public override void WriteXml(System.Xml.XmlWriter writer) {
+			writer.WriteAttributeString(nameof(Orientation), Orientation.ToString());
+			base.WriteXml(writer);
+		}
+
+		/// <inheritdoc />
 		protected override bool GetVisibility() => Children.Count > 0 && Children.Any(c => c.IsVisible);
-
-		/// <inheritdoc />
-		protected override void OnIsVisibleChanged() {
-			UpdateParentVisibility();
-			base.OnIsVisibleChanged();
-		}
-
-		/// <inheritdoc />
-		protected override void OnDockWidthChanged() {
-			if(DockWidth.IsAbsolute && ChildrenCount == 1) {
-				((ILayoutPositionableElement) Children[0]).DockWidth = DockWidth;
-			}
-			base.OnDockWidthChanged();
-		}
-
-		/// <inheritdoc />
-		protected override void OnDockHeightChanged() {
-			if(DockHeight.IsAbsolute && ChildrenCount == 1)
-				((ILayoutPositionableElement) Children[0]).DockHeight = DockHeight;
-			base.OnDockHeightChanged();
-		}
 
 		/// <inheritdoc />
 		protected override void OnChildrenCollectionChanged() {
 			AutoFixSelectedContent();
-			for(var i = 0; i < Children.Count; i++) {
-				if(!Children[i].IsSelected)
+			for (var i = 0; i < Children.Count; i++) {
+				if (!Children[i].IsSelected)
 					continue;
 				SelectedIndex = i;
 				break;
@@ -155,6 +172,26 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <inheritdoc />
+		protected override void OnDockHeightChanged() {
+			if (DockHeight.IsAbsolute && ChildrenCount == 1)
+				((ILayoutPositionableElement)Children[0]).DockHeight = DockHeight;
+			base.OnDockHeightChanged();
+		}
+
+		/// <inheritdoc />
+		protected override void OnDockWidthChanged() {
+			if (DockWidth.IsAbsolute && ChildrenCount == 1) {
+				((ILayoutPositionableElement)Children[0]).DockWidth = DockWidth;
+			}
+			base.OnDockWidthChanged();
+		}
+
+		/// <inheritdoc />
+		protected override void OnIsVisibleChanged() {
+			UpdateParentVisibility();
+			base.OnIsVisibleChanged();
+		}
+		/// <inheritdoc />
 		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
 			if(oldValue is ILayoutGroup oldGroup)
 				oldGroup.ChildrenCollectionChanged -= OnParentChildrenCollectionChanged;
@@ -163,29 +200,7 @@ namespace AvalonDock.Layout {
 				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
 			base.OnParentChanged(oldValue, newValue);
 		}
-
-		/// <inheritdoc />
-		public override void WriteXml(System.Xml.XmlWriter writer) {
-			writer.WriteAttributeString(nameof(Orientation), Orientation.ToString());
-			base.WriteXml(writer);
-		}
-
-		/// <inheritdoc />
-		public override void ReadXml(System.Xml.XmlReader reader) {
-			if(reader.MoveToAttribute(nameof(Orientation)))
-				Orientation = (Orientation) Enum.Parse(typeof(Orientation), reader.Value, true);
-			base.ReadXml(reader);
-		}
-
 #if TRACE
-		/// <inheritdoc />
-		public override void ConsoleDump(int tab) {
-			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-			System.Diagnostics.Trace.WriteLine(string.Format("AnchorableExpander({0})", Orientation));
-
-			foreach(LayoutElement child in Children)
-				child.ConsoleDump(tab + 1);
-		}
 #endif
 
 		#endregion Overrides
@@ -206,6 +221,8 @@ namespace AvalonDock.Layout {
 		#region IsSelected
 
 		private bool _isSelected = false;
+
+		public event EventHandler IsSelectedChanged;
 
 		public bool IsSelected {
 			get => _isSelected;
@@ -231,9 +248,6 @@ namespace AvalonDock.Layout {
 		/// Provides derived classes an opportunity to handle changes to the <see cref="IsSelected"/> property.
 		/// </summary>
 		protected virtual void OnIsSelectedChanged(bool oldValue, bool newValue) => IsSelectedChanged?.Invoke(this, EventArgs.Empty);
-
-		public event EventHandler IsSelectedChanged;
-
 		#endregion IsSelected
 
 		#region ToolTip
@@ -244,6 +258,8 @@ namespace AvalonDock.Layout {
 
 		[field: NonSerialized]
 		private bool _isActive = false;
+
+		public event EventHandler IsActiveChanged;
 
 		[XmlIgnore]
 		public bool IsActive {
@@ -279,15 +295,11 @@ namespace AvalonDock.Layout {
 				LastActivationTimeStamp = DateTime.Now;
 			IsActiveChanged?.Invoke(this, EventArgs.Empty);
 		}
-
-		public event EventHandler IsActiveChanged;
-
 		#endregion IsActive
 
-		public bool IsEnabled => true;
-
 		private DateTime? _lastActivationTimeStamp = null;
-
+		private LayoutActivityTabItem _tabItem;
+		public bool IsEnabled => true;
 		public DateTime? LastActivationTimeStamp {
 			get => _lastActivationTimeStamp;
 			set {
@@ -297,8 +309,6 @@ namespace AvalonDock.Layout {
 				RaisePropertyChanged(nameof(LastActivationTimeStamp));
 			}
 		}
-
-		private LayoutActivityTabItem _tabItem;
 		public LayoutActivityTabItem TabItem {
 			get => _tabItem;
 			set { 
@@ -363,14 +373,13 @@ namespace AvalonDock.Layout {
 				SetLastActivatedIndex();
 		}
 
+		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
 		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
 		private void SetLastActivatedIndex() {
 			var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
 			SelectedIndex = Children.IndexOf(lastActivatedDocument);
 		}
-
-		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-
 		#endregion
 	}
 }

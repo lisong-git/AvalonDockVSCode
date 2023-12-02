@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -23,5 +23,7 @@ namespace AvalonDock.Layout
 		/// <summary>Remove a child entry from the collection of children at the <paramref name="childIndex"/>.</summary>
 		/// <param name="childIndex"></param>
 		void RemoveChildAt(int childIndex);
+
+		//bool CanEmpty() { return false; }
 	}
 }

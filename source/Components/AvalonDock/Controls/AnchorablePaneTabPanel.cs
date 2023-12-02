@@ -84,29 +84,31 @@ namespace AvalonDock.Controls {
 			var offset = 0.0;
 			var skipAllOthers = false;
 
-			foreach(TabItem child in visibleChildren) {
-				if(skipAllOthers || offset + child.DesiredSize.Width > finalSize.Width) {
+			foreach (TabItem child in visibleChildren) {
+				if (skipAllOthers || offset + child.DesiredSize.Width > finalSize.Width) {
 					bool isLayoutContentSelected = false;
 					var layoutContent = child.Content as LayoutAnchorableGroup;
 
-					if(layoutContent != null)
+					if (layoutContent != null)
 						isLayoutContentSelected = layoutContent.IsSelected;
 
-					if(isLayoutContentSelected && !child.IsVisible) {
+					if (isLayoutContentSelected && !child.IsVisible) {
 						var parentContainer = layoutContent.Parent as ILayoutContainer;
 						var parentSelector = layoutContent.Parent as ILayoutSelector<LayoutAnchorableGroup>;
 						var parentPane = layoutContent.Parent as ILayoutPane;
 						int contentIndex = parentSelector.IndexOf(layoutContent);
-						if(contentIndex > 0 &&
+						if (contentIndex > 0 &&
 							parentContainer.ChildrenCount > 1) {
 							parentPane.MoveChild(contentIndex, 0);
 							parentSelector.SelectedIndex = 0;
 							return ArrangeOverride(finalSize);
+
 						}
 					}
 					child.Visibility = Visibility.Hidden;
 					skipAllOthers = true;
-				} else {
+				}
+				else {
 					child.Visibility = Visibility.Visible;
 					child.Arrange(new Rect(offset, 0.0, child.DesiredSize.Width, finalSize.Height));
 					offset += child.ActualWidth + child.Margin.Left + child.Margin.Right;

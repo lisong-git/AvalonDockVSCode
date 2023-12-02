@@ -23,7 +23,9 @@ namespace AvalonDock.Layout
 		/// <summary>Gets the <see cref="LayoutPanel"/> that acts as a root of this layout root.</summary>
 		LayoutPanel RootPanel { get; }
 
-		/// <summary>Gets the top side <see cref="LayoutAnchorSide"/> where a layout Anchorable
+		LayoutAnchorableGroupPane PrimarySideBar {  get; }
+
+        /// <summary>Gets the top side <see cref="LayoutAnchorSide"/> where a layout Anchorable
 		/// can be/or has been anchored in this layout root.</summary>
 		//LayoutAnchorSide TopSide { get; }
 

@@ -147,11 +147,9 @@ namespace AvalonDock.Controls {
 			var model = Model;
 			if(model != null) {
 				var activityBar = model.Parent as LayoutActivityBar;
-				
-				var paneModel = activityBar.Root.Manager.PrimarySideBar;
-				//Debug.WriteLine($"{_lastSelectedIndex}, {activityBar.SelectedIndex}", $"OnMouseLeftButtonUp 1");
-				if(_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
-					//Model.IsActive = true;
+
+				var paneModel = activityBar.GetRoot().PrimarySideBar;
+				if (_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
 					paneModel.SetVisible(!paneModel.IsVisible);
 				}
 			}

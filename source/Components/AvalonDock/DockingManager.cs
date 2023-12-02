@@ -85,7 +85,7 @@ namespace AvalonDock {
 			IsVirtualizingAnchorable = true;
 
 #if !VS2008
-			Layout = new LayoutRoot { RootPanel = new LayoutPanel(new LayoutDocumentPaneGroup(new LayoutDocumentPane())) };
+			Layout = new LayoutRoot();
 #else
 		  this.SetCurrentValue( DockingManager.LayoutProperty, new LayoutRoot() { RootPanel = new LayoutPanel(new LayoutDocumentPaneGroup(new LayoutDocumentPane())) } );
 #endif
@@ -167,7 +167,8 @@ namespace AvalonDock {
 		/// <summary>Coerces the <see cref="Layout"/> value.</summary>
 		private static object CoerceLayoutValue(DependencyObject d, object value) {
 			if(value == null)
-				return new LayoutRoot { RootPanel = new LayoutPanel(new LayoutDocumentPaneGroup(new LayoutDocumentPane())) };
+				return  LayoutRoot.DefaultRootPanel;
+			//return new LayoutRoot { RootPanel = new LayoutPanel(new LayoutDocumentPaneGroup(new LayoutDocumentPane())) };
 			((DockingManager) d).OnLayoutChanging(value as LayoutRoot);
 			return value;
 		}
@@ -316,20 +317,20 @@ namespace AvalonDock {
 
 		#endregion AnchorablePaneTemplate
 
-		#region AnchorSideTemplate
+		//#region AnchorSideTemplate
 
-		/// <summary>The <see cref="AnchorSideTemplate"/> dependency property.</summary>
-		public static readonly DependencyProperty AnchorSideTemplateProperty = DependencyProperty.Register(nameof(AnchorSideTemplate), typeof(ControlTemplate), typeof(DockingManager),
-				new FrameworkPropertyMetadata((ControlTemplate)null));
+		///// <summary>The <see cref="AnchorSideTemplate"/> dependency property.</summary>
+		//public static readonly DependencyProperty AnchorSideTemplateProperty = DependencyProperty.Register(nameof(AnchorSideTemplate), typeof(ControlTemplate), typeof(DockingManager),
+		//		new FrameworkPropertyMetadata((ControlTemplate)null));
 
-		/// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render <see cref="LayoutAnchorSideControl"/>.</summary>
-		[Bindable(true), Description("Gets/sets the ControlTemplate used to render LayoutAnchorSideControl."), Category("Anchor")]
-		public ControlTemplate AnchorSideTemplate {
-			get => (ControlTemplate) GetValue(AnchorSideTemplateProperty);
-			set => SetValue(AnchorSideTemplateProperty, value);
-		}
+		///// <summary>Gets/sets the <see cref="ControlTemplate"/> used to render <see cref="LayoutAnchorSideControl"/>.</summary>
+		//[Bindable(true), Description("Gets/sets the ControlTemplate used to render LayoutAnchorSideControl."), Category("Anchor")]
+		//public ControlTemplate AnchorSideTemplate {
+		//	get => (ControlTemplate) GetValue(AnchorSideTemplateProperty);
+		//	set => SetValue(AnchorSideTemplateProperty, value);
+		//}
 
-		#endregion AnchorSideTemplate
+		//#endregion AnchorSideTemplate
 
 		#region ActivityBarTemplate
 
@@ -455,7 +456,6 @@ namespace AvalonDock {
 		}
 
 		#endregion PanelStyle
-
 
 		#region ActivityBarControlStyle
 
@@ -1055,7 +1055,6 @@ namespace AvalonDock {
 
 		#endregion
 
-
 		#region DocumentPaneMenuItemHeaderTemplate
 
 		/// <summary><see cref="DocumentPaneMenuItemHeaderTemplate"/> dependency property.</summary>
@@ -1473,9 +1472,9 @@ namespace AvalonDock {
 				if(!(contentModel.Parent is ILayoutPane)) {
 					var group = new LayoutAnchorableGroup(anchorable)
 					{
-						FloatingTop = contentModel.FloatingTop,
-						FloatingLeft = contentModel.FloatingLeft,
-						FloatingWidth = contentModel.FloatingWidth,
+						FloatingTop    = contentModel.FloatingTop,
+						FloatingLeft   = contentModel.FloatingLeft,
+						FloatingWidth  = contentModel.FloatingWidth,
 						FloatingHeight = contentModel.FloatingHeight
 					};
 					Debug.WriteLine($"{contentModel.Title}", "CreateFloatingWindow 1 ");
@@ -1494,18 +1493,11 @@ namespace AvalonDock {
 		public static readonly string SecondarySideBarKey = "PART_SecondarySideBar";
 		public static readonly string PanelKey = "PART_Panel";
 
-		private LayoutAnchorableGroupPane _primarySideBar;
 
-		public LayoutAnchorableGroupPane PrimarySideBar { get; internal set; }
-
+		
 		public LayoutAnchorableGroupPane SecondarySideBar { get; private set; }
 
 		public LayoutAnchorableGroupPane Panel { get; private set; }
-
-		private LayoutAnchorableGroupPaneControl PrimarySideBarControl { get; set; }
-
-		//private LayoutAnchorableGroupPaneControl SecondarySideBarControl { get; set; }
-		//private LayoutAnchorableGroupPaneControl PanelControl { get; set; }
 
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
@@ -1521,6 +1513,7 @@ namespace AvalonDock {
 				return new LayoutPanelControl(model as LayoutPanel);
 			}
 			if(model is LayoutActivityBar layoutActivityBar) {
+				//Debug.WriteLine($"{layoutActivityBar.Parent}, {layoutActivityBar.Root}", "CreateUIElementForModel");
 				var templateModelView = new LayoutActivityBarControl(layoutActivityBar);
 				templateModelView.SetBinding(StyleProperty, new Binding(ActivityBarControlStyleProperty.Name) { Source = this });
 				return templateModelView;
@@ -1538,7 +1531,7 @@ namespace AvalonDock {
 
 				if(PrimarySideBarKey == layoutAnchorableGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
-					PrimarySideBar = layoutAnchorableGroupPane;
+					//PrimarySideBar = layoutAnchorableGroupPane;
 				} else if(SecondarySideBarKey == layoutAnchorableGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(SecondarySideBarStyleProperty.Name) { Source = this });
 					SecondarySideBar = layoutAnchorableGroupPane;
@@ -1700,10 +1693,10 @@ namespace AvalonDock {
 		}
 
 		internal void StartDraggingFloatingWindowForPane(LayoutAnchorableGroup paneModel) {
-			Debug.WriteLine($"{paneModel.Title}", "StartDraggingFloatingWindowForPane 0 ");
+			//Debug.WriteLine($"{paneModel.Title}", "StartDraggingFloatingWindowForPane 0 ");
 
 			var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);
-			Debug.WriteLine($"{paneModel.Title}, {fwc != null}", "StartDraggingFloatingWindowForPane 1 ");
+			//Debug.WriteLine($"{paneModel.Title}, {fwc != null}", "StartDraggingFloatingWindowForPane 1 ");
 			if(fwc == null)
 				return;
 
@@ -2785,12 +2778,6 @@ namespace AvalonDock {
 		}
 
 		#endregion Private Methods
-
-
-
-
-
-
 
 	}
 }

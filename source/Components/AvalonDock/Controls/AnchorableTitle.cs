@@ -151,7 +151,7 @@ namespace AvalonDock.Controls {
 				_isDragging = false;
 			}
 			//e.Handled = true;
-			Debug.WriteLine($"", $"{nameof(AnchorableTitle)} OnMouseLeftButtonDown");
+			//Debug.WriteLine($"", $"{nameof(AnchorableTitle)} OnMouseLeftButtonDown");
 			//base.OnMouseLeftButtonDown(e);
 		}
 
@@ -159,7 +159,7 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
-			Debug.WriteLine($"{_isMouseDown}, {_isDragging}", $"{nameof(AnchorableTitle)} OnMouseLeftButtonUp 1");
+			//Debug.WriteLine($"{_isMouseDown}, {_isDragging}", $"{nameof(AnchorableTitle)} OnMouseLeftButtonUp 1");
 			if(!_isDragging) {
 				_isMouseDown = false;
 				//base.OnMouseLeftButtonDown(_mouseLeftButtonDownEventArgs);
