@@ -111,26 +111,18 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
-			//base.OnMouseLeftButtonDown(e);
-
-			// Start a drag & drop action for a LayoutAnchorable
-			//var anchorAble = this.Model as LayoutAnchorable;
-			//if(anchorAble != null) {
-			//	if(anchorAble.CanMove == false)
-			//		return;
-			//}
+			base.OnMouseLeftButtonDown(e);
 
 			_isMouseDown = true;
 			_draggingItem = this;
-
-			if(Model?.Root?.ActivityBar != null) {
-				var activityBar = Model.Root.ActivityBar;
+			if(Model?.Root?.ActivityBar is LayoutActivityBar activityBar) {
 				_lastSelectedIndex = activityBar.SelectedIndex;				
 				Model.IsActive = true;
 			}
 		}
 
 		private int _lastSelectedIndex = -1;
+
 		/// <inheritdoc />
 		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
@@ -145,7 +137,9 @@ namespace AvalonDock.Controls {
 		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
 			_isMouseDown = false;
 			var model = Model;
-			if(model != null) {
+			//Debug.WriteLine($"{model != null}", "OnMouseLeftButtonUp");
+
+			if (model != null) {
 				var activityBar = model.Root.ActivityBar;
 
 				var paneModel = model.Root.PrimarySideBar;

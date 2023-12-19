@@ -232,27 +232,35 @@ namespace AvalonDock.Layout {
 		}
 
 
+		//public int SelectedIndex {
+		//	get => _selectedIndex;
+		//	set {
+		//		if(_selectedIndex != value) {
+		//			_selectedIndex = value;
+		//			RaisePropertyChanged(nameof(SelectedIndex));
+		//			RaisePropertyChanged(nameof(SelectedItem));
+		//		}
+		//	}
+		//}
 
 		public int SelectedIndex {
 			get => _selectedIndex;
 			set {
-				//Debug.WriteLine($"{_selectedIndex}, {value}", $"SelectedIndex");
-
-				if(_selectedIndex != value) {
-					_selectedIndex = value;
-					RaisePropertyChanged(nameof(SelectedIndex));
-				}
+				if (value < 0 || value >= Children.Count) value = -1;
+				if (value == _selectedIndex) return;
+				RaisePropertyChanging(nameof(SelectedIndex));
+				RaisePropertyChanging(nameof(SelectedItem));
+				if (_selectedIndex >= 0 && _selectedIndex < Children.Count)
+					Children[_selectedIndex].IsSelected = false;
+				_selectedIndex = value;
+				if (_selectedIndex >= 0 && _selectedIndex < Children.Count)
+					Children[_selectedIndex].IsSelected = true;
+				RaisePropertyChanged(nameof(SelectedIndex));
+				RaisePropertyChanged(nameof(SelectedItem));
 			}
 		}
 
-		public LayoutAnchorableGroup SelectedItem {
-			get => Children.Where((o, index) => index == SelectedIndex).SingleOrDefault();
-			set {
-				//if(value != SelectedItem) { 
-
-				//}
-			}
-		}
+		public LayoutAnchorableGroup SelectedItem => _selectedIndex == -1 ? null : Children[_selectedIndex];
 
 		/// <summary>
 		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)

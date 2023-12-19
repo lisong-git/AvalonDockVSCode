@@ -143,15 +143,12 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="floatingWindowModel"></param>
 		/// <retur ns>The geometry of the preview/highlighting WPF figure path.</returns>
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
-												LayoutFloatingWindow floatingWindowModel)
-		{
-			//Debug.WriteLine($"{Type}", $"{nameof(AnchorableActivityBarDropTarget)} GetPreviewPath");
-			var targetModel = _targetPane.Model as LayoutAnchorableGroup;
+												LayoutFloatingWindow floatingWindowModel) {
+			Debug.WriteLine($"{Type}", $"{nameof(AnchorableActivityTabItemDropTarget)} GetPreviewPath");
+			//var targetModel = _targetPane.Model as LayoutAnchorableGroup;
 
-			switch (Type)
-			{
-				case DropTargetType.AnchorableExpanderDockTop:
-					{
+			switch (Type) {
+				case DropTargetType.AnchorableExpanderDockTop: {
 						var targetScreenRect = TargetElement.GetScreenArea();
 
 						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top);
@@ -159,15 +156,14 @@ namespace AvalonDock.Controls.DropTargets
 
 						return new RectangleGeometry(targetScreenRect);
 					}
-				case DropTargetType.AnchorableExpanderDockBottom:
-					{
+				case DropTargetType.AnchorableExpanderDockBottom: {
 						//var expanderGroup = targetModel.Parent as ILayoutGroup;
 						var targetScreenRect = TargetElement.GetScreenArea();
 
 						targetScreenRect.Offset(-overlayWindow.Left, -overlayWindow.Top + targetScreenRect.Height - 2);
 						targetScreenRect.Height = 4.0;
 
-						//Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableActivityBarDropTarget)} GetPreviewPath 2");
+						//Debug.WriteLine($"{targetScreenRect.Left}, {-overlayWindow.Left}", $"{nameof(AnchorableActivityTabItemDropTarget)} GetPreviewPath 2");
 						return new RectangleGeometry(targetScreenRect);
 					}
 				default:

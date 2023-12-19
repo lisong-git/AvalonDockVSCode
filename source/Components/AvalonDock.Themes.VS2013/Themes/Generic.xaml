@@ -858,8 +858,8 @@
                       Background="{TemplateBinding Background}"
                       DockPanel.Dock="Bottom"
                       Foreground="{TemplateBinding Foreground}"
-                      ItemsSource="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
-                      SelectedItem="{Binding Model.SelectedItem, Mode=OneWayToSource, RelativeSource={RelativeSource TemplatedParent}}">
+                      ItemsSource="{Binding Model.OverflowItems, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}">
+                      <!--  SelectedItem="{Binding Model.SelectedItem, Mode=OneWayToSource, RelativeSource={RelativeSource TemplatedParent}}">  -->
                       <ListBox.ItemTemplate>
                         <DataTemplate>
                           <Grid>
@@ -965,7 +965,7 @@
                     BorderThickness="0">
                     <ContentPresenter
                       x:Name="Content"
-											Margin="4"
+                      Margin="4"
                       ContentSource="Header"
                       RecognizesAccessKey="True"
                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />

@@ -18,17 +18,15 @@ namespace AvalonDock.Layout {
 		#region fields
 
 		//private string _id;
-		private int _selectedIndex = -1;
-		[XmlIgnore]
-		private bool _autoFixSelectedContent = true;
+		//private int _selectedIndex = -1;
+		//[XmlIgnore]
+		//private bool _autoFixSelectedContent = true;
 
 		#endregion fields
 
 		#region Constructors
-		private int key;
 		/// <summary>Class constructor</summary>
 		public LayoutActivityBar() : base() {
-			key = new Random().Next(0, 100);
 		}
 
 		#endregion Constructors
@@ -37,9 +35,20 @@ namespace AvalonDock.Layout {
 
 		public ICommand TestCommand => new RelayCommand<object>((p) => {
 			var model = Root?.PrimarySideBar;
-			Debug.WriteLine($"{model?.IsVisible}, {key}", "TestCommand");
 			model?.SetVisible(!model.IsVisible);
 		});
+
+		public int SelectedIndex {
+			get => Root.PrimarySideBar?.SelectedIndex ?? -1;
+			set {
+				if (Root.PrimarySideBar != null) {
+					Root.PrimarySideBar.SelectedIndex = value;
+					RaisePropertyChanged(nameof(SelectedIndex));
+				}
+			}
+		}
+
+		public LayoutAnchorableGroup SelectedItem  => Root.PrimarySideBar?.SelectedItem;			
 
 		#endregion Properties
 
@@ -61,24 +70,32 @@ namespace AvalonDock.Layout {
 			base.InsertChildAt(index, item);
 		}
 
-		/// <inheritdoc />
-		protected override void OnChildrenCollectionChanged() {
-			AutoFixSelectedContent();
-
-			for(var i = 0; i < Children.Count; i++) {
-				if(!Children[i].IsSelected)
-					continue;
-				SelectedIndex = i;
-				break;
+		public void PrimarySideBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+			if (e.PropertyName == nameof(SelectedIndex)) {
+				if (sender is LayoutAnchorableGroup model && model.IsActive) {
+					Root.PrimarySideBar?.SetVisible(true);
+				}
 			}
-
-			foreach(var child in Children.OfType<LayoutAnchorableGroup>()) {
-				child.IsActiveChanged -= Child_IsActiveChanged;
-				child.IsActiveChanged += Child_IsActiveChanged;
-			}
-
-			base.OnChildrenCollectionChanged();
 		}
+
+		/// <inheritdoc />
+		//protected override void OnChildrenCollectionChanged() {
+		//	AutoFixSelectedContent();
+
+		//	for(var i = 0; i < Children.Count; i++) {
+		//		if(!Children[i].IsSelected)
+		//			continue;
+		//		SelectedIndex = i;
+		//		break;
+		//	}
+
+		//	foreach(var child in Children.OfType<LayoutAnchorableGroup>()) {
+		//		child.IsActiveChanged -= Child_IsActiveChanged;
+		//		child.IsActiveChanged += Child_IsActiveChanged;
+		//	}
+
+		//	base.OnChildrenCollectionChanged();
+		//}
 
 		private void Child_IsActiveChanged(object sender, EventArgs e) {
 			if (sender is LayoutAnchorableGroup model && model.IsActive) {
@@ -111,21 +128,6 @@ namespace AvalonDock.Layout {
 			base.OnParentChanged(oldValue, newValue);
 		}
 
-		/// <inheritdoc />
-		public override void WriteXml(System.Xml.XmlWriter writer) {
-			//if(_id != null)
-			//	writer.WriteAttributeString(nameof(ILayoutPaneSerializable.Id), _id);
-
-			//base.WriteXml(writer);
-		}
-
-		/// <inheritdoc />
-		public override void ReadXml(System.Xml.XmlReader reader) {
-			//if(reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id)))
-			//	_id = reader.Value;
-			//base.ReadXml(reader);
-		}
-
 #if TRACE
 		/// <inheritdoc />
 		public override void ConsoleDump(int tab) {
@@ -154,25 +156,6 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public int SelectedIndex {
-			get => _selectedIndex;
-			set {
-				if(_selectedIndex != value) {
-					_selectedIndex = value;
-					RaisePropertyChanged(nameof(SelectedIndex));
-				}
-			}
-		}
-
-		public LayoutAnchorableGroup SelectedItem {
-			get => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
-			set {
-				if(value != null && value != SelectedItem) {
-					value.IsSelected = true;
-				}
-			}
-		}
-
 		/// <summary>
 		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
@@ -183,15 +166,6 @@ namespace AvalonDock.Layout {
 		}
 
 		#endregion Public Methods
-
-		#region Internal Methods
-
-		/// <summary>
-		/// Updates whether this object is hosted at the root level of a floating window control or not.
-		/// </summary>
-		//internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-
-		#endregion Internal Methods
 
 		#region Private Methods
 
@@ -215,20 +189,20 @@ namespace AvalonDock.Layout {
 		public bool HasOverflowItem => Children.OfType<LayoutAnchorableGroup>().Any(o => !(o.TabItem?.IsVisible == true));
 
 		#region Private Metho
-		private void AutoFixSelectedContent() {
-			if(!_autoFixSelectedContent)
-				return;
-			if(SelectedIndex >= ChildrenCount)
-				SelectedIndex = Children.Count - 1;
-			if(SelectedIndex == -1 && ChildrenCount > 0)
-				SetLastActivatedIndex();
-		}
+		//private void AutoFixSelectedContent() {
+		//	if(!_autoFixSelectedContent)
+		//		return;
+		//	if(SelectedIndex >= ChildrenCount)
+		//		SelectedIndex = Children.Count - 1;
+		//	if(SelectedIndex == -1 && ChildrenCount > 0)
+		//		SetLastActivatedIndex();
+		//}
 
-		/// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
-		private void SetLastActivatedIndex() {
-			var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
-			SelectedIndex = Children.IndexOf(lastActivatedDocument);
-		}
+		///// <summary>Sets the current <see cref="SelectedContentIndex"/> to the last activated child with IsEnabled == true</summary>
+		//private void SetLastActivatedIndex() {
+		//	var lastActivatedDocument = Children.Where(c => c.IsEnabled).OrderByDescending(c => c.LastActivationTimeStamp.GetValueOrDefault()).FirstOrDefault();
+		//	SelectedIndex = Children.IndexOf(lastActivatedDocument);
+		//}
 		#endregion
 
 	}

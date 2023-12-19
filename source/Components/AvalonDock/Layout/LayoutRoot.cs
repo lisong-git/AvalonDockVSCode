@@ -123,6 +123,7 @@ namespace AvalonDock.Layout {
 					if (PrimarySideBar != null) {
 						//sidePar.ReplaceChildrenNoCollectionChangedSubscribe(_activityBar.Children);
 						_activityBar.ReplaceChildrenNoCollectionChangedSubscribe(_primarySideBar.Children);
+						_primarySideBar.PropertyChanged += _activityBar.PrimarySideBar_PropertyChanged;
 					}
 				}
 
@@ -146,6 +147,7 @@ namespace AvalonDock.Layout {
 					//if (_primarySideBar.Parent == null)
 					//	RootPanel.InsertChildAt(0, _primarySideBar);
 					ActivityBar.ReplaceChildrenNoCollectionChangedSubscribe(_primarySideBar.Children);
+					_primarySideBar.PropertyChanged += _activityBar.PrimarySideBar_PropertyChanged;
 				}
 			}
 		}

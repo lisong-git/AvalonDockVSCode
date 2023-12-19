@@ -8,15 +8,13 @@
  ************************************************************************/
 
 using AvalonDock.Layout;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace AvalonDock.Controls.DropTargets
-{
+namespace AvalonDock.Controls.DropTargets {
 	/// <summary>
 	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
 	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.

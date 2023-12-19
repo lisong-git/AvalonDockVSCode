@@ -17,7 +17,7 @@ namespace AvalonDock.Layout
 		int SelectedIndex { get; set; }
 
 		/// <summary>Gets the selected content in the pane.</summary>
-		T SelectedItem { get; set; }
+		T SelectedItem { get; }
 
 		#endregion Properties
 

@@ -450,53 +450,7 @@ namespace AvalonDock.Controls
 							yield return new DockingManagerDropTarget(dropAreaDockingManager.AreaElement, _dockingManagerDropTargetBottom.GetScreenArea(), DropTargetType.DockingManagerDockBottom);
 							yield return new DockingManagerDropTarget(dropAreaDockingManager.AreaElement, _dockingManagerDropTargetRight.GetScreenArea(), DropTargetType.DockingManagerDockRight);
 						}
-						break;				
-
-					//case DropAreaType.AnchorableExpander: {
-					//		// Dragging over AnchorablePane -> Add DropTarget Area
-					//		var dropAreaAnchorablePane = visibleArea as DropArea<LayoutAnchorableControl>;
-					//		var model = dropAreaAnchorablePane.AreaElement.Model;
-					//		var orientable =  (model.Parent as ILayoutOrientableGroup)?.Orientation ?? Orientation.Vertical;
-					//		//Debug.WriteLine($"{orientable}, {model.Parent.GetType()}", "GetTargets 2");
-					//		if(orientable == Orientation.Vertical) {
-					//			yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderDropTargetTop.GetScreenArea(), DropTargetType.AnchorableExpanderDockTop);
-					//			yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderDropTargetBottom.GetScreenArea(), DropTargetType.AnchorableExpanderDockBottom);
-					//		} else {
-					//			yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderDropTargetLeft.GetScreenArea(), DropTargetType.AnchorableExpanderDockLeft);
-					//			yield return new AnchorableExpanderDropTarget(dropAreaAnchorablePane.AreaElement, _anchorableExpanderDropTargetRight.GetScreenArea(), DropTargetType.AnchorableExpanderDockRight);
-					//		}
-					//	}
-					//	break;
-
-					//case DropAreaType.AnchorableExpanderGroup: {
-					//		// Dragging over AnchorablePane -> Add DropTarget Area
-					//		var dropAreaAnchorableExpanderGroup = visibleArea as DropArea<LayoutAnchorableGroupControl>;
-					//		var parentPaneModel = dropAreaAnchorableExpanderGroup.AreaElement.Model as LayoutAnchorableGroup;
-
-					//		if(parentPaneModel.Orientation == Orientation.Vertical) {
-					//			var lastRowDefinition = dropAreaAnchorableExpanderGroup.AreaElement.RowDefinitions.LastOrDefault();
-					//			if(lastRowDefinition != null) {
-					//				var offset = lastRowDefinition.Offset + lastRowDefinition.ActualHeight;
-					//				//var layoutPositionableElementWithActualSize = dropAreaAnchorableExpanderGroupPane.AreaElement.Model as ILayoutPositionableElementWithActualSize;
-					//				var area  = dropAreaAnchorableExpanderGroup.DetectionRect;
-					//				var freeSpace = new Rect(area.Left , area.Top + offset, area.Width , area.Height - offset);
-					//				//var freeSpace = new Rect(area.Left , area.Top, area.Width , area.Height - offset);
-					//				//Debug.WriteLine($"{area}; {freeSpace}; {offset}", "GetTargets 1");
-
-					//				yield return new AnchorableExpanderGroupDropTarget(dropAreaAnchorableExpanderGroup.AreaElement, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
-					//			}
-					//		} else {
-					//			var lastColumnDefinition = dropAreaAnchorableExpanderGroup.AreaElement.ColumnDefinitions.LastOrDefault();
-					//			if(lastColumnDefinition != null) {
-					//				var offset = lastColumnDefinition.Offset + lastColumnDefinition.ActualWidth;
-					//				//var layoutPositionableElementWithActualSize = dropAreaAnchorableExpanderGroupPane.AreaElement.Model as ILayoutPositionableElementWithActualSize;
-					//				var area  = dropAreaAnchorableExpanderGroup.DetectionRect;
-					//				var freeSpace = new Rect(area.Left + offset, area.Top, area.Width - offset, area.Height);
-					//				yield return new AnchorableExpanderGroupDropTarget(dropAreaAnchorableExpanderGroup.AreaElement, freeSpace, DropTargetType.AnchorableExpanderDockInside, -1);
-					//			}
-					//		}
-					//	}
-					//	break;
+						break;
 
 					case DropAreaType.AnchorableExpanderGroupPane: {
 							// Dragging over AnchorablePane -> Add DropTarget Area
@@ -558,22 +512,8 @@ namespace AvalonDock.Controls
 									yield return new AnchorableGroupTabItemDropTarget(dropAreaTabItem, tabItemArea.RightHalf(), DropTargetType.DockRight);
 								}
 							}
-
-
 						}
 						break;
-
-					//case DropAreaType.AnchorableExpanderGroupTabItem: {
-					//		var dropAreaAnchorableExpanderGroupPane = visibleArea as DropArea<LayoutAnchorableGroupTabItem>;
-					//		var rect = dropAreaAnchorableExpanderGroupPane.DetectionRect;
-
-					//		var wrapContainer = dropAreaAnchorableExpanderGroupPane.AreaElement.FindVisualAncestor<WrapPanel>();
-					//		var offset = wrapContainer.DesiredSize.Width;
-
-					//		//yield return new AnchorableActivityBarDropTarget(dropAreaAnchorableExpanderGroupPane.AreaElement, rect.TopHalf(), DropTargetType.AnchorableExpanderDockTop);
-					//		//yield return new AnchorableActivityBarDropTarget(dropAreaAnchorableExpanderGroupPane.AreaElement, rect.BottomHalf(), DropTargetType.AnchorableExpanderDockBottom);
-					//	}
-					//	break;
 
 					case DropAreaType.ActivityBar: {
 							// Dragging over AnchorablePane -> Add DropTarget Area
@@ -1025,13 +965,6 @@ namespace AvalonDock.Controls
 				areaElement.Visibility = System.Windows.Visibility.Visible;
 			}
 		}
-
-		//void PrintTest(string title) {
-		//	Debug.WriteLine($"{_anchorableExpanderDropTargetLeft.Visibility}," +
-		//		$"{_anchorableExpanderDropTargetRight.Visibility}," +
-		//		$"{_anchorableExpanderDropTargetTop.Visibility}," +
-		//		$"{_anchorableExpanderDropTargetBottom.Visibility}", title);
-		//}
 
 		/// <inheritdoc cref="IOverlayWindow"/>
 		void IOverlayWindow.DragLeave(IDropArea area) {
