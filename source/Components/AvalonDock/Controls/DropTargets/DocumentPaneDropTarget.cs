@@ -442,7 +442,7 @@ namespace AvalonDock.Controls.DropTargets
 
 					{
 						var paneModel = targetModel as LayoutDocumentPane;
-						LayoutAnchorableGroupPane layoutAnchorableGroup = floatingWindow.RootPanel;
+						LayoutPaneCompositePart layoutAnchorableGroup = floatingWindow.RootPanel;
 
 						bool checkPreviousContainer = true;
 						int i = 0;

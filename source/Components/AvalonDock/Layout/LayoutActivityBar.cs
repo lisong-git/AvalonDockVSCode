@@ -14,7 +14,7 @@ namespace AvalonDock.Layout {
 
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutActivityBar :LayoutGroup<LayoutAnchorableGroup>, ILayoutPane, ILayoutSelector<LayoutAnchorableGroup> {
+	public class LayoutActivityBar :LayoutGroup<LayoutPaneComposite>, ILayoutPane, ILayoutSelector<LayoutPaneComposite> {
 		#region fields
 
 		//private string _id;
@@ -48,7 +48,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public LayoutAnchorableGroup SelectedItem  => Root.PrimarySideBar?.SelectedItem;			
+		public LayoutPaneComposite SelectedItem  => Root.PrimarySideBar?.SelectedItem;			
 
 		#endregion Properties
 
@@ -62,19 +62,20 @@ namespace AvalonDock.Layout {
 			base.ChildMoved(oldIndex, newIndex);
 		}
 
-		protected void RemoveChild(LayoutAnchorableGroupPane item) {
+		protected void RemoveChild(LayoutPaneCompositePart item) {
 			base.RemoveChild(item);
 		}
 
-		protected void InsertChild(int index, LayoutAnchorableGroupPane item) {
+		protected void InsertChild(int index, LayoutPaneCompositePart item) {
 			base.InsertChildAt(index, item);
 		}
 
 		public void PrimarySideBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
 			if (e.PropertyName == nameof(SelectedIndex)) {
-				if (sender is LayoutAnchorableGroup model && model.IsActive) {
-					Root.PrimarySideBar?.SetVisible(true);
-				}
+				//if (sender is LayoutPaneCompositePart model && model.IsActive) {
+				//if (sender is LayoutPaneCompositePart model) {
+				Root.PrimarySideBar?.SetVisible(true);
+				//}
 			}
 		}
 
@@ -89,7 +90,7 @@ namespace AvalonDock.Layout {
 		//		break;
 		//	}
 
-		//	foreach(var child in Children.OfType<LayoutAnchorableGroup>()) {
+		//	foreach(var child in Children.OfType<LayoutPaneComposite>()) {
 		//		child.IsActiveChanged -= Child_IsActiveChanged;
 		//		child.IsActiveChanged += Child_IsActiveChanged;
 		//	}
@@ -98,13 +99,13 @@ namespace AvalonDock.Layout {
 		//}
 
 		private void Child_IsActiveChanged(object sender, EventArgs e) {
-			if (sender is LayoutAnchorableGroup model && model.IsActive) {
+			if (sender is LayoutPaneComposite model && model.IsActive) {
 				Debug.WriteLine($"{Root}, {Root?.PrimarySideBar}, {Parent}", "Child_IsActiveChanged");
 				if (Root.PrimarySideBar != null) {
 					Root.PrimarySideBar.SetVisible(true);
 				}
 				//else {
-				// var pane =	new LayoutAnchorableGroupPane() {
+				// var pane =	new LayoutPaneCompositePart() {
 				//		Name = DockingManager.PrimarySideBarKey,
 				//		DockMinWidth = 56,
 				//		DockWidth = new GridLength(168)
@@ -161,7 +162,7 @@ namespace AvalonDock.Layout {
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
 		/// </summary>
 		/// <param name="content"></param>
-		public int IndexOf(LayoutAnchorableGroup content) {
+		public int IndexOf(LayoutPaneComposite content) {
 			return Children.IndexOf(content);
 		}
 
@@ -173,10 +174,10 @@ namespace AvalonDock.Layout {
 
 		#endregion Private Methods
 
-		public IEnumerable<LayoutAnchorableGroup> OverflowItems {
+		public IEnumerable<LayoutPaneComposite> OverflowItems {
 			get {
 				var children = Children;
-				var listSorted = Children.OfType<LayoutAnchorableGroup>().Where(o=> !(o.TabItem?.IsVisible == true));
+				var listSorted = Children.OfType<LayoutPaneComposite>().Where(o=> !(o.TabItem?.IsVisible == true));
 				return listSorted.ToList();
 			}
 			set {
@@ -186,7 +187,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public bool HasOverflowItem => Children.OfType<LayoutAnchorableGroup>().Any(o => !(o.TabItem?.IsVisible == true));
+		public bool HasOverflowItem => Children.OfType<LayoutPaneComposite>().Any(o => !(o.TabItem?.IsVisible == true));
 
 		#region Private Metho
 		//private void AutoFixSelectedContent() {

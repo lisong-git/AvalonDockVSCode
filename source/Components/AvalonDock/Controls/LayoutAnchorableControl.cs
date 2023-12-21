@@ -103,7 +103,7 @@ namespace AvalonDock.Controls {
 			IsEnabled = Model.IsEnabled;
 			if(IsEnabled || !Model.IsActive)
 				return;
-			if(Model.Parent != null && Model.Parent is LayoutAnchorableGroup group)
+			if(Model.Parent != null && Model.Parent is LayoutPaneComposite group)
 				group.SetNextSelectedIndex();
 		}
 

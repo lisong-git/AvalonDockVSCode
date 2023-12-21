@@ -237,7 +237,7 @@ namespace AvalonDock.Controls {
 		/// <returns>All the anchorable items found.</returns>
 		/// <seealso cref="LayoutAnchorable"/>
 		/// <seealso cref="LayoutAnchorablePaneGroup"/>
-		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorableGroupPane layoutAnchPaneGroup) {
+		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutPaneCompositePart layoutAnchPaneGroup) {
 			if(layoutAnchPaneGroup == null)
 				yield break;
 			foreach(var anchorable in layoutAnchPaneGroup.Descendents().OfType<LayoutAnchorable>())
@@ -284,8 +284,8 @@ namespace AvalonDock.Controls {
 				yield break;
 			//big part of code for getting type
 
-			if(layoutAnchorableFloatingWindow.SinglePane is LayoutAnchorableGroup layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null)) {
-				var layoutAnchorable = ((LayoutAnchorableGroup)layoutAnchorableFloatingWindow.SinglePane).SelectedContent as LayoutAnchorable;
+			if(layoutAnchorableFloatingWindow.SinglePane is LayoutPaneComposite layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null)) {
+				var layoutAnchorable = ((LayoutPaneComposite)layoutAnchorableFloatingWindow.SinglePane).SelectedContent as LayoutAnchorable;
 				yield return layoutAnchorable;
 			} else
 				foreach(var item in GetLayoutAnchorable(layoutAnchorableFloatingWindow.RootPanel))

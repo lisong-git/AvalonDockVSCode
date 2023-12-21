@@ -48,13 +48,13 @@ namespace AvalonDock.Controls {
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableGroup), typeof(LayoutActivityTabItem),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutPaneComposite), typeof(LayoutActivityTabItem),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
-		public LayoutAnchorableGroup Model {
-			get => (LayoutAnchorableGroup) GetValue(ModelProperty);
+		public LayoutPaneComposite Model {
+			get => (LayoutPaneComposite) GetValue(ModelProperty);
 			set {
 				//Debug.WriteLine($"{Model?.GetType()?.Name}", "LayoutActivityTabItem_Model 1");
 				SetValue(ModelProperty, value);
@@ -111,14 +111,14 @@ namespace AvalonDock.Controls {
 
 		/// <inheritdoc />
 		protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e) {
-			base.OnMouseLeftButtonDown(e);
 
 			_isMouseDown = true;
 			_draggingItem = this;
-			if(Model?.Root?.ActivityBar is LayoutActivityBar activityBar) {
-				_lastSelectedIndex = activityBar.SelectedIndex;				
-				Model.IsActive = true;
+			if (Model?.Root?.ActivityBar is LayoutActivityBar activityBar) {
+				_lastSelectedIndex = activityBar.SelectedIndex;
+				//Model.IsActive = true;
 			}
+			base.OnMouseLeftButtonDown(e);
 		}
 
 		private int _lastSelectedIndex = -1;
@@ -173,7 +173,7 @@ namespace AvalonDock.Controls {
 			var container = model.Parent as ILayoutContainer;
 			var containerPane = model.Parent as ILayoutPane;
 			Debug.WriteLine($"{model?.GetType().Name}, {container.GetType().Name}, {container is ILayoutPane}, {container.Root?.GetType().Name}, {container.Root?.Manager == null}", "LayoutActivityTabItem_OnMouseEnter 1");
-			if(containerPane is LayoutAnchorableGroupPane expGroupBox && !expGroupBox.CanRepositionItems)
+			if(containerPane is LayoutPaneCompositePart expGroupBox && !expGroupBox.CanRepositionItems)
 				return;
 			//if (containerPane.Parent is LayoutAnchorablePaneGroup layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
 			var childrenList = container.Children.ToList();

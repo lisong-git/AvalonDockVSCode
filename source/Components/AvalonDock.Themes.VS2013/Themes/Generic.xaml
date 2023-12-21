@@ -965,7 +965,6 @@
                     BorderThickness="0">
                     <ContentPresenter
                       x:Name="Content"
-                      Margin="4"
                       ContentSource="Header"
                       RecognizesAccessKey="True"
                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
@@ -3092,6 +3091,7 @@
         <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutActivityTabItem}">
           <avalonDockControls:DropDownControlArea DropDownContextMenu="{Binding Root.Manager.AnchorableContextMenu}" DropDownContextMenuDataContext="{Binding LayoutItem, RelativeSource={RelativeSource TemplatedParent}}">
             <Border
+              Margin="6"
               Background="Transparent"
               BorderBrush="{TemplateBinding BorderBrush}"
               BorderThickness="{TemplateBinding BorderThickness}">

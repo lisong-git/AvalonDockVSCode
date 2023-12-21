@@ -24,7 +24,7 @@ namespace AvalonDock.Layout
 		LayoutPanel RootPanel { get; }
 		LayoutActivityBar ActivityBar { get; set; }
 
-		LayoutAnchorableGroupPane PrimarySideBar {  get; }
+		LayoutPaneCompositePart PrimarySideBar {  get; }
 
 		/// <summary>Gets the top side <see cref="LayoutAnchorSide"/> where a layout Anchorable
 		/// can be/or has been anchored in this layout root.</summary>

@@ -97,11 +97,11 @@
       </DockingManager.DocumentHeaderTemplate>
       <LayoutRoot PropertyChanged="OnLayoutRootPropertyChanged">
         <LayoutPanel Orientation="Horizontal">
-          <LayoutAnchorableGroupPane
+          <LayoutPaneCompositePart
             Name="PART_PrimarySideBar"
             DockMinWidth="20"
             DockWidth="120">
-            <LayoutAnchorableGroup Name="A" Orientation="Vertical">
+						<LayoutPaneComposite Name="A" Orientation="Vertical">
               <LayoutAnchorable
                 Title="自定义4"
                 ContentId="Primary_G1_A1"
@@ -126,8 +126,8 @@
                   <TextBox Text="内容32" />
                 </StackPanel>
               </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-            <LayoutAnchorableGroup Name="B" Orientation="Vertical">
+            </LayoutPaneComposite>
+						<LayoutPaneComposite Name="B" Orientation="Vertical">
               <LayoutAnchorable
                 Title="自定义7"
                 ContentId="Primary_G2_A1"
@@ -143,8 +143,8 @@
                 IsExpanded="True">
                 <TextBox Text="P_G2_A2内容5" />
               </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-          </LayoutAnchorableGroupPane>
+            </LayoutPaneComposite>
+          </LayoutPaneCompositePart>
 
           <LayoutPanel Orientation="Vertical">
             <LayoutDocumentPaneGroup>
@@ -175,13 +175,13 @@
                 </LayoutDocument>
               </LayoutDocumentPane>
             </LayoutDocumentPaneGroup>
-            <LayoutAnchorableGroupPane
+            <LayoutPaneCompositePart
               Name="PART_Panel"
               DockHeight="120"
               DockMinWidth="20"
               DockWidth="120"
               Orientation="Horizontal">
-              <LayoutAnchorableGroup Name="C" Orientation="Horizontal">
+							<LayoutPaneComposite Name="C" Orientation="Horizontal">
                 <LayoutAnchorable
                   Title="Pane1"
                   ContentId="P_G1_A1"
@@ -213,9 +213,9 @@
                     <TextBox Text="内容62" />
                   </StackPanel>
                 </LayoutAnchorable>
-              </LayoutAnchorableGroup>
+              </LayoutPaneComposite>
 
-              <LayoutAnchorableGroup Name="D" Orientation="Vertical">
+							<LayoutPaneComposite Name="D" Orientation="Vertical">
                 <LayoutAnchorable
                   Title="Pane17"
                   ContentId="P_G2_A1"
@@ -231,15 +231,15 @@
                   IsExpanded="True">
                   <TextBox Text="P_G2_A2 内容5" />
                 </LayoutAnchorable>
-              </LayoutAnchorableGroup>
-            </LayoutAnchorableGroupPane>
+              </LayoutPaneComposite>
+						</LayoutPaneCompositePart>
           </LayoutPanel>
 
-          <LayoutAnchorableGroupPane
+					<LayoutPaneCompositePart
             Name="PART_SecondarySideBar"
             DockMinWidth="20"
             DockWidth="120">
-            <LayoutAnchorableGroup Name="E" Orientation="Vertical">
+						<LayoutPaneComposite Name="E" Orientation="Vertical">
               <LayoutAnchorable
                 Title="自定义4"
                 ContentId="S_G1_A1"
@@ -264,8 +264,8 @@
                   <TextBox Text="内容32" />
                 </StackPanel>
               </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-            <LayoutAnchorableGroup Name="F" Orientation="Vertical">
+            </LayoutPaneComposite>
+						<LayoutPaneComposite Name="F" Orientation="Vertical">
               <LayoutAnchorable
                 Title="自定义7"
                 ContentId="S_G2_A1"
@@ -281,8 +281,8 @@
                 IsExpanded="True">
                 <TextBox Text="S_G2_A2内容5" />
               </LayoutAnchorable>
-            </LayoutAnchorableGroup>
-          </LayoutAnchorableGroupPane>
+            </LayoutPaneComposite>
+          </LayoutPaneCompositePart>
         </LayoutPanel>
 
         <LayoutRoot.ActivityBar>

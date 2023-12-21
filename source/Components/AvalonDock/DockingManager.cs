@@ -1440,8 +1440,8 @@ namespace AvalonDock {
 				yield break;
 			//big part of code for getting type
 
-			if(layoutAnchorableFloatingWindow.SinglePane is LayoutAnchorableGroup layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null)) {
-				//var layoutAnchorable = ((LayoutAnchorableGroupPane)layoutAnchorableFloatingWindow.SinglePane).SelectedItem as LayoutAnchorable;
+			if(layoutAnchorableFloatingWindow.SinglePane is LayoutPaneComposite layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null)) {
+				//var layoutAnchorable = ((LayoutPaneCompositePart)layoutAnchorableFloatingWindow.SinglePane).SelectedItem as LayoutAnchorable;
 				//yield return layoutAnchorable;
 			} else
 				foreach(var item in GetLayoutAnchorable(layoutAnchorableFloatingWindow.RootPanel))
@@ -1450,12 +1450,12 @@ namespace AvalonDock {
 
 		/// <summary>
 		/// Finds all <see cref="LayoutAnchorable"/> objects (toolwindows) within a
-		/// <see cref="LayoutAnchorableGroup"/> (if any) and return them.
+		/// <see cref="LayoutPaneComposite"/> (if any) and return them.
 		/// </summary>
 		/// <returns>All the anchorable items found.</returns>
 		/// <seealso cref="LayoutAnchorable"/>
-		/// <seealso cref="LayoutAnchorableGroup"/>
-		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutAnchorableGroupPane layoutAnchorableGroupPane) {
+		/// <seealso cref="LayoutPaneComposite"/>
+		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutPaneCompositePart layoutAnchorableGroupPane) {
 			if(layoutAnchorableGroupPane == null)
 				yield break;
 			foreach(var anchorable in layoutAnchorableGroupPane.Descendents().OfType<LayoutAnchorable>())
@@ -1478,7 +1478,7 @@ namespace AvalonDock {
 
 			if(contentModel is LayoutAnchorable anchorable) {
 				if(!(contentModel.Parent is ILayoutPane)) {
-					var group = new LayoutAnchorableGroup(anchorable)
+					var group = new LayoutPaneComposite(anchorable)
 					{
 						FloatingTop    = contentModel.FloatingTop,
 						FloatingLeft   = contentModel.FloatingLeft,
@@ -1501,9 +1501,9 @@ namespace AvalonDock {
 		public static readonly string SecondarySideBarKey = "PART_SecondarySideBar";
 		public static readonly string PanelKey = "PART_Panel";
 		
-		public LayoutAnchorableGroupPane SecondarySideBar { get; private set; }
+		public LayoutPaneCompositePart SecondarySideBar { get; private set; }
 
-		public LayoutAnchorableGroupPane Panel { get; private set; }
+		public LayoutPaneCompositePart Panel { get; private set; }
 
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
@@ -1524,14 +1524,14 @@ namespace AvalonDock {
 				return templateModelView;
 			}
 
-			if(model is LayoutAnchorableGroup layoutAnchorableGroup) {
+			if(model is LayoutPaneComposite layoutAnchorableGroup) {
 				var templateModelView = new LayoutAnchorableGroupControl {
 					Model = layoutAnchorableGroup
 				};
 				return templateModelView;
 			}
 
-			if (model is LayoutAnchorableGroupPane layoutAnchorableGroupPane) {
+			if (model is LayoutPaneCompositePart layoutAnchorableGroupPane) {
 				var templateModelView = new LayoutAnchorableGroupPaneControl(layoutAnchorableGroupPane, IsVirtualizingAnchorable);
 
 				if (PrimarySideBarKey == layoutAnchorableGroupPane.Name) {
@@ -1699,7 +1699,7 @@ namespace AvalonDock {
 			}
 		}
 
-		internal void StartDraggingFloatingWindowForPane(LayoutAnchorableGroup paneModel) {
+		internal void StartDraggingFloatingWindowForPane(LayoutPaneComposite paneModel) {
 			//Debug.WriteLine($"{paneModel.Title}", "StartDraggingFloatingWindowForPane 0 ");
 
 			var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);
@@ -2316,10 +2316,10 @@ namespace AvalonDock {
 				if(anchorablesImported.Contains(document))
 					listOfAnchorablesToImport.Remove(document);
 			}
-			LayoutAnchorableGroup anchorablePane = null;
+			LayoutPaneComposite anchorablePane = null;
 			if(layout.ActiveContent != null) {
 				//look for active content parent group
-				anchorablePane = layout.ActiveContent.Parent as LayoutAnchorableGroup;
+				anchorablePane = layout.ActiveContent.Parent as LayoutPaneComposite;
 			}
 			//if(anchorablePane == null) {
 			//	//look for a group on the right side
@@ -2327,7 +2327,7 @@ namespace AvalonDock {
 			//}
 			if(anchorablePane == null) {
 				//look for an available group
-				anchorablePane = layout.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault();
+				anchorablePane = layout.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault();
 			}
 			_suspendLayoutItemCreation = true;
 			foreach(var anchorableContentToImport in listOfAnchorablesToImport) {
@@ -2344,7 +2344,7 @@ namespace AvalonDock {
 						}
 
 						layout.RootPanel = mainLayoutPanel;
-						anchorablePane = new LayoutAnchorableGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+						anchorablePane = new LayoutPaneComposite { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
 						mainLayoutPanel.Children.Add(anchorablePane);
 					}
 
@@ -2383,10 +2383,10 @@ namespace AvalonDock {
 			//handle add
 			if(e.NewItems != null && (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)) {
 				if(e.NewItems != null) {
-					LayoutAnchorableGroup anchorablePane = null;
+					LayoutPaneComposite anchorablePane = null;
 					if(Layout.ActiveContent != null) {
 						//look for active content parent group
-						anchorablePane = Layout.ActiveContent.Parent as LayoutAnchorableGroup;
+						anchorablePane = Layout.ActiveContent.Parent as LayoutPaneComposite;
 					}
 					//if(anchorablePane == null) {
 					//	//look for a group on the right side
@@ -2394,7 +2394,7 @@ namespace AvalonDock {
 					//}
 					if(anchorablePane == null) {
 						//look for an available group
-						anchorablePane = Layout.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault();
+						anchorablePane = Layout.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault();
 					}
 					_suspendLayoutItemCreation = true;
 					foreach(var anchorableContentToImport in e.NewItems) {
@@ -2409,7 +2409,7 @@ namespace AvalonDock {
 									mainLayoutPanel.Children.Add(Layout.RootPanel);
 								}
 								Layout.RootPanel = mainLayoutPanel;
-								anchorablePane = new LayoutAnchorableGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+								anchorablePane = new LayoutPaneComposite { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
 								mainLayoutPanel.Children.Add(anchorablePane);
 							}
 							anchorablePane.Children.Add(anchorableToImport);
@@ -2582,11 +2582,11 @@ namespace AvalonDock {
 			layoutItem.Attach(contentToAttach);
 			_layoutItems.Add(layoutItem);
 			ApplyStyleToLayoutItem(layoutItem);
-			//Debug.WriteLine($"{contentToAttach.ContentId}, {contentToAttach.FindParent<LayoutAnchorableGroupPane>()?.Name}", "DockingManager CreateAnchorableLayoutItem 1");
+			//Debug.WriteLine($"{contentToAttach.ContentId}, {contentToAttach.FindParent<LayoutPaneCompositePart>()?.Name}", "DockingManager CreateAnchorableLayoutItem 1");
 
-			// TODO 用contentToAttach.FindParent<LayoutAnchorableGroupPane>()?.Name != PrimarySideBarKey 判断实属权宜之计,需要找出真正的原因
+			// TODO 用contentToAttach.FindParent<LayoutPaneCompositePart>()?.Name != PrimarySideBarKey 判断实属权宜之计,需要找出真正的原因
 			if (contentToAttach?.Content is UIElement) {
-			//if (contentToAttach?.Content is UIElement && contentToAttach.FindParent<LayoutAnchorableGroupPane>()?.Name != PrimarySideBarKey) {
+			//if (contentToAttach?.Content is UIElement && contentToAttach.FindParent<LayoutPaneCompositePart>()?.Name != PrimarySideBarKey) {
 				//Debug.WriteLine($"{contentToAttach.ContentId}", "DockingManager CreateAnchorableLayoutItem 2");
 				InternalAddLogicalChild(contentToAttach.Content);
 			}
@@ -2621,7 +2621,7 @@ namespace AvalonDock {
 			_navigatorWindow = null;
 		}
 
-		private LayoutFloatingWindowControl CreateFloatingWindowForLayoutAnchorableWithoutParent(LayoutAnchorableGroup paneModel, bool isContentImmutable) {
+		private LayoutFloatingWindowControl CreateFloatingWindowForLayoutAnchorableWithoutParent(LayoutPaneComposite paneModel, bool isContentImmutable) {
 			Debug.WriteLine($"{paneModel.Children.Count}", "CreateFloatingWindowForLayoutAnchorableWithoutParent 0 ");
 
 			//if(paneModel.Children.Any())
@@ -2639,7 +2639,7 @@ namespace AvalonDock {
 			if(fwHeight == 0.0)
 				fwHeight = paneAsWithActualSize.ActualHeight + 10;   //10 includes BorderThickness and Margins inside LayoutAnchorableFloatingWindowControl.
 
-			var destPane = new LayoutAnchorableGroup()
+			var destPane = new LayoutPaneComposite()
 			{
 				DockWidth = paneAsPositionableElement.DockWidth,
 				DockHeight = paneAsPositionableElement.DockHeight,
@@ -2675,7 +2675,7 @@ namespace AvalonDock {
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
 			fw = new LayoutAnchorableFloatingWindow {
-				RootPanel = new LayoutAnchorableGroupPane(destPane) {
+				RootPanel = new LayoutPaneCompositePart(destPane) {
 					DockHeight = destPane.DockHeight,
 					DockWidth = destPane.DockWidth,
 					DockMinHeight = destPane.DockMinHeight,
@@ -2740,7 +2740,7 @@ namespace AvalonDock {
 				var anchorableContent = contentModel as LayoutAnchorable;
 
 				fw = new LayoutAnchorableFloatingWindow {
-					RootPanel = new LayoutAnchorableGroupPane(new LayoutAnchorableGroup(anchorableContent)) {
+					RootPanel = new LayoutPaneCompositePart(new LayoutPaneComposite(anchorableContent)) {
 						DockWidth = parentPaneAsPositionableElement.DockWidth,
 						DockHeight = parentPaneAsPositionableElement.DockHeight,
 						DockMinHeight = parentPaneAsPositionableElement.DockMinHeight,

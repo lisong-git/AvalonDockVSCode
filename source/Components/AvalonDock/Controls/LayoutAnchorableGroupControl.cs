@@ -41,13 +41,13 @@ namespace AvalonDock.Controls {
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableGroup), typeof(LayoutAnchorableGroupControl),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutPaneComposite), typeof(LayoutAnchorableGroupControl),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to this view.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to this view."), Category("Other")]
 		public override ILayoutElement Model {
-			get => (LayoutAnchorableGroup) GetValue(ModelProperty);
+			get => (LayoutPaneComposite) GetValue(ModelProperty);
 			set {
 				Debug.WriteLine($"{value.GetType()}", "LayoutAnchorableGroupControl Model");
 				SetValue(ModelProperty, value);
@@ -68,7 +68,7 @@ namespace AvalonDock.Controls {
 			//} else
 			//SetLayoutItem(null);
 			//Debug.WriteLine($"{e.NewValue?.GetType()}", "LayoutAnchorableGroupControl OnOverflowOpenChanged");
-			if(e.NewValue is LayoutAnchorableGroup model) {
+			if(e.NewValue is LayoutPaneComposite model) {
 				base.Model = model;
 			}
 		}
@@ -81,7 +81,7 @@ namespace AvalonDock.Controls {
 			//IsEnabled = Model.IsEnabled;
 			//iIsEnabled || !Model.IsActive)
 			//	return;f(
-			if(Model.Parent != null && Model.Parent is LayoutAnchorableGroup layoutAnchorablePane)
+			if(Model.Parent != null && Model.Parent is LayoutPaneComposite layoutAnchorablePane)
 				layoutAnchorablePane.SetNextSelectedIndex();
 		}
 
@@ -101,7 +101,7 @@ namespace AvalonDock.Controls {
 		#region Overrides
 
 		protected override void OnFixChildrenDockLengths() {
-			//var model = Model as LayoutAnchorableGroup;
+			//var model = Model as LayoutPaneComposite;
 			//if(model == null)
 			//	return;
 			////Debug.WriteLine($"", "LayoutAnchorableGroupControl OnFixChildrenDockLengths");

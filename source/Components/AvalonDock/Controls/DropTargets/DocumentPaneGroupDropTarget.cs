@@ -94,7 +94,7 @@ namespace AvalonDock.Controls.DropTargets
 					{
 						var paneGroupModel = targetModel as LayoutDocumentPaneGroup;
 						var paneModel = paneGroupModel.Children[0] as LayoutDocumentPane;
-						LayoutAnchorableGroupPane layoutAnchorableGroupPane = floatingWindow.RootPanel;
+						LayoutPaneCompositePart layoutAnchorableGroupPane = floatingWindow.RootPanel;
 
 						int i = 0;
 						foreach (var anchorableToImport in layoutAnchorableGroupPane.Descendents().OfType<LayoutAnchorable>().ToArray())

@@ -18,7 +18,7 @@ namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
 	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.
+	/// on which other items (<see cref="LayoutPaneComposite"/>) can be dropped.
 	/// </summary>
 	internal class AnchorableActivityTabItemDropTarget : DropTarget<LayoutActivityTabItem>
 	{
@@ -76,7 +76,7 @@ namespace AvalonDock.Controls.DropTargets
 		{
 			Debug.WriteLine($"{Type}", $"AnchorableActivityBarDropTarget Drop 1");
 
-			LayoutAnchorableGroup targetModel = _targetPane.Model;
+			LayoutPaneComposite targetModel = _targetPane.Model;
 			switch (Type)
 			{
 				case DropTargetType.AnchorableExpanderDockTop:
@@ -85,7 +85,7 @@ namespace AvalonDock.Controls.DropTargets
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
-						LayoutAnchorableGroupPane layoutAnchorableGroup = floatingWindow.RootPanel;
+						LayoutPaneCompositePart layoutAnchorableGroup = floatingWindow.RootPanel;
 						layoutAnchorableGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
 						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
 						//layoutAnchorableGroup.Parent = null;
@@ -100,7 +100,7 @@ namespace AvalonDock.Controls.DropTargets
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
-						LayoutAnchorableGroupPane layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
+						LayoutPaneCompositePart layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
 						layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
 						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
 						//layoutAnchorableGroup.Parent = null;
@@ -145,7 +145,7 @@ namespace AvalonDock.Controls.DropTargets
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
 												LayoutFloatingWindow floatingWindowModel) {
 			Debug.WriteLine($"{Type}", $"{nameof(AnchorableActivityTabItemDropTarget)} GetPreviewPath");
-			//var targetModel = _targetPane.Model as LayoutAnchorableGroup;
+			//var targetModel = _targetPane.Model as LayoutPaneComposite;
 
 			switch (Type) {
 				case DropTargetType.AnchorableExpanderDockTop: {

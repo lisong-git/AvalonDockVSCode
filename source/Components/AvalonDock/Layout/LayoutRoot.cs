@@ -7,6 +7,7 @@
    License (Ms-PL) as published at https://opensource.org/licenses/MS-PL
  ************************************************************************/
 
+using AvalonDock.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -133,30 +134,20 @@ namespace AvalonDock.Layout {
 		}
 
 
-		private LayoutAnchorableGroupPane _primarySideBar;
+		private LayoutPaneCompositePart _primarySideBar;
 
-		public LayoutAnchorableGroupPane PrimarySideBar {
+		public LayoutPaneCompositePart PrimarySideBar {
 			get => _primarySideBar;
 			set {
 				if (_primarySideBar == value) return;
 
 				_primarySideBar = value;
 				if (ActivityBar != null) {
-					//_primarySideBar.ReplaceChildrenNoCollectionChangedSubscribe(activityBar.Children);
-					//activityBar.ReplaceChildrenNoCollectionChangedSubscribe(_primarySideBar.Children);
-					//if (_primarySideBar.Parent == null)
-					//	RootPanel.InsertChildAt(0, _primarySideBar);
 					ActivityBar.ReplaceChildrenNoCollectionChangedSubscribe(_primarySideBar.Children);
 					_primarySideBar.PropertyChanged += _activityBar.PrimarySideBar_PropertyChanged;
 				}
 			}
 		}
-
-		//public static LayoutAnchorableGroupPane DefaultPrimarySideBar => new LayoutAnchorableGroupPane() {
-		//	Name = DockingManager.PrimarySideBarKey,
-		//	DockMinWidth = 56,
-		//	DockWidth = new GridLength(168)
-		//};
 
 		/// <summary>Gets the floating windows that are part of this layout.</summary>
 		public ObservableCollection<LayoutFloatingWindow> FloatingWindows {
@@ -354,7 +345,7 @@ namespace AvalonDock.Layout {
 
 				if(!exitFlag) {
 					//removes any empty anchorable pane group
-					foreach(var emptyLayoutAnchorablePaneGroup in this.Descendents().OfType<LayoutAnchorableGroupPane>().Where(p => p.ChildrenCount == 0)) {
+					foreach(var emptyLayoutAnchorablePaneGroup in this.Descendents().OfType<LayoutPaneCompositePart>().Where(p => p.ChildrenCount == 0)) {
 						var parentGroup = emptyLayoutAnchorablePaneGroup.Parent;
 						parentGroup.RemoveChild(emptyLayoutAnchorablePaneGroup);
 						exitFlag = false;
@@ -418,10 +409,10 @@ namespace AvalonDock.Layout {
 			//do {
 			//	exitFlag = true;
 
-			//	Debug.WriteLine($"{this.Descendents().OfType<LayoutAnchorableGroupPane>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableGroup).ToArray().Length}", "CollectGarbage 1");
+			//	Debug.WriteLine($"{this.Descendents().OfType<LayoutPaneCompositePart>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableGroup).ToArray().Length}", "CollectGarbage 1");
 
 			//	//for each pane that is empty
-			//	foreach(LayoutAnchorableGroupPane paneGroupToCollapse in this.Descendents().OfType<LayoutAnchorableGroupPane>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableGroup).ToArray()) {
+			//	foreach(LayoutPaneCompositePart paneGroupToCollapse in this.Descendents().OfType<LayoutPaneCompositePart>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorableGroup).ToArray()) {
 			//		LayoutAnchorableGroup singleChild = paneGroupToCollapse.Children[0];
 			//		paneGroupToCollapse.Orientation = singleChild.Orientation;
 			//		Debug.WriteLine($"{singleChild.Title}, {singleChild.ChildrenCount}", "CollectGarbage 2");
@@ -482,7 +473,7 @@ namespace AvalonDock.Layout {
 			UpdateActiveContentProperty();
 
 #if DEBUG
-			Debug.Assert(!this.Descendents().OfType<LayoutAnchorableGroup>().Any(a => a.ChildrenCount == 0 && a.IsVisible));
+			Debug.Assert(!this.Descendents().OfType<LayoutPaneComposite>().Any(a => a.ChildrenCount == 0 && a.IsVisible));
 			//DumpTree(true);
 #if TRACE
 			//RootPanel.ConsoleDump(4);
@@ -512,7 +503,7 @@ namespace AvalonDock.Layout {
 
 			ActivityBar = new LayoutActivityBar();
 			//if (ReadElement(reader) != null) FillLayoutAnchorSide(reader, ActivityBar);
-			_ = ReadElementList(reader, false);
+			//_ = ReadElementList(reader, false);
 
 			FloatingWindows.Clear();
 			var floatingWindows = ReadElementList(reader, true);
@@ -534,9 +525,9 @@ namespace AvalonDock.Layout {
 			RootPanel?.WriteXml(writer);
 			writer.WriteEndElement();
 
-			writer.WriteStartElement(nameof(ActivityBar));
-			ActivityBar?.WriteXml(writer);
-			writer.WriteEndElement();
+			//writer.WriteStartElement(nameof(ActivityBar));
+			//ActivityBar?.WriteXml(writer);
+			//writer.WriteEndElement();
 
 			// Write all floating windows (can be LayoutDocumentFloatingWindow or LayoutAnchorableFloatingWindow).
 			// To prevent "can not create instance of abstract type", the type is retrieved with GetType().Name
@@ -786,12 +777,12 @@ namespace AvalonDock.Layout {
 
 			Type typeToSerialize;
 			switch(reader.LocalName) {
-				case nameof(LayoutAnchorableGroupPane):
-					typeToSerialize = typeof(LayoutAnchorableGroupPane);
+				case nameof(LayoutPaneCompositePart):
+					typeToSerialize = typeof(LayoutPaneCompositePart);
 					break;
 
-				case nameof(LayoutAnchorableGroup):
-					typeToSerialize = typeof(LayoutAnchorableGroup);
+				case nameof(LayoutPaneComposite):
+					typeToSerialize = typeof(LayoutPaneComposite);
 					break;
 
 				case nameof(LayoutAnchorable):
@@ -863,5 +854,21 @@ namespace AvalonDock.Layout {
 #endif
 
 		#endregion Diagnostic tools
+
+		public LayoutPaneCompositePart GetPartByLocation(ViewContainerLocation location) {
+			switch (location) {
+				case ViewContainerLocation.Sidebar:
+					return PrimarySideBar;
+				case ViewContainerLocation.Panel:
+					return Manager?.Panel;
+				default:
+					return Manager?.SecondarySideBar;
+			}
+		}
+
+		public ILayoutAnchorableGroup GetViewContainer(string name) {
+			return this.FindVisualChildren<LayoutPaneComposite>().SingleOrDefault(o => o.Name == name);
+		}
+
 	}
 }

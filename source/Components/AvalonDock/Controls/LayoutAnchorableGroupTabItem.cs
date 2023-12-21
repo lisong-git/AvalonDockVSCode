@@ -48,14 +48,14 @@ namespace AvalonDock.Controls
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutAnchorableGroup), typeof(LayoutAnchorableGroupTabItem),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutPaneComposite), typeof(LayoutAnchorableGroupTabItem),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to the anchorable tab item.</summary>
 		[Bindable(true), Description("Gets/sets the model attached to the anchorable tab item."), Category("Other")]
-		public LayoutAnchorableGroup Model
+		public LayoutPaneComposite Model
 		{
-			get => (LayoutAnchorableGroup) GetValue(ModelProperty);
+			get => (LayoutPaneComposite) GetValue(ModelProperty);
 			set => SetValue(ModelProperty, value);
 		}
 
@@ -113,8 +113,8 @@ namespace AvalonDock.Controls
 		{
 			base.OnMouseLeftButtonDown(e);
 
-			// Start a drag & drop action for a LayoutAnchorableGroup
-			//var anchorAble = this.Model as LayoutAnchorableGroup;
+			// Start a drag & drop action for a LayoutPaneComposite
+			//var anchorAble = this.Model as LayoutPaneComposite;
 			//if (anchorAble != null)
 			//{
 			//	if (anchorAble.CanMove == false) return;
@@ -169,8 +169,8 @@ namespace AvalonDock.Controls
 			var model = Model;
 			var container = model.Parent;
 			var containerPane = model.Parent as ILayoutPane;
-			if (containerPane is LayoutAnchorableGroup layoutAnchorablePane && !layoutAnchorablePane.CanRepositionItems) return;
-			if (containerPane.Parent is LayoutAnchorableGroupPane layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
+			if (containerPane is LayoutPaneComposite layoutAnchorablePane && !layoutAnchorablePane.CanRepositionItems) return;
+			if (containerPane.Parent is LayoutPaneCompositePart layoutAnchorablePaneGroup && !layoutAnchorablePaneGroup.CanRepositionItems) return;
 			var childrenList = container.Children.ToList();
 
 			// Hotfix to avoid crash caused by a likely threading issue Back in the containerPane.

@@ -20,11 +20,11 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableGroupPane :LayoutPositionableGroup<LayoutAnchorableGroup>
-		//, ILayoutAnchorablePane
-		,ILayoutPanelElement
+	public class LayoutPaneCompositePart : LayoutPositionableGroup<LayoutPaneComposite>
+		, IPaneCompositePart
+		, ILayoutPanelElement
 		, ILayoutPositionableElement
-		, ILayoutSelector<LayoutAnchorableGroup>
+		, ILayoutSelector<LayoutPaneComposite>
 		, ILayoutPaneSerializable {
 		#region fields
 
@@ -40,14 +40,13 @@ namespace AvalonDock.Layout {
 		private Orientation _orientation = Orientation.Vertical;
 
 		#endregion fields
-
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableGroupPane():base() {
+		public LayoutPaneCompositePart() : base() {
 		}
 
-		public LayoutAnchorableGroupPane(LayoutAnchorableGroup anchorableExpanderGroup):this() {
+		public LayoutPaneCompositePart(LayoutPaneComposite anchorableExpanderGroup) : this() {
 			Children.Add(anchorableExpanderGroup);
 		}
 
@@ -61,7 +60,7 @@ namespace AvalonDock.Layout {
 		public Orientation Orientation {
 			get => _orientation;
 			set {
-				if(value == _orientation)
+				if (value == _orientation)
 					return;
 				RaisePropertyChanging(nameof(Orientation));
 				_orientation = value;
@@ -73,7 +72,7 @@ namespace AvalonDock.Layout {
 		public string Title {
 			get => _title ?? Children.FirstOrDefault()?.Title ?? "Empty Title";
 			set {
-				if(value == _title)
+				if (value == _title)
 					return;
 				_title = value;
 				RaisePropertyChanged(nameof(Title));
@@ -84,7 +83,7 @@ namespace AvalonDock.Layout {
 		public string Name {
 			get => _name;
 			set {
-				if(value == _name)
+				if (value == _name)
 					return;
 				_name = value;
 				RaisePropertyChanged(nameof(Name));
@@ -94,13 +93,13 @@ namespace AvalonDock.Layout {
 		public bool IsActive {
 			get => _isActive;
 			set {
-				if(value == _isActive)
+				if (value == _isActive)
 					return;
 
 				RaisePropertyChanging(nameof(IsActive));
 				_isActive = value;
 
-				if(_isActive) {
+				if (_isActive) {
 					IsVisible = true;
 				}
 				RaisePropertyChanged(nameof(IsActive));
@@ -115,18 +114,18 @@ namespace AvalonDock.Layout {
 		public int SelectedContentIndex {
 			get => _selectedIndex;
 			set {
-				if(value < 0 || value >= Children.Count)
+				if (value < 0 || value >= Children.Count)
 					value = -1;
-				if(value == _selectedIndex)
+				if (value == _selectedIndex)
 					return;
 				RaisePropertyChanging(nameof(SelectedContentIndex));
 				//RaisePropertyChanging(nameof(SelectedContent));
-				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
+				if (_selectedIndex >= 0 && _selectedIndex < Children.Count)
 					Children[_selectedIndex].IsSelected = false;
 
 
 				_selectedIndex = value;
-				if(_selectedIndex >= 0 && _selectedIndex < Children.Count)
+				if (_selectedIndex >= 0 && _selectedIndex < Children.Count)
 					Children[_selectedIndex].IsSelected = true;
 				RaisePropertyChanged(nameof(SelectedContentIndex));
 				//RaisePropertyChanged(nameof(SelectedContent));
@@ -148,7 +147,7 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		protected override void ChildMoved(int oldIndex, int newIndex) {
-			if(_selectedIndex == oldIndex) {
+			if (_selectedIndex == oldIndex) {
 				RaisePropertyChanging(nameof(SelectedContentIndex));
 				_selectedIndex = newIndex;
 				RaisePropertyChanged(nameof(SelectedContentIndex));
@@ -159,8 +158,8 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		protected override void OnChildrenCollectionChanged() {
 			AutoFixSelectedContent();
-			for(var i = 0; i < Children.Count; i++) {
-				if(!Children[i].IsSelected)
+			for (var i = 0; i < Children.Count; i++) {
+				if (!Children[i].IsSelected)
 					continue;
 				SelectedContentIndex = i;
 				break;
@@ -175,28 +174,28 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
-			if(oldValue is ILayoutGroup oldGroup)
+			if (oldValue is ILayoutGroup oldGroup)
 				oldGroup.ChildrenCollectionChanged -= OnParentChildrenCollectionChanged;
 			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-			if(newValue is ILayoutGroup newGroup)
+			if (newValue is ILayoutGroup newGroup)
 				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
 			base.OnParentChanged(oldValue, newValue);
 		}
 
 		/// <inheritdoc />
 		public override void WriteXml(System.Xml.XmlWriter writer) {
-			if(_id != null)
+			if (_id != null)
 				writer.WriteAttributeString(nameof(ILayoutPaneSerializable.Id), _id);
-			if(_name != null)
+			if (_name != null)
 				writer.WriteAttributeString(nameof(Name), _name);
 			base.WriteXml(writer);
 		}
 
 		/// <inheritdoc />
 		public override void ReadXml(System.Xml.XmlReader reader) {
-			if(reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id)))
+			if (reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id)))
 				_id = reader.Value;
-			if(reader.MoveToAttribute(nameof(Name)))
+			if (reader.MoveToAttribute(nameof(Name)))
 				_name = reader.Value;
 			_autoFixSelectedContent = false;
 			base.ReadXml(reader);
@@ -210,7 +209,7 @@ namespace AvalonDock.Layout {
 			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
 			System.Diagnostics.Trace.WriteLine($"AnchorableGroupPane({Name})");
 
-			foreach(LayoutElement child in Children)
+			foreach (LayoutElement child in Children)
 				child.ConsoleDump(tab + 1);
 		}
 #endif
@@ -218,6 +217,11 @@ namespace AvalonDock.Layout {
 		#endregion Overrides
 
 		#region Public Methods
+
+		public LayoutPaneComposite GetPaneComposite(string id) {
+			return Children.SingleOrDefault(o => o.Name == id);
+		}
+
 
 		/// <summary>
 		/// Gets whether the model hosts only 1 <see cref="LayoutAnchorable"/> (True)
@@ -260,14 +264,14 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public LayoutAnchorableGroup SelectedItem => _selectedIndex == -1 ? null : Children[_selectedIndex];
+		public LayoutPaneComposite SelectedItem => _selectedIndex == -1 ? null : Children[_selectedIndex];
 
 		/// <summary>
 		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
 		/// </summary>
 		/// <param name="content"></param>
-		public int IndexOf(LayoutAnchorableGroup content) {
+		public int IndexOf(LayoutPaneComposite content) {
 			return Children.IndexOf(content);
 		}
 		#endregion Public Methods
@@ -279,11 +283,11 @@ namespace AvalonDock.Layout {
 		#region Private Methods
 
 		protected void AutoFixSelectedContent() {
-			if(!_autoFixSelectedContent)
+			if (!_autoFixSelectedContent)
 				return;
-			if(SelectedContentIndex >= ChildrenCount)
+			if (SelectedContentIndex >= ChildrenCount)
 				SelectedContentIndex = Children.Count - 1;
-			if(SelectedContentIndex == -1 && ChildrenCount > 0)
+			if (SelectedContentIndex == -1 && ChildrenCount > 0)
 				SetLastActivatedIndex();
 		}
 
@@ -296,7 +300,7 @@ namespace AvalonDock.Layout {
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
 
 		private void UpdateChildrenOrientation() {
-			foreach(var child in Children) {
+			foreach (var child in Children) {
 				child.Orientation = _orientation;
 			}
 		}

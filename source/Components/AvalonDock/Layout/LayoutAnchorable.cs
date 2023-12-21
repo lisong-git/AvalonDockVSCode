@@ -216,8 +216,8 @@ namespace AvalonDock.Layout {
 				_contentVisibility = value;
 				//if(Parent is La)
 				//Debug.WriteLine($"{_contentVisibility}", "ContentVisibility");
-				if (Parent is LayoutAnchorableGroup lap) {
-					if (lap.Parent is LayoutAnchorableGroupPane pg) {
+				if (Parent is LayoutPaneComposite lap) {
+					if (lap.Parent is LayoutPaneCompositePart pg) {
 						//Debug.WriteLine($"LayoutAnchorablePane,{lap.Parent.GetType()},  {lap.FixedDockHeight}, {lap.DockHeight}", "ContentVisibility");
 
 						//if(ContentVisibility == Visibility.Collapsed) {
@@ -454,19 +454,19 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		protected override void InternalDock() {
 			var root = Root as LayoutRoot;
-			LayoutAnchorableGroup anchorableGroup = null;
+			LayoutPaneComposite anchorableGroup = null;
 
 			//look for active content parent pane
 			if (root.ActiveContent != null && root.ActiveContent != this)
-				anchorableGroup = root.ActiveContent.Parent as LayoutAnchorableGroup;
+				anchorableGroup = root.ActiveContent.Parent as LayoutPaneComposite;
 			//look for a pane on the right side
 			//if (anchorableGroup == null)
-			//	anchorableGroup = root.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
+			//	anchorableGroup = root.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
 			if (anchorableGroup == null)
-				anchorableGroup = root.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow);
+				anchorableGroup = root.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow);
 			//look for an available pane
 			if (anchorableGroup == null)
-				anchorableGroup = root.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault();
+				anchorableGroup = root.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault();
 			var added = false;
 			if (root.Manager.LayoutUpdateStrategy != null)
 				added = root.Manager.LayoutUpdateStrategy.BeforeInsertAnchorable(root, this, anchorableGroup);
@@ -478,7 +478,7 @@ namespace AvalonDock.Layout {
 						mainLayoutPanel.Children.Add(root.RootPanel);
 
 					root.RootPanel = mainLayoutPanel;
-					anchorableGroup = new LayoutAnchorableGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+					anchorableGroup = new LayoutPaneComposite { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
 					mainLayoutPanel.Children.Add(anchorableGroup);
 				}
 				anchorableGroup.Children.Add(this);

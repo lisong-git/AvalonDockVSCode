@@ -114,7 +114,7 @@ namespace AvalonDock.Controls {
 
 				//if(pane != null) {
 
-				//	var paneModel = pane.Model as LayoutAnchorableGroup;
+				//	var paneModel = pane.Model as LayoutPaneComposite;
 				//	var manager = paneModel.Root.Manager;
 				//	manager.StartDraggingFloatingWindowForPane(paneModel);
 				//} else {
@@ -140,7 +140,7 @@ namespace AvalonDock.Controls {
 			var attachFloatingWindow = false;
 			var parentFloatingWindow = Model.FindParent<LayoutAnchorableFloatingWindow>();
 			if(parentFloatingWindow != null)
-				attachFloatingWindow = parentFloatingWindow.Descendents().OfType<LayoutAnchorableGroup>().Count() == 1;
+				attachFloatingWindow = parentFloatingWindow.Descendents().OfType<LayoutPaneComposite>().Count() == 1;
 
 			if(attachFloatingWindow) {
 				//the pane is hosted inside a floating window that contains only an anchorable pane so drag the floating window itself

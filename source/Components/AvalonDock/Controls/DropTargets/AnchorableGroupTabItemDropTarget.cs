@@ -9,7 +9,7 @@ namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
 	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.
+	/// on which other items (<see cref="LayoutPaneComposite"/>) can be dropped.
 	/// </summary>
 	internal class AnchorableGroupTabItemDropTarget : DropTarget<LayoutAnchorableGroupTabItem>
 	{
@@ -67,7 +67,7 @@ namespace AvalonDock.Controls.DropTargets
 		{
 			Debug.WriteLine($"{Type}, {_tabIndex}", $"{nameof(AnchorableGroupDropTarget)} Drop 1");
 
-			LayoutAnchorableGroup targetModel = _targetPane.Model as LayoutAnchorableGroup;
+			LayoutPaneComposite targetModel = _targetPane.Model as LayoutPaneComposite;
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
 			switch (Type)
 			{
@@ -82,7 +82,7 @@ namespace AvalonDock.Controls.DropTargets
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
 
-						LayoutAnchorableGroupPane paneModel = floatingWindow.RootPanel;
+						LayoutPaneCompositePart paneModel = floatingWindow.RootPanel;
 						Debug.WriteLine($"{paneModel?.Children.Count}", $"{nameof(AnchorableGroupDropTarget)} Drop 2");
 						if (paneModel != null &&
 							(paneModel.Children.Count == 1 ||
@@ -148,7 +148,7 @@ namespace AvalonDock.Controls.DropTargets
 		public override Geometry GetPreviewPath(OverlayWindow overlayWindow,
 												LayoutFloatingWindow floatingWindowModel)
 		{
-			var targetModel = _targetPane.Model as LayoutAnchorableGroup;
+			var targetModel = _targetPane.Model as LayoutPaneComposite;
 			var orientableGroup = targetModel as ILayoutOrientableGroup;
 			var orientable = orientableGroup.Orientation;
 			Debug.WriteLine($"{Type}, {orientable}, {_targetPane.Model?.GetType().Name}", $"{nameof(AnchorableGroupTabItemDropTarget)} GetPreviewPath");

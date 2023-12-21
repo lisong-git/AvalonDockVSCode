@@ -9,7 +9,7 @@ namespace AvalonDock.Controls.DropTargets
 {
 	/// <summary>
 	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.
+	/// on which other items (<see cref="LayoutPaneComposite"/>) can be dropped.
 	/// </summary>
 	internal class AnchorableDropTarget : DropTarget<LayoutAnchorableControl>
 	{
@@ -82,7 +82,7 @@ namespace AvalonDock.Controls.DropTargets
 						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
 
-						LayoutAnchorableGroupPane paneModel = floatingWindow.RootPanel;
+						LayoutPaneCompositePart paneModel = floatingWindow.RootPanel;
 						Debug.WriteLine($"{paneModel?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
 						if (paneModel != null &&
 							(paneModel.Children.Count == 1 ||

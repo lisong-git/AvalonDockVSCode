@@ -156,7 +156,7 @@ namespace AvalonDock.Controls {
 				}
 
 			}
-				if(visibleChildren.FirstOrDefault()?.DataContext is LayoutAnchorableGroup group && group.Parent is LayoutActivityBar activityBar) {
+				if(visibleChildren.FirstOrDefault()?.DataContext is LayoutPaneComposite group && group.Parent is LayoutActivityBar activityBar) {
 					activityBar.OverflowItems = null;
 				}
 

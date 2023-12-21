@@ -17,7 +17,7 @@ using System.Windows.Media;
 namespace AvalonDock.Controls.DropTargets {
 	/// <summary>
 	/// Implements a <see cref="LayoutAnchorableControl"/> drop target
-	/// on which other items (<see cref="LayoutAnchorableGroup"/>) can be dropped.
+	/// on which other items (<see cref="LayoutPaneComposite"/>) can be dropped.
 	/// </summary>
 	internal class AnchorableActivityWrapPanelDropTarget : DropTarget<WrapPanel>
 	{
@@ -75,7 +75,7 @@ namespace AvalonDock.Controls.DropTargets {
 		{
 			Debug.WriteLine($"{Type}", $"AnchorableActivityBarDropTarget Drop 1");
 
-			//		LayoutAnchorableGroup targetModel = _targetPane.Model;
+			//		LayoutPaneComposite targetModel = _targetPane.Model;
 			//		switch(Type) {
 			//			case DropTargetType.AnchorableExpanderDockTop:
 			//				#region DropTargetType.Bottom
@@ -83,7 +83,7 @@ namespace AvalonDock.Controls.DropTargets {
 			//					var expanderGroup = targetModel.Parent as ILayoutGroup;
 			//					int insertToIndex = expanderGroup.IndexOfChild(targetModel);
 
-			//					LayoutAnchorableGroupPane layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
+			//					LayoutPaneCompositePart layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
 			//					layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
 			//					Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
 			//					//layoutAnchorableExpanderGroup.Parent = null;

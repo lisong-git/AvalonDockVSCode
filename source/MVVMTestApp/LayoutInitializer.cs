@@ -56,7 +56,6 @@ namespace AvalonDock.MVVMTestApp
 
 		public void AfterInsertDocument(LayoutRoot layout, LayoutDocument anchorableShown)
 		{
-
 		}
 	}
 }

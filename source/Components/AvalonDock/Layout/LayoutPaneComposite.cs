@@ -20,12 +20,12 @@ using System.Xml.Serialization;
 namespace AvalonDock.Layout {
 	/// <summary>
 	/// Implements an element in the layout model tree that can contain and arrange multiple
-	/// <see cref="LayoutAnchorableGroup"/> elements in x or y directions, which in turn contain
+	/// <see cref="LayoutPaneComposite"/> elements in x or y directions, which in turn contain
 	/// <see cref="LayoutAnchorable"/> elements.
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutAnchorableGroup :LayoutPositionableGroup<LayoutAnchorable>
+	public class LayoutPaneComposite :LayoutPositionableGroup<LayoutAnchorable>
 		, ILayoutAnchorableGroup
 		, ILayoutContentSelector
 		, ILayoutOrientableGroup
@@ -44,11 +44,11 @@ namespace AvalonDock.Layout {
 		#region Constructors
 
 		/// <summary>Class constructor</summary>
-		public LayoutAnchorableGroup() {
+		public LayoutPaneComposite() {
 		}
 
 		/// <summary>Class constructor <paramref name="firstChild"/> to be inserted into collection of children models.</summary>
-		public LayoutAnchorableGroup(LayoutAnchorable firstChild, Orientation orientation = Orientation.Vertical) {
+		public LayoutPaneComposite(LayoutAnchorable firstChild, Orientation orientation = Orientation.Vertical) {
 			Children.Add(firstChild);
 			_orientation = orientation;
 		}
@@ -157,7 +157,7 @@ namespace AvalonDock.Layout {
 				_orientation = (Orientation)Enum.Parse(typeof(Orientation), reader.Value, true);
 			if (reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id))) _id = reader.Value;
 			if (reader.MoveToAttribute(nameof(Name))) _name = reader.Value;
-			//Debug.WriteLine($"{Name}, {Title}, {Orientation}, {_id}", "LayoutAnchorableGroup ReadXml");
+			//Debug.WriteLine($"{Name}, {Title}, {Orientation}, {_id}", "LayoutPaneComposite ReadXml");
 			base.ReadXml(reader);
 		}
 
@@ -239,7 +239,7 @@ namespace AvalonDock.Layout {
 				var oldValue = _isSelected;
 				RaisePropertyChanging(nameof(IsSelected));
 				_isSelected = value;
-				if(_isSelected && Parent is ILayoutSelector<LayoutAnchorableGroup> parentSelector) {
+				if(_isSelected && Parent is ILayoutSelector<LayoutPaneComposite> parentSelector) {
 					parentSelector.SelectedIndex = parentSelector.IndexOf(this);
 				}
 				if(!_isSelected) {
@@ -272,7 +272,7 @@ namespace AvalonDock.Layout {
 		public bool IsActive {
 			get => _isActive;
 			set {
-				//Debug.WriteLine($"{_isActive}, {value}", $"LayoutAnchorableGroup IsActive 1");
+				//Debug.WriteLine($"{_isActive}, {value}", $"LayoutPaneComposite IsActive 1");
 				if(value == _isActive)
 					return;
 				RaisePropertyChanging(nameof(IsActive));
