@@ -867,7 +867,7 @@ namespace AvalonDock.Layout {
 		}
 
 		public ILayoutAnchorableGroup GetViewContainer(string name) {
-			return this.FindVisualChildren<LayoutPaneComposite>().SingleOrDefault(o => o.Name == name);
+			return this.FindLogicalChildren<LayoutPaneComposite>().SingleOrDefault(o => o.Name == name);
 		}
 
 	}

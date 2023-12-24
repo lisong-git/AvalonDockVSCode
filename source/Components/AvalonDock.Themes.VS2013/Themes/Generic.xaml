@@ -1038,7 +1038,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <avalonDockControls:LayoutActivityTabItem Model="{Binding}" Tag="{Binding}" />
+          <avalonDockControls:LayoutActivityTabItem Model="{Binding}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -1245,7 +1245,7 @@
                 FontSize="14"
                 FontWeight="Thin"
                 Foreground="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=LayoutAnchorableGroupPaneControl}}"
-                Text="{Binding Path=Model.Title, RelativeSource={RelativeSource TemplatedParent}}" />
+                Text="{Binding Path=SelectedItem.Title, RelativeSource={RelativeSource TemplatedParent}}" />
 
               <ToolBarTray
                 Grid.Column="1"
@@ -2014,6 +2014,7 @@
                 <TextBlock
                   VerticalAlignment="Center"
                   DockPanel.Dock="Left"
+                  FontSize="12"
                   Foreground="{TemplateBinding Foreground}"
                   Text="{Binding Path=Model.Title, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
 
@@ -2600,7 +2601,10 @@
   <!--#endregion-->
 
   <DataTemplate x:Key="ActiviyItemTemplate">
-    <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+    <TextBlock
+      MaxWidth="22"
+      Text="{Binding Title}"
+      TextTrimming="CharacterEllipsis" />
   </DataTemplate>
 
   <DataTemplate x:Key="DocumentTitleTemplate">
