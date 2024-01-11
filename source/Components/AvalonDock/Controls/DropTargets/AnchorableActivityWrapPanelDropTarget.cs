@@ -71,29 +71,21 @@ namespace AvalonDock.Controls.DropTargets {
 		/// by docking of the <paramref name="floatingWindow"/> into this drop target.
 		/// </summary>
 		/// <param name="floatingWindow"></param>
-		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
-		{
-			Debug.WriteLine($"{Type}", $"AnchorableActivityBarDropTarget Drop 1");
+		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow) {
+			switch (Type) {
+				case DropTargetType.AnchorableExpanderDockInside:
+					#region DropTargetType.Bottom
+					{
+						var activityBarControl = _targetPane.FindVisualAncestor<LayoutActivityBarControl>();
+						var activityBar = activityBarControl.Model as LayoutActivityBar;
 
-			//		LayoutPaneComposite targetModel = _targetPane.Model;
-			//		switch(Type) {
-			//			case DropTargetType.AnchorableExpanderDockTop:
-			//				#region DropTargetType.Bottom
-			//{
-			//					var expanderGroup = targetModel.Parent as ILayoutGroup;
-			//					int insertToIndex = expanderGroup.IndexOfChild(targetModel);
-
-			//					LayoutPaneCompositePart layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
-			//					layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
-			//					Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
-			//					//layoutAnchorableExpanderGroup.Parent = null;
-			//					expanderGroup.InsertChildAt(insertToIndex, layoutAnchorableExpanderGroup);
-			//				}
-			//				break;
-			//				#endregion DropTargetType.Inside
-			//		}
-
-			//anchorableActive.IsActive = true;
+						LayoutPaneComposite layoutPaneComposite = floatingWindow.RootPanel;
+						layoutPaneComposite.Orientation = System.Windows.Controls.Orientation.Vertical;
+						activityBar.InsertChildAt(activityBar.ChildrenCount, layoutPaneComposite);
+					}
+					break;
+					#endregion DropTargetType.Inside
+			}
 
 			base.Drop(floatingWindow);
 		}

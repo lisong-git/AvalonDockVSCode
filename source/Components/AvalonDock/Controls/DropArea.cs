@@ -30,10 +30,10 @@ namespace AvalonDock.Controls
 		/// <summary>This type of drop area identifies a <see cref="LayoutAnchorableControl"/>.</summary>
 		AnchorableExpander,
 
-		/// <summary>This type of drop area identifies a <see cref="LayoutAnchorableGroupControl"/>.</summary>
+		/// <summary>This type of drop area identifies a <see cref="LayoutPaneCompositeControl"/>.</summary>
 		AnchorableExpanderGroup,
 
-		/// <summary>This type of drop area identifies a <see cref="LayoutAnchorableGroupPaneControl"/>.</summary>
+		/// <summary>This type of drop area identifies a <see cref="LayoutPaneCompositePartControl"/>.</summary>
 		AnchorableExpanderGroupPane,
 
 		/// <summary>

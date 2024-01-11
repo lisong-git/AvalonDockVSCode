@@ -399,7 +399,7 @@ namespace AvalonDock {
 		public static readonly DependencyProperty PrimarySideBarStyleProperty = DependencyProperty.Register(nameof(PrimarySideBarStyle), typeof(Style), typeof(DockingManager),
 				new FrameworkPropertyMetadata(null, OnPrimarySideBarStyleChanged));
 
-		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutAnchorableGroupPaneControl"/>.</summary>
+		/// <summary>Gets/sets the <see cref="Style"/> to apply to <see cref="LayoutPaneCompositePartControl"/>.</summary>
 		[Bindable(true), Description("Gets/sets the Style to apply to LayoutAnchorableGroupPaneControl."), Category("Anchorable")]
 		public Style PrimarySideBarStyle {
 			get => (Style) GetValue(PrimarySideBarStyleProperty);
@@ -1407,8 +1407,8 @@ namespace AvalonDock {
 			//	_areas.Add(new DropArea<LayoutAnchorableGroupTabItem>(areaHost, DropAreaType.AnchorableExpanderGroupTabItem));
 			//}
 
-			foreach(var areaHost in this.FindVisualChildren<LayoutAnchorableGroupPaneControl>()) {
-				_areas.Add(new DropArea<LayoutAnchorableGroupPaneControl>(areaHost, DropAreaType.AnchorableExpanderGroupPane));
+			foreach(var areaHost in this.FindVisualChildren<LayoutPaneCompositePartControl>()) {
+				_areas.Add(new DropArea<LayoutPaneCompositePartControl>(areaHost, DropAreaType.AnchorableExpanderGroupPane));
 			}
 
 			foreach(var areaHost in this.FindVisualChildren<LayoutActivityTabItem>()) {
@@ -1440,11 +1440,12 @@ namespace AvalonDock {
 				yield break;
 			//big part of code for getting type
 
-			if(layoutAnchorableFloatingWindow.SinglePane is LayoutPaneComposite layoutAnchorablePane && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorablePane.SelectedContent != null)) {
-				//var layoutAnchorable = ((LayoutPaneCompositePart)layoutAnchorableFloatingWindow.SinglePane).SelectedItem as LayoutAnchorable;
-				//yield return layoutAnchorable;
-			} else
-				foreach(var item in GetLayoutAnchorable(layoutAnchorableFloatingWindow.RootPanel))
+			if(layoutAnchorableFloatingWindow.SinglePane is LayoutAnchorable layoutAnchorable && (layoutAnchorableFloatingWindow.IsSinglePane && layoutAnchorable != null)) {
+				//var layoutAnchorable = layoutAnchorableFloatingWindow.SinglePane;
+				yield return layoutAnchorable;
+			}
+			else
+				foreach (var item in GetLayoutAnchorable(layoutAnchorableFloatingWindow.RootPanel))
 					yield return item;
 		}
 
@@ -1455,7 +1456,7 @@ namespace AvalonDock {
 		/// <returns>All the anchorable items found.</returns>
 		/// <seealso cref="LayoutAnchorable"/>
 		/// <seealso cref="LayoutPaneComposite"/>
-		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutPaneCompositePart layoutAnchorableGroupPane) {
+		internal IEnumerable<LayoutAnchorable> GetLayoutAnchorable(LayoutPaneComposite layoutAnchorableGroupPane) {
 			if(layoutAnchorableGroupPane == null)
 				yield break;
 			foreach(var anchorable in layoutAnchorableGroupPane.Descendents().OfType<LayoutAnchorable>())
@@ -1525,14 +1526,14 @@ namespace AvalonDock {
 			}
 
 			if(model is LayoutPaneComposite layoutAnchorableGroup) {
-				var templateModelView = new LayoutAnchorableGroupControl {
+				var templateModelView = new LayoutPaneCompositeControl {
 					Model = layoutAnchorableGroup
 				};
 				return templateModelView;
 			}
 
 			if (model is LayoutPaneCompositePart layoutAnchorableGroupPane) {
-				var templateModelView = new LayoutAnchorableGroupPaneControl(layoutAnchorableGroupPane, IsVirtualizingAnchorable);
+				var templateModelView = new LayoutPaneCompositePartControl(layoutAnchorableGroupPane, IsVirtualizingAnchorable);
 
 				if (PrimarySideBarKey == layoutAnchorableGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
@@ -2674,15 +2675,17 @@ namespace AvalonDock {
 
 			LayoutFloatingWindow fw;
 			LayoutFloatingWindowControl fwc;
+			//fw = new LayoutAnchorableFloatingWindow {
+			//	RootPanel = new LayoutPaneCompositePart(destPane) {
+			//		DockHeight = destPane.DockHeight,
+			//		DockWidth = destPane.DockWidth,
+			//		DockMinHeight = destPane.DockMinHeight,
+			//		DockMinWidth = destPane.DockMinWidth,
+			//	}
+			//};
 			fw = new LayoutAnchorableFloatingWindow {
-				RootPanel = new LayoutPaneCompositePart(destPane) {
-					DockHeight = destPane.DockHeight,
-					DockWidth = destPane.DockWidth,
-					DockMinHeight = destPane.DockMinHeight,
-					DockMinWidth = destPane.DockMinWidth,
-				}
+				RootPanel = destPane
 			};
-
 			Layout.FloatingWindows.Add(fw);
 
 			fwc = new LayoutAnchorableFloatingWindowControl((LayoutAnchorableFloatingWindow) fw, isContentImmutable) {
@@ -2739,19 +2742,21 @@ namespace AvalonDock {
 			if(contentModel is LayoutAnchorable) {
 				var anchorableContent = contentModel as LayoutAnchorable;
 
+				//fw = new LayoutAnchorableFloatingWindow {
+				//	RootPanel = new LayoutPaneCompositePart(new LayoutPaneComposite(anchorableContent)) {
+				//		DockWidth = parentPaneAsPositionableElement.DockWidth,
+				//		DockHeight = parentPaneAsPositionableElement.DockHeight,
+				//		DockMinHeight = parentPaneAsPositionableElement.DockMinHeight,
+				//		DockMinWidth = parentPaneAsPositionableElement.DockMinWidth,
+				//		FloatingLeft = parentPaneAsPositionableElement.FloatingLeft,
+				//		FloatingTop = parentPaneAsPositionableElement.FloatingTop,
+				//		FloatingWidth = parentPaneAsPositionableElement.FloatingWidth,
+				//		FloatingHeight = parentPaneAsPositionableElement.FloatingHeight,
+				//	}
+				//};
 				fw = new LayoutAnchorableFloatingWindow {
-					RootPanel = new LayoutPaneCompositePart(new LayoutPaneComposite(anchorableContent)) {
-						DockWidth = parentPaneAsPositionableElement.DockWidth,
-						DockHeight = parentPaneAsPositionableElement.DockHeight,
-						DockMinHeight = parentPaneAsPositionableElement.DockMinHeight,
-						DockMinWidth = parentPaneAsPositionableElement.DockMinWidth,
-						FloatingLeft = parentPaneAsPositionableElement.FloatingLeft,
-						FloatingTop = parentPaneAsPositionableElement.FloatingTop,
-						FloatingWidth = parentPaneAsPositionableElement.FloatingWidth,
-						FloatingHeight = parentPaneAsPositionableElement.FloatingHeight,
-					}
+					RootPanel = new LayoutPaneComposite(anchorableContent)
 				};
-
 				Layout.FloatingWindows.Add(fw);
 				fwc = new LayoutAnchorableFloatingWindowControl((LayoutAnchorableFloatingWindow) fw, isContentImmutable) {
 					Width = fwWidth,

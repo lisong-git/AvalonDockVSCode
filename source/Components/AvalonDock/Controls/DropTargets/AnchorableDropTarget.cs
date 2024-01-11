@@ -71,65 +71,45 @@ namespace AvalonDock.Controls.DropTargets
 			LayoutAnchorable anchorableActive = floatingWindow.Descendents().OfType<LayoutAnchorable>().FirstOrDefault();
 			switch (Type)
 			{
-				case DropTargetType.AnchorableExpanderDockBottom:
-
-
-
+				case DropTargetType.DockTop:
+				case DropTargetType.DockLeft:
 					#region DropTargetType.AnchorableExpanderPaneDockBottom
 
 					{
-						var expanderGroup = targetModel.Parent as ILayoutGroup;
-						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
-
-
-						LayoutPaneCompositePart paneModel = floatingWindow.RootPanel;
-						Debug.WriteLine($"{paneModel?.Children.Count}", $"AnchorableExpanderDropTarget Drop 2");
-						if (paneModel != null &&
-							(paneModel.Children.Count == 1 ||
-								paneModel.Orientation == System.Windows.Controls.Orientation.Vertical))
-						{
-
-							var anchorablesToMove = paneModel.Children.ToArray();
-							for (int i = 0; i < anchorablesToMove.Length; i++)
-							{
-								//Debug.WriteLine($"{anchorablesToMove[i].Children.FirstOrDefault()}", $"{nameof(AnchorableExpanderGroupPaneDropTarget)} Drop 3");
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}, {expanderGroup.GetType()}", $"AnchorableExpanderDropTarget Drop 3");
-
-								var temp = anchorablesToMove[i];
-								//expanderGroup.InsertChildAt(insertToIndex + 1 + i, anchorablesToMove[i]);
-								expanderGroup.InsertChildAt(insertToIndex + 1 + i, temp);
-								Debug.WriteLine($"{expanderGroup.ChildrenCount}", $"AnchorableExpanderDropTarget Drop 31");
-
-							}
-						}
-						else
-						{
-							Debug.WriteLine($"", $"AnchorableExpanderDropTarget Drop 4");
-							expanderGroup.InsertChildAt(insertToIndex + 1, floatingWindow.RootPanel);
-						}
+						var container = targetModel.Parent as ILayoutGroup;
+						var index = container.IndexOfChild(targetModel);
+						container.InsertChildAt(index, anchorableActive);
 					}
 					break;
 
-					#endregion DropTargetType.AnchorableExpanderPaneDockBottom
+				#endregion DropTargetType.AnchorableExpanderPaneDockBottom
 
-					//case DropTargetType.AnchorablePaneDockInside:
+				case DropTargetType.DockBottom:
+				case DropTargetType.DockRight: {
+						var container = targetModel.Parent as ILayoutGroup;
+						var index = container.IndexOfChild(targetModel);
+						container.InsertChildAt(index + 1, anchorableActive);
+						break;
+					}
 
-					//	#region DropTargetType.AnchorablePaneDockInside
+				//case DropTargetType.AnchorablePaneDockInside:
 
-					//	//{
-					//	//	var paneModel = targetModel as LayoutAnchorablePane;
-					//	//	var paneModel = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
+				//	#region DropTargetType.AnchorablePaneDockInside
 
-					//	//	int i = _index == -1 ? 0 : _index;
-					//	//	foreach(var anchorableToImport in
-					//	//		paneModel.Descendents().OfType<LayoutAnchorable>().ToArray()) {
-					//	//		paneModel.Children.Insert(i, anchorableToImport);
-					//	//		i++;
-					//	//	}
-					//	//}
-					//	break;
+				//	{
+				//		var paneModel = targetModel as LayoutAnchorable;
+				//		//var paneModel = floatingWindow.RootPanel as LayoutAnchorablePaneGroup;
 
-					//	#endregion DropTargetType.AnchorablePaneDockInside
+				//		//int i = _index == -1 ? 0 : _index;
+				//		//foreach (var anchorableToImport in
+				//		//	paneModel.Descendents().OfType<LayoutAnchorable>().ToArray()) {
+				//		//	//paneModel.Children.Insert(i, anchorableToImport);
+				//		//	i++;
+				//		//}
+				//	}
+				//	break;
+
+				//	#endregion DropTargetType.AnchorablePaneDockInside
 			}
 
 			anchorableActive.IsActive = true;

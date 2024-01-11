@@ -22,7 +22,7 @@ namespace AvalonDock.Layout {
 	public class LayoutAnchorableFloatingWindow :LayoutFloatingWindow, ILayoutElementWithVisibility {
 		#region fields
 
-		private LayoutPaneCompositePart _rootPanel;
+		private LayoutPaneComposite _rootPanel;
 
 		[NonSerialized]
 		private bool _isVisible = true;
@@ -54,7 +54,7 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public LayoutPaneCompositePart RootPanel {
+		public LayoutPaneComposite RootPanel {
 			get => _rootPanel;
 			set {
 				if(value == _rootPanel)
@@ -77,11 +77,11 @@ namespace AvalonDock.Layout {
 			}
 		}
 
-		public ILayoutAnchorableGroup SinglePane {
+		public LayoutAnchorable SinglePane {
 			get {
 				if(!IsSinglePane)
 					return null;
-				var singlePane = RootPanel.Descendents().OfType<LayoutPaneComposite>().Single(p => p.IsVisible);
+				var singlePane = RootPanel.Descendents().OfType<LayoutAnchorable>().Single(p => p.IsVisible);
 				singlePane.UpdateIsDirectlyHostedInFloatingWindow();
 				return singlePane;
 			}
@@ -112,7 +112,7 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		public override void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement) {
 			Debug.Assert(oldElement == RootPanel && oldElement != null);
-			RootPanel = newElement as LayoutPaneCompositePart;
+			RootPanel = newElement as LayoutPaneComposite;
 		}
 
 		/// <inheritdoc />
@@ -151,7 +151,7 @@ namespace AvalonDock.Layout {
 						throw new ArgumentException("AvalonDock.LayoutAnchorableFloatingWindow doesn't know how to deserialize " + reader.LocalName);
 					serializer = XmlSerializersCache.GetSerializer(type);
 				}
-				RootPanel = (LayoutPaneCompositePart) serializer.Deserialize(reader);
+				RootPanel = (LayoutPaneComposite) serializer.Deserialize(reader);
 			}
 			reader.ReadEndElement();
 		}

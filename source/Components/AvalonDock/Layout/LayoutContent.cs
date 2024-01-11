@@ -151,7 +151,7 @@ namespace AvalonDock.Layout {
 				OnIsSelectedChanged(oldValue, value);
 				RaisePropertyChanged(nameof(IsSelected));
 				//LayoutAnchorableTabItem.CancelMouseLeave();
-				LayoutAnchorableGroupTabItem.CancelMouseLeave();
+				LayoutPaneCompositeTabItem.CancelMouseLeave();
 			}
 		}
 

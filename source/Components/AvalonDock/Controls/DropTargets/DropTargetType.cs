@@ -91,7 +91,7 @@ namespace AvalonDock.Controls.DropTargets
 
 		#region AnchorablePaneGroup
 
-		/// <summary>The specific drop area is the bottom of a <see cref="LayoutAnchorableGroupControl"/> control.</summary>
+		/// <summary>The specific drop area is the bottom of a <see cref="LayoutPaneCompositeControl"/> control.</summary>
 		AnchorablePaneGroupDockBottom,
 
 		#endregion AnchorablePaneGroup

@@ -121,11 +121,11 @@ namespace AvalonDock.Controls {
 
 		protected override void OnMouseLeave(System.Windows.Input.MouseEventArgs e) {
 			if(e.LeftButton == System.Windows.Input.MouseButtonState.Pressed &&
-				LayoutAnchorableGroupTabItem.IsDraggingItem()) {
-				var contentModel = LayoutAnchorableGroupTabItem.GetDraggingItem().Model as LayoutPaneComposite;
+				LayoutPaneCompositeTabItem.IsDraggingItem()) {
+				var contentModel = LayoutPaneCompositeTabItem.GetDraggingItem().Model as LayoutPaneComposite;
 				Debug.WriteLine($"{contentModel.Title}", "AnchorablePaneTabPanel");
 				var manager = contentModel.Root.Manager;
-				LayoutAnchorableGroupTabItem.ResetDraggingItem();
+				LayoutPaneCompositeTabItem.ResetDraggingItem();
 
 				//manager.StartDraggingFloatingWindowForContent(contentModel);
 				manager.StartDraggingFloatingWindowForPane(contentModel);

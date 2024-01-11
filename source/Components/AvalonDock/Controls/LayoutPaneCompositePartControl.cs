@@ -24,7 +24,7 @@ namespace AvalonDock.Controls {
 	/// </summary>
 	/// <seealso cref="TabControlEx"/>
 	/// <seealso cref="ILayoutControl"/>
-	public class LayoutAnchorableGroupPaneControl :TabControlEx, ILayoutControl//, ILogicalChildrenContainer
+	public class LayoutPaneCompositePartControl :TabControlEx, ILayoutControl//, ILogicalChildrenContainer
 	{
 		#region fields
 
@@ -35,14 +35,14 @@ namespace AvalonDock.Controls {
 		#region Constructors
 
 		/// <summary>Static class constructor to register WPF style keys.</summary>
-		static LayoutAnchorableGroupPaneControl() {
-			FocusableProperty.OverrideMetadata(typeof(LayoutAnchorableGroupPaneControl), new FrameworkPropertyMetadata(false));
+		static LayoutPaneCompositePartControl() {
+			FocusableProperty.OverrideMetadata(typeof(LayoutPaneCompositePartControl), new FrameworkPropertyMetadata(false));
 		}
 
 		/// <summary>Class constructor from model and virtualization parameter.</summary>
 		/// <param name="model"></param>
 		/// <param name="IsVirtualizing">Whether tabbed items are virtualized or not.</param>
-		internal LayoutAnchorableGroupPaneControl(LayoutPaneCompositePart model, bool IsVirtualizing)
+		internal LayoutPaneCompositePartControl(LayoutPaneCompositePart model, bool IsVirtualizing)
 			: base(IsVirtualizing) {
 			_model = model ?? throw new ArgumentNullException(nameof(model));
 			SetBinding(ItemsSourceProperty, new Binding("Model.Children") { Source = this });
@@ -111,15 +111,5 @@ namespace AvalonDock.Controls {
 
 		#endregion Private Methods
 
-		private void PrintClick(object sender, RoutedEventArgs e) {
-			Debug.WriteLine($"{SelectedContent.GetType().Name}", "PrintClick");
-			
-			//var rows = container.RowDefinitions.Select((col, i)=> $"{i}, {col.Height}, {col.ActualHeight}, {col.MinHeight}, {col.MaxHeight}, {col.Offset}");
-			//foreach(var col in rows) {
-			//	Debug.WriteLine($"{col}", "TestExplanderWindow_LayoutUpdated");
-
-			//}
-			//columnListView.ItemsSource = rows;
-		}
 	}
 }

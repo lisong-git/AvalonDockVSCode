@@ -148,7 +148,7 @@ namespace AvalonDock.Controls {
 		private static void manager_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) {
 			var focusedElement = e.NewFocus as Visual;
 			if(focusedElement != null &&
-				!(focusedElement is LayoutAnchorableGroupTabItem || focusedElement is LayoutDocumentTabItem))
+				!(focusedElement is LayoutPaneCompositeTabItem || focusedElement is LayoutDocumentTabItem))
 			//Avoid tracking focus for elements like this
 			{
 				var parentAnchorable = focusedElement.FindVisualAncestor<LayoutAnchorableControl>();

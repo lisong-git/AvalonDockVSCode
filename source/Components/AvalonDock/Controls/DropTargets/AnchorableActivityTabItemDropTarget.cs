@@ -74,8 +74,6 @@ namespace AvalonDock.Controls.DropTargets
 		/// <param name="floatingWindow"></param>
 		protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
 		{
-			Debug.WriteLine($"{Type}", $"AnchorableActivityBarDropTarget Drop 1");
-
 			LayoutPaneComposite targetModel = _targetPane.Model;
 			switch (Type)
 			{
@@ -83,13 +81,11 @@ namespace AvalonDock.Controls.DropTargets
 					#region DropTargetType.Bottom
 					{
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
-						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
+						int index = expanderGroup.IndexOfChild(targetModel);
 
-						LayoutPaneCompositePart layoutAnchorableGroup = floatingWindow.RootPanel;
+						LayoutPaneComposite layoutAnchorableGroup = floatingWindow.RootPanel;
 						layoutAnchorableGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
-						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
-						//layoutAnchorableGroup.Parent = null;
-						expanderGroup.InsertChildAt(insertToIndex, layoutAnchorableGroup);
+						expanderGroup.InsertChildAt(index, layoutAnchorableGroup);
 					}
 					break;
 
@@ -98,13 +94,11 @@ namespace AvalonDock.Controls.DropTargets
 					#region DropTargetType.Bottom
 					{
 						var expanderGroup = targetModel.Parent as ILayoutGroup;
-						int insertToIndex = expanderGroup.IndexOfChild(targetModel);
+						int index = expanderGroup.IndexOfChild(targetModel);
 
-						LayoutPaneCompositePart layoutAnchorableExpanderGroup = floatingWindow.RootPanel;
-						layoutAnchorableExpanderGroup.Orientation = System.Windows.Controls.Orientation.Vertical;
-						Debug.WriteLine($"{expanderGroup}", $"AnchorableActivityBarDropTarget Drop 2");
-						//layoutAnchorableGroup.Parent = null;
-						expanderGroup.InsertChildAt(insertToIndex + 1, layoutAnchorableExpanderGroup);
+						LayoutPaneComposite layoutPaneComposite = floatingWindow.RootPanel;
+						layoutPaneComposite.Orientation = System.Windows.Controls.Orientation.Vertical;
+						expanderGroup.InsertChildAt(index + 1, layoutPaneComposite);
 					}
 					break;
 

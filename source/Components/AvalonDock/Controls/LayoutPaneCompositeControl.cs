@@ -22,7 +22,7 @@ namespace AvalonDock.Controls {
 	/// This Grid based control can host multiple other controls in its Children collection
 	/// (<see cref="LayoutAnchorableControl"/>).
 	/// </summary>
-	public class LayoutAnchorableGroupControl :LayoutExpanderGridControl<LayoutAnchorable> {
+	public class LayoutPaneCompositeControl :LayoutExpanderGridControl<LayoutAnchorable> {
 		#region fields
 
 
@@ -41,7 +41,7 @@ namespace AvalonDock.Controls {
 		#region Model
 
 		/// <summary><see cref="Model"/> dependency property.</summary>
-		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutPaneComposite), typeof(LayoutAnchorableGroupControl),
+		public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(nameof(Model), typeof(LayoutPaneComposite), typeof(LayoutPaneCompositeControl),
 				new FrameworkPropertyMetadata(null, OnModelChanged));
 
 		/// <summary>Gets/sets the model attached to this view.</summary>
@@ -56,7 +56,7 @@ namespace AvalonDock.Controls {
 		}
 
 		/// <summary>Handles changes to the <see cref="Model"/> property.</summary>
-		private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutAnchorableGroupControl) d).OnModelChanged(e);
+		private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((LayoutPaneCompositeControl) d).OnModelChanged(e);
 
 		/// <summary>Provides derived classes an opportunity to handle changes to the <see cref="Model"/> property.</summary>
 		protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e) {

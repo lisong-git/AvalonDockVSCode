@@ -18,8 +18,8 @@ using System.Windows.Input;
 namespace AvalonDock.Controls {
 	/// <inheritdoc />
 	/// <summary>
-	/// Implements the TabItem Header that is displayed when the <see cref="LayoutAnchorableGroupPaneControl"/>
-	/// shows more than 1 <see cref="LayoutAnchorableGroupControl"/>. This TabItem is displayed at the bottom
+	/// Implements the TabItem Header that is displayed when the <see cref="LayoutPaneCompositePartControl"/>
+	/// shows more than 1 <see cref="LayoutPaneCompositeControl"/>. This TabItem is displayed at the bottom
 	/// of a <see cref="LayoutAnchorablePaneControl"/>.
 	/// </summary>
 	/// <seealso cref="Control"/>

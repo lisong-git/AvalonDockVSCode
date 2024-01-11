@@ -58,7 +58,7 @@ namespace AvalonDock.Controls
 			{
 				if (fwc is LayoutAnchorableFloatingWindowControl)
 				{
-					var paneControl = GetLayoutControlByMousePosition<LayoutAnchorableGroupPaneControl>(fwc);
+					var paneControl = GetLayoutControlByMousePosition<LayoutPaneCompositePartControl>(fwc);
 					if (paneControl != null && paneControl.Model is LayoutPaneComposite pane)
 					{
 						if (pane.SelectedContent != null)
