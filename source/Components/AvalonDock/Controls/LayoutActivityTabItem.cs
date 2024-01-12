@@ -137,12 +137,19 @@ namespace AvalonDock.Controls {
 		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
 			_isMouseDown = false;
 			var model = Model;
+<<<<<<< HEAD
 			//Debug.WriteLine($"{model != null}", "OnMouseLeftButtonUp");
 
 			if (model != null) {
 				var activityBar = model.Root.ActivityBar;
 
 				var paneModel = model.Root.PrimarySideBar;
+=======
+			if(model != null) {
+				var activityBar = model.Parent as LayoutActivityBar;
+
+				var paneModel = activityBar.GetRoot().PrimarySideBar;
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 				if (_lastSelectedIndex!= -1 && _lastSelectedIndex == activityBar.SelectedIndex) {
 					paneModel.SetVisible(!paneModel.IsVisible);
 				}

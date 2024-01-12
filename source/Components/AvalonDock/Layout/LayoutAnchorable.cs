@@ -216,8 +216,13 @@ namespace AvalonDock.Layout {
 				_contentVisibility = value;
 				//if(Parent is La)
 				//Debug.WriteLine($"{_contentVisibility}", "ContentVisibility");
+<<<<<<< HEAD
 				if (Parent is LayoutPaneComposite lap) {
 					if (lap.Parent is LayoutPaneCompositePart pg) {
+=======
+				if (Parent is LayoutAnchorableGroup lap) {
+					if (lap.Parent is LayoutAnchorableGroupPane pg) {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 						//Debug.WriteLine($"LayoutAnchorablePane,{lap.Parent.GetType()},  {lap.FixedDockHeight}, {lap.DockHeight}", "ContentVisibility");
 
 						//if(ContentVisibility == Visibility.Collapsed) {
@@ -341,11 +346,23 @@ namespace AvalonDock.Layout {
 			set => _actualHeight = value;
 		}
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		/// <summary>
 		/// Event fired when floating properties were updated.
 		/// </summary>
 		//public event EventHandler FloatingPropertiesUpdated;
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		public GridLength DockWidth {
 			//get => _dockWidth.IsAbsolute && _resizableAbsoluteDockWidth < _dockWidth.Value && _resizableAbsoluteDockWidth.HasValue ?
 			//			new GridLength(_resizableAbsoluteDockWidth.Value) : _dockWidth;
@@ -370,8 +387,15 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+<<<<<<< HEAD
 		public double FixedDockWidth => _dockWidth.IsAbsolute && _dockWidth.Value >= _dockMinWidth ? _dockWidth.Value : _dockMinWidth;
 
+=======
+
+		public double FixedDockWidth => _dockWidth.IsAbsolute && _dockWidth.Value >= _dockMinWidth ? _dockWidth.Value : _dockMinWidth;
+
+
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		public double ResizableAbsoluteDockWidth {
 			get => _resizableAbsoluteDockWidth ?? 0;
 			set {
@@ -388,6 +412,11 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		public ExpandDirection ExpandDirection {
 			get {
 				if (Parent is ILayoutOrientableGroup orientableGroup && Orientation.Horizontal == orientableGroup.Orientation) {
@@ -454,6 +483,7 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		protected override void InternalDock() {
 			var root = Root as LayoutRoot;
+<<<<<<< HEAD
 			LayoutPaneComposite anchorableGroup = null;
 
 			//look for active content parent pane
@@ -467,6 +497,21 @@ namespace AvalonDock.Layout {
 			//look for an available pane
 			if (anchorableGroup == null)
 				anchorableGroup = root.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault();
+=======
+			LayoutAnchorableGroup anchorableGroup = null;
+
+			//look for active content parent pane
+			if (root.ActiveContent != null && root.ActiveContent != this)
+				anchorableGroup = root.ActiveContent.Parent as LayoutAnchorableGroup;
+			//look for a pane on the right side
+			//if (anchorableGroup == null)
+			//	anchorableGroup = root.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
+			if (anchorableGroup == null)
+				anchorableGroup = root.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow);
+			//look for an available pane
+			if (anchorableGroup == null)
+				anchorableGroup = root.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault();
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 			var added = false;
 			if (root.Manager.LayoutUpdateStrategy != null)
 				added = root.Manager.LayoutUpdateStrategy.BeforeInsertAnchorable(root, this, anchorableGroup);
@@ -478,7 +523,11 @@ namespace AvalonDock.Layout {
 						mainLayoutPanel.Children.Add(root.RootPanel);
 
 					root.RootPanel = mainLayoutPanel;
+<<<<<<< HEAD
 					anchorableGroup = new LayoutPaneComposite { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+=======
+					anchorableGroup = new LayoutAnchorableGroup { DockWidth = new GridLength(200.0, GridUnitType.Pixel) };
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 					mainLayoutPanel.Children.Add(anchorableGroup);
 				}
 				anchorableGroup.Children.Add(this);
@@ -489,8 +538,11 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		public override void ReadXml(System.Xml.XmlReader reader) {
+<<<<<<< HEAD
 			if (reader.MoveToAttribute(nameof(IsExpanded)))
 				IsExpanded = bool.Parse(reader.Value);
+=======
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 			if (reader.MoveToAttribute(nameof(CanHide)))
 				CanHide = bool.Parse(reader.Value);
 			if (reader.MoveToAttribute(nameof(CanAutoHide)))
@@ -512,8 +564,11 @@ namespace AvalonDock.Layout {
 
 		/// <inheritdoc />
 		public override void WriteXml(System.Xml.XmlWriter writer) {
+<<<<<<< HEAD
 			if (IsExpanded)
 				writer.WriteAttributeString(nameof(IsExpanded), IsExpanded.ToString());
+=======
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 			if (!CanHide)
 				writer.WriteAttributeString(nameof(CanHide), CanHide.ToString());
 			if (!CanAutoHide)

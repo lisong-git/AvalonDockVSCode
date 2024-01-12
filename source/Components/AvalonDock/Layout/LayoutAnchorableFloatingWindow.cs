@@ -77,7 +77,11 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+<<<<<<< HEAD
 		public LayoutAnchorable SinglePane {
+=======
+		public ILayoutAnchorableGroup SinglePane {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 			get {
 				if(!IsSinglePane)
 					return null;

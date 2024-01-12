@@ -116,6 +116,7 @@ namespace AvalonDock.Layout {
 					return;
 				RaisePropertyChanging(nameof(ActivityBar));
 
+<<<<<<< HEAD
 				_activityBar = value;
 				if (_activityBar != null) {
 					_activityBar.Children.Clear();
@@ -145,10 +146,55 @@ namespace AvalonDock.Layout {
 				if (ActivityBar != null) {
 					ActivityBar.ReplaceChildrenNoCollectionChangedSubscribe(_primarySideBar.Children);
 					_primarySideBar.PropertyChanged += _activityBar.PrimarySideBar_PropertyChanged;
+=======
+				if (_activityBar != null) {
+					_activityBar.Parent = null;
 				}
+				_activityBar = value;
+				if (_activityBar == null) return;
+				_activityBar.Parent = this;
+
+				if (RootPanel != null) {
+					var sidePar = PrimarySideBar;
+					if (sidePar == null) {
+						sidePar = DefaultPrimarySideBar;
+						PrimarySideBar = sidePar;
+					}
+					sidePar.ReplaceChildrenNoCollectionChangedSubscribe(_activityBar.Children);
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
+				}
+
+				RaisePropertyChanged(nameof(ActivityBar));
 			}
 		}
 
+<<<<<<< HEAD
+=======
+		private LayoutAnchorableGroupPane _primarySideBar;
+
+		public LayoutAnchorableGroupPane PrimarySideBar {
+			get => _primarySideBar;
+		  set {
+				if (_primarySideBar == value) return;
+
+				_primarySideBar = value;
+				if (ActivityBar != null) {
+					var activityBar = ActivityBar;
+					_primarySideBar.ReplaceChildrenNoCollectionChangedSubscribe(activityBar.Children);
+					RootPanel.InsertChildAt(0, _primarySideBar);
+				}
+
+				//Debug.WriteLine($"{_primarySideBar == null}", "PrimarySideBar");
+			}
+		}
+
+		public static LayoutAnchorableGroupPane DefaultPrimarySideBar => new LayoutAnchorableGroupPane() {
+			Name = DockingManager.PrimarySideBarKey,
+			DockMinWidth = 56,
+			DockWidth = new GridLength(168)
+		};
+
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		/// <summary>Gets the floating windows that are part of this layout.</summary>
 		public ObservableCollection<LayoutFloatingWindow> FloatingWindows {
 			get {

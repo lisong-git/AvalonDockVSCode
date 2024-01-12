@@ -1504,7 +1504,15 @@ namespace AvalonDock {
 		
 		public LayoutPaneCompositePart SecondarySideBar { get; private set; }
 
+<<<<<<< HEAD
 		public LayoutPaneCompositePart Panel { get; private set; }
+=======
+
+		
+		public LayoutAnchorableGroupPane SecondarySideBar { get; private set; }
+
+		public LayoutAnchorableGroupPane Panel { get; private set; }
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 
 		/// <summary>
 		/// Method is invoked to create the actual visible UI element from a given layout model. It is invoked when:
@@ -1520,6 +1528,7 @@ namespace AvalonDock {
 				return new LayoutPanelControl(model as LayoutPanel);
 			}
 			if(model is LayoutActivityBar layoutActivityBar) {
+				//Debug.WriteLine($"{layoutActivityBar.Parent}, {layoutActivityBar.Root}", "CreateUIElementForModel");
 				var templateModelView = new LayoutActivityBarControl(layoutActivityBar);
 				templateModelView.SetBinding(StyleProperty, new Binding(ActivityBarControlStyleProperty.Name) { Source = this });
 				return templateModelView;
@@ -1537,9 +1546,14 @@ namespace AvalonDock {
 
 				if (PrimarySideBarKey == layoutAnchorableGroupPane.Name) {
 					templateModelView.SetBinding(StyleProperty, new Binding(PrimarySideBarStyleProperty.Name) { Source = this });
+<<<<<<< HEAD
 					Layout.PrimarySideBar = layoutAnchorableGroupPane;
 				}
 				else if (SecondarySideBarKey == layoutAnchorableGroupPane.Name) {
+=======
+					//PrimarySideBar = layoutAnchorableGroupPane;
+				} else if(SecondarySideBarKey == layoutAnchorableGroupPane.Name) {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 					templateModelView.SetBinding(StyleProperty, new Binding(SecondarySideBarStyleProperty.Name) { Source = this });
 					SecondarySideBar = layoutAnchorableGroupPane;
 				}
@@ -1700,7 +1714,11 @@ namespace AvalonDock {
 			}
 		}
 
+<<<<<<< HEAD
 		internal void StartDraggingFloatingWindowForPane(LayoutPaneComposite paneModel) {
+=======
+		internal void StartDraggingFloatingWindowForPane(LayoutAnchorableGroup paneModel) {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 			//Debug.WriteLine($"{paneModel.Title}", "StartDraggingFloatingWindowForPane 0 ");
 
 			var fwc = CreateFloatingWindowForLayoutAnchorableWithoutParent(paneModel, false);

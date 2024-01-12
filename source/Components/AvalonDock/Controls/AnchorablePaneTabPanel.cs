@@ -98,7 +98,11 @@ namespace AvalonDock.Controls {
 						var parentPane = layoutContent.Parent as ILayoutPane;
 						int contentIndex = parentSelector.IndexOf(layoutContent);
 						if (contentIndex > 0 &&
+<<<<<<< HEAD
 							parentContainer.ChildrenCount > 1 && parentPane!= null) {
+=======
+							parentContainer.ChildrenCount > 1) {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 							parentPane.MoveChild(contentIndex, 0);
 							parentSelector.SelectedIndex = 0;
 							return ArrangeOverride(finalSize);

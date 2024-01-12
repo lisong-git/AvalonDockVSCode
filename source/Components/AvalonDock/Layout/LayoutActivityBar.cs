@@ -18,15 +18,25 @@ namespace AvalonDock.Layout {
 		#region fields
 
 		//private string _id;
+<<<<<<< HEAD
 		//private int _selectedIndex = -1;
 		//[XmlIgnore]
 		//private bool _autoFixSelectedContent = true;
+=======
+		private int _selectedIndex = -1;
+		[XmlIgnore]
+		private bool _autoFixSelectedContent = true;
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 
 		#endregion fields
 
 		#region Constructors
 		/// <summary>Class constructor</summary>
+<<<<<<< HEAD
 		public LayoutActivityBar() : base() {
+=======
+		public LayoutActivityBar():base() {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		}
 
 		#endregion Constructors
@@ -34,6 +44,7 @@ namespace AvalonDock.Layout {
 		#region Properties
 
 		public ICommand TestCommand => new RelayCommand<object>((p) => {
+<<<<<<< HEAD
 			var model = Root?.PrimarySideBar;
 			model?.SetVisible(!model.IsVisible);
 		});
@@ -49,6 +60,11 @@ namespace AvalonDock.Layout {
 		}
 
 		public LayoutPaneComposite SelectedItem  => Root.PrimarySideBar?.SelectedItem;			
+=======
+			//var model = Root?.Manager?.PrimarySideBar;
+			//model?.SetVisible(!model.IsVisible);
+		});
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 
 		#endregion Properties
 
@@ -99,13 +115,21 @@ namespace AvalonDock.Layout {
 		//}
 
 		private void Child_IsActiveChanged(object sender, EventArgs e) {
+<<<<<<< HEAD
 			if (sender is LayoutPaneComposite model && model.IsActive) {
+=======
+			if (sender is LayoutAnchorableGroup model && model.IsActive) {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 				Debug.WriteLine($"{Root}, {Root?.PrimarySideBar}, {Parent}", "Child_IsActiveChanged");
 				if (Root.PrimarySideBar != null) {
 					Root.PrimarySideBar.SetVisible(true);
 				}
 				//else {
+<<<<<<< HEAD
 				// var pane =	new LayoutPaneCompositePart() {
+=======
+				// var pane =	new LayoutAnchorableGroupPane() {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 				//		Name = DockingManager.PrimarySideBarKey,
 				//		DockMinWidth = 56,
 				//		DockWidth = new GridLength(168)
@@ -157,6 +181,28 @@ namespace AvalonDock.Layout {
 			}
 		}
 
+<<<<<<< HEAD
+=======
+		public int SelectedIndex {
+			get => _selectedIndex;
+			set {
+				if(_selectedIndex != value) {
+					_selectedIndex = value;
+					RaisePropertyChanged(nameof(SelectedIndex));
+				}
+			}
+		}
+
+		public LayoutAnchorableGroup SelectedItem {
+			get => Children.Where((o, index) => index == SelectedIndex).FirstOrDefault();
+			set {
+				if(value != null && value != SelectedItem) {
+					value.IsSelected = true;
+				}
+			}
+		}
+
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		/// <summary>
 		/// Gets the index of the layout content (which is required to be a <see cref="LayoutAnchorable"/>)
 		/// or -1 if the layout content is not a <see cref="LayoutAnchorable"/> or is not part of the childrens collection.
@@ -168,6 +214,18 @@ namespace AvalonDock.Layout {
 
 		#endregion Public Methods
 
+<<<<<<< HEAD
+=======
+		#region Internal Methods
+
+		/// <summary>
+		/// Updates whether this object is hosted at the root level of a floating window control or not.
+		/// </summary>
+		//internal void UpdateIsDirectlyHostedInFloatingWindow() => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
+
+		#endregion Internal Methods
+
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc
 		#region Private Methods
 
 		private void OnParentChildrenCollectionChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));

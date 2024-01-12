@@ -20,9 +20,15 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneCompositePart.cs
 	public class LayoutPaneCompositePart : LayoutPositionableGroup<LayoutPaneComposite>
 		, IPaneCompositePart
 		, ILayoutPanelElement
+=======
+	public class LayoutAnchorableGroupPane :LayoutPositionableGroup<LayoutAnchorableGroup>
+		//, ILayoutAnchorablePane
+		,ILayoutPanelElement
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroupPane.cs
 		, ILayoutPositionableElement
 		, ILayoutSelector<LayoutPaneComposite>
 		, ILayoutPaneSerializable {
@@ -46,7 +52,11 @@ namespace AvalonDock.Layout {
 		public LayoutPaneCompositePart() : base() {
 		}
 
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneCompositePart.cs
 		public LayoutPaneCompositePart(LayoutPaneComposite anchorableExpanderGroup) : this() {
+=======
+		public LayoutAnchorableGroupPane(LayoutAnchorableGroup anchorableExpanderGroup):this() {
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroupPane.cs
 			Children.Add(anchorableExpanderGroup);
 		}
 

@@ -20,12 +20,20 @@ using System.Xml.Serialization;
 namespace AvalonDock.Layout {
 	/// <summary>
 	/// Implements an element in the layout model tree that can contain and arrange multiple
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneComposite.cs
 	/// <see cref="LayoutPaneComposite"/> elements in x or y directions, which in turn contain
+=======
+	/// <see cref="LayoutAnchorableGroup"/> elements in x or y directions, which in turn contain
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroup.cs
 	/// <see cref="LayoutAnchorable"/> elements.
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneComposite.cs
 	public class LayoutPaneComposite :LayoutPositionableGroup<LayoutAnchorable>
+=======
+	public class LayoutAnchorableGroup :LayoutPositionableGroup<LayoutAnchorable>
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroup.cs
 		, ILayoutAnchorableGroup
 		, ILayoutContentSelector
 		, ILayoutOrientableGroup
@@ -114,7 +122,10 @@ namespace AvalonDock.Layout {
 		}
 
 		public string Title => Name ?? Children.FirstOrDefault()?.Title ?? "默认";
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneComposite.cs
 		
+=======
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroup.cs
 		private void SetChildSelected(int index, bool selected) {
 			if(index >= 0 && index < Children.Count)
 				Children[index].IsSelected = selected;
@@ -126,7 +137,11 @@ namespace AvalonDock.Layout {
 		/// <inheritdoc />
 		public override void ConsoleDump(int tab) {
 			System.Diagnostics.Trace.Write(new string(' ', tab * 4));
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneComposite.cs
 			System.Diagnostics.Trace.WriteLine($"AnchorableGroup({Name}, {Orientation})");
+=======
+			System.Diagnostics.Trace.WriteLine(string.Format("AnchorableExpander({0})", Orientation));
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroup.cs
 
 			foreach (LayoutElement child in Children)
 				child.ConsoleDump(tab + 1);
@@ -144,6 +159,7 @@ namespace AvalonDock.Layout {
 		}
 
 		/// <inheritdoc />
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneComposite.cs
 		public override void WriteXml(System.Xml.XmlWriter writer) {
 			writer.WriteAttributeString(nameof(Orientation), Orientation.ToString());
 			if (_id != null) writer.WriteAttributeString(nameof(ILayoutPaneSerializable.Id), _id);
@@ -158,10 +174,24 @@ namespace AvalonDock.Layout {
 			if (reader.MoveToAttribute(nameof(ILayoutPaneSerializable.Id))) _id = reader.Value;
 			if (reader.MoveToAttribute(nameof(Name))) _name = reader.Value;
 			//Debug.WriteLine($"{Name}, {Title}, {Orientation}, {_id}", "LayoutPaneComposite ReadXml");
+=======
+		public override void ReadXml(System.Xml.XmlReader reader) {
+			if (reader.MoveToAttribute(nameof(Orientation)))
+				Orientation = (Orientation)Enum.Parse(typeof(Orientation), reader.Value, true);
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroup.cs
 			base.ReadXml(reader);
 		}
 
 		/// <inheritdoc />
+<<<<<<< HEAD:source/Components/AvalonDock/Layout/LayoutPaneComposite.cs
+=======
+		public override void WriteXml(System.Xml.XmlWriter writer) {
+			writer.WriteAttributeString(nameof(Orientation), Orientation.ToString());
+			base.WriteXml(writer);
+		}
+
+		/// <inheritdoc />
+>>>>>>> 4e44adb17b85797821902ce92cc3d7ef9d9cb1cc:source/Components/AvalonDock/Layout/LayoutAnchorableGroup.cs
 		protected override bool GetVisibility() => Children.Count > 0 && Children.Any(c => c.IsVisible);
 
 		/// <inheritdoc />
