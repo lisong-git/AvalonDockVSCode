@@ -9,7 +9,7 @@ namespace AvalonDock.VS2013Test {
 			//AD wants to add the anchorable into destinationContainer
 			//just for test provide a new anchorablepane 
 			//if the pane is floating let the manager go ahead
-			LayoutPaneComposite destPane = destinationContainer as LayoutPaneComposite;
+			LayoutAnchorableGroup destPane = destinationContainer as LayoutAnchorableGroup;
 			if (destinationContainer != null && destinationContainer.FindParent<LayoutFloatingWindow>() != null)
 				return false;
 
@@ -20,17 +20,17 @@ namespace AvalonDock.VS2013Test {
 			if (anchorableToShow.Content is ExplorerViewModel) {
 				var groupName = "ExplorerPaneGroup";
 
-				var explorerPane = layout.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault(d => d.Name == groupName);
+				var explorerPane = layout.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault(d => d.Name == groupName);
 				Debug.WriteLine($"{explorerPane != null}", "BeforeInsertAnchorable 2");
 
 				if (explorerPane != null) {
 					explorerPane.Children.Add(anchorableToShow);
 				}
 				else {
-					explorerPane = new LayoutPaneComposite { Name = groupName };
+					explorerPane = new LayoutAnchorableGroup { Name = groupName };
 
 					explorerPane.Children.Add(anchorableToShow);
-					var p = layout.Descendents().OfType<LayoutPaneCompositePart>().FirstOrDefault(o => o.Name == DockingManager.SecondarySideBarKey);
+					var p = layout.Descendents().OfType<LayoutAnchorableGroupPane>().FirstOrDefault(o => o.Name == DockingManager.SecondarySideBarKey);
 					p.InsertChildAt(0, explorerPane);
 				}
 				return true;
@@ -39,17 +39,17 @@ namespace AvalonDock.VS2013Test {
 			if (anchorableToShow.Content is PropertiesViewModel) {
 				var groupName = "PropertiesPaneGroup";
 
-				var propertiesPane = layout.Descendents().OfType<LayoutPaneComposite>().FirstOrDefault(d => d.Name == groupName);
+				var propertiesPane = layout.Descendents().OfType<LayoutAnchorableGroup>().FirstOrDefault(d => d.Name == groupName);
 				Debug.WriteLine($"{propertiesPane != null}", "BeforeInsertAnchorable 4");
 
 				if (propertiesPane != null) {
 					propertiesPane.Children.Add(anchorableToShow);
 				}
 				else {
-					propertiesPane = new LayoutPaneComposite { Name = groupName };
+					propertiesPane = new LayoutAnchorableGroup { Name = groupName };
 
 					propertiesPane.Children.Add(anchorableToShow);
-					var p = layout.Descendents().OfType<LayoutPaneCompositePart>().FirstOrDefault(o => o.Name == DockingManager.SecondarySideBarKey);
+					var p = layout.Descendents().OfType<LayoutAnchorableGroupPane>().FirstOrDefault(o => o.Name == DockingManager.SecondarySideBarKey);
 					Debug.WriteLine($"{p != null}", "BeforeInsertAnchorable 5");
 
 					//	p.InsertChildAt(0, propertiesPane);

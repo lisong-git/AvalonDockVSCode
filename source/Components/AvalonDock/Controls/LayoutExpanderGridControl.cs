@@ -207,6 +207,7 @@ namespace AvalonDock.Controls {
 				if(RowDefinitions.Count != InternalChildren.Count)
 					return;
 
+
 				var changedElement = sender as ILayoutPositionableElement;
 				var childFromModel = InternalChildren.OfType<ILayoutControl>().First(ch => ch.Model == changedElement) as UIElement;
 				var indexOfChild = InternalChildren.IndexOf(childFromModel);
@@ -286,7 +287,7 @@ namespace AvalonDock.Controls {
 					var childModel = _model.Children[iChildModel] as LayoutAnchorable;
 					//Debug.WriteLine($"{temp.GetType()}, {childModel.DockHeight}", "LayoutGridControl2 UpdateRowColDefinitions 3");
 					RowDefinitions.Add(new RowDefinition {
-						Height = childModel.IsExpanded ? (childModel.DockHeight.IsStar ? childModel.DockHeight : new GridLength(1, GridUnitType.Star)) : new GridLength(1, GridUnitType.Auto),
+						Height = childModel.IsExpanded ? (childModel.DockHeight.IsStar ? childModel.DockHeight : new GridLength(1, GridUnitType.Auto)) : new GridLength(1, GridUnitType.Auto),
 						MinHeight = childModel.CalculatedDockMinHeight()
 					});
 

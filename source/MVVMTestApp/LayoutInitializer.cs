@@ -14,16 +14,16 @@ namespace AvalonDock.MVVMTestApp
 			//AD wants to add the anchorable into destinationContainer
 			//just for test provide a new anchorablepane 
 			//if the pane is floating let the manager go ahead
-			LayoutPaneComposite destPane = destinationContainer as LayoutPaneComposite;
+			LayoutAnchorableGroup destPane = destinationContainer as LayoutAnchorableGroup;
 			if (destinationContainer != null &&
 				destinationContainer.FindParent<LayoutFloatingWindow>() != null)
 				return false;
 
-			var toolsPane = layout.Descendents().OfType<LayoutPaneCompositePart>().FirstOrDefault(d => d.Name == _toolsPane);
+			var toolsPane = layout.Descendents().OfType<LayoutAnchorableGroupPane>().FirstOrDefault(d => d.Name == _toolsPane);
 			Debug.WriteLine($"{toolsPane != null}", "BeforeInsertAnchorable 1");
 
 			if (toolsPane != null) {
-				toolsPane.Children.Add(new LayoutPaneComposite(anchorableToShow) { Orientation = System.Windows.Controls.Orientation.Horizontal });
+				toolsPane.Children.Add(new LayoutAnchorableGroup(anchorableToShow) { Orientation = System.Windows.Controls.Orientation.Horizontal });
 				//toolsPane.Children.Add(anchorableToShow);
 				return true;
 			}
@@ -33,8 +33,8 @@ namespace AvalonDock.MVVMTestApp
 				if (documentPane != null) {
 					var parentPane = documentPane.Parent as LayoutPanel;
 					parentPane.Orientation = System.Windows.Controls.Orientation.Vertical;
-					var group = new LayoutPaneComposite(anchorableToShow) { Orientation = Orientation.Horizontal };
-					var groupPane = new LayoutPaneCompositePart(group) { Name = _toolsPane };
+					var group = new LayoutAnchorableGroup(anchorableToShow) { Orientation = Orientation.Horizontal };
+					var groupPane = new LayoutAnchorableGroupPane(group) { Name = _toolsPane };
 					parentPane.Children.Add(groupPane);
 					return true;
 				}

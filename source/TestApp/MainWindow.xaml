@@ -103,10 +103,10 @@
             DockWidth="120">
 						<LayoutPaneComposite Name="A" Orientation="Vertical">
               <LayoutAnchorable
-                Title="自定义4" 
+                Title="自定义4"
                 ContentId="Primary_G1_A1"
-                IsExpanded="True">
-                <StackPanel Orientation="Vertical" Height="395" Background="YellowGreen">
+                IsExpanded="False">
+                <StackPanel Orientation="Vertical">
                   <TextBox Text="内容1" />
                   <TextBox Text="内容2" />
                 </StackPanel>
@@ -243,9 +243,8 @@
               <LayoutAnchorable
                 Title="自定义4"
                 ContentId="S_G1_A1"
-								
                 IsExpanded="False">
-                <StackPanel Orientation="Vertical" Height="400">
+                <StackPanel Orientation="Vertical">
                   <TextBox Text="内容1" />
                   <TextBox Text="内容2" />
                 </StackPanel>

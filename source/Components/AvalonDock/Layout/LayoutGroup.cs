@@ -202,7 +202,9 @@ namespace AvalonDock.Layout {
 		private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
 #if DEBUG
 			var duplicates = Children.OfType<LayoutAnchorable>().GroupBy(o => o.ContentId).Where(g => g.Count() > 1).Select(g => $"{g.Key}: {string.Join(", ", g.Select(o => $"{{{o.Name}, {o.Title}}}"))}");
+			Debug.WriteLineIf(duplicates.Any(), $"{string.Join(";", duplicates)}", "LayoutGroup Children_CollectionChanged 1");
 			var emptyContentIdLayouts = Children.OfType<LayoutAnchorable>().Where(o=> string.IsNullOrEmpty(o.ContentId)).Select(o => $"{{{o.Name}, {o.Title}}}");
+			Debug.WriteLineIf(emptyContentIdLayouts.Any(), $"{string.Join(";", emptyContentIdLayouts)}", "LayoutGroup Children_CollectionChanged 2");
 #endif
 
 			if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {

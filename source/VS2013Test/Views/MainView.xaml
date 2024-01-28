@@ -344,23 +344,23 @@
                     <LayoutPanel Orientation="Vertical">
                         <LayoutDocumentPane />
 
-                        <LayoutPaneCompositePart
+                        <LayoutAnchorableGroupPane
                             Name="PART_Panel"
                             DockHeight="128"
                             Orientation="Horizontal">
-                            <LayoutPaneComposite Name="ErrorsPaneGroup">
+                            <LayoutAnchorableGroup Name="ErrorsPaneGroup">
                                 <LayoutAnchorable Name="ErrorsPane" Title="ErrorsPaneTitle">
                                     <TextBlock Margin="8" Text="ErrorsPaneContent" />
                                 </LayoutAnchorable>
                                 <!--<LayoutAnchorable Name="OutputPane" Title="OutputPaneTitle">
                                     <TextBlock Margin="8" Text="OutputPaneContent" />
                                 </LayoutAnchorable>-->
-                            </LayoutPaneComposite>
+                            </LayoutAnchorableGroup>
 
-                        </LayoutPaneCompositePart>
+                        </LayoutAnchorableGroupPane>
                     </LayoutPanel>
 
-                    <LayoutPaneCompositePart
+                    <LayoutAnchorableGroupPane
                         Name="PART_SecondarySideBar"
                         DockWidth="256"
                         Orientation="Vertical">
@@ -388,7 +388,7 @@
 							</LayoutAnchorable>-->
                         <!--
 						</LayoutAnchorableGroup>-->
-                    </LayoutPaneCompositePart>
+                    </LayoutAnchorableGroupPane>
                 </LayoutPanel>
             </LayoutRoot>
         </DockingManager>

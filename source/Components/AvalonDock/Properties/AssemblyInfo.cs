@@ -1,4 +1,4 @@
-/************************************************************************
+﻿/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -37,7 +37,7 @@ using System;
                                               // app, or any theme specific resource dictionaries)
 )]
 
-	[assembly: XmlnsPrefix("https://github.com/Dirkster99/AvalonDock", "avalondock")]
+[assembly: XmlnsPrefix("https://github.com/Dirkster99/AvalonDock", "avalondock")]
 [assembly: XmlnsDefinition("https://github.com/Dirkster99/AvalonDock", "AvalonDock")]
 [assembly: XmlnsDefinition("https://github.com/Dirkster99/AvalonDock", "AvalonDock.Controls")]
 [assembly: XmlnsDefinition("https://github.com/Dirkster99/AvalonDock", "AvalonDock.Converters")]

@@ -25,7 +25,7 @@ namespace AvalonDock.Layout {
 	/// </summary>
 	[ContentProperty(nameof(Children))]
 	[Serializable]
-	public class LayoutPaneComposite : LayoutPositionableGroup<LayoutAnchorable>
+	public class LayoutPaneComposite :LayoutPositionableGroup<LayoutAnchorable>
 		, ILayoutAnchorableGroup
 		, ILayoutContentSelector
 		, ILayoutOrientableGroup
@@ -114,9 +114,9 @@ namespace AvalonDock.Layout {
 		}
 
 		public string Title => Name ?? Children.FirstOrDefault()?.Title ?? "默认";
-
+		
 		private void SetChildSelected(int index, bool selected) {
-			if (index >= 0 && index < Children.Count)
+			if(index >= 0 && index < Children.Count)
 				Children[index].IsSelected = selected;
 		}
 		#endregion Properties
@@ -138,7 +138,7 @@ namespace AvalonDock.Layout {
 		/// </summary>
 		/// <param name="content"></param>
 		public int IndexOf(LayoutContent content) {
-			if (!(content is LayoutAnchorable anchorableChild))
+			if(!(content is LayoutAnchorable anchorableChild))
 				return -1;
 			return Children.IndexOf(anchorableChild);
 		}
@@ -200,10 +200,10 @@ namespace AvalonDock.Layout {
 		}
 		/// <inheritdoc />
 		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
-			if (oldValue is ILayoutGroup oldGroup)
+			if(oldValue is ILayoutGroup oldGroup)
 				oldGroup.ChildrenCollectionChanged -= OnParentChildrenCollectionChanged;
 			RaisePropertyChanged(nameof(IsDirectlyHostedInFloatingWindow));
-			if (newValue is ILayoutGroup newGroup)
+			if(newValue is ILayoutGroup newGroup)
 				newGroup.ChildrenCollectionChanged += OnParentChildrenCollectionChanged;
 			base.OnParentChanged(oldValue, newValue);
 		}
@@ -215,7 +215,7 @@ namespace AvalonDock.Layout {
 		#region Private Methods
 
 		private void UpdateParentVisibility() {
-			if (Parent is ILayoutElementWithVisibility parentPane)
+			if(Parent is ILayoutElementWithVisibility parentPane)
 				parentPane.ComputeVisibility();
 		}
 
@@ -234,15 +234,15 @@ namespace AvalonDock.Layout {
 		public bool IsSelected {
 			get => _isSelected;
 			set {
-				if (value == _isSelected)
+				if(value == _isSelected)
 					return;
 				var oldValue = _isSelected;
 				RaisePropertyChanging(nameof(IsSelected));
 				_isSelected = value;
-				if (_isSelected && Parent is ILayoutSelector<LayoutPaneComposite> parentSelector) {
+				if(_isSelected && Parent is ILayoutSelector<LayoutPaneComposite> parentSelector) {
 					parentSelector.SelectedIndex = parentSelector.IndexOf(this);
 				}
-				if (!_isSelected) {
+				if(!_isSelected) {
 					IsActive = false;
 				}
 				OnIsSelectedChanged(oldValue, value);
@@ -273,19 +273,19 @@ namespace AvalonDock.Layout {
 			get => _isActive;
 			set {
 				//Debug.WriteLine($"{_isActive}, {value}", $"LayoutPaneComposite IsActive 1");
-				if (value == _isActive)
+				if(value == _isActive)
 					return;
 				RaisePropertyChanging(nameof(IsActive));
 				var oldValue = _isActive;
 				_isActive = value;
 				var root = Root;
-				if (root != null) {
-					if (root.ActiveContent != SelectedContent && value)
+				if(root != null) {
+					if(root.ActiveContent != SelectedContent && value)
 						Root.ActiveContent = SelectedContent;
-					if (_isActive && root.ActiveContent != SelectedContent)
+					if(_isActive && root.ActiveContent != SelectedContent)
 						root.ActiveContent = SelectedContent;
 				}
-				if (_isActive) {
+				if(_isActive) {
 					IsSelected = true;
 					IsVisible = true;
 				}
@@ -298,7 +298,7 @@ namespace AvalonDock.Layout {
 		/// Provides derived classes an opportunity to handle changes to the <see cref="IsActive"/> property.
 		/// </summary>
 		protected virtual void OnIsActiveChanged(bool oldValue, bool newValue) {
-			if (newValue)
+			if(newValue)
 				LastActivationTimeStamp = DateTime.Now;
 			IsActiveChanged?.Invoke(this, EventArgs.Empty);
 		}
@@ -310,7 +310,7 @@ namespace AvalonDock.Layout {
 		public DateTime? LastActivationTimeStamp {
 			get => _lastActivationTimeStamp;
 			set {
-				if (value == _lastActivationTimeStamp)
+				if(value == _lastActivationTimeStamp)
 					return;
 				_lastActivationTimeStamp = value;
 				RaisePropertyChanged(nameof(LastActivationTimeStamp));
@@ -318,10 +318,10 @@ namespace AvalonDock.Layout {
 		}
 		public LayoutActivityTabItem TabItem {
 			get => _tabItem;
-			set {
-				_tabItem = value;
-				RaisePropertyChanged(nameof(TabItem));
-				if (Parent is LayoutActivityBar activityBar) {
+			set { 
+				_tabItem = value; 
+				RaisePropertyChanged(nameof(TabItem)); 
+				if(Parent is LayoutActivityBar activityBar) {
 					activityBar.OverflowItems = null;
 				}
 			}
@@ -355,8 +355,8 @@ namespace AvalonDock.Layout {
 		/// <summary>Invalidates the current <see cref="SelectedContentIndex"/> and sets the index for the next avialable child with IsEnabled == true.</summary>
 		internal void SetNextSelectedIndex() {
 			SelectedIndex = -1;
-			for (var i = 0; i < Children.Count; ++i) {
-				if (!Children[i].IsEnabled)
+			for(var i = 0; i < Children.Count; ++i) {
+				if(!Children[i].IsEnabled)
 					continue;
 				SelectedIndex = i;
 				return;
@@ -372,11 +372,11 @@ namespace AvalonDock.Layout {
 
 		#region Private Metho
 		private void AutoFixSelectedContent() {
-			if (!_autoFixSelectedContent)
+			if(!_autoFixSelectedContent)
 				return;
-			if (SelectedIndex >= ChildrenCount)
+			if(SelectedIndex >= ChildrenCount)
 				SelectedIndex = Children.Count - 1;
-			if (SelectedIndex == -1 && ChildrenCount > 0)
+			if(SelectedIndex == -1 && ChildrenCount > 0)
 				SetLastActivatedIndex();
 		}
 
