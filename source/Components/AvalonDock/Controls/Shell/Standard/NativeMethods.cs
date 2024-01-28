@@ -1,4 +1,4 @@
-﻿/************************************************************************
+/************************************************************************
    AvalonDock
 
    Copyright (C) 2007-2013 Xceed Software Inc.
@@ -2778,9 +2778,7 @@ namespace Standard
 
 		public static IntPtr GetStockObject(StockObject fnObject)
 		{
-			var retPtr = _GetStockObject(fnObject);
-			if (retPtr == null) HRESULT.ThrowLastError();
-			return retPtr;
+			return _GetStockObject(fnObject);
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
