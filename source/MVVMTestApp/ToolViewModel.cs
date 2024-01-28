@@ -1,9 +1,9 @@
-﻿namespace AvalonDock.MVVMTestApp
+namespace AvalonDock.MVVMTestApp
 {
 	internal class ToolViewModel : PaneViewModel
 	{
 		#region fields
-		private bool _isVisible = true;
+		private bool _isVisible = false;
 		#endregion fields
 
 		#region constructor

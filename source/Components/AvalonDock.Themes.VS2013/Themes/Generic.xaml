@@ -1279,6 +1279,7 @@
               Background="{TemplateBinding Background}"
               BorderBrush="{TemplateBinding BorderBrush}"
               BorderThickness="0"
+              ClipToBounds="True"
               KeyboardNavigation.DirectionalNavigation="Contained"
               KeyboardNavigation.TabIndex="2"
               KeyboardNavigation.TabNavigation="Cycle"
@@ -1986,6 +1987,7 @@
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
               </Grid.ColumnDefinitions>
 
               <Grid
@@ -2006,42 +2008,39 @@
                   Stretch="Uniform" />
               </Grid>
 
-              <DockPanel
+              <TextBlock
                 Grid.Column="1"
-                Margin="8,0,0,0"
-                FlowDirection="LeftToRight"
-                LastChildFill="False">
-                <TextBlock
-                  VerticalAlignment="Center"
-                  DockPanel.Dock="Left"
-                  FontSize="12"
-                  Foreground="{TemplateBinding Foreground}"
-                  Text="{Binding Path=Model.Title, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                Margin="8,0"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Left"
+                FontSize="12"
+                Foreground="{TemplateBinding Foreground}"
+                Text="{Binding Path=Model.Title, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                TextTrimming="CharacterEllipsis" />
 
-                <!--  ItemsSource="{Binding Path=Model.ToolBars, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"  -->
-                <ToolBar
-                  x:Name="PART_ToolBar"
-                  Background="Transparent"
-                  DockPanel.Dock="Right"
-                  Style="{DynamicResource SimpleToolBar}"
-                  Visibility="Collapsed">
-                  <Button
-                    Width="21"
-                    Height="21"
-                    Content="1" />
-                  <Button
-                    Width="21"
-                    Height="21"
-                    Content="2"
-                    Foreground="{TemplateBinding Foreground}" />
-                  <Button
-                    Width="21"
-                    Height="21"
-                    Content="3"
-                    Foreground="{TemplateBinding Foreground}"
-                    ToolBar.OverflowMode="Always" />
-                </ToolBar>
-              </DockPanel>
+              <ToolBar
+                x:Name="PART_ToolBar"
+                Grid.Column="2"
+                Background="Transparent"
+                DockPanel.Dock="Right"
+                Style="{DynamicResource SimpleToolBar}"
+                Visibility="Collapsed">
+                <Button
+                  Width="21"
+                  Height="21"
+                  Content="1" />
+                <Button
+                  Width="21"
+                  Height="21"
+                  Content="2"
+                  Foreground="{TemplateBinding Foreground}" />
+                <Button
+                  Width="21"
+                  Height="21"
+                  Content="3"
+                  Foreground="{TemplateBinding Foreground}"
+                  ToolBar.OverflowMode="Always" />
+              </ToolBar>
             </Grid>
           </Border>
           <ControlTemplate.Triggers>
