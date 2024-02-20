@@ -1839,8 +1839,6 @@
   </Style>
   <!--#endregion-->
 
-
-
   <!--#region AnchorableExpanderControlStyle-->
   <Style x:Key="AnchorableExpanderControlStyle" TargetType="{x:Type avalonDockControls:LayoutAnchorableControl}">
     <Setter Property="Foreground" Value="{Binding Model.Root.Manager.Foreground, RelativeSource={RelativeSource Self}}" />
@@ -1897,7 +1895,6 @@
 
             <Trigger Property="IsMouseOver" Value="True">
               <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
               <Setter Property="Background" Value="{DynamicResource ControlFillColorDisabledBrush}" />
